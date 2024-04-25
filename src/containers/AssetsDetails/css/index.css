@@ -181,3 +181,12 @@
   border: none !important;
   opacity: 1 !important;
 }
+
+@media only screen and (max-width: 600px) {
+  .cancel-btn {
+    font-size: 18px;
+  }
+  .create-btn {
+    font-size: 18px;
+  }
+}

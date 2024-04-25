@@ -7,6 +7,10 @@
   color: white !important;
 }
 
+.homelogo {
+  margin-right: 0.5rem;
+}
+
 @media only screen and (max-width: 992px) {
   .first-nav {
     margin-top: 1rem;
@@ -47,6 +51,10 @@
   align-items: center;
 }
 
+.connectIcon {
+  flex: 1;
+}
+
 @media only screen and (max-width: 575px) {
   .walletBtn {
     border: 1px solid #c13636;
@@ -57,7 +65,7 @@
   }
 
   .loginbtn {
-    margin-left: -2.5rem;
+    /* margin-left: -2.5rem; */
   }
 }
 
@@ -87,9 +95,12 @@
     display: none;
   }
 
-  .menuBarMobView {
-    display: block;
+  .navlinkBorder {
+    border-bottom: 1px solid #222 !important;
   }
+  /* .menuBarMobView {
+    display: block;
+  } */
 }
 
 @media only screen and (max-width: 600px) {
@@ -97,9 +108,9 @@
     display: none;
   }
 
-  .menuBarMobView {
+  /* .menuBarMobView {
     display: block;
-  }
+  } */
 }
 
 .chainDiv {
@@ -112,7 +123,7 @@
 
 @media only screen and (max-width: 992px) {
   .chainDiv {
-    margin-bottom: 1rem;
+    margin-right: 1rem;
   }
 }
 
@@ -162,6 +173,22 @@
   }
 }
 
+@media (max-width: 640px) {
+  .chainDiv {
+    margin: 0rem;
+    margin-top: 1rem;
+  }
+  .leftChainDiv {
+    flex: 1;
+  }
+  .rightChainDiv {
+    flex: 1;
+  }
+  .topmenu {
+    flex: 0.9;
+  }
+}
+
 @media (min-width: 999px) {
   .topmenu {
     display: none !important;
@@ -170,7 +197,8 @@
 
 @media (max-width: 999px) {
   .nav-logo {
-    display: none !important;
+    display: block !important;
+    margin: 0px !important;
   }
 }
 

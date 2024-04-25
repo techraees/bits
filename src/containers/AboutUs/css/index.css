@@ -22,4 +22,15 @@
   .about-us {
     width: 100%;
   }
+  .imageIconAboutUs {
+    width: 45px;
+    height: auto !important;
+  }
+  .socialIcons {
+    background: #b13232;
+    border-radius: 60px;
+    width: 1000px;
+    height: 65px;
+    cursor: pointer;
+  }
 }

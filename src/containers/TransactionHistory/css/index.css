@@ -109,3 +109,37 @@ h3 {
     margin-top: 30px;
   }
 }
+
+@media only screen and (max-width: 500px) {
+  .depositeBtn {
+    margin-right: 0.5rem;
+    background: #78f785;
+    border-radius: 10px;
+    font-family: "Nunito Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 22px;
+    text-align: center;
+    height: 30px;
+    width: 70px;
+    color: #ffffff;
+    border: none;
+  }
+
+  .withdrawBtn {
+    margin-right: 0.5rem;
+    background: #ff5858;
+    border-radius: 10px;
+    font-family: "Nunito Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 22px;
+    text-align: center;
+    height: 30px;
+    width: 70px;
+    color: #ffffff;
+    border: none;
+  }
+}

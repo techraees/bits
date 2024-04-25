@@ -48,9 +48,9 @@ const AboutUs = () => {
           }}
           className="socialIcons"
         >
-          <img src={discord} height={70} />
-          <img src={telegram} height={70} />
-          <img src={twitter} height={70} />
+          <img src={discord} height={70} className="imageIconAboutUs" />
+          <img src={telegram} height={70}  className="imageIconAboutUs"/>
+          <img src={twitter} height={70} className="imageIconAboutUs" />
         </div>
       </div>
     </div>

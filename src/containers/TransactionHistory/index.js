@@ -239,7 +239,7 @@ const TransactionHistory = () => {
                     </>
                   )}
 
-                  <span className={`${textColor} me-2`}>$405</span>
+                  <span className={`${textColor} me-2 walletPriceShow`}>$405</span>
                   <img src={e.arrow} style={{ width: 10 }} />
                 </div>
               </div>

@@ -249,7 +249,7 @@ const Collections = () => {
       <div className="container">
         <Row className="my-5">
           <Col lg={12} md={24} sm={24} xs={24}>
-            <div className="d-flex justify-content-center my-3 align-items-center flex-wrap">
+            <div className="d-flex justify-content-md-between  my-3 align-items-center flex-wrap profilePicCenter">
               {userProfile ? (
                 <img
                   src={imgPath}
@@ -268,7 +268,7 @@ const Collections = () => {
                   className="my-2"
                 />
               )}
-              <div style={{ position: "absolute", width: 540 }}>
+              <div style={{ position: "absolute", width: 540 }} className="circleImageAbsolute">
                 <img
                   src={ellipse}
                   style={{ borderRadius: "50%" }}
@@ -289,7 +289,7 @@ const Collections = () => {
                 )}
 
                 <span className={`ms-5 ${textColor2}`}>{bio}</span>
-                <div className="ms-5 mt-4">
+                <div className=" editprofileButton">
                   {profileData?.GetProfileDetails?.id === userData?.id && (
                     <ButtonComponent
                       onClick={() => navigate("/account-settings/edit-profile")}

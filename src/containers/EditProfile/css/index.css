@@ -21,3 +21,15 @@
 .cascaderStyle {
   width: 100% !important;
 }
+
+@media only screen and (max-width: 600px) {
+  .submitButton {
+    width: 100% !important;
+  }
+  .linksubmitButtonBig {
+    flex: 1;
+  }
+  .linksubmitButtonSmall {
+    flex: 0.6;
+  }
+}

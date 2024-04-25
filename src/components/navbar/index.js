@@ -224,7 +224,7 @@ const NavbarComponent = ({
         >
           <LogoutModal />
         </Modal>
-        <Navbar.Brand>
+        <Navbar.Brand className="menuBarWebView">
           <img
             onClick={toggleCollapsed}
             src={menu_icon}
@@ -241,8 +241,8 @@ const NavbarComponent = ({
               alt="icon"
             />
           )}
-          <Navbar.Brand>
-            <div className="nav-logo">
+          <Navbar.Brand className="nav-logo">
+            <div className="nav-logo ">
               <NavLink to="/" className="white d-flex">
                 <img
                   src={logo}
@@ -254,23 +254,10 @@ const NavbarComponent = ({
             </div>
           </Navbar.Brand>
           <div className="topmenu">
-            <div className="d-flex align-items-center justify-content-center loginbtn">
+            <div className="d-flex align-items-center justify-content-between loginbtn">
               {!full_name ? (
                 <>
-                  <div className="connentbtn">
-                    <Nav.Link className="white mx-2 " onClick={handleLogin}>
-                      Login
-                    </Nav.Link>
-                    <Nav.Link
-                      className="white mx-2  walletBtn d-flex justify-content-center align-items-center"
-                      onClick={handleLogin}
-                    >
-                      <span>
-                        {/* {width < 575 ? <CiWallet /> : "Connect Wallet"} */}
-                      </span>
-                    </Nav.Link>
-                  </div>
-                  <div className="connectIcon d-flex">
+                  <div className="connectIcon d-flex align-items-center justify-content-between gap-md-0 gap-md-5">
                     <Nav.Link className="white" onClick={handleLogin}>
                       Login
                     </Nav.Link>
@@ -283,7 +270,8 @@ const NavbarComponent = ({
                         Connect Wallet
                       </span>
                     </Nav.Link>
-                    <div style={{ margin: "5px 0 0 1rem" }}>
+                    {/* <div style={{ margin: "5px 0 0 1rem" }}> */}
+                    <div>
                       <SwitchBtn toggleBtn={toggleBtn} />
                     </div>
                   </div>
@@ -317,36 +305,39 @@ const NavbarComponent = ({
               )}
             </div>
           </div>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-3" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav
               className={`d-flex align-items-center justify-content-between first-nav`}
             >
-              <NavLink to="/" className="white d-flex">
+              <NavLink to="/" className="white d-flex py-3 w-100 navlinkBorder">
                 <img
                   src={home}
-                  className="mx-2"
-                  style={{ width: "100%", height: "auto" }}
+                  className="homelogo"
+                  style={{ width: "16px", height: "auto" }}
                   alt="home"
                 />
                 <span>Home</span>
               </NavLink>
               <Nav.Link
-                className="white"
+                className="white py-3 w-100 navlinkBorder"
                 onClick={() => navigate("/video-gallery")}
               >
                 Emote/Video gallery
               </Nav.Link>
               <Nav.Link
-                className="white"
+                className="white py-3 w-100 navlinkBorder"
                 onClick={() => navigate("/marketplace")}
               >
                 NFT Marketplace
               </Nav.Link>
-              <Nav.Link className="white" onClick={() => navigate("/about-us")}>
+              <Nav.Link
+                className="white py-3 w-100 navlinkBorder"
+                onClick={() => navigate("/about-us")}
+              >
                 About
               </Nav.Link>
-              <NavLink to="/contact" className="white">
+              <NavLink to="/contact" className="white py-3 w-100 navlinkBorder">
                 Contact
               </NavLink>
             </Nav>

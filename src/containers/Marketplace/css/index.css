@@ -107,3 +107,45 @@
   overflow-x: hidden !important;
   width: 99vw;
 }
+
+@media only screen and (max-width: 1000px) {
+  .selectVideoGalleryOption {
+    justify-content: center;
+  }
+  .selectVideoGalleryOptionSingle {
+    width: 100px !important;
+  }
+  .selectVideoGalleryOptionSingle_real {
+    width: 100% !important;
+  }
+  .svgConIcon {
+    width: 20px !important;
+  }
+  .svgConIconParent {
+    width: 80px !important;
+    height: 3rem !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 10px !important;
+  }
+  .svgConIconParentWithNoWrap {
+    width: 100px !important;
+    height: 3rem !important;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 18px !important;
+  }
+  .svgConIconParentSpanLine {
+    height: 65%;
+  }
+  .parentFlexDivForGap {
+    gap: 0 !important;
+  }
+  .svgConIconAZImage {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}

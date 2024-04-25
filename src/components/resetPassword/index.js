@@ -22,7 +22,7 @@ const ResetPassword = () => {
                     </Row>
 
                     <Row>
-                        <Col span={6}>
+                        <Col span={12}>
                             <label
                                 htmlFor="password"
                                 className="text-white mb-1"
@@ -44,7 +44,7 @@ const ResetPassword = () => {
                     </Row>
 
                     <Row className="my-3">
-                        <Col span={6}>
+                        <Col span={12}>
                             <label
                                 htmlFor="confirm-password"
                                 className="text-white mb-1"

@@ -12,6 +12,8 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 import { USDTOMATIC } from "../../utills/currencyConverter";
 
+import "./css/index.css";
+
 const environment = process.env;
 
 const VideoGallery = () => {
@@ -160,22 +162,27 @@ const VideoGallery = () => {
           style={{ borderBottom: "0.5px solid #c23737", marginTop: "2.5rem" }}
         ></div>
         <div className="d-flex justify-content-between mt-5">
-          <div className="d-flex gap-5 ">
-            <div className={`filter-wrapper ${bgColor}`}>
+          <div className="d-flex gap-sm-5 parentFlexDivForGap">
+            <div className={`filter-wrapper ${bgColor} svgConIconParent`}>
               <FontAwesomeIcon
                 icon={faFilter}
                 style={{ color: "#C93B3B", fontSize: "2rem" }}
+                className="svgConIcon"
               />
               {/* <BsFilterLeft style={{ color: "#C93B3B", fontSize: "2rem" }} /> */}
             </div>
-            <div className="marketplace-select-field d-flex gap-2">
-              <div className={`marketplace-selct-div ${bgColor}`}>
+            <div className="marketplace-select-field d-flex gap-2 selectVideoGalleryOption">
+              <div
+                className={`marketplace-selct-div ${bgColor} selectVideoGalleryOptionSingle`}
+              >
                 <Select
                   defaultValue="Category"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`${
+                    textColor == "black" && "light"
+                  } selectVideoGalleryOptionSingle_real`}
                   onChange={handleCategoryChange}
                   options={[
                     {
@@ -198,13 +205,17 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div
+                className={`marketplace-selct-div ${bgColor} selectVideoGalleryOptionSingle`}
+              >
                 <Select
                   defaultValue="Price"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`${
+                    textColor == "black" && "light"
+                  }  selectVideoGalleryOptionSingle_real`}
                   onChange={handlePriceChange}
                   options={[
                     {
@@ -231,14 +242,18 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div
+                className={`marketplace-selct-div ${bgColor} selectVideoGalleryOptionSingle`}
+              >
                 <Select
                   defaultValue="Quantity"
                   style={{
                     width: 120,
                   }}
                   onChange={handleQuantityChange}
-                  className={textColor == "black" && "light"}
+                  className={`${
+                    textColor == "black" && "light"
+                  }  selectVideoGalleryOptionSingle_real`}
                   options={[
                     {
                       value: "0-10",
@@ -264,13 +279,17 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div
+                className={`marketplace-selct-div ${bgColor} selectVideoGalleryOptionSingle`}
+              >
                 <Select
                   defaultValue="Ranking"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`${
+                    textColor == "black" && "light"
+                  }  selectVideoGalleryOptionSingle_real`}
                   onChange={handleRankingChange}
                   options={[
                     {
@@ -282,13 +301,21 @@ const VideoGallery = () => {
               </div>
             </div>
           </div>
-          <div className={`grid-wrapper ${bgColor}`}>
-            <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
+          <div className={`grid-wrapper ${bgColor} svgConIconParentWithNoWrap`}>
+            <img
+              src={AZ}
+              className="me-2 svgConIconAZImage"
+              style={{ width: "20px", height: "20px" }}
+            />
             <span
-              className="me-2"
+              className="me-2 svgConIconParentSpanLine"
               style={{ border: "1px solid #D54343" }}
             ></span>
-            <img src={grid} style={{ width: 20, height: 20 }} />
+            <img
+              src={grid}
+              style={{ width: 20, height: 20 }}
+              className="svgConIconAZImage"
+            />
           </div>
         </div>
         <div

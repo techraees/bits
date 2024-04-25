@@ -85,10 +85,10 @@ const Router = () => {
             path="/account-settings/edit-profile"
             element={<PrivateRoute />}
           >
-            <Route
-              path="/account-settings/edit-profile"
-              element={<EditProfile />}
-            />
+          <Route
+            path="/account-settings/edit-profile"
+            element={<EditProfile />}
+          />
           </Route>
           <Route path="/nft-detail/:id" element={<NdtDetailsScreen />} />
 

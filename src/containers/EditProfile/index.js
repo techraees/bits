@@ -382,15 +382,16 @@ const EditProfile = () => {
             })}
           </div>
           <div className="d-flex justify-content-center mt-5 mb-3">
-            <Link to="/collections">
-              <div style={{ width: 280 }} className="me-3">
+            <Link to="/collections" className="linksubmitButtonBig">
+              <div style={{ width: "280px" }} className="me-3 submitButton">
                 <ButtonComponent radius={5} text={"Cancel"} />
               </div>
             </Link>
-            <div style={{ width: 280 }} className="ms-3">
+            <div style={{ width: "280px" }} className="ms-3 linksubmitButtonSmall">
               <ButtonComponent
                 radius={5}
                 green
+                width={"100%"}
                 text={"Save"}
                 onClick={handleSubmit}
                 disabled={!values.userAddress || !values.full_name}
