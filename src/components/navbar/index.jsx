@@ -211,7 +211,7 @@ const NavbarComponent = ({ dashboardNav }) => {
   const getPageName = (pathName) => {
     const pageName = routes?.find(
       (route) =>
-        trimAfterFirstSlash(route?.path) === trimAfterFirstSlash(pathName)
+        trimAfterFirstSlash(route?.path) === trimAfterFirstSlash(pathName),
     )?.name;
     return pageName === "Home" ? "" : pageName;
   };

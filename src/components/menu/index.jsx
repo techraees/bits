@@ -93,7 +93,7 @@ const MenuComponent = ({ menuHandle, className }) => {
   };
   const getSelectedKey = () => {
     return JSON.stringify(
-      routes?.find((route) => route?.path === location?.pathname)?.key
+      routes?.find((route) => route?.path === location?.pathname)?.key,
     );
   };
 

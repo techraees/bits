@@ -317,11 +317,12 @@ const CardCompnent = ({
             controls={true}
             width="260px"
             height="190px"
-            url={videoLink}
+            url={"https://videos.pexels.com/video-files/29713297/12776318_2560_1440_30fps.mp4"}
             onPlay={handleWatchClick}
           />
         }
       >
+
         <Space
           direction="horizontal"
           style={{
