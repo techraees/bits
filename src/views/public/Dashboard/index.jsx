@@ -19,6 +19,8 @@ import {
 } from "../../../gql/queries";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
 import { CardCompnent, Loader, UploadVideoModal } from "../../../components";
+import CardSkeletal from "./Skeletal/CardSkeletal";
+
 
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
@@ -40,6 +42,9 @@ const Dashboard = () => {
   const textColor = useSelector((state) => state.app.theme.textColor);
   const isLogged = userData?.isLogged;
   const userProfile = userData?.full_name;
+  const [loadingTopNft, setLoadingTopNft] = useState(true)
+  const [topNFTSLoading, setTopNFTSLoading] = useState(true)
+
 
   const handleCreateNFT = () => {
     if (isLogged) {
@@ -70,6 +75,7 @@ const Dashboard = () => {
   // }
 
   const topNfts = useMemo(() => {
+    setLoadingTopNft(true)
     let arr = [];
     data?.getAllNftsWithoutAddress?.map((x) => {
       auctionItemData?.map((y) => {
@@ -116,6 +122,7 @@ const Dashboard = () => {
           otherItem.is_Published,
       ),
     );
+    setLoadingTopNft(false)
 
     // console.log("checking_arr", arr);
     // const uniqueObjects = getUniqueObjects(arr);
@@ -226,7 +233,7 @@ const Dashboard = () => {
             });
           })} */}
 
-            {topNfts?.map((e, i) => (
+            {/* {topNfts?.map((e, i) => (
               <CardCompnent
                 key={i}
                 image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
@@ -252,7 +259,46 @@ const Dashboard = () => {
                 isPaid={e.isPaid}
                 duration={e.video_duration}
               />
-            ))}
+            ))} */}
+
+            {/* {(loadingTopNft || topNFTSLoading || true) ? <CardSkeletal /> : */}
+            {(loadingTopNft) ? <CardSkeletal /> :
+              topNfts?.GetTopNfts?.length > 0 ? topNfts?.GetTopNfts?.map((e, i) => (
+                <CardCompnent
+                  key={i}
+                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
+                  status={e.status}
+                  name={e.name}
+                  videoLink={e.video}
+                  userProfile={userProfile ? true : false}
+                  id={e._id}
+                  userId={e?.user_id?.id}
+                  owners={e.owners}
+                  fixtokenId={e.fixtokenId}
+                  fixOwner={e.wallet_address}
+                  fixRoyalty={e.royalty}
+                  fixCopies={e.supply}
+                  numberofcopies={e.supply}
+                  initialPrice={e.initialPrice}
+                  auctionid={e.auctionid}
+                  currentBidAmount={e.currentBidAmount}
+                  nftOwner={e.wallet_address}
+                  isAuction={e.isFixedItem ? false : true}
+                  likeCount={e.likeCount}
+                  watchCount={e.watchCount}
+                  isPaid={e.isPaid}
+                  duration={e.video_duration}
+                />
+              ))
+                :
+                <div
+                  style={{
+                    height: "200px",
+                    color: "white",
+                    margin: "1rem 0rem 0rem 0.5rem"
+                  }}
+                >Right now there is no top nfts available. May be it is loading or not available</div>
+            }
 
             {/* {fixedItemData?.map((item) => {
             return data?.getTopViewNfts?.map((e, i) => {
