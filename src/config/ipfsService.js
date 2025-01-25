@@ -4,6 +4,58 @@ import axios from "axios";
 
 const env = process.env;
 
+// uploading to storj
+export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
+  console.log("file", file);
+  let finalFile;
+  if (isEmote) {
+    try {
+      const response = await fetch(file);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+
+      finalFile = new File([blob], "filename");
+    } catch (error) {
+      console.error("Error fetching file:", error);
+    }
+  } else {
+    finalFile = file;
+  }
+
+  if (finalFile) {
+    try {
+      // const url = `${env.REACT_APP_BACKEND_BASE_URL}/presign`;
+
+      // Step 1: Get the pre-signed URL
+      const { data } = await createSignedUrl({
+        variables: { key: finalFile.name },
+      });
+
+      const presignUrl = data.CreateSignedUrlForNfts.url;
+
+      // Step 2: Upload the file using the pre-signed URL
+      const uploadResp = await axios.put(presignUrl, finalFile, {
+        headers: {
+          "Content-Type": finalFile.type,
+        },
+      });
+
+      if (uploadResp.status == 200) {
+        const videiLink = `${env.REACT_APP_STORJ_URL}/${file.name}`;
+        return videiLink;
+      } else {
+        console.log("Storj Upload Error");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+};
+
 export const sendFileToIPFS = async (file, isEmote) => {
   if (file) {
     try {
@@ -20,7 +72,7 @@ export const sendFileToIPFS = async (file, isEmote) => {
 
       // console.log("ImgHash", res)
       const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-        "z",
+        "z"
       )}`;
       return ImgHash;
     } catch (error) {
@@ -51,11 +103,11 @@ export const sendFileToIPFSV1 = async (file, isEmote) => {
       const result = await axios.post(
         `${env.REACT_APP_INFURA}/add`,
         formData,
-        options,
+        options
       );
 
       const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-        "z",
+        "z"
       )}`;
       return ImgHash;
     } catch (error) {
@@ -99,7 +151,7 @@ export const sendFileToIPFSV2 = async (file, isEmote) => {
       const result = await axios.post(
         "https://api.nft.storage/upload",
         finalFile,
-        options,
+        options
       );
 
       // console.log("ImgHash", res)
@@ -166,7 +218,7 @@ export const sendFileToIPFSV3 = async (file, isEmote) => {
     } catch (error) {
       console.error(
         "Error sending File to IPFS: ",
-        error.response ? error.response.data : error.message,
+        error.response ? error.response.data : error.message
       );
     }
   }
