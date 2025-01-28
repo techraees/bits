@@ -317,7 +317,8 @@ const CardCompnent = ({
             controls={true}
             width="260px"
             height="190px"
-            url={"https://videos.pexels.com/video-files/29713297/12776318_2560_1440_30fps.mp4"}
+            // url={"https://videos.pexels.com/video-files/29713297/12776318_2560_1440_30fps.mp4"}
+            url={videoLink}
             onPlay={handleWatchClick}
           />
         }
