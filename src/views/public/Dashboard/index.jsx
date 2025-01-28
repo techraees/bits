@@ -73,6 +73,7 @@ const Dashboard = () => {
 
   //   return uniqueObjects;
   // }
+  const [showAllTopNFTS, setShowAllTopNFTS] = useState([])
 
   const topNfts = useMemo(() => {
     setLoadingTopNft(true)
@@ -126,9 +127,12 @@ const Dashboard = () => {
 
     // console.log("checking_arr", arr);
     // const uniqueObjects = getUniqueObjects(arr);
+    setShowAllTopNFTS(filterItem)
     return filterItem;
+
   }, [auctionItemData, data, fixedItemData, topnfts]);
 
+  console.log(showAllTopNFTS, "THIS IS THE FILTERED ITEMS")
   // const topNfts1 = useMemo(() => {
   //   const filterItem = data?.getAllNftsWithoutAddress?.filter((item) =>
   //     topnfts?.GetTopNfts?.some(
@@ -263,7 +267,7 @@ const Dashboard = () => {
 
             {/* {(loadingTopNft || topNFTSLoading || true) ? <CardSkeletal /> : */}
             {(loadingTopNft) ? <CardSkeletal /> :
-              topNfts?.GetTopNfts?.length > 0 ? topNfts?.GetTopNfts?.map((e, i) => (
+              showAllTopNFTS.length > 0 ? showAllTopNFTS?.map((e, i) => (
                 <CardCompnent
                   key={i}
                   image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
