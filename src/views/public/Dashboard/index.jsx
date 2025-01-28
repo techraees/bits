@@ -147,6 +147,27 @@ const Dashboard = () => {
     toprefetch();
   }, []);
 
+  const [loading30Second, setLoading30Second] = useState(true);
+  const [timer30Second, setTimer30Second] = useState(40); // Reverse stopwatch starting from 30
+
+  useEffect(() => {
+    if (loading30Second) {
+      const countdown = setInterval(() => {
+        setTimer30Second((prev) => {
+          if (prev > 0) {
+            return prev - 1; // Decrease timer by 1 second
+          } else {
+            clearInterval(countdown);
+            setLoading30Second(false); // Stop loading when timer reaches 0
+            return 0;
+          }
+        });
+      }, 1000);
+
+      return () => clearInterval(countdown); // Cleanup interval on unmount
+    }
+  }, [loading30Second]);
+
   return (
     <div className={backgroundTheme}>
       {loading && <Loader />}
@@ -266,7 +287,15 @@ const Dashboard = () => {
             ))} */}
 
             {/* {(loadingTopNft || topNFTSLoading || true) ? <CardSkeletal /> : */}
-            {(loadingTopNft) ? <CardSkeletal /> :
+            {(loadingTopNft) ? <div
+              style={{
+                color: "white",
+                margin: "1rem 0rem 0rem 0.5rem"
+              }}
+            >
+              <p>Loading... Please wait at least for {timer30Second} seconds! </p>
+              <CardSkeletal />
+            </div> :
               showAllTopNFTS.length > 0 ? showAllTopNFTS?.map((e, i) => (
                 <CardCompnent
                   key={i}
@@ -295,13 +324,24 @@ const Dashboard = () => {
                 />
               ))
                 :
-                <div
-                  style={{
-                    height: "200px",
-                    color: "white",
-                    margin: "1rem 0rem 0rem 0.5rem"
-                  }}
-                >Right now there is no top nfts available. May be it is loading or not available</div>
+                loading30Second ?
+                  <div
+                    style={{
+                      color: "white",
+                      margin: "1rem 0rem 0rem 0.5rem"
+                    }}
+                  >
+                    <p>Loading... Please wait at least for {timer30Second} seconds! </p>
+                    <CardSkeletal />
+                  </div>
+                  :
+                  <div
+                    style={{
+                      height: "200px",
+                      color: "white",
+                      margin: "1rem 0rem 0rem 0.5rem"
+                    }}
+                  >Right now there is no top nfts available. May be it is loading or not available</div>
             }
 
             {/* {fixedItemData?.map((item) => {
