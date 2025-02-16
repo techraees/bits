@@ -54,7 +54,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "npm run format && npm run lint-fix && PORT=8080 react-scripts start",
+    "start": "set PORT=8080 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

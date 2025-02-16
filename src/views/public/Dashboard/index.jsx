@@ -19,6 +19,8 @@ import {
 } from "../../../gql/queries";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
 import { CardCompnent, Loader, UploadVideoModal } from "../../../components";
+import CardSkeletal from "./Skeletal/CardSkeletal";
+
 
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
@@ -40,6 +42,9 @@ const Dashboard = () => {
   const textColor = useSelector((state) => state.app.theme.textColor);
   const isLogged = userData?.isLogged;
   const userProfile = userData?.full_name;
+  const [loadingTopNft, setLoadingTopNft] = useState(true)
+  const [topNFTSLoading, setTopNFTSLoading] = useState(true)
+
 
   const handleCreateNFT = () => {
     if (isLogged) {
@@ -68,8 +73,10 @@ const Dashboard = () => {
 
   //   return uniqueObjects;
   // }
+  const [showAllTopNFTS, setShowAllTopNFTS] = useState([])
 
   const topNfts = useMemo(() => {
+    setLoadingTopNft(true)
     let arr = [];
     data?.getAllNftsWithoutAddress?.map((x) => {
       auctionItemData?.map((y) => {
@@ -116,12 +123,16 @@ const Dashboard = () => {
           otherItem.is_Published,
       ),
     );
+    setLoadingTopNft(false)
 
     // console.log("checking_arr", arr);
     // const uniqueObjects = getUniqueObjects(arr);
+    setShowAllTopNFTS(filterItem)
     return filterItem;
+
   }, [auctionItemData, data, fixedItemData, topnfts]);
 
+  console.log(showAllTopNFTS, "THIS IS THE FILTERED ITEMS")
   // const topNfts1 = useMemo(() => {
   //   const filterItem = data?.getAllNftsWithoutAddress?.filter((item) =>
   //     topnfts?.GetTopNfts?.some(
@@ -135,6 +146,27 @@ const Dashboard = () => {
   useEffect(() => {
     toprefetch();
   }, []);
+
+  const [loading30Second, setLoading30Second] = useState(true);
+  const [timer30Second, setTimer30Second] = useState(40); // Reverse stopwatch starting from 30
+
+  useEffect(() => {
+    if (loading30Second) {
+      const countdown = setInterval(() => {
+        setTimer30Second((prev) => {
+          if (prev > 0) {
+            return prev - 1; // Decrease timer by 1 second
+          } else {
+            clearInterval(countdown);
+            setLoading30Second(false); // Stop loading when timer reaches 0
+            return 0;
+          }
+        });
+      }, 1000);
+
+      return () => clearInterval(countdown); // Cleanup interval on unmount
+    }
+  }, [loading30Second]);
 
   return (
     <div className={backgroundTheme}>
@@ -226,7 +258,7 @@ const Dashboard = () => {
             });
           })} */}
 
-            {topNfts?.map((e, i) => (
+            {/* {topNfts?.map((e, i) => (
               <CardCompnent
                 key={i}
                 image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
@@ -252,7 +284,65 @@ const Dashboard = () => {
                 isPaid={e.isPaid}
                 duration={e.video_duration}
               />
-            ))}
+            ))} */}
+
+            {/* {(loadingTopNft || topNFTSLoading || true) ? <CardSkeletal /> : */}
+            {(loadingTopNft) ? <div
+              style={{
+                color: "white",
+                margin: "1rem 0rem 0rem 0.5rem"
+              }}
+            >
+              <p>Loading... Please wait at least for {timer30Second} seconds! </p>
+              <CardSkeletal />
+            </div> :
+              showAllTopNFTS.length > 0 ? showAllTopNFTS?.map((e, i) => (
+                <CardCompnent
+                  key={i}
+                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
+                  status={e.status}
+                  name={e.name}
+                  videoLink={e.video}
+                  userProfile={userProfile ? true : false}
+                  id={e._id}
+                  userId={e?.user_id?.id}
+                  owners={e.owners}
+                  fixtokenId={e.fixtokenId}
+                  fixOwner={e.wallet_address}
+                  fixRoyalty={e.royalty}
+                  fixCopies={e.supply}
+                  numberofcopies={e.supply}
+                  initialPrice={e.initialPrice}
+                  auctionid={e.auctionid}
+                  currentBidAmount={e.currentBidAmount}
+                  nftOwner={e.wallet_address}
+                  isAuction={e.isFixedItem ? false : true}
+                  likeCount={e.likeCount}
+                  watchCount={e.watchCount}
+                  isPaid={e.isPaid}
+                  duration={e.video_duration}
+                />
+              ))
+                :
+                loading30Second ?
+                  <div
+                    style={{
+                      color: "white",
+                      margin: "1rem 0rem 0rem 0.5rem"
+                    }}
+                  >
+                    <p>Loading... Please wait at least for {timer30Second} seconds! </p>
+                    <CardSkeletal />
+                  </div>
+                  :
+                  <div
+                    style={{
+                      height: "200px",
+                      color: "white",
+                      margin: "1rem 0rem 0rem 0.5rem"
+                    }}
+                  >Right now there is no top nfts available. May be it is loading or not available</div>
+            }
 
             {/* {fixedItemData?.map((item) => {
             return data?.getTopViewNfts?.map((e, i) => {

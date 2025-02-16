@@ -97,6 +97,15 @@ const CREATE_USER = gql`
   }
 `;
 
+const CREATE_SIGNED_URL_FOR_NFTS = gql`
+  mutation CreateSignedUrlForNfts($key: String!) {
+    CreateSignedUrlForNfts(key: $key) {
+      url
+    }
+  }
+  `;
+
+
 const MINT_ASSET = gql`
   mutation MintAsset(
     $assetId: String!
@@ -245,4 +254,5 @@ export {
   UPDATE_NFT_LIKE,
   UPDATE_NFT_WATCH,
   UPDATE_NFT_PAYMENT,
+  CREATE_SIGNED_URL_FOR_NFTS
 };
