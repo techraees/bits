@@ -289,11 +289,11 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
 
 // Used to add the time by 5 mints
 const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
-  mutation RemoveNftFromNftMarketPlace(
+  mutation UpdateNftMarketPlaceBiddingTimeByMintsForEachRequest(
         $token: String!
         $nftDbMarketPlaceId: String!
   ) {
-    removeNftFromNftMarketPlace(
+    updateNftMarketPlaceBiddingTimeByMintsForEachRequest(
         token: $token
         nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
