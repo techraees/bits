@@ -71,10 +71,7 @@ const CREATE_SIGNED_URL_FOR_NFTS = gql`
       url
     }
   }
-  `;
-
-
-
+`;
 
 const CREATE_USER = gql`
   mutation Mutation(
@@ -241,6 +238,55 @@ const UPDATE_NFT_PAYMENT = gql`
   }
 `;
 
+// ============================ Optimization Mutations =====================
+// Add Nft to Nft Market Place
+const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
+  mutation AddNftToNftMarketPlace(
+        $token: String!
+        $tokenId: String!
+        $numberOfCopies: Int!
+        $price: Decimal!
+        $nftAddress: String!
+        $listingID: String!
+        $listingType: String!
+        $currency: String!
+        $biddingStartTime: Date
+        $biddingEndTime: Date
+  ) {
+    addNftToNftMarketPlace(
+        token: $token
+        tokenId: $tokenId
+        numberOfCopies: $numberOfCopies
+        price: $price
+        nftAddress: $nftAddress
+        listingID: $listingID
+        listingType: $listingType
+        currency: $currency
+        biddingStartTime: $biddingStartTime
+        biddingEndTime: $biddingEndTime
+    ) {
+      message
+      _id
+    }
+  }
+`;
+
+// Remove Nft From Nft Market Place
+const REMOVE_NFT_NFT_MARKET_PLACE = gql`
+  mutation RemoveNftFromNftMarketPlace(
+        $token: String!
+        $nftDbMarketPlaceId: String!
+  ) {
+    removeNftFromNftMarketPlace(
+        token: $token
+        nftDbMarketPlaceId: $nftDbMarketPlaceId
+    ) {
+      message
+      _id
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -256,5 +302,11 @@ export {
   UPDATE_NFT_LIKE,
   UPDATE_NFT_WATCH,
   UPDATE_NFT_PAYMENT,
-  CREATE_SIGNED_URL_FOR_NFTS
+  CREATE_SIGNED_URL_FOR_NFTS,
+
+  // ========================= Optimization Mutations ======================
+  // Nft Market Place
+  ADD_NFT_TO_NFT_MARKET_PLACE,
+  REMOVE_NFT_NFT_MARKET_PLACE,
+  // ========================= Optimization Mutations ======================
 };
