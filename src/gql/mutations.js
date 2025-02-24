@@ -287,6 +287,22 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
   }
 `;
 
+// Used to add the time by 5 mints
+const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
+  mutation RemoveNftFromNftMarketPlace(
+        $token: String!
+        $nftDbMarketPlaceId: String!
+  ) {
+    removeNftFromNftMarketPlace(
+        token: $token
+        nftDbMarketPlaceId: $nftDbMarketPlaceId
+    ) {
+      message
+      _id
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -308,5 +324,6 @@ export {
   // Nft Market Place
   ADD_NFT_TO_NFT_MARKET_PLACE,
   REMOVE_NFT_NFT_MARKET_PLACE,
+  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   // ========================= Optimization Mutations ======================
 };
