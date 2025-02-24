@@ -303,6 +303,66 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
   }
 `;
 
+// Used to create New Transaction
+const CREATE_NEW_TRANSACTION = gql`
+  mutation CreateNewTransaction(
+        $token: String!
+        $nft_id: String
+        $first_person: String
+        $second_person: String
+        $listingID: String
+        $blockchain_listingID: String
+        $token_id: String
+        $price: Decimal
+        $currency: String
+        $transaction_type: String!
+        $copies_transferred: Int
+  ) {
+    createNewTransaction(
+        token: $token
+        nft_id: $nft_id
+        first_person: $first_person
+        second_person: $second_person
+        listingID: $listingID
+        blockchain_listingID: $blockchain_listingID
+        token_id: $token_id
+        price: $price
+        currency: $currency
+        transaction_type: $transaction_type
+        copies_transferred: $copies_transferred
+    ) {
+      message
+      _id
+    }
+  }
+`;
+
+// Used to create New ownership of nft
+const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
+  mutation CreateNewOwnershipOfNft(
+        $token: String! 
+        $total_price: Decimal!
+        $listingIDFromBlockChain: String!
+        $copies: Int!
+        $pricePerItem: Decimal!
+        $from_user_wallet: String!
+        $to_user_wallet: String!
+  ) {
+    createNewOwnershipOfNft(
+        token: $token 
+        total_price: $total_price
+        listingIDFromBlockChain: $listingIDFromBlockChain
+        copies: $copies
+        pricePerItem: $pricePerItem
+        from_user_wallet: $from_user_wallet
+        to_user_wallet: $to_user_wallet
+    ) {
+      message
+      _id
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -324,6 +384,12 @@ export {
   // Nft Market Place
   ADD_NFT_TO_NFT_MARKET_PLACE,
   REMOVE_NFT_NFT_MARKET_PLACE,
-  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
+  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+
+  // Transaction
+  CREATE_NEW_TRANSACTION,
+
+  // Create New Nft Ownershsip
+  CREATE_NEW_OWNERSHIP_OF_NFT
   // ========================= Optimization Mutations ======================
 };
