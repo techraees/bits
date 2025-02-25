@@ -62,7 +62,7 @@ function Login() {
     LOGIN_USER,
     {
       fetchPolicy: "network-only",
-    },
+    }
   );
 
   const loginUser = (values) => {
@@ -333,7 +333,7 @@ function Login() {
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const data = await response.json();

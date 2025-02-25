@@ -39,6 +39,8 @@ function PurchaseStep({
 
   const { userData } = useSelector((state) => state.address.userData);
 
+  console.log("web3", web3, signer);
+
   const [
     getProfile,
     {
@@ -79,6 +81,7 @@ function PurchaseStep({
   const handlePurchase = async () => {
     let val = Number(ETHToWei(totalPrice.toString()));
     let amount = val.toString();
+    setLoadingStatus(true);
 
     if (signer) {
       const marketContractWithsigner =
@@ -89,10 +92,9 @@ function PurchaseStep({
           const tx = await marketContractWithsigner.BuyFixedPriceItem(
             fixedId,
             quantity,
-            { value: amount },
+            { value: amount }
           );
 
-          setLoadingStatus(true);
           setLoadingMessage("Transaction Pending...");
 
           const res = await tx.wait();
@@ -109,7 +111,7 @@ function PurchaseStep({
                 userData?.full_name,
                 name,
                 sellerUsername,
-                totalPrice,
+                totalPrice
               );
               await sendEmail({
                 variables: {
@@ -120,6 +122,7 @@ function PurchaseStep({
                 },
               });
             } catch (error) {
+              setLoadingStatus(false);
               console.log(error);
             }
           }

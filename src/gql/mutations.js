@@ -71,10 +71,7 @@ const CREATE_SIGNED_URL_FOR_NFTS = gql`
       url
     }
   }
-  `;
-
-
-
+`;
 
 const CREATE_USER = gql`
   mutation Mutation(
@@ -256,5 +253,5 @@ export {
   UPDATE_NFT_LIKE,
   UPDATE_NFT_WATCH,
   UPDATE_NFT_PAYMENT,
-  CREATE_SIGNED_URL_FOR_NFTS
+  CREATE_SIGNED_URL_FOR_NFTS,
 };

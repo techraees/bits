@@ -11,6 +11,32 @@ import { loadContractIns } from "./store/actions";
 import { removeStorage } from "./utills/localStorage";
 import Layout from "./layout/index";
 
+import { createAppKit } from "@reown/appkit/react";
+import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
+import { mainnet, polygon } from "@reown/appkit/networks";
+
+const projectId = process.env.REACT_APP_REOWN_ID;
+
+const metadata = {
+  name: "BITS",
+  description: "A NFT Marketplace",
+  url: "https://www.bitsnft.com", // origin must match your domain & subdomain
+  icons: ["https://www.bitsnft.com"],
+};
+
+createAppKit({
+  adapters: [new Ethers5Adapter()],
+  metadata: metadata,
+  networks: [mainnet, polygon],
+  projectId,
+  features: {
+    analytics: false,
+    email: false,
+    socials: [],
+    emailShowWallets: false,
+  },
+});
+
 function App() {
   // const [recordVisit] = useMutation(RECORD_VISIT_MUTATION);
 

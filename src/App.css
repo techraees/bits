@@ -6,6 +6,12 @@
   z-index: 299;
 }
 
+w3m-modal {
+  z-index: 99999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
 @media (max-width: 991.98px) {
   .img-wrapper {
     bottom: 60px;

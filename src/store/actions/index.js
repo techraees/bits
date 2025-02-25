@@ -10,162 +10,35 @@ import { ToastMessage } from "../../components";
 import UniversalProvider from "@walletconnect/universal-provider";
 import { Web3Modal } from "@web3modal/standalone";
 
-export const loadBlockchainAction = (chain, address) => async (dispatch) => {
-  // try {
-  //   await Web3.givenProvider.enable();
-  //   const web3 = new Web3(Web3.givenProvider);
-  //   await web3.currentProvider.request({
-  //     method: "wallet_switchEthereumChain",
-  //     params: [{ chainId: "0x13881" }],
-  //   });
+export const loadBlockchainAction =
+  (chain, address, connectedAccount, provider) => async (dispatch) => {
+    try {
+      if (
+        address?.toLowerCase() === connectedAccount?.toLowerCase() ||
+        address === undefined
+      ) {
+        const signer = await provider.getSigner();
+        const { chainId } = await provider.getNetwork();
 
-  //   let account = await web3.eth.getAccounts();
-  //   account = account[0];
-  //   let chainId = await web3.eth.getChainId();
-
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const accounts = await provider.listAccounts();
-    let account = accounts[0];
-    if (
-      address?.toLowerCase() === account?.toLowerCase() ||
-      address === undefined
-    ) {
-      const signer = await provider.getSigner();
-      const { chainId } = await provider.getNetwork();
-
-      if (chain === chainId) {
-        const web3 = provider;
-        const data = {
-          account,
-          web3,
-          chainId,
-          signer,
-        };
-        dispatch({ type: ActionTypes.WEB3CONNECT, payload: data });
+        if (chain === chainId) {
+          const web3 = provider;
+          const data = {
+            connectedAccount,
+            web3,
+            chainId,
+            signer,
+          };
+          dispatch({ type: ActionTypes.WEB3CONNECT, payload: data });
+        } else {
+          ToastMessage("Error", "Please connect correct chain", "error");
+        }
       } else {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: numToHex(chain) }],
-        });
-        const web3 = provider;
-        const data = {
-          account,
-          web3,
-          chainId,
-          signer,
-        };
-        dispatch({ type: ActionTypes.WEB3CONNECT, payload: data });
+        ToastMessage("Error", "Please connect correct wallet", "error");
       }
-    } else {
-      ToastMessage("Error", "Please connect correct wallet", "error");
+    } catch (err) {
+      console.log("errr", err);
     }
-  } catch (err) {
-    console.log("errr", err);
-  }
-};
-
-export const loadWalletConnectAction = (chain, address) => async (dispatch) => {
-  try {
-    console.log({ address });
-    const DEFAULT_PROJECT_ID = "1eccdcef1fec662a8e65ca062f39ed04";
-    const DEFAULT_RELAY_URL = "wss://relay.walletconnect.com";
-
-    const connector = await UniversalProvider.init({
-      projectId: DEFAULT_PROJECT_ID,
-      logger: "debug",
-      relayUrl: DEFAULT_RELAY_URL,
-    });
-
-    const web3Modal = new Web3Modal({
-      projectId: DEFAULT_PROJECT_ID || "",
-      walletConnectVersion: 2,
-    });
-
-    connector.on("display_uri", async (uri) => {
-      web3Modal?.openModal({ uri });
-    });
-
-    // Subscribe to session ping
-    connector.on("session_ping", ({ id, topic }) => {
-      console.log({ id, topic });
-
-      console.log("EVENT", "session_ping");
-    });
-
-    // Subscribe to session event
-    connector.on("session_event", ({ event, chainId }) => {
-      console.log({ event, chainId });
-
-      console.log("EVENT", "session_event");
-    });
-
-    // Subscribe to session update
-    connector.on("session_update", ({ topic, session }) => {
-      console.log({ topic, session });
-
-      console.log("EVENT", "session_updated");
-    });
-
-    // Subscribe to session delete
-    connector.on("session_delete", ({ id, topic }) => {
-      console.log({ id, topic });
-
-      console.log("EVENT", "session_deleted");
-
-      // resetApp();
-    });
-    let rpc;
-    if (chain === 1) {
-      rpc = { 1: "https://ethereum-rpc.publicnode.com" };
-    } else {
-      rpc = {
-        137: "https://polygon-rpc.com",
-      };
-    }
-
-    await connector.connect({
-      namespaces: {
-        eip155: {
-          methods: [
-            "eth_sendTransaction",
-            "eth_signTransaction",
-            "eth_sign",
-            "personal_sign",
-            "eth_signTypedData",
-          ],
-          chains: ["eip155:1"],
-          events: ["chainChanged", "accountsChanged"],
-          rpcMap: rpc,
-        },
-      },
-      // pairingTopic: pairing?.topic,
-    });
-
-    const accounts = await connector.enable();
-    let account = accounts[0];
-
-    web3Modal?.closeModal();
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = await provider.getSigner();
-    const { chainId } = await provider.getNetwork();
-
-    if (chain === chainId) {
-      const web3 = provider;
-      const data = {
-        account,
-        web3,
-        chainId,
-        signer,
-      };
-      dispatch({ type: ActionTypes.WEB3CONNECT, payload: data });
-    }
-  } catch (err) {
-    console.log("errr", err);
-  }
-};
+  };
 
 export const logoutWallet = () => async (dispatch) => {
   try {
@@ -210,18 +83,18 @@ export const loadContractIns = () => async (dispatch) => {
     const ethMarketContractIns = new ethers.Contract(
       ethMarketPlaceContract,
       ethMarketContractAbi,
-      ethProvider,
+      ethProvider
     );
 
     const ethMintingContractIns = new ethers.Contract(
       ethMintingConract,
       ethMintingContractAbi,
-      ethProvider,
+      ethProvider
     );
 
     //polygon
     const polygonProvider = new ethers.providers.JsonRpcProvider(
-      polygonInfuraIns,
+      polygonInfuraIns
     );
     const polygonMarketPlaceContract =
       "0x381c730F1646f00e4Ae9Dfe9589b1E0BDE107a1e";
@@ -229,12 +102,12 @@ export const loadContractIns = () => async (dispatch) => {
     const polygonMarketContractIns = new ethers.Contract(
       polygonMarketPlaceContract,
       polygonMarketContractAbi,
-      polygonProvider,
+      polygonProvider
     );
     const polygonMintingContractIns = new ethers.Contract(
       polygonMintingConract,
       polygonMintingContractAbi,
-      polygonProvider,
+      polygonProvider
     );
 
     // const imguri = extractNFTImage(ethMintingContract, 0)
@@ -271,7 +144,7 @@ export const loadContractIns = () => async (dispatch) => {
           type: "MATIC_CHAIN_FIXED",
           fixedItemData: maticList,
         });
-      },
+      }
     );
 
     getAuctions(ethMarketContractIns, polygonMarketContractIns).then(
@@ -281,7 +154,7 @@ export const loadContractIns = () => async (dispatch) => {
           type: "MATIC_CHAIN_AUCTION",
           auctionItemData: maticAuctionsList,
         });
-      },
+      }
     );
   } catch (err) {
     console.log("errr", err);
@@ -291,7 +164,7 @@ export const loadContractIns = () => async (dispatch) => {
 // getting fixed prices
 const getEmoteItems = async (
   ethMarketContractIns,
-  polygonMarketContractIns,
+  polygonMarketContractIns
 ) => {
   const maticcombined = {};
   const ethcombined = {};
