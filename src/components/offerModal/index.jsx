@@ -15,6 +15,8 @@ import { ETHToWei, WeiToETH } from "../../utills/convertWeiAndBnb";
 import { ToastMessage } from "../../components";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { loadContractIns } from "../../store/actions";
+import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import { ethers } from "ethers";
 
 const OfferModal = ({
   name,
@@ -25,7 +27,8 @@ const OfferModal = ({
   auctionid,
 }) => {
   const dispatch = useDispatch();
-
+  const { isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
 
@@ -34,7 +37,6 @@ const OfferModal = ({
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
   const [connectModal, setConnectModal] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
 
   const [dataSource, setDataSource] = useState([]);
 
@@ -152,13 +154,14 @@ const OfferModal = ({
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!web3) {
+    if (!isConnected) {
       setConnectModal(true);
-      setIsConnected(true);
     }
   };
 
   const handleBid = async () => {
+    const provider = new ethers.providers.Web3Provider(walletProvider);
+    const signer = provider.getSigner();
     if (offerAmount > 0) {
       const amount = ETHToWei(`${offerAmount}`);
       if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
@@ -195,10 +198,10 @@ const OfferModal = ({
   };
 
   useEffect(() => {
-    if (web3) {
+    if (isConnected) {
       setConnectModal(false);
     }
-  }, [web3]);
+  }, [isConnected]);
 
   return (
     <div>

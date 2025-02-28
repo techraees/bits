@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import { useSelector, useDispatch } from "react-redux";
 import "./css/index.css";
 import { AiFillCheckCircle } from "react-icons/ai";
@@ -15,6 +16,7 @@ import { Loader, ToastMessage } from "../../../components";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { loadContractIns } from "../../../store/actions";
 import { boughtMessage } from "../../../utills/emailMessages";
+import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 
 const environment = process.env;
 
@@ -28,18 +30,17 @@ function PurchaseStep({
   sellerUsername,
 }) {
   const dispatch = useDispatch();
+  const { isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { web3, signer } = useSelector((state) => state.web3.walletData);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [connectModal, setConnectModal] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
   const { userData } = useSelector((state) => state.address.userData);
-
-  console.log("web3", web3, signer);
 
   const [
     getProfile,
@@ -79,6 +80,8 @@ function PurchaseStep({
   }, [userData?.id]);
 
   const handlePurchase = async () => {
+    const provider = new ethers.providers.Web3Provider(walletProvider);
+    const signer = provider.getSigner();
     let val = Number(ETHToWei(totalPrice.toString()));
     let amount = val.toString();
     setLoadingStatus(true);
@@ -92,7 +95,7 @@ function PurchaseStep({
           const tx = await marketContractWithsigner.BuyFixedPriceItem(
             fixedId,
             quantity,
-            { value: amount }
+            { value: amount },
           );
 
           setLoadingMessage("Transaction Pending...");
@@ -111,7 +114,7 @@ function PurchaseStep({
                 userData?.full_name,
                 name,
                 sellerUsername,
-                totalPrice
+                totalPrice,
               );
               await sendEmail({
                 variables: {
@@ -127,6 +130,7 @@ function PurchaseStep({
             }
           }
         } catch (error) {
+          setLoadingStatus(false);
           const parsedEthersError = getParsedEthersError(error);
           if (parsedEthersError.context == -32603) {
             ToastMessage("Error", "Insufficient Balance", "error");
@@ -144,17 +148,16 @@ function PurchaseStep({
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!web3) {
+    if (!isConnected) {
       setConnectModal(true);
     }
   };
 
   useEffect(() => {
-    if (web3) {
+    if (isConnected) {
       setConnectModal(false);
-      setIsConnected(true);
     }
-  }, [web3]);
+  }, [isConnected]);
 
   return (
     <div className="purchaseStep">

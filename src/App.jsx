@@ -16,7 +16,7 @@ import {
   REMOVE_NFT_NFT_MARKET_PLACE,
   UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   CREATE_NEW_TRANSACTION,
-  CREATE_NEW_OWNERSHIP_OF_NFT
+  CREATE_NEW_OWNERSHIP_OF_NFT,
 } from "./gql/mutations";
 
 import { createAppKit } from "@reown/appkit/react";
@@ -54,12 +54,8 @@ function App() {
   const [updateBiddingTime] = useMutation(
     UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   );
-  const [createNewTransation] = useMutation(
-    CREATE_NEW_TRANSACTION,
-  );
-  const [createNewNftOwnership] = useMutation(
-    CREATE_NEW_OWNERSHIP_OF_NFT,
-  );
+  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
+  const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
 
   useEffect(() => {
     removeStorage("walletconnect");
@@ -90,7 +86,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <h1
+        {/* <h1
           style={{ background: "blue" }}
           onClick={async () => {
             try {
@@ -108,12 +104,16 @@ function App() {
               //     biddingEndTime:"2025-02-24T16:56:00.158+00:00"
               //   }
               // });
+
+              //skip this one
               // const response = await removeNftFromMarketPlace({
               //   variables: {
               //     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
               //     nftDbMarketPlaceId: "67bc1d42c1b4f5df8e868209",
               //   }
               // });
+
+              //skip this one too
               // const response = await updateBiddingTime({
               //   variables: {
               //     token:
@@ -121,11 +121,6 @@ function App() {
               //     nftDbMarketPlaceId: "67bc1d42c1b4f5df8e868209",
               //   },
               // });
-
-
-
-
-
 
               // const response = await createNewTransation({
               //   variables: {
@@ -143,12 +138,10 @@ function App() {
               //   },
               // });
 
-
-
-
               const response = await createNewNftOwnership({
                 variables: {
-                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
+                  token:
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
                   total_price: "120",
                   listingIDFromBlockChain: "asdasda",
                   copies: 23,
@@ -158,8 +151,6 @@ function App() {
                 },
               });
 
-
-
               console.log("Mutation response:", response.data);
             } catch (err) {
               console.error("Error adding NFT:", err);
@@ -167,7 +158,7 @@ function App() {
           }}
         >
           Hello World
-        </h1>
+        </h1> */}
         <Layout />
         <ZendeskComp />
       </Provider>
