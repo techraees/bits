@@ -18,8 +18,13 @@
   height: 100px;
   cursor: pointer;
 }
+
 @media only screen and (max-width: 600px) {
   .about-us {
     width: 100%;
+  }
+
+  .socialIcons_mobile>img {
+    height: 42px !important;
   }
 }

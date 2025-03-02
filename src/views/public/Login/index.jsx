@@ -131,7 +131,8 @@ function Login() {
           isLogged: true,
         },
       });
-      navigate("/");
+      // navigate("/");
+      window.location.href = '/'
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");

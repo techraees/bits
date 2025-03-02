@@ -139,7 +139,7 @@ const VideoGallery = () => {
       <div className="container">
         <div
           style={{ width: "100%" }}
-          className={`d-flex searchStyle ${bgColor} my-4`}
+          className={`d-flex searchStyle ${bgColor} my-4 py-2`}
         >
           <Input
             placeholder="Search Here..."
@@ -153,23 +153,23 @@ const VideoGallery = () => {
             marginTop: "2.5rem",
           }}
         ></div>
-        <div className="d-flex justify-content-between mt-5">
-          <div className="d-flex gap-5 ">
-            <div className={`filter-wrapper ${bgColor}`}>
+        <div className="d-flex justify-content-between mt-5 main_filter_parent">
+          <div className="d-flex gap-5 main_filter_parent__child_filters_with_categorised">
+            <div className={`filter-wrapper ${bgColor} main_filter_parent__filter_icon`}>
               <FontAwesomeIcon
                 icon={faFilter}
                 style={{ color: "#C93B3B", fontSize: "2rem" }}
               />
               {/* <BsFilterLeft style={{ color: "#C93B3B", fontSize: "2rem" }} /> */}
             </div>
-            <div className="marketplace-select-field d-flex gap-2">
-              <div className={`marketplace-selct-div ${bgColor}`}>
+            <div className="marketplace-select-field d-flex gap-2 main_filter_parent__select_icons">
+              <div className={`marketplace-selct-div ${bgColor} main_filter_parent__select_icons_single`}>
                 <Select
                   defaultValue="Category"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`main_filter_parent__select_icons_single_sub_child ${textColor == "black" && "light"}`}
                   onChange={handleCategoryChange}
                   options={[
                     {
@@ -192,13 +192,14 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div className={`marketplace-selct-div ${bgColor} main_filter_parent__select_icons_single`}>
                 <Select
                   defaultValue="Price"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`main_filter_parent__select_icons_single_sub_child ${textColor == "black" && "light"}`}
+
                   onChange={handlePriceChange}
                   options={[
                     {
@@ -225,14 +226,14 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div className={`marketplace-selct-div ${bgColor} main_filter_parent__select_icons_single`}>
                 <Select
                   defaultValue="Quantity"
                   style={{
                     width: 120,
                   }}
                   onChange={handleQuantityChange}
-                  className={textColor == "black" && "light"}
+                  className={`main_filter_parent__select_icons_single_sub_child ${textColor == "black" && "light"}`}
                   options={[
                     {
                       value: "0-10",
@@ -258,13 +259,13 @@ const VideoGallery = () => {
                 />
               </div>
 
-              <div className={`marketplace-selct-div ${bgColor}`}>
+              <div className={`marketplace-selct-div ${bgColor} main_filter_parent__select_icons_single`}>
                 <Select
                   defaultValue="Ranking"
                   style={{
                     width: 120,
                   }}
-                  className={textColor == "black" && "light"}
+                  className={`main_filter_parent__select_icons_single_sub_child ${textColor == "black" && "light"}`}
                   onChange={handleRankingChange}
                   options={[
                     {
@@ -276,7 +277,7 @@ const VideoGallery = () => {
               </div>
             </div>
           </div>
-          <div className={`grid-wrapper ${bgColor}`}>
+          <div className={`grid-wrapper ${bgColor} main_filter_parent__select_icons_single__icons`}>
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
             <span
               className="me-2"

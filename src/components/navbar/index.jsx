@@ -285,7 +285,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                       </span>
                     </Nav.Link>
                   </div>
-                  <div className="connectIcon d-flex">
+                  <div className="connectIcon d-flex align-items-center">
                     <Nav.Link className="white" onClick={handleLogin}>
                       Login
                     </Nav.Link>
@@ -335,38 +335,38 @@ const NavbarComponent = ({ dashboardNav }) => {
               )}
             </div>
           </div>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-3" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className="" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav
               className={
-                "d-flex align-items-center justify-content-between first-nav"
+                "d-flex align-items-center justify-content-between first-nav navBarPadding"
               }
             >
-              <NavLink to="/" className="white d-flex">
+              <NavLink to="/" className="white d-flex  mobile_navlink no_padding_top">
                 <img
                   src={home}
                   className="mx-2"
-                  style={{ width: "100%", height: "auto" }}
+                  style={{ width: "16px", height: "22px" }}
                   alt="home"
                 />
                 <span>Home</span>
               </NavLink>
               <Nav.Link
-                className="white"
+                className="white mobile_navlink"
                 onClick={() => navigate("/video-gallery")}
               >
                 Emote/Video gallery
               </Nav.Link>
               <Nav.Link
-                className="white"
+                className="white mobile_navlink"
                 onClick={() => navigate("/marketplace")}
               >
                 NFT Marketplace
               </Nav.Link>
-              <Nav.Link className="white" onClick={() => navigate("/about-us")}>
+              <Nav.Link className="white mobile_navlink" onClick={() => navigate("/about-us")}>
                 About
               </Nav.Link>
-              <NavLink to="/contact" className="white">
+              <NavLink to="/contact" className="white mobile_navlink">
                 Contact
               </NavLink>
             </Nav>

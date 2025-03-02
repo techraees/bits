@@ -28,7 +28,8 @@ function LogoutModal({ handleOk }) {
     removeStorage("token");
     dispatch(logoutWallet());
     handleOk();
-    navigate("/login");
+    window.location.href = '/'
+    // navigate("/login");
   };
 
   return (

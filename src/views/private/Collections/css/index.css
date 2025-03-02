@@ -52,7 +52,7 @@
   color: #b2b2b2 !important;
 }
 
-.ant-light > .ant-tabs-tab-btn {
+.ant-light>.ant-tabs-tab-btn {
   font-style: normal !important;
   font-weight: 600 !important;
   font-size: 16px !important;
@@ -64,10 +64,10 @@
   background: #b83131 !important;
 }
 
-.ant-tabs-top > .ant-tabs-nav::before,
-.ant-tabs-bottom > .ant-tabs-nav::before,
-.ant-tabs-top > div > .ant-tabs-nav::before,
-.ant-tabs-bottom > div > .ant-tabs-nav::before {
+.ant-tabs-top>.ant-tabs-nav::before,
+.ant-tabs-bottom>.ant-tabs-nav::before,
+.ant-tabs-top>div>.ant-tabs-nav::before,
+.ant-tabs-bottom>div>.ant-tabs-nav::before {
   display: none !important;
 }
 
@@ -108,19 +108,15 @@
   color: #b73131;
 }
 
-.pagination-wrapper
-  .ant-pagination-jump-prev
-  .ant-pagination-item-container
-  .ant-pagination-item-ellipsis,
-.ant-pagination-jump-next
-  .ant-pagination-item-container
-  .ant-pagination-item-ellipsis {
+.pagination-wrapper .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-ellipsis,
+.ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis {
   color: white !important;
 }
 
 .ant-pagination-options-size-changer.ant-select {
   display: none !important;
 }
+
 .ant-pagination-item {
   background-color: transparent !important;
   color: #ffffff !important;
@@ -134,6 +130,7 @@
 .ant-pagination-item:hover {
   border: 1px solid #ffffff !important;
 }
+
 .ant-pagination-item-active a {
   background: linear-gradient(180deg, #d34141 0%, #9f2424 100%);
   border-radius: 2px !important;
@@ -170,6 +167,12 @@
   color: #222222 !important;
 }
 
+
+.profile_icon_image {
+  position: relative;
+  left: -40px;
+}
+
 @media only screen and (max-width: 776px) {
   .collectionFirstContainer {
     flex-wrap: wrap;
@@ -193,4 +196,24 @@
     justify-content: center;
     align-items: center;
   }
+
+}
+
+@media (max-width: 767px) {
+  .circle_ring_icon_abs {
+    top: 11px !important;
+    right: -261px !important;
+  }
+
+  .no_margin,
+  .no_margin.ms-3 {
+    margin: 0px !important;
+  }
+
+  .profile_icon_image {
+    position: relative;
+    left: -4px !important;
+    top: -9px;
+  }
+
 }

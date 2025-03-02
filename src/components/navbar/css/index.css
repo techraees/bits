@@ -178,9 +178,11 @@
   background-color: #fff !important;
   left: 150%;
 }
+
 .logoutModal .ant-modal-body {
   padding: 5px 20px 20px 20px;
 }
+
 .logoutModal .ant-modal-close-x {
   width: 10px;
   height: 10px;
@@ -206,10 +208,27 @@
 }
 
 .red {
-  filter: invert(28%) sepia(95%) saturate(5744%) hue-rotate(343deg)
-    brightness(101%) contrast(98%);
+  filter: invert(28%) sepia(95%) saturate(5744%) hue-rotate(343deg) brightness(101%) contrast(98%);
 }
 
 .hidden {
   display: none;
+}
+
+
+/* Mobile-only styles */
+@media (max-width: 767px) {
+  .mobile_navlink {
+    padding: 12px 0;
+    border-bottom: 1px solid #3f3f3fa6 !important;
+    width: 100%;
+  }
+
+  .no_padding_top {
+    padding-top: 0px !important;
+  }
+
+  .navBarPadding {
+    padding: 0 10px;
+  }
 }

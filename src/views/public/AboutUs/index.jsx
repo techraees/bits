@@ -39,7 +39,7 @@ const AboutUs = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          className="socialIcons"
+          className="socialIcons socialIcons_mobile"
         >
           <img src={discord} height={70} />
           <img src={telegram} height={70} />

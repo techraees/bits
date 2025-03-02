@@ -257,7 +257,7 @@ const Collections = () => {
                     e.target.src = profileimg;
                   }}
                   style={{ borderRadius: "50%" }}
-                  className="my-2"
+                  className="my-2 profile_icon_image"
                 />
               ) : (
                 <img
@@ -265,10 +265,10 @@ const Collections = () => {
                   src={profileimg}
                   style={{ borderRadius: "50%" }}
                   width={200}
-                  className="my-2"
+                  className="my-2 profile_icon_image"
                 />
               )}
-              <div style={{ position: "absolute", width: 540 }}>
+              <div className="circle_ring_icon_abs" style={{ position: "absolute", width: 540 }}>
                 <img
                   alt="ellipse"
                   src={ellipse}
@@ -277,7 +277,7 @@ const Collections = () => {
                   className="my-2"
                 />
               </div>
-              <div className="ms-3">
+              <div className="ms-3 no_margin">
                 <h3 className="red-gradient-color semi-bold">{full_name}</h3>
                 {country && (
                   <div className="d-flex mb-1 ms-5">
