@@ -242,28 +242,28 @@ const UPDATE_NFT_PAYMENT = gql`
 // Add Nft to Nft Market Place
 const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
   mutation AddNftToNftMarketPlace(
-        $token: String!
-        $tokenId: String!
-        $numberOfCopies: Int!
-        $price: Decimal!
-        $nftAddress: String!
-        $listingID: String!
-        $listingType: String!
-        $currency: String!
-        $biddingStartTime: Date
-        $biddingEndTime: Date
+    $token: String!
+    $tokenId: String!
+    $numberOfCopies: Int!
+    $price: Decimal!
+    $nftAddress: String!
+    $listingID: String!
+    $listingType: String!
+    $currency: String!
+    $biddingStartTime: Date
+    $biddingEndTime: Date
   ) {
     addNftToNftMarketPlace(
-        token: $token
-        tokenId: $tokenId
-        numberOfCopies: $numberOfCopies
-        price: $price
-        nftAddress: $nftAddress
-        listingID: $listingID
-        listingType: $listingType
-        currency: $currency
-        biddingStartTime: $biddingStartTime
-        biddingEndTime: $biddingEndTime
+      token: $token
+      tokenId: $tokenId
+      numberOfCopies: $numberOfCopies
+      price: $price
+      nftAddress: $nftAddress
+      listingID: $listingID
+      listingType: $listingType
+      currency: $currency
+      biddingStartTime: $biddingStartTime
+      biddingEndTime: $biddingEndTime
     ) {
       message
       _id
@@ -274,12 +274,12 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
 // Remove Nft From Nft Market Place
 const REMOVE_NFT_NFT_MARKET_PLACE = gql`
   mutation RemoveNftFromNftMarketPlace(
-        $token: String!
-        $nftDbMarketPlaceId: String!
+    $token: String!
+    $nftDbMarketPlaceId: String!
   ) {
     removeNftFromNftMarketPlace(
-        token: $token
-        nftDbMarketPlaceId: $nftDbMarketPlaceId
+      token: $token
+      nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
       message
       _id
@@ -290,12 +290,12 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
 // Used to add the time by 5 mints
 const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
   mutation UpdateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-        $token: String!
-        $nftDbMarketPlaceId: String!
+    $token: String!
+    $nftDbMarketPlaceId: String!
   ) {
     updateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-        token: $token
-        nftDbMarketPlaceId: $nftDbMarketPlaceId
+      token: $token
+      nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
       message
       _id
@@ -306,30 +306,30 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
 // Used to create New Transaction
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
-        $token: String!
-        $nft_id: String
-        $first_person: String
-        $second_person: String
-        $listingID: String
-        $blockchain_listingID: String
-        $token_id: String
-        $price: Decimal
-        $currency: String
-        $transaction_type: String!
-        $copies_transferred: Int
+    $token: String!
+    $nft_id: String
+    $first_person: String
+    $second_person: String
+    $listingID: String
+    $blockchain_listingID: String
+    $token_id: String
+    $price: Decimal
+    $currency: String
+    $transaction_type: String!
+    $copies_transferred: Int
   ) {
     createNewTransaction(
-        token: $token
-        nft_id: $nft_id
-        first_person: $first_person
-        second_person: $second_person
-        listingID: $listingID
-        blockchain_listingID: $blockchain_listingID
-        token_id: $token_id
-        price: $price
-        currency: $currency
-        transaction_type: $transaction_type
-        copies_transferred: $copies_transferred
+      token: $token
+      nft_id: $nft_id
+      first_person: $first_person
+      second_person: $second_person
+      listingID: $listingID
+      blockchain_listingID: $blockchain_listingID
+      token_id: $token_id
+      price: $price
+      currency: $currency
+      transaction_type: $transaction_type
+      copies_transferred: $copies_transferred
     ) {
       message
       _id
@@ -340,22 +340,22 @@ const CREATE_NEW_TRANSACTION = gql`
 // Used to create New ownership of nft
 const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
   mutation CreateNewOwnershipOfNft(
-        $token: String! 
-        $total_price: Decimal!
-        $listingIDFromBlockChain: String!
-        $copies: Int!
-        $pricePerItem: Decimal!
-        $from_user_wallet: String!
-        $to_user_wallet: String!
+    $token: String!
+    $total_price: Decimal!
+    $listingIDFromBlockChain: String!
+    $copies: Int!
+    $pricePerItem: Decimal!
+    $from_user_wallet: String!
+    $to_user_wallet: String!
   ) {
     createNewOwnershipOfNft(
-        token: $token 
-        total_price: $total_price
-        listingIDFromBlockChain: $listingIDFromBlockChain
-        copies: $copies
-        pricePerItem: $pricePerItem
-        from_user_wallet: $from_user_wallet
-        to_user_wallet: $to_user_wallet
+      token: $token
+      total_price: $total_price
+      listingIDFromBlockChain: $listingIDFromBlockChain
+      copies: $copies
+      pricePerItem: $pricePerItem
+      from_user_wallet: $from_user_wallet
+      to_user_wallet: $to_user_wallet
     ) {
       message
       _id
@@ -390,6 +390,6 @@ export {
   CREATE_NEW_TRANSACTION,
 
   // Create New Nft Ownershsip
-  CREATE_NEW_OWNERSHIP_OF_NFT
+  CREATE_NEW_OWNERSHIP_OF_NFT,
   // ========================= Optimization Mutations ======================
 };
