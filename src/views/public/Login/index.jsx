@@ -22,11 +22,13 @@ import Cookies from "js-cookie";
 import { Col, Divider, Row, Select } from "antd";
 import { setStorage } from "../../../utills/localStorage";
 import ForgotPassModal from "../../../components/ForgotPassModal";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const env = process.env;
 
 function Login() {
   const dispatch = useDispatch();
+  const { address, isConnected } = useAppKitAccount();
 
   const { web3, account } = useSelector((state) => state.web3.walletData);
   const [connectModal, setConnectModal] = useState(false);
@@ -62,7 +64,7 @@ function Login() {
     LOGIN_USER,
     {
       fetchPolicy: "network-only",
-    },
+    }
   );
 
   const loginUser = (values) => {
@@ -210,7 +212,7 @@ function Login() {
       dispatch({
         type: "NFT_ADDRESS",
         userData: {
-          address: user_address,
+          address: address,
           user_name: user_name,
           country: country,
           bio: bio,
@@ -247,7 +249,7 @@ function Login() {
         fullName: data.full_name,
         password: data.password,
         phoneNumber: data.phone_number,
-        userAddress: account,
+        userAddress: address,
         dob: data.dob,
       };
       createUser({
@@ -271,7 +273,7 @@ function Login() {
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!web3) {
+    if (!isConnected) {
       setConnectModal(true);
     }
   };
@@ -280,10 +282,10 @@ function Login() {
   };
 
   useEffect(() => {
-    if (web3) {
+    if (isConnected) {
       setConnectModal(false);
     }
-  }, [web3]);
+  }, [isConnected]);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -333,7 +335,7 @@ function Login() {
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const data = await response.json();
@@ -611,7 +613,7 @@ function Login() {
                 <span className="ms-3 light-grey">Remember me</span>
               </div>
               <div className="my-5">
-                {!web3 ? (
+                {!isConnected ? (
                   <ButtonComponent
                     onClick={() => {
                       connectWalletHandle();

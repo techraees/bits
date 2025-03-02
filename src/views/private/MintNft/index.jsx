@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import { right_arrow } from "../../../assets";
 import {
   ButtonComponent,
@@ -25,6 +26,7 @@ import ConnectModal from "../../../components/connectModal";
 import CreatorEarningModal from "../../../components/creatorEarningModal";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { mintMessage } from "../../../utills/emailMessages";
+import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 
 const environment = process.env;
 
@@ -33,6 +35,9 @@ const MintNft = () => {
     (state) => state.app.theme.backgroundTheme,
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
+  const { isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
+
   const [connectModal, setConnectModal] = useState(false);
 
   const [creatorEarningModal, setCreatorEarningModal] = useState(false);
@@ -127,7 +132,7 @@ const MintNft = () => {
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!web3) {
+    if (!isConnected) {
       setConnectModal(true);
     }
   };
@@ -140,6 +145,8 @@ const MintNft = () => {
   };
 
   const mintCall = async (supply, royalty) => {
+    const provider = new ethers.providers.Web3Provider(walletProvider);
+    const signer = provider.getSigner();
     const contractWithsigner = contractData.mintContract.connect(signer);
     const prevTokenId = await contractWithsigner.mintedTokenId();
     try {
@@ -245,10 +252,10 @@ const MintNft = () => {
   }, [address, id]);
 
   useEffect(() => {
-    if (web3) {
+    if (isConnected) {
       setConnectModal(false);
     }
-  }, [web3]);
+  }, [isConnected]);
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>

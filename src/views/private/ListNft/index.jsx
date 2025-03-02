@@ -1,5 +1,6 @@
 import { Col, Radio, Row, Select } from "antd";
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import ReactPlayer from "react-player";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastMessage, Loader } from "../../../components";
@@ -18,9 +19,21 @@ import { timeToTimeStamp } from "../../../utills/timeToTimestamp";
 import { loadContractIns } from "../../../store/actions";
 // import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import { gql, useMutation } from "@apollo/client";
+import {
+  ADD_NFT_TO_NFT_MARKET_PLACE,
+  CREATE_NEW_TRANSACTION,
+} from "../../../gql/mutations";
 
 const ListNft = () => {
   // const { Option } = Select;
+
+  const [addNftToMarketPlace, { data, loading, error }] = useMutation(
+    ADD_NFT_TO_NFT_MARKET_PLACE
+  );
+
+  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("fixed Price");
@@ -49,10 +62,12 @@ const ListNft = () => {
 
   const { state } = useLocation();
   const dispatch = useDispatch();
+  const { isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
 
   const { userData } = useSelector((state) => state.address.userData);
   const { web3, account, signer } = useSelector(
-    (state) => state.web3.walletData,
+    (state) => state.web3.walletData
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
 
@@ -97,7 +112,7 @@ const ListNft = () => {
   };
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
 
@@ -109,7 +124,7 @@ const ListNft = () => {
     async function getTokens() {
       const data = await contractData.mintContract.balanceOf(
         userData?.address,
-        tokenId,
+        tokenId
       );
       setTokens(Number(data));
     }
@@ -119,6 +134,9 @@ const ListNft = () => {
   const handleListing = async () => {
     connectWalletHandle();
 
+    const provider = new ethers.providers.Web3Provider(walletProvider);
+    const signer = provider.getSigner();
+    const { chainId } = await provider.getNetwork();
     const marketContractWithsigner =
       contractData.marketContract.connect(signer);
     const mintContractWithsigner = contractData.mintContract.connect(signer);
@@ -127,12 +145,12 @@ const ListNft = () => {
       const price = ETHToWei(`${fixedPrice}`);
       const isApproved = await mintContractWithsigner.isApprovedForAll(
         account,
-        contractData.marketContract.address,
+        contractData.marketContract.address
       );
       if (!isApproved) {
         const approveTx = await mintContractWithsigner.setApprovalForAll(
           contractData.marketContract.address,
-          true,
+          true
         );
         const resp = await approveTx.wait();
         if (resp) {
@@ -141,7 +159,7 @@ const ListNft = () => {
               tokenId,
               fixedPriceCopies,
               price,
-              contractData.mintContract.address,
+              contractData.mintContract.address
             );
 
             setLoadingStatus(true);
@@ -171,7 +189,7 @@ const ListNft = () => {
             tokenId,
             fixedPriceCopies,
             price,
-            contractData.mintContract.address,
+            contractData.mintContract.address
           );
 
           setLoadingStatus(true);
@@ -199,13 +217,13 @@ const ListNft = () => {
       const price = ETHToWei(`${auctionStartPrice}`);
       const isApproved = await mintContractWithsigner.isApprovedForAll(
         account,
-        contractData.marketContract.address,
+        contractData.marketContract.address
       );
 
       if (!isApproved) {
         const approveTx = await mintContractWithsigner.setApprovalForAll(
           contractData.marketContract.address,
-          true,
+          true
         );
         const resp = await approveTx.wait();
         if (resp) {
@@ -217,7 +235,7 @@ const ListNft = () => {
               endTimeStamp,
               tokenId,
               auctionCopies,
-              contractData.mintContract.address,
+              contractData.mintContract.address
             );
 
             setLoadingStatus(true);
@@ -250,7 +268,7 @@ const ListNft = () => {
             endTimeStamp,
             tokenId,
             auctionCopies,
-            contractData.mintContract.address,
+            contractData.mintContract.address
           );
 
           setLoadingStatus(true);
@@ -273,6 +291,33 @@ const ListNft = () => {
         }
       }
     }
+
+    try {
+      const start = new Date(Math.floor(Date.now()) + 150);
+      const end = new Date(endTimeStamp);
+      const response = await addNftToMarketPlace({
+        variables: {
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
+          tokenId: tokenId,
+          numberOfCopies:
+            selectedOption === "auction price"
+              ? auctionCopies
+              : fixedPriceCopies,
+          price:
+            selectedOption === "auction price" ? auctionStartPrice : fixedPrice,
+          nftAddress: contractData.mintContract.address,
+          listingID: "listing_001",
+          listingType: selectedOption === "auction price" ? "auction" : "fixed",
+          currency: chainId == process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+          biddingStartTime: selectedOption === "auction price" ? start : 0,
+          biddingEndTime: selectedOption === "auction price" ? end : 0,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // code for db
   };
 
   const calculateEarning = (amount, fee, royalty) => {
@@ -297,16 +342,16 @@ const ListNft = () => {
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!web3) {
+    if (!isConnected) {
       setConnectModal(true);
     }
   };
 
   useEffect(() => {
-    if (web3) {
+    if (isConnected) {
       setConnectModal(false);
     }
-  }, [web3]);
+  }, [isConnected]);
 
   return (
     <div
