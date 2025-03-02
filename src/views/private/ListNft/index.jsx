@@ -30,7 +30,7 @@ const ListNft = () => {
   // const { Option } = Select;
 
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE
+    ADD_NFT_TO_NFT_MARKET_PLACE,
   );
 
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
@@ -67,7 +67,7 @@ const ListNft = () => {
 
   const { userData } = useSelector((state) => state.address.userData);
   const { web3, account, signer } = useSelector(
-    (state) => state.web3.walletData
+    (state) => state.web3.walletData,
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
 
@@ -112,7 +112,7 @@ const ListNft = () => {
   };
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
 
@@ -124,7 +124,7 @@ const ListNft = () => {
     async function getTokens() {
       const data = await contractData.mintContract.balanceOf(
         userData?.address,
-        tokenId
+        tokenId,
       );
       setTokens(Number(data));
     }
@@ -145,12 +145,12 @@ const ListNft = () => {
       const price = ETHToWei(`${fixedPrice}`);
       const isApproved = await mintContractWithsigner.isApprovedForAll(
         account,
-        contractData.marketContract.address
+        contractData.marketContract.address,
       );
       if (!isApproved) {
         const approveTx = await mintContractWithsigner.setApprovalForAll(
           contractData.marketContract.address,
-          true
+          true,
         );
         const resp = await approveTx.wait();
         if (resp) {
@@ -159,7 +159,7 @@ const ListNft = () => {
               tokenId,
               fixedPriceCopies,
               price,
-              contractData.mintContract.address
+              contractData.mintContract.address,
             );
 
             setLoadingStatus(true);
@@ -189,7 +189,7 @@ const ListNft = () => {
             tokenId,
             fixedPriceCopies,
             price,
-            contractData.mintContract.address
+            contractData.mintContract.address,
           );
 
           setLoadingStatus(true);
@@ -217,13 +217,13 @@ const ListNft = () => {
       const price = ETHToWei(`${auctionStartPrice}`);
       const isApproved = await mintContractWithsigner.isApprovedForAll(
         account,
-        contractData.marketContract.address
+        contractData.marketContract.address,
       );
 
       if (!isApproved) {
         const approveTx = await mintContractWithsigner.setApprovalForAll(
           contractData.marketContract.address,
-          true
+          true,
         );
         const resp = await approveTx.wait();
         if (resp) {
@@ -235,7 +235,7 @@ const ListNft = () => {
               endTimeStamp,
               tokenId,
               auctionCopies,
-              contractData.mintContract.address
+              contractData.mintContract.address,
             );
 
             setLoadingStatus(true);
@@ -268,7 +268,7 @@ const ListNft = () => {
             endTimeStamp,
             tokenId,
             auctionCopies,
-            contractData.mintContract.address
+            contractData.mintContract.address,
           );
 
           setLoadingStatus(true);

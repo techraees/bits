@@ -304,16 +304,18 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
 `;
 
 // Used to create New Transaction
+
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
     $token: String!
     $nft_id: String
-    $first_person: String
-    $second_person: String
+    $first_person_wallet_address: String
+    $second_person_wallet_address: String
     $listingID: String
     $blockchain_listingID: String
     $token_id: String
-    $price: Decimal
+    $chain_id: String
+    $amount: Decimal
     $currency: String
     $transaction_type: String!
     $copies_transferred: Int
@@ -321,12 +323,13 @@ const CREATE_NEW_TRANSACTION = gql`
     createNewTransaction(
       token: $token
       nft_id: $nft_id
-      first_person: $first_person
-      second_person: $second_person
+      first_person_wallet_address: $first_person_wallet_address
+      second_person_wallet_address: $second_person_wallet_address
       listingID: $listingID
       blockchain_listingID: $blockchain_listingID
       token_id: $token_id
-      price: $price
+      chain_id: $chain_id
+      amount: $amount
       currency: $currency
       transaction_type: $transaction_type
       copies_transferred: $copies_transferred
@@ -344,6 +347,7 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
     $total_price: Decimal!
     $listingIDFromBlockChain: String!
     $copies: Int!
+    $listingID: String!
     $pricePerItem: Decimal!
     $from_user_wallet: String!
     $to_user_wallet: String!
@@ -353,6 +357,7 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
       total_price: $total_price
       listingIDFromBlockChain: $listingIDFromBlockChain
       copies: $copies
+      listingID: $listingID
       pricePerItem: $pricePerItem
       from_user_wallet: $from_user_wallet
       to_user_wallet: $to_user_wallet
