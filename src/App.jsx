@@ -86,7 +86,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <h1
+        {/* <h1
           style={{ background: "blue" }}
           onClick={async () => {
             try {
@@ -160,7 +160,7 @@ function App() {
           }}
         >
           Hello World
-        </h1>
+        </h1> */}
         <Layout />
         <ZendeskComp />
       </Provider>
