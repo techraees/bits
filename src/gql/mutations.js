@@ -250,6 +250,8 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
     $listingID: String!
     $listingType: String!
     $currency: String!
+    $fixedid: String
+    $auctionid: String
     $biddingStartTime: Date
     $biddingEndTime: Date
   ) {
@@ -261,6 +263,8 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
       nftAddress: $nftAddress
       listingID: $listingID
       listingType: $listingType
+      fixedid: $fixedid
+      auctionid: $auctionid
       currency: $currency
       biddingStartTime: $biddingStartTime
       biddingEndTime: $biddingEndTime

@@ -342,7 +342,10 @@ const NavbarComponent = ({ dashboardNav }) => {
                 "d-flex align-items-center justify-content-between first-nav navBarPadding"
               }
             >
-              <NavLink to="/" className="white d-flex  mobile_navlink no_padding_top">
+              <NavLink
+                to="/"
+                className="white d-flex  mobile_navlink no_padding_top"
+              >
                 <img
                   src={home}
                   className="mx-2"
@@ -363,7 +366,10 @@ const NavbarComponent = ({ dashboardNav }) => {
               >
                 NFT Marketplace
               </Nav.Link>
-              <Nav.Link className="white mobile_navlink" onClick={() => navigate("/about-us")}>
+              <Nav.Link
+                className="white mobile_navlink"
+                onClick={() => navigate("/about-us")}
+              >
                 About
               </Nav.Link>
               <NavLink to="/contact" className="white mobile_navlink">

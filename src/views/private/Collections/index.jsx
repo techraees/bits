@@ -268,7 +268,10 @@ const Collections = () => {
                   className="my-2 profile_icon_image"
                 />
               )}
-              <div className="circle_ring_icon_abs" style={{ position: "absolute", width: 540 }}>
+              <div
+                className="circle_ring_icon_abs"
+                style={{ position: "absolute", width: 540 }}
+              >
                 <img
                   alt="ellipse"
                   src={ellipse}

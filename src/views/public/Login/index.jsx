@@ -132,7 +132,7 @@ function Login() {
         },
       });
       // navigate("/");
-      window.location.href = '/'
+      window.location.href = "/";
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");

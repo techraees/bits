@@ -71,40 +71,35 @@ const sellingNftFromNftMarketPlace = await createNewTransation({
   },
 });
 
-
-
 // Used to make bidding transaction
 const biddingTransaction = await createNewTransation({
-    variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
-      first_person_wallet_address: "0x6588110c61280f68275bf852fC2C12CED740e8d9",
-      nft_id: "6658c6badb40134913175fca",
-      amount: 10.5,
-      currency: "ETH",
-      transaction_type: "bidding_transaction",
-      token_id: "1",
-      chain_id: "1",
-      blockchain_listingID: "listing_001",
-      listingID: "67bca4a0cc7a16835231eb20"
-    },
-  });
-
-
-
+  variables: {
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
+    first_person_wallet_address: "0x6588110c61280f68275bf852fC2C12CED740e8d9",
+    nft_id: "6658c6badb40134913175fca",
+    amount: 10.5,
+    currency: "ETH",
+    transaction_type: "bidding_transaction",
+    token_id: "1",
+    chain_id: "1",
+    blockchain_listingID: "listing_001",
+    listingID: "67bca4a0cc7a16835231eb20",
+  },
+});
 
 //   ============================== New Ownership =====================
 // Used to create new ownership
 const newOwnership = await createNewNftOwnership({
-    variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
-      total_price: "120",
-      listingIDFromBlockChain: "listing_001",
-      listingID: "listing_001",
-      copies: 23,
-      pricePerItem: "12",
-      from_user_wallet: "0x8769",
-      to_user_wallet: "0x95",
-    },
-  });
+  variables: {
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
+    total_price: "120",
+    listingIDFromBlockChain: "listing_001",
+    listingID: "listing_001",
+    copies: 23,
+    pricePerItem: "12",
+    from_user_wallet: "0x8769",
+    to_user_wallet: "0x95",
+  },
+});

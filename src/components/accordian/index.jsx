@@ -41,11 +41,13 @@ const AccordianComponent = ({
               <Panel className={`${border} p-2`} header={e.title} key={e.key}>
                 {list ? (
                   <ul>
-                    <li className={`py-3 ${'textColor_Black'}`}>{e.description}</li>
+                    <li className={`py-3 ${"textColor_Black"}`}>
+                      {e.description}
+                    </li>
                   </ul>
                 ) : (
                   <>
-                    <span className={'textColor_Black'}>{e.description}</span>
+                    <span className={"textColor_Black"}>{e.description}</span>
                     {e.key === btnKey && (
                       <div className="d-flex mt-4 justify-content-center">
                         <div style={{ minWidth: "20%" }}>

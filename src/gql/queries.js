@@ -264,6 +264,64 @@ const GET_TOP_NFTS = gql`
   }
 `;
 
+// Used to fetch my nfts that I owned
+const Get_MY_NFTS_THAT_I_OWNED = gql`
+  query GetMyNftsThatIOwned($token: String!, $wallet_address: String!) {
+    getMyNftsThatIOwned(token: $token, wallet_address: $wallet_address)
+  }
+`;
+
+// Used to fetch all nfts in market plance that support filters
+const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
+  query GetAllNftsInMarketPlaceAndSupportFilter($filterObj: JSON) {
+    getAllNftsInMarketPlaceAndSupportFilter(filterObj: $filterObj)
+  }
+`;
+
+// Used to get datails of single nft from nft market place
+const GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE = gql`
+  query GetDetailsOfSingleNftFromMarketPlace($_id: String!) {
+    getDetailsOfSingleNftFromMarketPlace(_id: $_id)
+  }
+`;
+
+// Used to get all my transactions
+const GET_ALL_MY_TRANSACTION = gql`
+  query GetAllMyTransaction($token: String!, $filterObj: JSON) {
+    getAllMyTransaction(token: $token, filterObj: $filterObj)
+  }
+`;
+
+//  Used to fetch transaction details of specific transaction
+const GET_TRANSACTION_DETAILS_OF_SPECIFIC = gql`
+  query GetTransactionDetailsOfSpecific($token: String!, $_id: String!) {
+    getTransactionDetailsOfSpecific(token: $token, _id: $_id)
+  }
+`;
+
+//  Used to fetch nfts that I sold
+const GET_NFTS_THAT_I_SOLD = gql`
+  query GetNftsThatISold($token: String!) {
+    getNftsThatISold(token: $token)
+  }
+`;
+
+//  Used to fetch nfts that I bought
+const GET_NFTS_THAT_I_BOUGHT = gql`
+  query GetNftsThatIBought($token: String!) {
+    getNftsThatIBought(token: $token)
+  }
+`;
+
+// //  Used to fetch secondary owner who bought my nfts
+// const GET_SECONDARY_OWNER_WHO_BOUGHT_MY_NFTS = gql``;
+
+// //  Used to fetch the ownership history of single nfts
+// const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql``;
+
+// //  Used to fetch all nfts as primary or secondary quantity
+// const GET_ALL_NFTS_AS_PRIMARY_OR_SECONDARY_QUANTITY = gql``;
+
 export {
   GET_ALL_NFTS,
   LOGIN_USER,
@@ -276,4 +334,16 @@ export {
   GET_TOP_VIEW_NFTS,
   DETAILS_OF_A_NFT,
   GET_TOP_NFTS,
+  // ========================= Optimization Queries ======================
+  Get_MY_NFTS_THAT_I_OWNED,
+  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
+  GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
+  GET_ALL_MY_TRANSACTION,
+  GET_TRANSACTION_DETAILS_OF_SPECIFIC,
+  GET_NFTS_THAT_I_SOLD,
+  GET_NFTS_THAT_I_BOUGHT,
+  // GET_SECONDARY_OWNER_WHO_BOUGHT_MY_NFTS,
+  // GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
+  // GET_ALL_NFTS_AS_PRIMARY_OR_SECONDARY_QUANTITY,
+  // ========================= Optimization Queries ======================
 };
