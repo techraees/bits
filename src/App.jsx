@@ -22,7 +22,15 @@ import {
 import { createAppKit } from "@reown/appkit/react";
 import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
 import { mainnet, polygon } from "@reown/appkit/networks";
-import { GET_ALL_MY_TRANSACTION, GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE, Get_MY_NFTS_THAT_I_OWNED, GET_NFTS_THAT_I_BOUGHT, GET_NFTS_THAT_I_SOLD, GET_TRANSACTION_DETAILS_OF_SPECIFIC } from "./gql/queries";
+import {
+  GET_ALL_MY_TRANSACTION,
+  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
+  GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
+  Get_MY_NFTS_THAT_I_OWNED,
+  GET_NFTS_THAT_I_BOUGHT,
+  GET_NFTS_THAT_I_SOLD,
+  GET_TRANSACTION_DETAILS_OF_SPECIFIC,
+} from "./gql/queries";
 
 const projectId = process.env.REACT_APP_REOWN_ID;
 
@@ -64,48 +72,71 @@ function App() {
     isFetching: getMyNftsThatIOwnedFetching,
   } = useQuery(Get_MY_NFTS_THAT_I_OWNED, {
     variables: {
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
       wallet_address: "0x6588110c61280f68275bf852fC2C12CED740e8d9",
     },
   });
-  const { data: getAllNftsInMarketPlaceAndSupportFilter, isLoading: getAllNftsInMarketPlaceAndSupportFilterLoading, isFetching: getAllNftsInMarketPlaceAndSupportFilterFetching } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
-    {
-      variables: {
-        filterObj: "{\"listingType\":\"auction\"}",
-      }
-    }
-  )
-  const { data: getDetailsOfSingleNftFromMarketPlace, isLoading: getDetailsOfSingleNftFromMarketPlaceLoading, isFetching: getDetailsOfSingleNftFromMarketPlaceFetching } = useQuery(GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
-    {
-      variables: {
-        _id: "67bca4a0cc7a16835231eb20",
-      },
-    }
-  )
-  const { data: getAllMyTransaction, isLoading: getAllMyTransactionLoading, isFetching: getAllMyTransactionFetching } = useQuery(GET_ALL_MY_TRANSACTION,
-    {
-      variables: {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
-        filterObj: "{\"listingType\":\"auction\"}",
-      }
-    }
-  )
-  const { data: getTransactionDetailsOfSpecific, isLoading: getTransactionDetailsOfSpecificLoading, isFetching: getTransactionDetailsOfSpecificFetching } = useQuery(GET_TRANSACTION_DETAILS_OF_SPECIFIC, {
+  const {
+    data: getAllNftsInMarketPlaceAndSupportFilter,
+    isLoading: getAllNftsInMarketPlaceAndSupportFilterLoading,
+    isFetching: getAllNftsInMarketPlaceAndSupportFilterFetching,
+  } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+      filterObj: '{"listingType":"auction"}',
+    },
+  });
+  const {
+    data: getDetailsOfSingleNftFromMarketPlace,
+    isLoading: getDetailsOfSingleNftFromMarketPlaceLoading,
+    isFetching: getDetailsOfSingleNftFromMarketPlaceFetching,
+  } = useQuery(GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE, {
+    variables: {
+      _id: "67bca4a0cc7a16835231eb20",
+    },
+  });
+  const {
+    data: getAllMyTransaction,
+    isLoading: getAllMyTransactionLoading,
+    isFetching: getAllMyTransactionFetching,
+  } = useQuery(GET_ALL_MY_TRANSACTION, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+      filterObj: '{"listingType":"auction"}',
+    },
+  });
+  const {
+    data: getTransactionDetailsOfSpecific,
+    isLoading: getTransactionDetailsOfSpecificLoading,
+    isFetching: getTransactionDetailsOfSpecificFetching,
+  } = useQuery(GET_TRANSACTION_DETAILS_OF_SPECIFIC, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
       _id: "67c3fba7ae1fe85f32d72ebb",
-    }
-  })
-  const { data: getNftsThatISold, isLoading: getNftsThatISoldLoading, isFetching: getNftsThatISoldFetching } = useQuery(GET_NFTS_THAT_I_SOLD, {
+    },
+  });
+  const {
+    data: getNftsThatISold,
+    isLoading: getNftsThatISoldLoading,
+    isFetching: getNftsThatISoldFetching,
+  } = useQuery(GET_NFTS_THAT_I_SOLD, {
     variables: {
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
-    }
-  })
-  const { data: getNftsThatIBought, isLoading: getNftsThatIBoughtLoading, isFetching: getNftsThatIBoughtFetching } = useQuery(GET_NFTS_THAT_I_BOUGHT, {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+    },
+  });
+  const {
+    data: getNftsThatIBought,
+    isLoading: getNftsThatIBoughtLoading,
+    isFetching: getNftsThatIBoughtFetching,
+  } = useQuery(GET_NFTS_THAT_I_BOUGHT, {
     variables: {
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
-    }
-  })
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+    },
+  });
 
   useEffect(() => {
     removeStorage("walletconnect");
