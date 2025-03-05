@@ -313,14 +313,12 @@ const GET_NFTS_THAT_I_BOUGHT = gql`
   }
 `;
 
-// //  Used to fetch secondary owner who bought my nfts
-// const GET_SECONDARY_OWNER_WHO_BOUGHT_MY_NFTS = gql``;
-
-// //  Used to fetch the ownership history of single nfts
-// const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql``;
-
-// //  Used to fetch all nfts as primary or secondary quantity
-// const GET_ALL_NFTS_AS_PRIMARY_OR_SECONDARY_QUANTITY = gql``;
+//  Used to fetch the ownership history of single nfts
+const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
+  query GetOwnershipHistoryOfSingleNfts($_id: String!){
+    getOwnershipHistoryOfSingleNfts(_id: $_id)
+  }
+`;
 
 export {
   GET_ALL_NFTS,
@@ -342,8 +340,6 @@ export {
   GET_TRANSACTION_DETAILS_OF_SPECIFIC,
   GET_NFTS_THAT_I_SOLD,
   GET_NFTS_THAT_I_BOUGHT,
-  // GET_SECONDARY_OWNER_WHO_BOUGHT_MY_NFTS,
-  // GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
-  // GET_ALL_NFTS_AS_PRIMARY_OR_SECONDARY_QUANTITY,
+  GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
   // ========================= Optimization Queries ======================
 };

@@ -29,6 +29,7 @@ import {
   Get_MY_NFTS_THAT_I_OWNED,
   GET_NFTS_THAT_I_BOUGHT,
   GET_NFTS_THAT_I_SOLD,
+  GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
   GET_TRANSACTION_DETAILS_OF_SPECIFIC,
 } from "./gql/queries";
 
@@ -137,6 +138,15 @@ function App() {
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
     },
   });
+  const {
+    data: getOwnershipHistoryOfSingleNfts,
+    isLoading: getOwnershipHistoryOfSingleNftsLoading,
+    isFetching: getOwnershipHistoryOfSingleNftsFetching,
+  } = useQuery(GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS, {
+    variables: {
+      _id: "662c321321570927266b46ec",
+    },
+  });
 
   useEffect(() => {
     removeStorage("walletconnect");
@@ -172,6 +182,7 @@ function App() {
     getTransactionDetailsOfSpecific,
     getNftsThatISold,
     getNftsThatIBought,
+    getOwnershipHistoryOfSingleNfts,
   );
   return (
     <>
