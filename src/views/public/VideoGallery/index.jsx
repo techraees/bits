@@ -6,9 +6,13 @@ import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { GET_ALL_NFTS_WITHOUT_ADDRESS } from "../../../gql/queries";
+import {
+  GET_ALL_NFTS_WITHOUT_ADDRESS,
+  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
+} from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { CardCompnent } from "../../../components";
+import { profile2 } from "../../../assets";
 
 const environment = process.env;
 
@@ -26,11 +30,31 @@ const VideoGallery = () => {
   const [quantityFilter, setQuantityFilter] = useState([]);
   const [allnfts, setAllNfts] = useState([]);
   const [fixedItemsDatas, setFixedItemsDatas] = useState([]);
+  const [fixedItemData, setFixedItemData] = useState([]);
+
+  const {
+    data: getAllNftsInMarketPlaceAndSupportFilter,
+    isLoading: getAllNftsInMarketPlaceAndSupportFilterLoading,
+    isFetching: getAllNftsInMarketPlaceAndSupportFilterFetching,
+  } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
+    variables: {
+      filterObj: '{"listingType":"fixed_price"}',
+    },
+  });
+
+  useEffect(() => {
+    if (getAllNftsInMarketPlaceAndSupportFilter) {
+      setFixedItemData(
+        getAllNftsInMarketPlaceAndSupportFilter
+          ?.getAllNftsInMarketPlaceAndSupportFilter?.data,
+      );
+    }
+  }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
   const { contractData } = useSelector((state) => state.chain.contractData);
-  const { fixedItemData } = useSelector(
-    (state) => state.fixedItemDatas.fixedItemData,
-  );
+  // const { fixedItemData } = useSelector(
+  //   (state) => state.fixedItemDatas.fixedItemData
+  // );
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
@@ -87,25 +111,25 @@ const VideoGallery = () => {
     setAllNfts(filterdItems);
   }, [categoryFilter]);
 
-  useEffect(() => {
-    let filteredFixedItems;
-    if (priceFilter && fixedItemData) {
-      filteredFixedItems = fixedItemData
-        .map((item) => ({
-          ...item,
-          owners: item.owners.filter((owner) => {
-            const usdPrice = Number(owner.price);
-            return (
-              Number(usdPrice) >= Number(priceFilter[0]) &&
-              Number(usdPrice) <= Number(priceFilter[1])
-            );
-          }),
-        }))
-        .filter((item) => item.owners.length > 0);
-    }
+  // useEffect(() => {
+  //   let filteredFixedItems;
+  //   if (priceFilter && fixedItemData) {
+  //     filteredFixedItems = fixedItemData
+  //       .map((item) => ({
+  //         ...item,
+  //         owners: item.owners.filter((owner) => {
+  //           const usdPrice = Number(owner.price);
+  //           return (
+  //             Number(usdPrice) >= Number(priceFilter[0]) &&
+  //             Number(usdPrice) <= Number(priceFilter[1])
+  //           );
+  //         }),
+  //       }))
+  //       .filter((item) => item.owners.length > 0);
+  //   }
 
-    setFixedItemsDatas(filteredFixedItems);
-  }, [priceFilter]);
+  //   setFixedItemsDatas(filteredFixedItems);
+  // }, [priceFilter]);
 
   useEffect(() => {
     let filteredFixedItems;
@@ -130,6 +154,8 @@ const VideoGallery = () => {
   useEffect(() => {
     refetch();
   }, []);
+
+  console.log("All data", fixedItemData, fixedItemsDatas);
 
   return (
     <div
@@ -304,44 +330,41 @@ const VideoGallery = () => {
           }}
         ></div>
         <div className="row my-3">
-          {(priceFilter.length > 0 || quantityFilter.length > 0
+          {(priceFilter.length > 0 ||
+          quantityFilter.length > 0 ||
+          categoryFilter
             ? fixedItemsDatas
             : fixedItemData
-          )?.map((item) => {
-            return (
-              categoryFilter ? allnfts : data?.getAllNftsWithoutAddress
-            )?.map((e, i) => {
-              if (
-                !e.is_blocked &&
-                item.tokenid == e.token_id &&
-                contractData.chain == e.chainId &&
-                item.isSold == false
-              ) {
-                return (
-                  <CardCompnent
-                    key={i}
-                    image={imgPaths + e?.user_id?.profileImg}
-                    status={e.status}
-                    name={e.name}
-                    videoLink={e.video}
-                    topName
-                    collectionBtn
-                    detailBtn
-                    userProfile={userProfile ? true : false}
-                    userId={e?.user_id?.id}
-                    sellerUsername={e?.user_id?.user_name}
-                    owners={item.owners}
-                    fixtokenId={item.tokenid}
-                    fixOwner={e.wallet_address}
-                    fixRoyalty={e.royalty}
-                    fixCopies={e.supply}
-                    id={e._id}
-                    likeCount={e.likeCount}
-                    watchCount={e.watchCount}
-                  />
-                );
-              }
-            });
+          )?.map((item, i) => {
+            if (
+              !item?.nft_id?.is_blocked &&
+              contractData.chain == item?.nft_id?.chainId &&
+              item.isSold == false
+            ) {
+              return (
+                <CardCompnent
+                  key={i}
+                  image={profile2}
+                  status={item?.nft_id?.status}
+                  name={item?.nft_id?.name}
+                  videoLink={item?.nft_id?.video}
+                  topName
+                  collectionBtn
+                  detailBtn
+                  userProfile={userProfile ? true : false}
+                  userId={item?.seller?._id}
+                  sellerUsername={item?.seller?.user_name}
+                  owners={item?.owners}
+                  fixtokenId={item?.tokenid}
+                  fixOwner={item?.seller?.user_address}
+                  fixRoyalty={item?.nft_id?.royalty}
+                  fixCopies={item?.nft_id?.supply}
+                  id={item?.nft_id?._id}
+                  likeCount={item?.nft_id?.likeCount}
+                  watchCount={item?.nft_id?.watchCount}
+                />
+              );
+            }
           })}
         </div>
       </div>

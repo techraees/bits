@@ -115,7 +115,7 @@ const routes = [
     belongsToIcon: history,
     component: <TransactionHistory />,
     visible: true,
-    isDisabled: true,
+    isDisabled: false,
     isNav: true,
     key: 12,
   },

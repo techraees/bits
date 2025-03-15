@@ -4,6 +4,7 @@ import "./css/index.css";
 import { useSelector } from "react-redux";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { trimWallet } from "../../utills/trimWalletAddr";
+import { dbDateToReadableDate } from "../../utills/timeToTimestamp";
 
 const Transactions = ({ data, checkIcon }) => {
   const textColor = useSelector((state) => state.app.theme.textColor);
@@ -22,6 +23,8 @@ const Transactions = ({ data, checkIcon }) => {
   MATICTOUSD(1).then((result) => {
     setMaticBal(result);
   });
+
+  console.log("history data", data);
 
   return (
     <div className="py-2">
@@ -79,23 +82,30 @@ const Transactions = ({ data, checkIcon }) => {
                   <img className="me-4" src={e.image} style={{ width: 60 }} />
                 )}
                 <div>
-                  <span className={textColor2}>{e.name}</span>
+                  <span className={textColor2}>
+                    {trimWallet(e?.first_person_wallet_address)}
+                  </span>
                   <div>
                     {checkIcon && <img src={check} className="me-2" />}
-                    {e.buyerName && (
+                    {e?.second_person_wallet_address && (
                       <span className={textColor2}>
-                        Sold to {trimWallet(e.buyerName)} on{" "}
+                        {e?.transaction_type === "selling_nft"
+                          ? "Sold to"
+                          : "bought from"}{" "}
+                        {trimWallet(e?.second_person_wallet_address)} on{" "}
                       </span>
                     )}
-                    <span className="red">{e.date}</span>
+                    <span className="red">
+                      {dbDateToReadableDate(e?.createdAt)}
+                    </span>
                   </div>
                 </div>
               </div>
               <h4 className={"m-0"} style={{ color: "#B93232" }}>
                 ${" "}
-                {contractData.chain == 1
-                  ? (e.price * ethBal).toFixed(4)
-                  : (e.price * maticBal).toFixed(4)}
+                {e?.currency === "ETH"
+                  ? Number(e?.amount * ethBal).toFixed(4)
+                  : Number(e?.amount * maticBal).toFixed(4)}
               </h4>
             </div>
           );

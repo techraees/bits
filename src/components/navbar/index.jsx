@@ -148,6 +148,7 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   useEffect(() => {
     let token = getStorage("token");
+    console.log("token", token);
     if (token) {
       profile({
         variables: {

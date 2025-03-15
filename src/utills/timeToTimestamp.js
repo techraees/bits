@@ -23,3 +23,18 @@ export const timestampToDate = (timestamp) => {
     dateFormat.getFullYear();
   return fulldate;
 };
+
+export const dbDateToReadableDate = (dbdate) => {
+  const date = new Date(dbdate);
+
+  const readableDateTime = date.toLocaleString("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // Ensures AM/PM format
+  });
+
+  return readableDateTime;
+};

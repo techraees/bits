@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { down_arrow, profile_large, up_arrow } from "../../../assets";
+import React, { useState, useEffect } from "react";
 import "./css/index.css";
 import { Menu, Dropdown, Button, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
+import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
+import { dbDateToReadableDate } from "../../../utills/timeToTimestamp";
 
 import {
   Chart as ChartJS,
@@ -53,51 +56,54 @@ export const data = {
 };
 
 const TransactionHistory = () => {
+  const {
+    data: getAllMyTransaction,
+    isLoading: getAllMyTransactionLoading,
+    isFetching: getAllMyTransactionFetching,
+  } = useQuery(GET_ALL_MY_TRANSACTION, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+    },
+  });
+  const { userData } = useSelector((state) => state.address.userData);
   const [dropdownValue, setDropdownValue] = useState("Last Week");
-  let transactionsData = [
-    {
-      title: "Deposit",
-      category: "Paypal",
-      price: "$405",
-      arrow: up_arrow,
-    },
-    {
-      title: "Deposit",
-      category: "Metamask",
-      price: "$405",
-      arrow: up_arrow,
-    },
-    {
-      title: "Withdraw",
-      category: "Paypal",
-      price: "$405",
-      arrow: down_arrow,
-    },
-    {
-      title: "Withdraw",
-      category: "Metamask",
-      price: "$405",
-      arrow: down_arrow,
-    },
-    {
-      title: "Deposit",
-      category: "Paypal",
-      price: "$405",
-      arrow: up_arrow,
-    },
-    {
-      title: "Deposit",
-      category: "Paypal",
-      price: "$405",
-      arrow: up_arrow,
-    },
-    {
-      title: "Withdraw",
-      category: "metamask",
-      price: "$405",
-      arrow: down_arrow,
-    },
-  ];
+  const [allHistory, setAllHistory] = useState([]);
+  const [ethBal, setEthBal] = useState(0);
+  const [maticBal, setMaticBal] = useState(0);
+
+  ETHTOUSD(1).then((result) => {
+    setEthBal(result);
+  });
+
+  MATICTOUSD(1).then((result) => {
+    setMaticBal(result);
+  });
+
+  const getTranType = (tran) => {
+    if (tran === "create_nft") {
+      return "Nft Created";
+    }
+    if (tran === "listing_nft") {
+      return "Nft Listed";
+    }
+    if (tran === "buying_nft") {
+      return "Nft Bought";
+    }
+    if (tran === "selling_nft") {
+      return "Nft Sold";
+    }
+    if (tran === "bidding_transaction") {
+      return "Bid";
+    }
+  };
+
+  useEffect(() => {
+    if (getAllMyTransaction) {
+      setAllHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+    }
+  }, [getAllMyTransaction]);
+
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
@@ -135,10 +141,10 @@ const TransactionHistory = () => {
           style={{ alignItems: "center" }}
         >
           <div className="d-flex">
-            <img src={profile_large} style={{ width: 70, height: 70 }} />
+            {/* <img src={profile_large} style={{ width: 70, height: 70 }} /> */}
             <div className="ms-3">
               <span className={textColor2}>Hi,</span>
-              <p className={textColor}>Snap Boogie</p>
+              <p className={textColor}>{userData?.full_name}</p>
             </div>
           </div>
           <Dropdown overlay={menu} className="dropdownView mobMargin">
@@ -191,7 +197,7 @@ const TransactionHistory = () => {
               </span>
             </h4> */}
           </div>
-          {transactionsData.map((e, i) => {
+          {allHistory.map((e, i) => {
             return (
               <div
                 key={i}
@@ -203,7 +209,7 @@ const TransactionHistory = () => {
               >
                 <div>
                   <span className={textColor2} style={{ fontSize: 18 }}>
-                    {e.title}
+                    {getTranType(e?.transaction_type)}
                   </span>
                   <div>
                     {/* <img
@@ -216,7 +222,7 @@ const TransactionHistory = () => {
                   </div>
                 </div>
                 <div>
-                  {e.title == "Deposit" ? (
+                  {/* {e.title == "Deposit" ? (
                     <>
                       <button className="depositeBtn">Deposit</button>
                     </>
@@ -224,9 +230,21 @@ const TransactionHistory = () => {
                     <>
                       <button className="withdrawBtn">Withdraw</button>
                     </>
-                  )}
+                  )} */}
 
-                  <span className={`${textColor} me-2`}>$405</span>
+                  {/* <button className="depositeBtn">
+                    {dbDateToReadableDate(e?.createdAt)}
+                  </button> */}
+                  <p className={`${textColor} me-2`}>
+                    {dbDateToReadableDate(e?.createdAt)}
+                  </p>
+
+                  <span className={`${textColor} me-2`}>
+                    ${" "}
+                    {e?.currency === "ETH"
+                      ? Number(e?.amount * ethBal).toFixed(4)
+                      : Number(e?.amount * maticBal).toFixed(4)}
+                  </span>
                   <img src={e.arrow} style={{ width: 10 }} />
                 </div>
               </div>

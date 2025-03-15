@@ -33,7 +33,14 @@ const ListNft = () => {
     ADD_NFT_TO_NFT_MARKET_PLACE,
   );
 
-  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
+  const [
+    createNewTransation,
+    {
+      data: transactionData,
+      loading: transactionLoading,
+      error: transactionError,
+    },
+  ] = useMutation(CREATE_NEW_TRANSACTION);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("fixed Price");
@@ -41,7 +48,6 @@ const ListNft = () => {
   const [fixedPriceCopies, setFixedPriceCopies] = useState(0);
   const [auctionStartPrice, setAuctionStartPrice] = useState(0);
   const [auctionCopies, setAuctionCopies] = useState(0);
-  const { hash } = useParams();
   const [potentialEarning, setPotentialEarning] = useState(0);
   const [connectModal, setConnectModal] = useState(false);
   const [endTimeStamp, setEndTimeStamp] = useState(0);
@@ -62,7 +68,7 @@ const ListNft = () => {
 
   const { state } = useLocation();
   const dispatch = useDispatch();
-  const { isConnected } = useAppKitAccount();
+  const { isConnected, address } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
 
   const { userData } = useSelector((state) => state.address.userData);
@@ -73,7 +79,7 @@ const ListNft = () => {
 
   const [tokens, setTokens] = useState(0);
 
-  const { name, royalty, artistName, tokenId } = state;
+  const { name, royalty, artistName, tokenId, videoLink, nftId } = state;
 
   const handleEndTimeStamp = (value, dateString) => {
     const time = timeToTimeStamp(dateString);
@@ -133,193 +139,122 @@ const ListNft = () => {
 
   const handleListing = async () => {
     connectWalletHandle();
-
-    const provider = new ethers.providers.Web3Provider(walletProvider);
-    const signer = provider.getSigner();
-    const { chainId } = await provider.getNetwork();
-    const marketContractWithsigner =
-      contractData.marketContract.connect(signer);
-    const mintContractWithsigner = contractData.mintContract.connect(signer);
-
-    if (selectedOption === "fixed Price") {
-      const price = ETHToWei(`${fixedPrice}`);
-      const isApproved = await mintContractWithsigner.isApprovedForAll(
-        account,
-        contractData.marketContract.address,
-      );
-      if (!isApproved) {
-        const approveTx = await mintContractWithsigner.setApprovalForAll(
-          contractData.marketContract.address,
-          true,
-        );
-        const resp = await approveTx.wait();
-        if (resp) {
-          try {
-            const tx = await marketContractWithsigner.listItemForFixedPrice(
-              tokenId,
-              fixedPriceCopies,
-              price,
-              contractData.mintContract.address,
-            );
-
-            setLoadingStatus(true);
-            setLoadingMessage("Listing...");
-
-            const res = await tx.wait();
-            if (res) {
-              setLoadingStatus(false);
-              setLoadingMessage("");
-              ToastMessage("Listing Successful", "", "success");
-              dispatch(loadContractIns());
-            }
-          } catch (error) {
-            const parsedEthersError = getParsedEthersError(error);
-            if (parsedEthersError.context === -32603) {
-              ToastMessage("Error", "Insufficient Balance", "error");
-            } else {
-              ToastMessage("Error", `${parsedEthersError.context}`, "error");
-            }
-          }
-        } else {
-          console.log("error");
-        }
-      } else {
-        try {
-          const tx = await marketContractWithsigner.listItemForFixedPrice(
-            tokenId,
-            fixedPriceCopies,
-            price,
-            contractData.mintContract.address,
-          );
-
-          setLoadingStatus(true);
-          setLoadingMessage("Listing...");
-
-          const res = await tx.wait();
-          if (res) {
-            setLoadingStatus(false);
-            setLoadingMessage("");
-            ToastMessage("Listing Successful", "", "success");
-            dispatch(loadContractIns());
-          }
-        } catch (error) {
-          const parsedEthersError = getParsedEthersError(error);
-          if (parsedEthersError.context === -32603) {
-            ToastMessage("Error", "Insufficient Balance", "error");
-          } else {
-            ToastMessage("Error", `${parsedEthersError.context}`, "error");
-          }
-        }
-      }
-
-      // Auction listing
-    } else if (selectedOption === "auction price") {
-      const price = ETHToWei(`${auctionStartPrice}`);
-      const isApproved = await mintContractWithsigner.isApprovedForAll(
-        account,
-        contractData.marketContract.address,
-      );
-
-      if (!isApproved) {
-        const approveTx = await mintContractWithsigner.setApprovalForAll(
-          contractData.marketContract.address,
-          true,
-        );
-        const resp = await approveTx.wait();
-        if (resp) {
-          try {
-            const startTimeStamp = Math.floor(Date.now() / 1000) + 150;
-            const tx = await marketContractWithsigner.listItemForAuction(
-              price,
-              startTimeStamp,
-              endTimeStamp,
-              tokenId,
-              auctionCopies,
-              contractData.mintContract.address,
-            );
-
-            setLoadingStatus(true);
-            setLoadingMessage("Listing...");
-
-            const res = await tx.wait();
-            if (res) {
-              setLoadingStatus(false);
-              setLoadingMessage("");
-              ToastMessage("Auction Listing Successful", "", "success");
-              dispatch(loadContractIns());
-            }
-          } catch (error) {
-            const parsedEthersError = getParsedEthersError(error);
-            if (parsedEthersError.context === -32603) {
-              ToastMessage("Error", "Insufficient Balance", "error");
-            } else {
-              ToastMessage("Error", `${parsedEthersError.context}`, "error");
-            }
-          }
-        } else {
-          console.log("error");
-        }
-      } else {
-        try {
-          const startTimeStamp = Math.floor(Date.now() / 1000) + 150;
-          const tx = await marketContractWithsigner.listItemForAuction(
-            price,
-            startTimeStamp,
-            endTimeStamp,
-            tokenId,
-            auctionCopies,
-            contractData.mintContract.address,
-          );
-
-          setLoadingStatus(true);
-          setLoadingMessage("Listing...");
-
-          const res = await tx.wait();
-          if (res) {
-            setLoadingStatus(false);
-            setLoadingMessage("");
-            ToastMessage("Aunction Listing Successful", "", "success");
-            dispatch(loadContractIns());
-          }
-        } catch (error) {
-          const parsedEthersError = getParsedEthersError(error);
-          if (parsedEthersError.context === -32603) {
-            ToastMessage("Error", "Insufficient Balance", "error");
-          } else {
-            ToastMessage("Error", `${parsedEthersError.context}`, "error");
-          }
-        }
-      }
-    }
+    let newItemId;
 
     try {
-      const start = new Date(Math.floor(Date.now()) + 150);
-      const end = new Date(endTimeStamp);
-      const response = await addNftToMarketPlace({
-        variables: {
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
-          tokenId: tokenId,
-          numberOfCopies:
-            selectedOption === "auction price"
-              ? auctionCopies
-              : fixedPriceCopies,
-          price:
-            selectedOption === "auction price" ? auctionStartPrice : fixedPrice,
-          nftAddress: contractData.mintContract.address,
-          listingID: "listing_001",
-          listingType: selectedOption === "auction price" ? "auction" : "fixed",
-          currency: chainId == process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
-          biddingStartTime: selectedOption === "auction price" ? start : 0,
-          biddingEndTime: selectedOption === "auction price" ? end : 0,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    // code for db
-  };
+      const provider = new ethers.providers.Web3Provider(walletProvider);
+      const signer = provider.getSigner();
+      const { chainId } = await provider.getNetwork();
+      const { marketContract, mintContract } = contractData;
 
+      const market = marketContract.connect(signer);
+      const mint = mintContract.connect(signer);
+
+      // Common approval check
+      const isApproved = await mint.isApprovedForAll(address, market.address);
+      if (!isApproved) {
+        const approveTx = await mint.setApprovalForAll(market.address, true);
+        await approveTx.wait();
+      }
+
+      // Common listing parameters
+      const isAuction = selectedOption === "auction price";
+      const price = ETHToWei(isAuction ? auctionStartPrice : fixedPrice);
+      const copies = isAuction ? auctionCopies : fixedPriceCopies;
+      const eventName = isAuction ? "AuctionStart" : "OfferSale"; // Update event name
+
+      // Additional auction parameters
+      const startTimeStamp = isAuction
+        ? Math.floor(Date.now() / 1000) + 150
+        : 0;
+      const endTimeStampParam = isAuction ? endTimeStamp : 0;
+
+      // Execute listing
+      setLoadingStatus(true);
+      setLoadingMessage("Listing...");
+
+      const tx = isAuction
+        ? await market.listItemForAuction(
+            price,
+            startTimeStamp,
+            endTimeStampParam,
+            tokenId,
+            copies,
+            mintContract.address,
+          )
+        : await market.listItemForFixedPrice(
+            tokenId,
+            copies,
+            price,
+            mintContract.address,
+          );
+
+      const res = await tx.wait();
+
+      // Extract newItemId from events
+      const event = res.events.find((e) => e.event === eventName);
+
+      console.log("The event", event, Number(event.args[0]));
+      if (event) {
+        newItemId = Number(event.args[0]);
+      } else {
+        throw new Error("Event not found");
+      }
+
+      // Update database
+      if (newItemId) {
+        const listingType = isAuction ? "auction" : "fixed_price";
+        const start = isAuction ? new Date(startTimeStamp * 1000) : null;
+        const end = isAuction ? new Date(endTimeStamp * 1000) : null;
+
+        //save data to DB
+        await addNftToMarketPlace({
+          variables: {
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MjAxOTE2MCwiZXhwIjoxNzQyMTA1NTYwfQ.Y1ZSP4phlReMfq_lhwRB2xmh-yIIUSDWEYIqlwqogdo",
+            tokenId,
+            numberOfCopies: Number(copies),
+            price: Number(isAuction ? auctionStartPrice : fixedPrice),
+            nftAddress: mintContract.address,
+            listingID: newItemId.toString(),
+            listingType,
+            currency:
+              chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+            fixedid: newItemId.toString(),
+            biddingStartTime: start || 0,
+            biddingEndTime: end || 0,
+          },
+        });
+
+        await createNewTransation({
+          variables: {
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MjAxOTE2MCwiZXhwIjoxNzQyMTA1NTYwfQ.Y1ZSP4phlReMfq_lhwRB2xmh-yIIUSDWEYIqlwqogdo",
+            first_person_wallet_address: address.toString(),
+            nft_id: nftId.toString(),
+            amount: Number(isAuction ? auctionStartPrice : fixedPrice),
+            currency:
+              chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+            transaction_type: "listing_nft",
+            token_id: tokenId.toString(),
+            chain_id: chainId.toString(),
+            blockchain_listingID: newItemId.toString(),
+          },
+        });
+      }
+
+      setLoadingStatus(false);
+      setLoadingMessage("");
+      ToastMessage("Listing Successful", "", "success");
+      dispatch(loadContractIns());
+    } catch (error) {
+      setLoadingStatus(false);
+      setLoadingMessage("");
+      const parsedError = getParsedEthersError(error);
+      ToastMessage("Error", parsedError.context || "Unknown error", "error");
+      console.error("Error:", error);
+    }
+  };
   const calculateEarning = (amount, fee, royalty) => {
     const totalFee = (Number(fee) + Number(royalty)) / 10000;
     const totalFeeAmount = amount * totalFee;
@@ -375,7 +310,7 @@ const ListNft = () => {
                     controls={true}
                     width="260px"
                     height="250px"
-                    url={`https://infura-ipfs.io/ipfs/${hash}`}
+                    url={videoLink}
                   />
                   <div className="d-flex justify-content-between mt-1 px-2">
                     <p className="name">{name}</p>

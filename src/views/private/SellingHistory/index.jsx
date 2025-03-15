@@ -1,93 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import { profile2 } from "../../../assets";
+
 import { Transactions } from "../../../components";
 import { Dropdown, Button, Space, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import "./css/index.css";
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_NFTS_WITHOUT_ADDRESS } from "../../../gql/queries";
-import { timestampToDate } from "../../../utills/timeToTimestamp";
-import { WeiToETH } from "../../../utills/convertWeiAndBnb";
+import {
+  GET_ALL_NFTS_WITHOUT_ADDRESS,
+  GET_ALL_MY_TRANSACTION,
+} from "../../../gql/queries";
 
 const SellingHistory = () => {
   const { error, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
 
+  const {
+    data: getAllMyTransaction,
+    isLoading: getAllMyTransactionLoading,
+    isFetching: getAllMyTransactionFetching,
+  } = useQuery(GET_ALL_MY_TRANSACTION, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+      filterObj: '{"transaction_type":"selling_nft"}',
+    },
+  });
+
   const [nfts, setNfts] = useState(null);
   const [dropdownValue, setDropdownValue] = useState("Last Week");
-  const { contractData } = useSelector((state) => state.chain.contractData);
   const { userData } = useSelector((state) => state.address.userData);
   const [sellingHistory, setSellingHistory] = useState([]);
+
+  useEffect(() => {
+    if (getAllMyTransaction) {
+      setSellingHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+    }
+  }, [getAllMyTransaction]);
 
   useEffect(() => {
     if (data) {
       setNfts(data?.getAllNftsWithoutAddress);
     }
   }, [data]);
-
-  useEffect(() => {
-    async function getPastEvents() {
-      try {
-        const provider = new ethers.providers.JsonRpcProvider(
-          contractData.chain == 1
-            ? "https://mainnet.infura.io/v3/e556d22112e34e3baab9760f1864493a"
-            : "https://polygon-mainnet.infura.io/v3/e556d22112e34e3baab9760f1864493a",
-        );
-        // Get past events
-        const filter = contractData.marketContract.filters.buyFixedprice(); // Define the event filter
-        const events = await contractData.marketContract.queryFilter(
-          filter,
-          0,
-          "latest",
-        );
-
-        // Process events
-        events.forEach(async (event) => {
-          const block = await provider.getBlock(event.blockHash);
-
-          const date = timestampToDate(block.timestamp * 1000);
-
-          const value = WeiToETH(
-            `${
-              Number(event.args.amountPaytoSeller) +
-              Number(event.args.platformfee) +
-              Number(event.args._royaltyfee)
-            }`,
-          );
-
-          nfts &&
-            nfts?.map((e) => {
-              if (
-                Number(event.args.tokenid) == e.token_id &&
-                userData.address == e.wallet_address
-              ) {
-                const obj = {
-                  image: profile2,
-                  name: e.name,
-                  buyerName: event.args.buyer,
-                  date: date,
-                  price: value,
-                };
-
-                setSellingHistory((prev) => {
-                  return [...prev, obj];
-                });
-              } else {
-                console.log(error);
-              }
-            });
-        });
-      } catch (err) {
-        console.error("Error fetching past events:", err);
-      }
-    }
-
-    const fetchData = async () => {
-      await getPastEvents();
-    };
-    fetchData();
-  }, [contractData, userData]);
 
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,

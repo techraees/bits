@@ -24,14 +24,17 @@ import {
   GET_ALL_NFTS,
   GET_PROFILE_DETAILS_QUERY,
   GET_ALL_NFTS_WITHOUT_ADDRESS,
+  Get_MY_NFTS_THAT_I_OWNED,
 } from "../../../gql/queries";
 // import { MINT_ASSET_MUTATION } from "../../../gql/mutations";
 // import { USDTOETH } from "../../../utills/currencyConverter";
 import { getAllNftsByAddressAlchemy } from "../../../config/infura";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const environment = process.env;
 
 const Collections = () => {
+  const { address } = useAppKitAccount();
   const pageSize = 20;
   // const [
   // 	mintAsset,
@@ -81,6 +84,22 @@ const Collections = () => {
     variables: { getProfileDetailsId: userId },
   });
 
+  const theToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTgwMzEzMCwiZXhwIjoxNzQxODg5NTMwfQ.7L2GNV1LzMMUmflJM8z85zZhmKVhCsoPPbyJhsei2Fs";
+
+  const [getMyNftsThatIOwned, { data: ownedData, error }] = useLazyQuery(
+    Get_MY_NFTS_THAT_I_OWNED,
+    {
+      fetchPolicy: "network-only",
+    },
+  );
+
+  useEffect(() => {
+    if (error) {
+      console.error("GraphQL Error:", error);
+    }
+  }, [error]);
+
   useEffect(() => {
     if (userId) {
       getProfile({ variables: userId });
@@ -112,6 +131,42 @@ const Collections = () => {
   const [isSorting, setIsSorting] = useState(false);
 
   const [tokenIdsByOwner, setTokenIdsByOwner] = useState([]);
+  const [activeTab, setActiveTab] = useState("1");
+  const [createdNfts, setCreatedNfts] = useState([]);
+  const [ownedNfts, setOwnedNfts] = useState([]);
+
+  // get owned nfts and created NFTs
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    const fetchNfts = async () => {
+      if (profileData?.GetProfileDetails?.user_address) {
+        const variables = {
+          token: theToken,
+          wallet_address: profileData.GetProfileDetails.user_address,
+          ownership_type: activeTab === "1" ? "created" : "owned",
+        };
+
+        try {
+          const { data } = await getMyNftsThatIOwned({ variables });
+          if (isCurrent) {
+            const nftss = data?.getMyNftsThatIOwned?.data || [];
+            activeTab === "1" ? setCreatedNfts(nftss) : setOwnedNfts(nftss);
+          }
+        } catch (error) {
+          console.error("Error fetching NFTs:", error);
+        }
+      }
+    };
+
+    fetchNfts();
+    return () => {
+      isCurrent = false;
+    };
+  }, [activeTab, profileData?.GetProfileDetails?.user_address]);
+
+  console.log("all nfts", ownedNfts, createdNfts);
 
   //get all tokenIds by an address
   useEffect(() => {
@@ -366,37 +421,39 @@ const Collections = () => {
         </div>
         {/* <div className="tabsWrapper"> */}
         <div className="tabsWrapper">
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" onChange={setActiveTab}>
             <Tabs.TabPane tab="NFT’s Created" key="1">
               <div className="row">
-                {currentNfts && currentNfts?.length > 0 ? (
-                  currentNfts?.map((e, i) =>
-                    contractData.chain == e.chainId ? (
+                {createdNfts?.length > 0 ? (
+                  createdNfts?.map((e, i) =>
+                    contractData.chain == e?.nft_id?.chainId ? (
                       <CardCompnent
                         key={i}
-                        image={imgPaths + e?.user_id?.profileImg}
-                        status={e.status}
-                        name={e.name}
-                        artistName={e.artist_name1}
-                        videoLink={e.video}
-                        isEmote={e.isEmote}
-                        rid={e.rid}
-                        bvh={e.bvh}
-                        fbx={e.fbx}
+                        image={imgPaths + e?.nft_id?.user_id?.profileImg}
+                        status={e?.nft_id?.status}
+                        name={e?.nft_id?.name}
+                        artistName={e?.nft_id?.artist_name1}
+                        videoLink={e?.nft_id?.video}
+                        isEmote={e?.nft_id?.isEmote}
+                        rid={e?.nft_id?.rid}
+                        bvh={e?.nft_id?.bvh}
+                        fbx={e?.nft_id?.fbx}
                         topName
                         userProfile={full_name ? true : false}
-                        likeCount={e.likeCount}
-                        watchCount={e.watchCount}
-                        isPaid={e.isPaid}
-                        duration={e.video_duration}
-                        id={e._id}
+                        likeCount={e?.nft_id?.likeCount}
+                        watchCount={e?.nft_id?.watchCount}
+                        isPaid={e?.nft_id?.isPaid}
+                        duration={e?.nft_id?.video_duration}
+                        id={e?.nft_id?._id}
                         navigateTo={() =>
-                          navigate(`/list-nft/${extractIPFSHash(e.video)}`, {
+                          navigate(`/list-nft/${e?.nft_id?._id}`, {
                             state: {
-                              name: e.name,
-                              royalty: e.royalty,
-                              artistName: e.artist_name1,
-                              tokenId: e.token_id,
+                              name: e?.nft_id?.name,
+                              royalty: e?.nft_id?.royalty,
+                              artistName: e?.nft_id?.artist_name1,
+                              tokenId: e?.nft_id?.token_id,
+                              videoLink: e?.nft_id?.video,
+                              nftId: e?.nft_id?._id,
                             },
                           })
                         }
@@ -417,51 +474,43 @@ const Collections = () => {
             <Tabs.TabPane
               tab="NFT’s Owned"
               key="2"
-              className={textColor == "black" && "ant-light"}
+              className={textColor === "black" ? "ant-light" : ""}
             >
               <div className="row">
-                {tokenIdsByOwner && tokenIdsByOwner?.length > 0 ? (
-                  tokenIdsByOwner?.map((item) => {
-                    return allNftsWithoutAddr?.getAllNftsWithoutAddress?.map(
-                      (e, i) => {
-                        if (
-                          !e.is_blocked &&
-                          item === e.token_id &&
-                          contractData.chain === e.chainId
-                        ) {
-                          return (
-                            <CardCompnent
-                              key={i}
-                              image={imgPaths + e?.user_id?.profileImg}
-                              status={e.status}
-                              name={e.name}
-                              artistName={e.artist_name1}
-                              videoLink={e.video}
-                              topName
-                              userProfile={full_name ? true : false}
-                              navigateTo={() =>
-                                navigate(
-                                  `/list-nft/${extractIPFSHash(e.video)}`,
-                                  {
-                                    state: {
-                                      name: e.name,
-                                      royalty: e.royalty,
-                                      artistName: e.artist_name1,
-                                      tokenId: e.token_id,
-                                    },
-                                  },
-                                )
-                              }
-                              isOwner={
-                                profileData?.GetProfileDetails?.id ===
-                                userData?.id
-                              }
-                            />
-                          );
+                {ownedNfts?.length > 0 ? (
+                  ownedNfts
+                    .filter(
+                      (e) =>
+                        !e?.nft_id?.is_blocked &&
+                        contractData.chain == e?.nft_id?.chainId,
+                    )
+                    .map((e) => (
+                      <CardCompnent
+                        key={e?.nft_id?._id} // Use unique ID instead of index
+                        image={`${imgPaths}${e?.nft_id?.user_id?.profileImg}`}
+                        status={e?.nft_id?.status}
+                        name={e?.nft_id?.name}
+                        artistName={e?.nft_id?.artist_name1}
+                        videoLink={e?.nft_id?.video}
+                        topName
+                        userProfile={!!full_name}
+                        navigateTo={() =>
+                          navigate(`/list-nft/${e?.nft_id?._id}`, {
+                            state: {
+                              name: e?.nft_id?.name,
+                              royalty: e?.nft_id?.royalty,
+                              artistName: e?.nft_id?.artist_name1,
+                              tokenId: e?.nft_id?.token_id,
+                              videoLink: e?.nft_id?.video,
+                              nftId: e?.nft_id?._id,
+                            },
+                          })
                         }
-                      },
-                    );
-                  })
+                        isOwner={
+                          profileData?.GetProfileDetails?.id === userData?.id
+                        }
+                      />
+                    ))
                 ) : (
                   <p className="text-white">No results found</p>
                 )}

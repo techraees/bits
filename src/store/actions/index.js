@@ -132,30 +132,30 @@ export const loadContractIns = () => async (dispatch) => {
       },
     });
 
-    getEmoteItems(ethMarketContractIns, polygonMarketContractIns).then(
-      (result) => {
-        const { maticList, ethList } = result;
+    // getEmoteItems(ethMarketContractIns, polygonMarketContractIns).then(
+    //   (result) => {
+    //     const { maticList, ethList } = result;
 
-        dispatch({
-          type: "LOAD_FIXED_ITEMS",
-          payload: { maticList, ethList },
-        });
-        dispatch({
-          type: "MATIC_CHAIN_FIXED",
-          fixedItemData: maticList,
-        });
-      },
-    );
+    //     dispatch({
+    //       type: "LOAD_FIXED_ITEMS",
+    //       payload: { maticList, ethList },
+    //     });
+    //     dispatch({
+    //       type: "MATIC_CHAIN_FIXED",
+    //       fixedItemData: maticList,
+    //     });
+    //   },
+    // );
 
-    getAuctions(ethMarketContractIns, polygonMarketContractIns).then(
-      (result) => {
-        const { maticAuctionsList } = result;
-        dispatch({
-          type: "MATIC_CHAIN_AUCTION",
-          auctionItemData: maticAuctionsList,
-        });
-      },
-    );
+    // getAuctions(ethMarketContractIns, polygonMarketContractIns).then(
+    //   (result) => {
+    //     const { maticAuctionsList } = result;
+    //     dispatch({
+    //       type: "MATIC_CHAIN_AUCTION",
+    //       auctionItemData: maticAuctionsList,
+    //     });
+    //   },
+    // );
   } catch (err) {
     console.log("errr", err);
   }

@@ -315,7 +315,7 @@ const GET_NFTS_THAT_I_BOUGHT = gql`
 
 //  Used to fetch the ownership history of single nfts
 const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
-  query GetOwnershipHistoryOfSingleNfts($_id: String!){
+  query GetOwnershipHistoryOfSingleNfts($_id: String!) {
     getOwnershipHistoryOfSingleNfts(_id: $_id)
   }
 `;

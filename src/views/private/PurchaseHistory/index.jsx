@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 // import { profile2 } from "../../assets";
-import { ethers } from "ethers";
 import { Transactions } from "../../../components";
 import { Dropdown, Button, Space, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import "./css/index.css";
 import { useSelector } from "react-redux";
-import polygonMarketContractAbi from "../../../abis/polygonMarketContractAbi.json";
-import ethMarketContractAbi from "../../../abis/ethMarketContractAbi.json";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_NFTS_WITHOUT_ADDRESS } from "../../../gql/queries";
-import { WeiToETH } from "../../../utills/convertWeiAndBnb";
-import { timestampToDate } from "../../../utills/timeToTimestamp";
+import {
+  GET_ALL_NFTS_WITHOUT_ADDRESS,
+  GET_ALL_MY_TRANSACTION,
+} from "../../../gql/queries";
 
 const PurchaseHistory = () => {
   const {
@@ -20,7 +18,6 @@ const PurchaseHistory = () => {
     // refetch
   } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
   const { userData } = useSelector((state) => state.address.userData);
-  const { contractData } = useSelector((state) => state.chain.contractData);
 
   const [transactionHistory, setTransactionHistory] = useState([]);
 
@@ -32,87 +29,23 @@ const PurchaseHistory = () => {
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
 
+  const {
+    data: getAllMyTransaction,
+    isLoading: getAllMyTransactionLoading,
+    isFetching: getAllMyTransactionFetching,
+  } = useQuery(GET_ALL_MY_TRANSACTION, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+      filterObj: '{"transaction_type":"buying_nft"}',
+    },
+  });
+
   useEffect(() => {
-    const getTransactionHistory = async () => {
-      try {
-        // Initialize Etherscan provider with your API key
-        const provider = new ethers.providers.EtherscanProvider(
-          contractData.chain == 1 ? "homestead" : "matic",
-        );
-
-        const contractInterface = new ethers.utils.Interface(
-          contractData.chain == 1
-            ? ethMarketContractAbi
-            : polygonMarketContractAbi,
-        );
-
-        // Get the transaction history for the wallet address
-
-        const history = (
-          await provider.getHistory(`${userData?.address}`)
-        ).filter((item) => item.to == contractData.marketContract.address);
-
-        history.map(async (item) => {
-          const inputData = item.data || "0x";
-          const decodedMethod = contractInterface.parseTransaction({
-            data: inputData,
-          });
-
-          if (decodedMethod.name == "BuyFixedPriceItem") {
-            await provider.getTransaction(item.hash);
-            const recp = await provider.getTransactionReceipt(item.hash);
-
-            if (recp.status === 1) {
-              const price = WeiToETH(`${Number(item.value)}`);
-              const date = timestampToDate(item.timestamp * 1000);
-              const decodeData =
-                contractData.marketContract.interface.decodeFunctionData(
-                  "BuyFixedPriceItem",
-                  inputData,
-                );
-              if (decodeData) {
-                const fixedDet = await contractData.marketContract.Fixedprices(
-                  Number(decodeData.fixedid),
-                );
-                data?.getAllNftsWithoutAddress?.map((e) => {
-                  if (Number(fixedDet[9]) == e.token_id) {
-                    let obj = {
-                      name: e.name,
-                      date: date,
-                      price: price,
-                    };
-                    setTransactionHistory((prev) => {
-                      return [...prev, obj];
-                    });
-                  }
-                });
-              }
-            }
-          }
-        });
-
-        // const decodedMethod = contractInterface.parseTransaction({ data: inputData });
-
-        // const decodeData = contractData.marketContract.interface.decodeFunctionData('BuyFixedPriceItem', inputData);
-
-        // const fixedDet = await contractData.marketContract.Fixedprices(Number(decodeData.fixedid));
-
-        // const price = Number(history[1].value);
-
-        // console.log('Method Name:', decodedMethod.name, price, Number(fixedDet[9]));
-
-        // Set the transaction history in state
-      } catch (error) {
-        console.error("Error retrieving transaction history:", error);
-      }
-    };
-
-    const fetchData = async () => {
-      await getTransactionHistory();
-    };
-
-    fetchData();
-  }, [contractData, userData]);
+    if (getAllMyTransaction) {
+      setTransactionHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+    }
+  }, [getAllMyTransaction]);
 
   const menu = (
     <Menu
