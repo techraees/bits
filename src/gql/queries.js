@@ -266,8 +266,16 @@ const GET_TOP_NFTS = gql`
 
 // Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
-  query GetMyNftsThatIOwned($token: String!, $wallet_address: String!) {
-    getMyNftsThatIOwned(token: $token, wallet_address: $wallet_address)
+  query GetMyNftsThatIOwned(
+    $token: String!
+    $wallet_address: String!
+    $ownership_type: String
+  ) {
+    getMyNftsThatIOwned(
+      token: $token
+      wallet_address: $wallet_address
+      ownership_type: $ownership_type
+    )
   }
 `;
 
@@ -320,6 +328,13 @@ const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
   }
 `;
 
+// Used to get owners who listing the same nft with different price
+const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
+  query GetOwnersWhoListedTheSameNftWithPrices($_id: String!) {
+    getOwnersWhoListedTheSameNftWithPrices(_id: $_id)
+  }
+`;
+
 export {
   GET_ALL_NFTS,
   LOGIN_USER,
@@ -336,6 +351,7 @@ export {
   Get_MY_NFTS_THAT_I_OWNED,
   GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
   GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
+  GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
   GET_ALL_MY_TRANSACTION,
   GET_TRANSACTION_DETAILS_OF_SPECIFIC,
   GET_NFTS_THAT_I_SOLD,

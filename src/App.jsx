@@ -29,6 +29,7 @@ import {
   Get_MY_NFTS_THAT_I_OWNED,
   GET_NFTS_THAT_I_BOUGHT,
   GET_NFTS_THAT_I_SOLD,
+  GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
   GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
   GET_TRANSACTION_DETAILS_OF_SPECIFIC,
 } from "./gql/queries";
@@ -74,8 +75,10 @@ function App() {
   } = useQuery(Get_MY_NFTS_THAT_I_OWNED, {
     variables: {
       token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTA4MzM3OSwiZXhwIjoxNzQxMTY5Nzc5fQ.7-joPzTlNWBR7mOTff_YrmJxGinQ-5Lt5rUy278XxW0",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MTY4NTAwMCwiZXhwIjoxNzQxNzcxNDAwfQ.1fzFbNM4_lkXJ_x9RcKRDV3Eu2deoiCdY9Ei-LQNO0E",
       wallet_address: "0x6588110c61280f68275bf852fC2C12CED740e8d9",
+      // ownership_type: "created",
+      ownership_type: "owned",
     },
   });
   const {
@@ -85,6 +88,16 @@ function App() {
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
       filterObj: '{"listingType":"auction"}',
+    },
+  });
+  const {
+    data: getOwnersWhoListedTheSameNftWithPrices,
+    isLoading: getOwnersWhoListedTheSameNftWithPricesLoading,
+    isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
+  } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
+    variables: {
+      // filterObj: '{"listingType":"auction"}',
+      _id: "662c321321570927266b46ec"
     },
   });
   const {
@@ -177,6 +190,7 @@ function App() {
   console.log(
     getMyNftsThatIOwned,
     getAllNftsInMarketPlaceAndSupportFilter,
+    getOwnersWhoListedTheSameNftWithPrices,
     getDetailsOfSingleNftFromMarketPlace,
     getAllMyTransaction,
     getTransactionDetailsOfSpecific,
