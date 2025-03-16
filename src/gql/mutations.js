@@ -372,6 +372,23 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
   }
 `;
 
+// Used to create New ownership of nft
+const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
+  mutation CreateBidAgainstAuctionNftMarketPlace(
+    $token: String!
+    $_id: String!
+    $price: Decimal!
+  ) {
+    createBidAgainstAuctionNftMarketPlace(
+      token: $token
+      _id: $_id
+      price: $price
+    ) {
+      message
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -400,5 +417,8 @@ export {
 
   // Create New Nft Ownershsip
   CREATE_NEW_OWNERSHIP_OF_NFT,
+
+  // Create Bid
+  CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   // ========================= Optimization Mutations ======================
 };

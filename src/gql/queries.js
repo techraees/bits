@@ -281,8 +281,14 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
 
 // Used to fetch all nfts in market plance that support filters
 const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
-  query GetAllNftsInMarketPlaceAndSupportFilter($filterObj: JSON) {
-    getAllNftsInMarketPlaceAndSupportFilter(filterObj: $filterObj)
+  query GetAllNftsInMarketPlaceAndSupportFilter(
+    $filterObj: JSON
+    $chainId: String!
+  ) {
+    getAllNftsInMarketPlaceAndSupportFilter(
+      filterObj: $filterObj
+      chainId: $chainId
+    )
   }
 `;
 
@@ -335,6 +341,20 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
   }
 `;
 
+// Used to get all bids of auction nft market place
+const GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE = gql`
+  query GetAllBidsOfAuctionNftMarketPlace($_id: String!) {
+    getAllBidsOfAuctionNftMarketPlace(_id: $_id)
+  }
+`;
+
+// Used to get all top nfts
+const GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE = gql`
+  query GetAllBidsOfAuctionNftMarketPlace($_id: String!) {
+    getAllBidsOfAuctionNftMarketPlace(_id: $_id)
+  }
+`;
+
 export {
   GET_ALL_NFTS,
   LOGIN_USER,
@@ -357,5 +377,7 @@ export {
   GET_NFTS_THAT_I_SOLD,
   GET_NFTS_THAT_I_BOUGHT,
   GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
+  GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE,
+  GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
   // ========================= Optimization Queries ======================
 };

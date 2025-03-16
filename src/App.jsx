@@ -16,6 +16,7 @@ import {
   REMOVE_NFT_NFT_MARKET_PLACE,
   UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   CREATE_NEW_TRANSACTION,
+  CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   CREATE_NEW_OWNERSHIP_OF_NFT,
 } from "./gql/mutations";
 
@@ -23,8 +24,10 @@ import { createAppKit } from "@reown/appkit/react";
 import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
 import { mainnet, polygon } from "@reown/appkit/networks";
 import {
+  GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE,
   GET_ALL_MY_TRANSACTION,
   GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
+  GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
   GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
   Get_MY_NFTS_THAT_I_OWNED,
   GET_NFTS_THAT_I_BOUGHT,
@@ -59,14 +62,17 @@ createAppKit({
 function App() {
   // const [recordVisit] = useMutation(RECORD_VISIT_MUTATION);
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE,
+    ADD_NFT_TO_NFT_MARKET_PLACE
   );
   const [removeNftFromMarketPlace] = useMutation(REMOVE_NFT_NFT_MARKET_PLACE);
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
   const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
+  const [create_bid_against_auction] = useMutation(
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
+  );
   const {
     data: getMyNftsThatIOwned,
     isLoadin,
@@ -88,6 +94,7 @@ function App() {
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
       filterObj: '{"listingType":"auction"}',
+      chainId: "137",
     },
   });
   const {
@@ -97,7 +104,7 @@ function App() {
   } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
     variables: {
       // filterObj: '{"listingType":"auction"}',
-      _id: "662c321321570927266b46ec"
+      _id: "662c321321570927266b46ec",
     },
   });
   const {
@@ -160,6 +167,24 @@ function App() {
       _id: "662c321321570927266b46ec",
     },
   });
+  const {
+    data: getAllBidsOfAuctionNftMarketPlace,
+    isLoading: getAllBidsOfAuctionNftMarketPlaceLoading,
+    isFetching: getAllBidsOfAuctionNftMarketPlaceFetching,
+  } = useQuery(GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE, {
+    variables: {
+      _id: "662c321321570927266b46ec",
+    },
+  });
+  const {
+    data: getAllTopNftsForOneChainForWebsite,
+    isLoading: getAllTopNftsForOneChainForWebsiteLoading,
+    isFetching: getAllTopNftsForOneChainForWebsiteFetching,
+  } = useQuery(GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE, {
+    variables: {
+      chainId: "137",
+    },
+  });
 
   useEffect(() => {
     removeStorage("walletconnect");
@@ -197,6 +222,8 @@ function App() {
     getNftsThatISold,
     getNftsThatIBought,
     getOwnershipHistoryOfSingleNfts,
+    getAllBidsOfAuctionNftMarketPlace,
+    getAllTopNftsForOneChainForWebsite
   );
   return (
     <>
@@ -265,6 +292,16 @@ function App() {
                   pricePerItem: 12,
                   from_user_wallet: "0x6934b7875fEABE4FA129D4988ca6DEcD1Dca9C2B",
                   to_user_wallet: "0xdaF60d937a200b36688e4BfBA68Ef026231570Ef",
+                },
+              });
+
+
+              const response = await create_bid_against_auction({
+                variables: {
+                  token:
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
+                  _id: 276,
+                  price: 120,
                 },
               });
 
