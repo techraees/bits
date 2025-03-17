@@ -57,7 +57,7 @@
   },
   "scripts": {
     "windows": "npm run format && npm run lint-fix && set PORT=8080 && react-scripts start",
-    "start": "npm run format && npm run lint-fix && export PORT=8080 && react-scripts start",
+    "start": "npm run format && npm run lint-fix && set PORT=8080 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

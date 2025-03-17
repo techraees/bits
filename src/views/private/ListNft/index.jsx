@@ -26,6 +26,8 @@ import {
   CREATE_NEW_TRANSACTION,
 } from "../../../gql/mutations";
 
+import { getStorage } from "../../../utills/localStorage";
+
 const ListNft = () => {
   // const { Option } = Select;
 
@@ -80,6 +82,8 @@ const ListNft = () => {
   const [tokens, setTokens] = useState(0);
 
   const { name, royalty, artistName, tokenId, videoLink, nftId } = state;
+
+  let token = getStorage("token");
 
   const handleEndTimeStamp = (value, dateString) => {
     const time = timeToTimeStamp(dateString);
@@ -210,8 +214,7 @@ const ListNft = () => {
         //save data to DB
         await addNftToMarketPlace({
           variables: {
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MjAxOTE2MCwiZXhwIjoxNzQyMTA1NTYwfQ.Y1ZSP4phlReMfq_lhwRB2xmh-yIIUSDWEYIqlwqogdo",
+            token: token,
             tokenId,
             numberOfCopies: Number(copies),
             price: Number(isAuction ? auctionStartPrice : fixedPrice),
@@ -228,8 +231,7 @@ const ListNft = () => {
 
         await createNewTransation({
           variables: {
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MjAxOTE2MCwiZXhwIjoxNzQyMTA1NTYwfQ.Y1ZSP4phlReMfq_lhwRB2xmh-yIIUSDWEYIqlwqogdo",
+            token: token,
             first_person_wallet_address: address.toString(),
             nft_id: nftId.toString(),
             amount: Number(isAuction ? auctionStartPrice : fixedPrice),

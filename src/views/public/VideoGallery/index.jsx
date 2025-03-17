@@ -13,6 +13,7 @@ import {
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { CardCompnent } from "../../../components";
 import { profile2 } from "../../../assets";
+import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
 
@@ -25,12 +26,16 @@ const VideoGallery = () => {
 
   // const [tokenData, setTokenData] = useState({});
 
+  let token = getStorage("token");
+
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState([]);
   const [quantityFilter, setQuantityFilter] = useState([]);
   const [allnfts, setAllNfts] = useState([]);
   const [fixedItemsDatas, setFixedItemsDatas] = useState([]);
   const [fixedItemData, setFixedItemData] = useState([]);
+
+  const { contractData } = useSelector((state) => state.chain.contractData);
 
   const {
     data: getAllNftsInMarketPlaceAndSupportFilter,
@@ -39,6 +44,7 @@ const VideoGallery = () => {
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
       filterObj: '{"listingType":"fixed_price"}',
+      chainId: contractData.chain.toString(),
     },
   });
 
@@ -50,8 +56,6 @@ const VideoGallery = () => {
       );
     }
   }, [getAllNftsInMarketPlaceAndSupportFilter]);
-
-  const { contractData } = useSelector((state) => state.chain.contractData);
   // const { fixedItemData } = useSelector(
   //   (state) => state.fixedItemDatas.fixedItemData
   // );
@@ -336,11 +340,7 @@ const VideoGallery = () => {
             ? fixedItemsDatas
             : fixedItemData
           )?.map((item, i) => {
-            if (
-              !item?.nft_id?.is_blocked &&
-              contractData.chain == item?.nft_id?.chainId &&
-              item.isSold == false
-            ) {
+            if (!item?.nft_id?.is_blocked && item.isSold == false) {
               return (
                 <CardCompnent
                   key={i}

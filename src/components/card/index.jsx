@@ -9,8 +9,11 @@ import {
   watchedIcon,
   likedIcon,
 } from "../../assets";
+
 import { useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { UPDATE_NFT_LIKE, UPDATE_NFT_WATCH } from "../../gql/mutations";
+import { GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE } from "../../gql/queries";
 import { Button, Space } from "antd";
 import ButtonComponent from "../button";
 import ReactPlayer from "react-player/lazy";
@@ -47,7 +50,6 @@ const CardCompnent = ({
   navigateTo,
   userId,
   isOwner,
-  owners,
   auctionStartTime,
   auctionEndTime,
   initialPrice,
@@ -77,6 +79,7 @@ const CardCompnent = ({
   const [isNftModalOpen, setIsNftModalOpen] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
   const [showpayment, setShowPayment] = useState(false);
+  const [owners, setOwners] = useState([]);
   // const [paymentStat, setPaymentStat] = useState(false);
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
@@ -88,6 +91,32 @@ const CardCompnent = ({
 
   const [updateNftWatch] = useMutation(UPDATE_NFT_WATCH);
   // const [updateNftPayment] = useMutation(UPDATE_NFT_PAYMENT);
+
+  const {
+    data: getOwnersWhoListedTheSameNftWithPrices,
+    isLoading: getOwnersWhoListedTheSameNftWithPricesLoading,
+    isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
+  } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
+    variables: {
+      // filterObj: '{"listingType":"auction"}',
+      _id: id,
+    },
+  });
+
+  useEffect(() => {
+    if (getOwnersWhoListedTheSameNftWithPrices) {
+      const newData =
+        getOwnersWhoListedTheSameNftWithPrices?.getOwnersWhoListedTheSameNftWithPrices?.data.map(
+          (item) => ({
+            owner: item?.seller?.user_address,
+            copies: item?.numberOfCopies,
+            price: item?.price,
+            fixedid: item?.fixedid,
+          })
+        );
+      setOwners(newData);
+    }
+  }, [getOwnersWhoListedTheSameNftWithPrices]);
 
   ETHTOUSD(1).then((result) => {
     setEthBal(result);
@@ -120,7 +149,7 @@ const CardCompnent = ({
   // stripe payment
   const handleStripePayment = async () => {
     const stripe = await loadStripe(
-      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ",
+      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ"
     );
 
     const body = {
@@ -142,7 +171,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const session = await response.json();
@@ -180,7 +209,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const data = await response.json();

@@ -30,6 +30,7 @@ import {
 // import { USDTOETH } from "../../../utills/currencyConverter";
 import { getAllNftsByAddressAlchemy } from "../../../config/infura";
 import { useAppKitAccount } from "@reown/appkit/react";
+import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
 
@@ -84,8 +85,7 @@ const Collections = () => {
     variables: { getProfileDetailsId: userId },
   });
 
-  const theToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTgwMzEzMCwiZXhwIjoxNzQxODg5NTMwfQ.7L2GNV1LzMMUmflJM8z85zZhmKVhCsoPPbyJhsei2Fs";
+  let token = getStorage("token");
 
   const [getMyNftsThatIOwned, { data: ownedData, error }] = useLazyQuery(
     Get_MY_NFTS_THAT_I_OWNED,
@@ -143,7 +143,7 @@ const Collections = () => {
     const fetchNfts = async () => {
       if (profileData?.GetProfileDetails?.user_address) {
         const variables = {
-          token: theToken,
+          token: token,
           wallet_address: profileData.GetProfileDetails.user_address,
           ownership_type: activeTab === "1" ? "created" : "owned",
         };

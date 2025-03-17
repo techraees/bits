@@ -4,11 +4,15 @@ import { useSelector } from "react-redux";
 import { Input, Select } from "antd";
 import { AZ, grid, search } from "../../../assets";
 import { BsFilterLeft } from "react-icons/bs";
-import { GET_ALL_NFTS_WITHOUT_ADDRESS } from "../../../gql/queries";
 import { useQuery } from "@apollo/client";
+import {
+  GET_ALL_NFTS_WITHOUT_ADDRESS,
+  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
+} from "../../../gql/queries";
 import "./css/index.css";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
+import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
 
@@ -20,20 +24,44 @@ const Marketplace = () => {
   const [quantityFilter, setQuantityFilter] = useState([]);
   const [allnfts, setAllNfts] = useState([]);
   const [auctionsDatas, setAuctionsDatas] = useState([]);
+  const [auctionItemData, setAuctionItemData] = useState([]);
 
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
   const { userData } = useSelector((state) => state.address.userData);
-  const { auctionItemData } = useSelector(
-    (state) => state.auctionItemDatas.auctionItemData,
-  );
+  // const { auctionItemData } = useSelector(
+  //   (state) => state.auctionItemDatas.auctionItemData
+  // );
   const { contractData } = useSelector((state) => state.chain.contractData);
+
+  console.log("contract chain", contractData.chain.toString());
+  const {
+    data: getAllNftsInMarketPlaceAndSupportFilter,
+    isLoading: getAllNftsInMarketPlaceAndSupportFilterLoading,
+    isFetching: getAllNftsInMarketPlaceAndSupportFilterFetching,
+  } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
+    variables: {
+      filterObj: '{"listingType":"auction"}',
+      chainId: "137",
+    },
+  });
+
+  // useEffect(() => {
+  //   if (getAllNftsInMarketPlaceAndSupportFilter) {
+  //     setAuctionItemData(
+  //       getAllNftsInMarketPlaceAndSupportFilter
+  //         ?.getAllNftsInMarketPlaceAndSupportFilter?.data
+  //     );
+  //   }
+  // }, [getAllNftsInMarketPlaceAndSupportFilter]);
+
+  console.log("all auctions", getAllNftsInMarketPlaceAndSupportFilter);
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
 
   const handleCategoryChange = (value) => {
@@ -47,7 +75,7 @@ const Marketplace = () => {
     const convertedPrice = await Promise.all(
       data.map(async (val) => {
         return await USDTOMATIC(val);
-      }),
+      })
     );
 
     setPriceFilter(convertedPrice);
@@ -270,63 +298,49 @@ const Marketplace = () => {
           }}
         ></div>
         <div className="row my-3">
-          {(priceFilter.length > 0 || quantityFilter.length > 0
+          {(priceFilter.length > 0 ||
+          quantityFilter.length > 0 ||
+          categoryFilter
             ? auctionsDatas
             : auctionItemData
-          )?.map((item) => {
-            return (
-              categoryFilter ? allnfts : data?.getAllNftsWithoutAddress
-            )?.map((e, i) => {
-              if (
-                !e.is_blocked &&
-                Number(item.tokenId) == e.token_id &&
-                contractData.chain == e.chainId &&
-                Number(item.auctionEndTime) > timenow &&
-                item.isSold == false
-              ) {
-                return (
-                  <CardCompnent
-                    key={i}
-                    image={imgPaths + e?.user_id?.profileImg}
-                    status={e.status}
-                    name={e.name}
-                    videoLink={e.video}
-                    marketplacecard
-                    collectionBtn
-                    userProfile={userProfile ? true : false}
-                    auctionStartTime={Number(item.auctionStartTime)}
-                    auctionEndTime={Number(item.auctionEndTime)}
-                    initialPrice={WeiToETH(`${Number(item.initialPrice)}`)}
-                    auctionid={Number(item.auctionid)}
-                    numberofcopies={e.supply}
-                    currentBidAmount={WeiToETH(
-                      `${Number(item.currentBidAmount)}`,
-                    )}
-                    nftOwner={e.wallet_address}
-                    royalty={e.royalty}
-                    tokenId={Number(item.tokenId)}
-                    id={e._id}
-                  />
-                );
-              }
-            });
+          )?.map((item, i) => {
+            const e = categoryFilter ? allnfts : data?.getAllNftsWithoutAddress;
+
+            if (
+              e &&
+              !e.is_blocked &&
+              Number(item.tokenId) === e.token_id &&
+              contractData.chain === e.chainId &&
+              Number(item.auctionEndTime) > timenow &&
+              item.isSold === false
+            ) {
+              return (
+                <CardCompnent
+                  key={i}
+                  image={imgPaths + e?.user_id?.profileImg}
+                  status={e.status}
+                  name={e.name}
+                  videoLink={e.video}
+                  marketplacecard
+                  collectionBtn
+                  userProfile={!!userProfile}
+                  auctionStartTime={Number(item.auctionStartTime)}
+                  auctionEndTime={Number(item.auctionEndTime)}
+                  initialPrice={WeiToETH(`${Number(item.initialPrice)}`)}
+                  auctionid={Number(item.auctionid)}
+                  numberofcopies={e.supply}
+                  currentBidAmount={WeiToETH(
+                    `${Number(item.currentBidAmount)}`
+                  )}
+                  nftOwner={e.wallet_address}
+                  royalty={e.royalty}
+                  tokenId={Number(item.tokenId)}
+                  id={e._id}
+                />
+              );
+            }
+            return null;
           })}
-          {/* {cardsData.map((e, i) => {
-            console.log(e.videoLink);
-            // const status = "First Gen Emote";
-            return (
-              <CardCompnent
-                key={i}
-                image={e.image}
-                status="First Gen Emote"
-                name={e.name}
-                videoLink={e.videoLink}
-                marketplacecard
-                collectionBtn
-                userProfile={userProfile ? true : false}
-              />
-            );
-          })} */}
         </div>
       </div>
     </div>
