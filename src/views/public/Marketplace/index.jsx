@@ -61,7 +61,7 @@ const Marketplace = () => {
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
 
   const handleCategoryChange = (value) => {
@@ -75,7 +75,7 @@ const Marketplace = () => {
     const convertedPrice = await Promise.all(
       data.map(async (val) => {
         return await USDTOMATIC(val);
-      })
+      }),
     );
 
     setPriceFilter(convertedPrice);
@@ -330,7 +330,7 @@ const Marketplace = () => {
                   auctionid={Number(item.auctionid)}
                   numberofcopies={e.supply}
                   currentBidAmount={WeiToETH(
-                    `${Number(item.currentBidAmount)}`
+                    `${Number(item.currentBidAmount)}`,
                   )}
                   nftOwner={e.wallet_address}
                   royalty={e.royalty}
