@@ -44,20 +44,20 @@ const Marketplace = () => {
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
       filterObj: '{"listingType":"auction"}',
-      chainId: "137",
+      chainId: contractData.chain.toString(),
     },
   });
 
-  // useEffect(() => {
-  //   if (getAllNftsInMarketPlaceAndSupportFilter) {
-  //     setAuctionItemData(
-  //       getAllNftsInMarketPlaceAndSupportFilter
-  //         ?.getAllNftsInMarketPlaceAndSupportFilter?.data
-  //     );
-  //   }
-  // }, [getAllNftsInMarketPlaceAndSupportFilter]);
+  useEffect(() => {
+    if (getAllNftsInMarketPlaceAndSupportFilter) {
+      setAuctionItemData(
+        getAllNftsInMarketPlaceAndSupportFilter
+          ?.getAllNftsInMarketPlaceAndSupportFilter?.data
+      );
+    }
+  }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
-  console.log("all auctions", getAllNftsInMarketPlaceAndSupportFilter);
+  console.log("all auctions", auctionItemData);
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
@@ -100,20 +100,20 @@ const Marketplace = () => {
     setAllNfts(filterdItems);
   }, [categoryFilter]);
 
-  useEffect(() => {
-    let filteredAuctionItems;
-    if (priceFilter && auctionItemData) {
-      filteredAuctionItems = auctionItemData.filter((item) => {
-        const price = WeiToETH(`${Number(item.initialPrice)}`);
-        return (
-          Number(price) >= Number(priceFilter[0]) &&
-          Number(price) <= Number(priceFilter[1])
-        );
-      });
-    }
+  // useEffect(() => {
+  //   let filteredAuctionItems;
+  //   if (priceFilter && auctionItemData) {
+  //     filteredAuctionItems = auctionItemData.filter((item) => {
+  //       const price = WeiToETH(`${Number(item.initialPrice)}`);
+  //       return (
+  //         Number(price) >= Number(priceFilter[0]) &&
+  //         Number(price) <= Number(priceFilter[1])
+  //       );
+  //     });
+  //   }
 
-    setAuctionsDatas(filteredAuctionItems);
-  }, [priceFilter]);
+  //   setAuctionsDatas(filteredAuctionItems);
+  // }, [priceFilter]);
 
   useEffect(() => {
     let filteredAuctionItems;
@@ -134,7 +134,16 @@ const Marketplace = () => {
     refetch();
   }, []);
 
-  const timenow = Math.floor(Date.now() / 1000);
+  const compareTime = (time) => {
+    const givenTime = new Date(time);
+    const currentTime = new Date();
+
+    if (currentTime > givenTime) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <div
@@ -304,38 +313,31 @@ const Marketplace = () => {
             ? auctionsDatas
             : auctionItemData
           )?.map((item, i) => {
-            const e = categoryFilter ? allnfts : data?.getAllNftsWithoutAddress;
-
             if (
-              e &&
-              !e.is_blocked &&
-              Number(item.tokenId) === e.token_id &&
-              contractData.chain === e.chainId &&
-              Number(item.auctionEndTime) > timenow &&
+              !item?.nft_id?.is_blocked &&
+              compareTime(item?.biddingEndTime) &&
               item.isSold === false
             ) {
               return (
                 <CardCompnent
                   key={i}
-                  image={imgPaths + e?.user_id?.profileImg}
-                  status={e.status}
-                  name={e.name}
-                  videoLink={e.video}
+                  image={imgPaths + item?.user_id?.profileImg}
+                  status={item?.nft_id?.status}
+                  name={item?.nft_id?.name}
+                  videoLink={item?.nft_id?.video}
                   marketplacecard
                   collectionBtn
                   userProfile={!!userProfile}
                   auctionStartTime={Number(item.auctionStartTime)}
                   auctionEndTime={Number(item.auctionEndTime)}
-                  initialPrice={WeiToETH(`${Number(item.initialPrice)}`)}
-                  auctionid={Number(item.auctionid)}
-                  numberofcopies={e.supply}
-                  currentBidAmount={WeiToETH(
-                    `${Number(item.currentBidAmount)}`
-                  )}
-                  nftOwner={e.wallet_address}
-                  royalty={e.royalty}
+                  initialPrice={Number(item?.price)}
+                  auctionid={Number(item?.listingID)}
+                  numberofcopies={item?.numberOfCopies}
+                  currentBidAmount={item?.auction_highest_bid}
+                  nftOwner={item?.seller?.user_address}
+                  royalty={item?.nft_id?.royalty}
                   tokenId={Number(item.tokenId)}
-                  id={e._id}
+                  id={item?.nft_id?._id}
                 />
               );
             }
