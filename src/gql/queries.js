@@ -350,8 +350,8 @@ const GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE = gql`
 
 // Used to get all top nfts
 const GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE = gql`
-  query GetAllBidsOfAuctionNftMarketPlace($_id: String!) {
-    getAllBidsOfAuctionNftMarketPlace(_id: $_id)
+  query GetAllTopNftsForOneChainForWebsite($chainId: String!) {
+    getAllTopNftsForOneChainForWebsite(chainId: $chainId)
   }
 `;
 
