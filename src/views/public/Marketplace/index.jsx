@@ -52,16 +52,14 @@ const Marketplace = () => {
     if (getAllNftsInMarketPlaceAndSupportFilter) {
       setAuctionItemData(
         getAllNftsInMarketPlaceAndSupportFilter
-          ?.getAllNftsInMarketPlaceAndSupportFilter?.data
+          ?.getAllNftsInMarketPlaceAndSupportFilter?.data,
       );
     }
   }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
-  console.log("all auctions", auctionItemData);
-
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
 
   const handleCategoryChange = (value) => {
@@ -75,7 +73,7 @@ const Marketplace = () => {
     const convertedPrice = await Promise.all(
       data.map(async (val) => {
         return await USDTOMATIC(val);
-      })
+      }),
     );
 
     setPriceFilter(convertedPrice);

@@ -16,6 +16,7 @@ import {
   CREATE_NFT,
   // MINT_ASSET,
   SEND_EMAIL_MUTATION,
+  CREATE_NEW_TRANSACTION,
 } from "../../../gql/mutations";
 import { GET_PROFILE_DETAILS_QUERY } from "../../../gql/queries";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -27,6 +28,7 @@ import CreatorEarningModal from "../../../components/creatorEarningModal";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { mintMessage } from "../../../utills/emailMessages";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
 
@@ -50,6 +52,8 @@ const MintNft = () => {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
+  let token = getStorage("token");
+
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
@@ -59,6 +63,14 @@ const MintNft = () => {
   const { createNft } = useSelector((state) => state.nft.createNft);
 
   const [CreateNft, { data, loading, error }] = useMutation(CREATE_NFT);
+  const [
+    createNewTransation,
+    {
+      data: transactionData,
+      loading: transactionLoading,
+      error: transactionError,
+    },
+  ] = useMutation(CREATE_NEW_TRANSACTION);
 
   // const [
   // 	mintAsset,
@@ -236,6 +248,24 @@ const MintNft = () => {
             likeCount: 0,
             watchCount: 0,
             user_id: values.id,
+          },
+        });
+
+        //create transaction
+        await createNewTransation({
+          variables: {
+            token: token,
+            first_person_wallet_address: values.walletAddress.toString(),
+            nft_id: "",
+            amount: 0,
+            currency:
+              contractData.chain === process.env.REACT_ETH_CHAINID
+                ? "ETH"
+                : "MATIC",
+            transaction_type: "create_nft",
+            token_id: tokenid.toString(),
+            chain_id: contractData.chain.toString(),
+            blockchain_listingID: "",
           },
         });
       } else {

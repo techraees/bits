@@ -62,16 +62,16 @@ createAppKit({
 function App() {
   // const [recordVisit] = useMutation(RECORD_VISIT_MUTATION);
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE
+    ADD_NFT_TO_NFT_MARKET_PLACE,
   );
   const [removeNftFromMarketPlace] = useMutation(REMOVE_NFT_NFT_MARKET_PLACE);
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   );
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
   const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   );
   const {
     data: getMyNftsThatIOwned,
@@ -224,7 +224,7 @@ function App() {
     getOwnershipHistoryOfSingleNfts,
     getAllBidsOfAuctionNftMarketPlace,
     getAllTopNftsForOneChainForWebsite,
-    getAllTopNftsForOneChainForWebsite
+    getAllTopNftsForOneChainForWebsite,
   );
   return (
     <>

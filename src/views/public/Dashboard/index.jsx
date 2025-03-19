@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./css/index.css";
 import { Button, Row, Col } from "antd";
 import {
@@ -22,20 +22,21 @@ import { CardCompnent, Loader, UploadVideoModal } from "../../../components";
 
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
+  const [topNfts, setTopNfts] = useState([]);
   let navigate = useNavigate();
 
   const [showChat, setShowChat] = useState(false);
   const { userData } = useSelector((state) => state.address.userData);
   const { fixedItemData } = useSelector(
-    (state) => state.fixedItemDatas.fixedItemData,
+    (state) => state.fixedItemDatas.fixedItemData
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { auctionItemData } = useSelector(
-    (state) => state.auctionItemDatas.auctionItemData,
+    (state) => state.auctionItemDatas.auctionItemData
   );
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const isLogged = userData?.isLogged;
@@ -60,12 +61,23 @@ const Dashboard = () => {
     isFetching: getAllTopNftsForOneChainForWebsiteFetching,
   } = useQuery(GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE, {
     variables: {
-      chainId: "137",
+      chainId: contractData.chain.toString(),
     },
   });
 
-  console.log("the top nfts", getAllTopNftsForOneChainForWebsite);
-  const topNfts = [];
+  console.log(
+    "the top nfts",
+    getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite
+  );
+
+  useEffect(() => {
+    if (getAllTopNftsForOneChainForWebsite) {
+      setTopNfts(
+        getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite
+      );
+    }
+  }, [getAllTopNftsForOneChainForWebsite]);
+
   // function getUniqueObjects(arr) {
   //   const uniqueObjects = [];
   //   const seenIds = new Set();
@@ -241,27 +253,26 @@ const Dashboard = () => {
               <CardCompnent
                 key={i}
                 image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
-                status={e.status}
-                name={e.name}
-                videoLink={e.video}
+                status={e?.nft_id?.status}
+                name={e?.nft_id?.name}
+                videoLink={e?.nft_id?.video}
                 userProfile={userProfile ? true : false}
-                id={e._id}
-                userId={e?.user_id?.id}
-                owners={e.owners}
+                id={e?.nft_id?._id}
+                userId={e?.nft_id?.user_id}
                 fixtokenId={e.fixtokenId}
-                fixOwner={e.wallet_address}
-                fixRoyalty={e.royalty}
-                fixCopies={e.supply}
+                fixOwner={e?.nft_id?.wallet_address}
+                fixRoyalty={e?.nft_id?.royalty}
+                fixCopies={e?.nft_id?.supply}
                 numberofcopies={e.supply}
                 initialPrice={e.initialPrice}
                 auctionid={e.auctionid}
                 currentBidAmount={e.currentBidAmount}
-                nftOwner={e.wallet_address}
-                isAuction={e.isFixedItem ? false : true}
-                likeCount={e.likeCount}
-                watchCount={e.watchCount}
-                isPaid={e.isPaid}
-                duration={e.video_duration}
+                nftOwner={e?.nft_id?.wallet_address}
+                isAuction={e?.nft_id?.isFixedItem ? false : true}
+                likeCount={e?.nft_id?.likeCount}
+                watchCount={e?.nft_id?.watchCount}
+                isPaid={e?.nft_id?.isPaid}
+                duration={e?.nft_id?.video_duration}
               />
             ))}
 
