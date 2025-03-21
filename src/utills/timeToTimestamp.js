@@ -38,3 +38,16 @@ export const dbDateToReadableDate = (dbdate) => {
 
   return readableDateTime;
 };
+
+export const dbDateToTime = (dbdate) => {
+  // Parse the given time string into a Date object
+  const givenTime = new Date(dbdate);
+
+  // Get the timestamp in milliseconds
+  const timestampInMilliseconds = givenTime.getTime();
+
+  // Convert milliseconds to seconds
+  const timestampInSeconds = Math.floor(timestampInMilliseconds / 1000);
+
+  return timestampInSeconds;
+};

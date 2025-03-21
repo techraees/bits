@@ -16,6 +16,9 @@ function StepperModal({ handleCancel, owners, name, sellerUsername }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showAmt, setShowAmt] = useState(0);
   const [fixedId, setFixedId] = useState(0);
+  const [databaseId, setDatabaseId] = useState(null);
+  const [NFTId, setNFTId] = useState(null);
+  const [tokenId, setTokenId] = useState(null);
 
   // const onChange = (value) => {
   // 	setCurrent(value);
@@ -42,6 +45,9 @@ function StepperModal({ handleCancel, owners, name, sellerUsername }) {
             setOwner={setOwner}
             setPrice={setPrice}
             setFixedId={setFixedId}
+            setDatabaseId={setDatabaseId}
+            setTokenId={setTokenId}
+            setNFTId={setNFTId}
           />
         )}
 
@@ -52,6 +58,9 @@ function StepperModal({ handleCancel, owners, name, sellerUsername }) {
             owner={owner}
             setQuantity={setQuantity}
             quantity={quantity}
+            databaseId={databaseId}
+            NFTId={NFTId}
+            tokenId={tokenId}
             price={price}
             setTotalPrice={setTotalPrice}
             totalPrice={totalPrice}
@@ -65,6 +74,9 @@ function StepperModal({ handleCancel, owners, name, sellerUsername }) {
             name={name}
             owner={owner}
             quantity={quantity}
+            databaseId={databaseId}
+            NFTId={NFTId}
+            tokenId={tokenId}
             price={price}
             totalPrice={totalPrice}
             showAmt={showAmt}

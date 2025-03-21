@@ -13,6 +13,7 @@ import "./css/index.css";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { getStorage } from "../../../utills/localStorage";
+import { dbDateToTime } from "../../../utills/timeToTimestamp";
 
 const environment = process.env;
 
@@ -52,14 +53,14 @@ const Marketplace = () => {
     if (getAllNftsInMarketPlaceAndSupportFilter) {
       setAuctionItemData(
         getAllNftsInMarketPlaceAndSupportFilter
-          ?.getAllNftsInMarketPlaceAndSupportFilter?.data,
+          ?.getAllNftsInMarketPlaceAndSupportFilter?.data
       );
     }
   }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
 
   const handleCategoryChange = (value) => {
@@ -73,7 +74,7 @@ const Marketplace = () => {
     const convertedPrice = await Promise.all(
       data.map(async (val) => {
         return await USDTOMATIC(val);
-      }),
+      })
     );
 
     setPriceFilter(convertedPrice);
@@ -326,8 +327,8 @@ const Marketplace = () => {
                   marketplacecard
                   collectionBtn
                   userProfile={!!userProfile}
-                  auctionStartTime={Number(item.auctionStartTime)}
-                  auctionEndTime={Number(item.auctionEndTime)}
+                  auctionStartTime={dbDateToTime(item?.biddingStartTime)}
+                  auctionEndTime={dbDateToTime(item?.biddingEndTime)}
                   initialPrice={Number(item?.price)}
                   auctionid={Number(item?.listingID)}
                   numberofcopies={item?.numberOfCopies}
@@ -336,6 +337,7 @@ const Marketplace = () => {
                   royalty={item?.nft_id?.royalty}
                   tokenId={Number(item.tokenId)}
                   id={item?.nft_id?._id}
+                  itemId={item?._id}
                 />
               );
             }

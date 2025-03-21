@@ -7,6 +7,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
 import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
 import { dbDateToReadableDate } from "../../../utills/timeToTimestamp";
+import { getStorage } from "../../../utills/localStorage";
 
 import {
   Chart as ChartJS,
@@ -25,7 +26,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 export const options = {
@@ -56,14 +57,14 @@ export const data = {
 };
 
 const TransactionHistory = () => {
+  let token = getStorage("token");
   const {
     data: getAllMyTransaction,
     isLoading: getAllMyTransactionLoading,
     isFetching: getAllMyTransactionFetching,
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+      token: token,
     },
   });
   const { userData } = useSelector((state) => state.address.userData);
@@ -105,7 +106,7 @@ const TransactionHistory = () => {
   }, [getAllMyTransaction]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
 
   // const handleChange = (value) => {

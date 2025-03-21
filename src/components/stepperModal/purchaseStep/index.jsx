@@ -5,7 +5,11 @@ import "./css/index.css";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_PROFILE_DETAILS_QUERY } from "../../../gql/queries";
-import { SEND_EMAIL_MUTATION } from "../../../gql/mutations";
+import {
+  SEND_EMAIL_MUTATION,
+  CREATE_NEW_OWNERSHIP_OF_NFT,
+  CREATE_NEW_TRANSACTION,
+} from "../../../gql/mutations";
 import { test } from "../../../assets";
 import { SuccessModal } from "../../index";
 import ConnectModal from "../../connectModal";
@@ -17,6 +21,7 @@ import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { loadContractIns } from "../../../store/actions";
 import { boughtMessage } from "../../../utills/emailMessages";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
 
@@ -28,9 +33,12 @@ function PurchaseStep({
   quantity,
   fixedId,
   sellerUsername,
+  databaseId,
+  tokenId,
+  NFTId,
 }) {
   const dispatch = useDispatch();
-  const { isConnected } = useAppKitAccount();
+  const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { web3, signer } = useSelector((state) => state.web3.walletData);
@@ -41,6 +49,8 @@ function PurchaseStep({
   const [loadingMessage, setLoadingMessage] = useState("");
 
   const { userData } = useSelector((state) => state.address.userData);
+
+  let token = getStorage("token");
 
   const [
     getProfile,
@@ -58,6 +68,9 @@ function PurchaseStep({
     sendEmail,
     // { data: emailData, loading: emailLoading, error: emailError },
   ] = useMutation(SEND_EMAIL_MUTATION);
+
+  const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
+  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -82,65 +95,101 @@ function PurchaseStep({
   const handlePurchase = async () => {
     const provider = new ethers.providers.Web3Provider(walletProvider);
     const signer = provider.getSigner();
-    let val = Number(ETHToWei(totalPrice.toString()));
-    let amount = val.toString();
+    const amount = ETHToWei(totalPrice.toString()).toString();
     setLoadingStatus(true);
 
-    if (signer) {
-      const marketContractWithsigner =
-        contractData.marketContract.connect(signer);
+    if (!signer || quantity <= 0) {
+      handleConnect();
+      return;
+    }
 
-      if (quantity > 0) {
-        try {
-          const tx = await marketContractWithsigner.BuyFixedPriceItem(
-            fixedId,
-            quantity,
-            { value: amount },
-          );
+    const marketContractWithSigner =
+      contractData.marketContract.connect(signer);
 
-          setLoadingMessage("Transaction Pending...");
+    try {
+      const tx = await marketContractWithSigner.BuyFixedPriceItem(
+        fixedId,
+        quantity,
+        { value: amount }
+      );
+      setLoadingMessage("Transaction Pending...");
 
-          const res = await tx.wait();
-          if (res) {
-            setLoadingStatus(false);
-            setLoadingMessage("");
+      const res = await tx.wait();
+      if (!res) throw new Error("Transaction failed");
 
-            ToastMessage("Purchase Successful", "", "success");
-            showModal();
-            dispatch(loadContractIns());
+      const transactionVariables = {
+        token,
+        nft_id: NFTId.toString(),
+        amount: Number(totalPrice),
+        currency:
+          contractData.chain === process.env.REACT_ETH_CHAINID
+            ? "ETH"
+            : "MATIC",
+        token_id: tokenId.toString(),
+        chain_id: contractData.chain.toString(),
+        blockchain_listingID: fixedId.toString(),
+      };
 
-            try {
-              const msgData = boughtMessage(
-                userData?.full_name,
-                name,
-                sellerUsername,
-                totalPrice,
-              );
-              await sendEmail({
-                variables: {
-                  to: profileData?.GetProfileDetails?.email,
-                  from: environment.REACT_APP_EMAIL_OWNER,
-                  subject: msgData.subject,
-                  text: msgData.message,
-                },
-              });
-            } catch (error) {
-              setLoadingStatus(false);
-              console.log(error);
-            }
-          }
-        } catch (error) {
-          setLoadingStatus(false);
-          const parsedEthersError = getParsedEthersError(error);
-          if (parsedEthersError.context == -32603) {
-            ToastMessage("Error", "Insufficient Balance", "error");
-          } else {
-            ToastMessage("Error", `${parsedEthersError.context}`, "error");
-          }
-        }
-      } else {
-        handleConnect();
-      }
+      await createNewNftOwnership({
+        variables: {
+          ...transactionVariables,
+          total_price: Number(totalPrice),
+          listingIDFromBlockChain: fixedId.toString(),
+          listingID: databaseId.toString(),
+          copies: Number(quantity),
+          pricePerItem: Number(totalPrice),
+          from_user_wallet: owner.toString(),
+          to_user_wallet: address.toString(),
+        },
+      });
+
+      await Promise.all([
+        createNewTransation({
+          variables: {
+            ...transactionVariables,
+            first_person_wallet_address: address.toString(),
+            second_person_wallet_address: owner.toString(),
+            transaction_type: "buying_nft",
+          },
+        }),
+        createNewTransation({
+          variables: {
+            ...transactionVariables,
+            first_person_wallet_address: owner.toString(),
+            second_person_wallet_address: address.toString(),
+            transaction_type: "selling_nft",
+          },
+        }),
+      ]);
+
+      const msgData = boughtMessage(
+        userData?.full_name,
+        name,
+        sellerUsername,
+        totalPrice
+      );
+      await sendEmail({
+        variables: {
+          to: profileData?.GetProfileDetails?.email,
+          from: environment.REACT_APP_EMAIL_OWNER,
+          subject: msgData.subject,
+          text: msgData.message,
+        },
+      });
+
+      setLoadingStatus(false);
+      setLoadingMessage("");
+      ToastMessage("Purchase Successful", "", "success");
+      showModal();
+      dispatch(loadContractIns());
+    } catch (error) {
+      setLoadingStatus(false);
+      const parsedEthersError = getParsedEthersError(error);
+      const errorMessage =
+        parsedEthersError.context === -32603
+          ? "Insufficient Balance"
+          : parsedEthersError.context;
+      ToastMessage("Error", errorMessage, "error");
     }
   };
 

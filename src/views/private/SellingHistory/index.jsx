@@ -10,8 +10,10 @@ import {
   GET_ALL_NFTS_WITHOUT_ADDRESS,
   GET_ALL_MY_TRANSACTION,
 } from "../../../gql/queries";
+import { getStorage } from "../../../utills/localStorage";
 
 const SellingHistory = () => {
+  let token = getStorage("token");
   const { error, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
 
   const {
@@ -20,8 +22,7 @@ const SellingHistory = () => {
     isFetching: getAllMyTransactionFetching,
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+      token: token,
       filterObj: '{"transaction_type":"selling_nft"}',
     },
   });
@@ -44,7 +45,7 @@ const SellingHistory = () => {
   }, [data]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const menu = (
     <Menu

@@ -11,30 +11,20 @@ function ListingStep({
   setOwner,
   setPrice,
   setFixedId,
+  setDatabaseId,
+  setNFTId,
+  setTokenId,
 }) {
   const { contractData } = useSelector((state) => state.chain.contractData);
 
-  // const contentDivData = [
-  //   { id: 1 },
-  //   {
-  //     id: 2,
-  //     bottom: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     bottom: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     bottom: true,
-  //   },
-  // ];
-
-  const handleSelection = (owner, price, fixedid) => {
+  const handleSelection = (owner, price, fixedid, dbid, tokenId, nftId) => {
     setOwner(owner);
     setPrice(price);
     setFixedId(fixedid);
     setCurrent(1);
+    setDatabaseId(dbid);
+    setNFTId(nftId);
+    setTokenId(tokenId);
   };
   return (
     <div className="listingStepContainer">
@@ -51,7 +41,14 @@ function ListingStep({
             className={item ? "bottomContentDiv" : "contentDiv"}
             key={i}
             onClick={() =>
-              handleSelection(item.owner, item.price, item.fixedid)
+              handleSelection(
+                item.owner,
+                item.price,
+                item.fixedid,
+                item.dbid,
+                item.tokenId,
+                item.nftId,
+              )
             }
           >
             <div className="leftDiv">

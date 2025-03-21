@@ -9,6 +9,7 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
+import { useMutation } from "@apollo/client";
 import { trimWallet } from "../../utills/trimWalletAddr";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { ETHToWei, WeiToETH } from "../../utills/convertWeiAndBnb";
@@ -17,6 +18,11 @@ import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { loadContractIns } from "../../store/actions";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 import { ethers } from "ethers";
+import {
+  CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+} from "../../gql/mutations";
+import { getStorage } from "../../utills/localStorage";
 
 const OfferModal = ({
   name,
@@ -25,6 +31,7 @@ const OfferModal = ({
   currentBidAmount,
   nftOwner,
   auctionid,
+  itemId,
 }) => {
   const dispatch = useDispatch();
   const { isConnected } = useAppKitAccount();
@@ -39,6 +46,16 @@ const OfferModal = ({
   const [connectModal, setConnectModal] = useState(false);
 
   const [dataSource, setDataSource] = useState([]);
+
+  let token = getStorage("token");
+
+  const [create_bid_against_auction] = useMutation(
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
+  );
+
+  const [updateBiddingTime] = useMutation(
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
+  );
 
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { contractData } = useSelector((state) => state.chain.contractData);
@@ -90,7 +107,7 @@ const OfferModal = ({
         data?.bidAmount.map((item, i) => {
           const priceDiff = getPriceDiff(
             initialPrice,
-            WeiToETH(`${Number(item)}`),
+            WeiToETH(`${Number(item)}`)
           );
           let obj = {
             key: i + 1,
@@ -177,8 +194,28 @@ const OfferModal = ({
           // }
           const res = await tx.wait();
           if (res) {
-            ToastMessage("Bid Successful", "", "success");
-            dispatch(loadContractIns());
+            //saving to bids to DB
+            try {
+              await create_bid_against_auction({
+                variables: {
+                  token: token,
+                  _id: Number(itemId),
+                  price: Number(offerAmount),
+                },
+              });
+
+              await updateBiddingTime({
+                variables: {
+                  token: token,
+                  nftDbMarketPlaceId: itemId.toString(),
+                },
+              });
+
+              ToastMessage("Bid Successful", "", "success");
+              dispatch(loadContractIns());
+            } catch (error) {
+              console.log(error);
+            }
           }
         } catch (error) {
           const parsedEthersError = getParsedEthersError(error);

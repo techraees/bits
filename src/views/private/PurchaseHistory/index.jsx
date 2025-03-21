@@ -10,8 +10,10 @@ import {
   GET_ALL_NFTS_WITHOUT_ADDRESS,
   GET_ALL_MY_TRANSACTION,
 } from "../../../gql/queries";
+import { getStorage } from "../../../utills/localStorage";
 
 const PurchaseHistory = () => {
+  let token = getStorage("token");
   const {
     // loading, error,
     data,
@@ -24,7 +26,7 @@ const PurchaseHistory = () => {
   const [dropdownValue, setDropdownValue] = useState("Last Week");
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
@@ -35,8 +37,7 @@ const PurchaseHistory = () => {
     isFetching: getAllMyTransactionFetching,
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTRjY2M4ZmQ5ZTkyMTBjYWVjMjZhNCIsImlhdCI6MTc0MTcwOTkzMSwiZXhwIjoxNzQxNzk2MzMxfQ.6r7yGtisw7_i8lOPUXyGsKtn6UrDCUSHzMiLLPSWkEU",
+      token: token,
       filterObj: '{"transaction_type":"buying_nft"}',
     },
   });
