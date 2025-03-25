@@ -223,9 +223,10 @@ const ListNft = () => {
             listingType,
             currency:
               chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
-            fixedid: newItemId.toString(),
+            [isAuction ? "auctionid" : "fixedid"]: newItemId.toString(),
             biddingStartTime: start || 0,
             biddingEndTime: end || 0,
+            auctionid,
           },
         });
 
