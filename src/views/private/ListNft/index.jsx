@@ -32,7 +32,7 @@ const ListNft = () => {
   // const { Option } = Select;
 
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE,
+    ADD_NFT_TO_NFT_MARKET_PLACE
   );
 
   const [
@@ -75,7 +75,7 @@ const ListNft = () => {
 
   const { userData } = useSelector((state) => state.address.userData);
   const { web3, account, signer } = useSelector(
-    (state) => state.web3.walletData,
+    (state) => state.web3.walletData
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
 
@@ -122,7 +122,7 @@ const ListNft = () => {
   };
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
 
@@ -134,7 +134,7 @@ const ListNft = () => {
     async function getTokens() {
       const data = await contractData.mintContract.balanceOf(
         userData?.address,
-        tokenId,
+        tokenId
       );
       setTokens(Number(data));
     }
@@ -154,7 +154,7 @@ const ListNft = () => {
       const market = marketContract.connect(signer);
       const mint = mintContract.connect(signer);
 
-      // Common approval check
+      // // Common approval check
       const isApproved = await mint.isApprovedForAll(address, market.address);
       if (!isApproved) {
         const approveTx = await mint.setApprovalForAll(market.address, true);
@@ -184,13 +184,13 @@ const ListNft = () => {
             endTimeStampParam,
             tokenId,
             copies,
-            mintContract.address,
+            mintContract.address
           )
         : await market.listItemForFixedPrice(
             tokenId,
             copies,
             price,
-            mintContract.address,
+            mintContract.address
           );
 
       const res = await tx.wait();
@@ -212,7 +212,7 @@ const ListNft = () => {
         const end = isAuction ? new Date(endTimeStamp * 1000) : null;
 
         //save data to DB
-        await addNftToMarketPlace({
+        const response = await addNftToMarketPlace({
           variables: {
             token: token,
             tokenId,
@@ -237,10 +237,12 @@ const ListNft = () => {
             amount: Number(isAuction ? auctionStartPrice : fixedPrice),
             currency:
               chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+            copies_transferred: Number(copies),
             transaction_type: "listing_nft",
             token_id: tokenId.toString(),
             chain_id: chainId.toString(),
             blockchain_listingID: newItemId.toString(),
+            listingID: response?.data?.addNftToNftMarketPlace?._id,
           },
         });
       }

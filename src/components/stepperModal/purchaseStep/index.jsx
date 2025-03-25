@@ -86,6 +86,8 @@ function PurchaseStep({
     connectWalletHandle();
   };
 
+  console.log("id data", fixedId);
+
   useEffect(() => {
     if (userData?.id) {
       getProfile({ variables: userData?.id });
@@ -107,15 +109,15 @@ function PurchaseStep({
       contractData.marketContract.connect(signer);
 
     try {
-      // const tx = await marketContractWithSigner.BuyFixedPriceItem(
-      //   fixedId,
-      //   quantity,
-      //   { value: amount },
-      // );
-      // setLoadingMessage("Transaction Pending...");
+      const tx = await marketContractWithSigner.BuyFixedPriceItem(
+        fixedId,
+        quantity,
+        { value: amount }
+      );
+      setLoadingMessage("Transaction Pending...");
 
-      // const res = await tx.wait();
-      // if (!res) throw new Error("Transaction failed");
+      const res = await tx.wait();
+      if (!res) throw new Error("Transaction failed");
 
       const transactionVariables = {
         token,
@@ -150,6 +152,8 @@ function PurchaseStep({
             first_person_wallet_address: address.toString(),
             second_person_wallet_address: owner.toString(),
             transaction_type: "buying_nft",
+            copies_transferred: Number(quantity),
+            listingID: databaseId.toString(),
           },
         }),
         createNewTransation({
@@ -158,6 +162,8 @@ function PurchaseStep({
             first_person_wallet_address: owner.toString(),
             second_person_wallet_address: address.toString(),
             transaction_type: "selling_nft",
+            copies_transferred: Number(quantity),
+            listingID: databaseId.toString(),
           },
         }),
       ]);

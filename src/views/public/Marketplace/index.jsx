@@ -53,14 +53,14 @@ const Marketplace = () => {
     if (getAllNftsInMarketPlaceAndSupportFilter) {
       setAuctionItemData(
         getAllNftsInMarketPlaceAndSupportFilter
-          ?.getAllNftsInMarketPlaceAndSupportFilter?.data,
+          ?.getAllNftsInMarketPlaceAndSupportFilter?.data
       );
     }
   }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
 
   const handleCategoryChange = (value) => {
@@ -74,7 +74,7 @@ const Marketplace = () => {
     const convertedPrice = await Promise.all(
       data.map(async (val) => {
         return await USDTOMATIC(val);
-      }),
+      })
     );
 
     setPriceFilter(convertedPrice);
@@ -133,6 +133,7 @@ const Marketplace = () => {
     refetch();
   }, []);
 
+  console.log("auction data", auctionItemData, auctionsDatas);
   const compareTime = (time) => {
     const givenTime = new Date(time);
     const currentTime = new Date();
@@ -330,12 +331,12 @@ const Marketplace = () => {
                   auctionStartTime={dbDateToTime(item?.biddingStartTime)}
                   auctionEndTime={dbDateToTime(item?.biddingEndTime)}
                   initialPrice={Number(item?.price)}
-                  auctionid={Number(item?.listingID)}
+                  auctionid={item?.listingID}
                   numberofcopies={item?.numberOfCopies}
                   currentBidAmount={item?.auction_highest_bid}
                   nftOwner={item?.seller?.user_address}
                   royalty={item?.nft_id?.royalty}
-                  tokenId={Number(item.tokenId)}
+                  tokenId={item.tokenId}
                   id={item?.nft_id?._id}
                   itemDbId={item?._id}
                 />

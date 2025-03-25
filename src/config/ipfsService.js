@@ -72,7 +72,7 @@ export const sendFileToIPFS = async (file, isEmote) => {
 
       // console.log("ImgHash", res)
       const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-        "z"
+        "z",
       )}`;
       return ImgHash;
     } catch (error) {
