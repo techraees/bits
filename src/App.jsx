@@ -62,16 +62,16 @@ createAppKit({
 function App() {
   // const [recordVisit] = useMutation(RECORD_VISIT_MUTATION);
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE,
+    ADD_NFT_TO_NFT_MARKET_PLACE
   );
   const [removeNftFromMarketPlace] = useMutation(REMOVE_NFT_NFT_MARKET_PLACE);
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
   const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
   );
   const {
     data: getMyNftsThatIOwned,
@@ -224,12 +224,12 @@ function App() {
     getOwnershipHistoryOfSingleNfts,
     getAllBidsOfAuctionNftMarketPlace,
     getAllTopNftsForOneChainForWebsite,
-    getAllTopNftsForOneChainForWebsite,
+    getAllTopNftsForOneChainForWebsite
   );
   return (
     <>
       <Provider store={store}>
-        {/* <h1
+        <h1
           style={{ background: "blue" }}
           onClick={async () => {
             try {
@@ -265,13 +265,14 @@ function App() {
               //   },
               // });
 
-
               // Used to make bidding transaction
-              // const response = await createNewTransation({
+              // Bidding Transaction
+              // const BiddingTransaction = await createNewTransation({
               //   variables: {
               //     token:
-              //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
-              //     first_person_wallet_address: "0x6588110c61280f68275bf852fC2C12CED740e8d9",
+              //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0Mjg4MzQ4NCwiZXhwIjoxNzQyOTY5ODg0fQ.q-oEQ55On8rwV82mISVFvkaZtdDUMg57RzrtjRoLOhE",
+              //     first_person_wallet_address:
+              //       "0x6588110c61280f68275bf852fC2C12CED740e8d9",
               //     nft_id: "6658c6badb40134913175fca",
               //     amount: 10.5,
               //     currency: "ETH",
@@ -279,41 +280,52 @@ function App() {
               //     token_id: "1",
               //     chain_id: "1",
               //     blockchain_listingID: "listing_001",
-              //     listingID: "67bca4a0cc7a16835231eb20"
+              //     listingID: "67bca4a0cc7a16835231eb20",
               //   },
               // });
-              const response = await createNewNftOwnership({
+
+              // Create new Bid
+              const createNewBid = await create_bid_against_auction({
                 variables: {
                   token:
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
-                  total_price: 276,
-                  listingIDFromBlockChain: "listing_001",
-                  listingID: "67bca4a0cc7a16835231eb20",
-                  copies: 23,
-                  pricePerItem: 12,
-                  from_user_wallet: "0x6934b7875fEABE4FA129D4988ca6DEcD1Dca9C2B",
-                  to_user_wallet: "0xdaF60d937a200b36688e4BfBA68Ef026231570Ef",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0Mjg4MzQ4NCwiZXhwIjoxNzQyOTY5ODg0fQ.q-oEQ55On8rwV82mISVFvkaZtdDUMg57RzrtjRoLOhE",
+                  _id: "67bca55dcc7a16835231eb26",
+                  price: 205,
                 },
               });
 
+              // const response = await createNewNftOwnership({
+              //   variables: {
+              //     token:
+              //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MjczNzEzNywiZXhwIjoxNzQyODIzNTM3fQ.vauUQK9Z_Sd1OGQ2bBuspGzmegY7n0i9qTUOMg1xjqI",
+              //     total_price: 276,
+              //     listingIDFromBlockChain: "listing_001",
+              //     listingID: "67bca4a0cc7a16835231eb20",
+              //     copies: 23,
+              //     pricePerItem: 12,
+              //     from_user_wallet:
+              //       "0x6934b7875fEABE4FA129D4988ca6DEcD1Dca9C2B",
+              //     to_user_wallet: "0xdaF60d937a200b36688e4BfBA68Ef026231570Ef",
+              //   },
+              // });
 
-              const response = await create_bid_against_auction({
-                variables: {
-                  token:
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
-                  _id: 276,
-                  price: 120,
-                },
-              });
+              // const response = await create_bid_against_auction({
+              //   variables: {
+              //     token:
+              //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDg5NzE0NCwiZXhwIjoxNzQwOTgzNTQ0fQ.qbkY31xW-g8dW5fhjrISObz1EGvJjUMPUOZuB6TTZuA",
+              //     _id: 276,
+              //     price: 120,
+              //   },
+              // });
 
-              console.log("Mutation response:", response.data);
+              console.log("Mutation response:", createNewBid.data);
             } catch (err) {
               console.error("Error adding NFT:", err);
             }
           }}
         >
           Hello World
-        </h1> */}
+        </h1>
         <Layout />
         <ZendeskComp />
       </Provider>

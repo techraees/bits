@@ -45,7 +45,7 @@ const SellingHistory = () => {
   }, [data]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
   const menu = (
     <Menu

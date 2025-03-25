@@ -26,7 +26,7 @@ const PurchaseHistory = () => {
   const [dropdownValue, setDropdownValue] = useState("Last Week");
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
