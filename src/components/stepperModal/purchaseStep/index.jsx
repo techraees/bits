@@ -107,15 +107,15 @@ function PurchaseStep({
       contractData.marketContract.connect(signer);
 
     try {
-      const tx = await marketContractWithSigner.BuyFixedPriceItem(
-        fixedId,
-        quantity,
-        { value: amount }
-      );
-      setLoadingMessage("Transaction Pending...");
+      // const tx = await marketContractWithSigner.BuyFixedPriceItem(
+      //   fixedId,
+      //   quantity,
+      //   { value: amount },
+      // );
+      // setLoadingMessage("Transaction Pending...");
 
-      const res = await tx.wait();
-      if (!res) throw new Error("Transaction failed");
+      // const res = await tx.wait();
+      // if (!res) throw new Error("Transaction failed");
 
       const transactionVariables = {
         token,
@@ -166,7 +166,7 @@ function PurchaseStep({
         userData?.full_name,
         name,
         sellerUsername,
-        totalPrice
+        totalPrice,
       );
       await sendEmail({
         variables: {

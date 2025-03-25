@@ -337,7 +337,7 @@ const Marketplace = () => {
                   royalty={item?.nft_id?.royalty}
                   tokenId={Number(item.tokenId)}
                   id={item?.nft_id?._id}
-                  itemId={item?._id}
+                  itemDbId={item?._id}
                 />
               );
             }

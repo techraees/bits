@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { uploadValidation } from "../validations";
 import ErrorMessage from "../error";
-
-import { sendFileToIPFSV2, sendMetaToIPFS } from "../../config/ipfsService";
+import { useMutation } from "@apollo/client";
+import { CREATE_SIGNED_URL_FOR_NFTS } from "../../gql/mutations";
+import { sendMetaToIPFS, sendFileToStorj } from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
 
@@ -17,12 +18,14 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const textColor3 = useSelector((state) => state.app.theme.textColor3);
   // const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [createSignedUrl] = useMutation(CREATE_SIGNED_URL_FOR_NFTS);
 
   const [imageUpload, setImageUpload] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState(null);
@@ -120,7 +123,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         ToastMessage(
           "Uploading .avi files is not allowed. Please select another file.",
           "",
-          "error",
+          "error"
         );
       } else {
         if (isEmote) {
@@ -128,10 +131,14 @@ const UploadVideoModal = ({ visible, onClose }) => {
           setImageUpload(true);
           const response = await handleDeepMotionUpload(
             fileUploaded,
-            fileUploaded.name,
+            fileUploaded.name
           );
           if (response) {
-            const url = await sendFileToIPFSV2(response.mp4, isEmote);
+            const url = await sendFileToStorj(
+              response.mp4,
+              isEmote,
+              createSignedUrl
+            );
             setImageUpload(false);
 
             setFieldValue("video", url);
@@ -143,7 +150,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
         } else {
           setSelectedFileName(fileUploaded.name);
           setImageUpload(true);
-          const url = await sendFileToIPFSV2(fileUploaded, isEmote);
+          const url = await sendFileToStorj(
+            fileUploaded,
+            isEmote,
+            createSignedUrl
+          );
           setImageUpload(false);
 
           setFieldValue("video", url);
@@ -164,7 +175,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     function (e) {
       e.preventDefault();
     },
-    false,
+    false
   );
   window.addEventListener("drop", async (e) => {
     if (isSelected) {
@@ -177,7 +188,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           ToastMessage(
             "Uploading .avi files is not allowed. Please select another file.",
             "",
-            "error",
+            "error"
           );
         } else {
           if (isEmote) {
@@ -185,10 +196,14 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setImageUpload(true);
             const response = await handleDeepMotionUpload(
               fileUploaded,
-              fileUploaded.name,
+              fileUploaded.name
             );
             if (response) {
-              const url = await sendFileToIPFSV2(response.mp4, isEmote);
+              const url = await sendFileToStorj(
+                response.mp4,
+                isEmote,
+                createSignedUrl
+              );
               setImageUpload(false);
 
               setFieldValue("video", url);
@@ -200,7 +215,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
           } else {
             setSelectedFileName(fileUploaded.name);
             setImageUpload(true);
-            const url = await sendFileToIPFSV2(fileUploaded, isEmote);
+            const url = await sendFileToStorj(
+              fileUploaded,
+              isEmote,
+              createSignedUrl
+            );
             setImageUpload(false);
 
             setFieldValue("video", url);

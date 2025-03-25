@@ -31,7 +31,7 @@ const OfferModal = ({
   currentBidAmount,
   nftOwner,
   auctionid,
-  itemId,
+  itemDbId,
 }) => {
   const dispatch = useDispatch();
   const { isConnected } = useAppKitAccount();
@@ -185,21 +185,23 @@ const OfferModal = ({
         const marketContractWithsigner =
           contractData.marketContract.connect(signer);
         try {
-          setIsBidModalOpen(true);
-          const tx = await marketContractWithsigner.bid(auctionid, {
-            value: amount,
-          });
-          // if(tx){
-          //   setIsBidModalOpen(true);
-          // }
-          const res = await tx.wait();
+          // setIsBidModalOpen(true);
+          // const tx = await marketContractWithsigner.bid(auctionid, {
+          //   value: amount,
+          // });
+          // // if(tx){
+          // //   setIsBidModalOpen(true);
+          // // }
+          // const res = await tx.wait();
+
+          const res = "res";
           if (res) {
             //saving to bids to DB
             try {
               await create_bid_against_auction({
                 variables: {
                   token: token,
-                  _id: Number(itemId),
+                  _id: itemDbId.toString(),
                   price: Number(offerAmount),
                 },
               });
@@ -207,7 +209,7 @@ const OfferModal = ({
               await updateBiddingTime({
                 variables: {
                   token: token,
-                  nftDbMarketPlaceId: itemId.toString(),
+                  nftDbMarketPlaceId: itemDbId.toString(),
                 },
               });
 

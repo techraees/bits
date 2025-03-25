@@ -72,7 +72,7 @@ const CardCompnent = ({
   isPaid,
   duration,
   sellerUsername,
-  itemId,
+  itemDbId,
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,6 +92,8 @@ const CardCompnent = ({
 
   const [updateNftWatch] = useMutation(UPDATE_NFT_WATCH);
   // const [updateNftPayment] = useMutation(UPDATE_NFT_PAYMENT);
+
+  console.log("Item Id", itemDbId);
 
   const {
     data: getOwnersWhoListedTheSameNftWithPrices,
@@ -321,7 +323,7 @@ const CardCompnent = ({
           }
           nftOwner={nftOwner}
           auctionid={auctionid}
-          itemId={itemId}
+          itemDbId={itemDbId}
         />
       </Modal>
 

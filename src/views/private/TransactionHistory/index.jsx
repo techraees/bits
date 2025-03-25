@@ -26,7 +26,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export const options = {
@@ -106,7 +106,7 @@ const TransactionHistory = () => {
   }, [getAllMyTransaction]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
 
   // const handleChange = (value) => {
