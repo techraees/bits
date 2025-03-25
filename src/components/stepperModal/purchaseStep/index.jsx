@@ -166,7 +166,7 @@ function PurchaseStep({
         userData?.full_name,
         name,
         sellerUsername,
-        totalPrice,
+        totalPrice
       );
       await sendEmail({
         variables: {

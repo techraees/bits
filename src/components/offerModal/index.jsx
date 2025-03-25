@@ -50,11 +50,11 @@ const OfferModal = ({
   let token = getStorage("token");
 
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   );
 
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   );
 
   const { web3, signer } = useSelector((state) => state.web3.walletData);
@@ -107,7 +107,7 @@ const OfferModal = ({
         data?.bidAmount.map((item, i) => {
           const priceDiff = getPriceDiff(
             initialPrice,
-            WeiToETH(`${Number(item)}`)
+            WeiToETH(`${Number(item)}`),
           );
           let obj = {
             key: i + 1,

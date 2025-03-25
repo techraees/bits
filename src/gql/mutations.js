@@ -312,6 +312,7 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
     $token: String!
+    $transaction_type: String!
     $nft_id: String
     $first_person_wallet_address: String
     $second_person_wallet_address: String
@@ -321,7 +322,6 @@ const CREATE_NEW_TRANSACTION = gql`
     $chain_id: String
     $amount: Decimal
     $currency: String
-    $transaction_type: String!
     $copies_transferred: Int
   ) {
     createNewTransaction(
@@ -383,9 +383,7 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
       token: $token
       _id: $_id
       price: $price
-    ) {
-      message
-    }
+    )
   }
 `;
 
