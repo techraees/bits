@@ -34,7 +34,7 @@ const environment = process.env;
 
 const MintNft = () => {
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { isConnected } = useAppKitAccount();
@@ -109,7 +109,7 @@ const MintNft = () => {
     const sendMsg = async () => {
       const msgData = mintMessage(
         createNft && createNft.artist_name1,
-        createNft && createNft.name,
+        createNft && createNft.name
       );
 
       try {
@@ -169,7 +169,7 @@ const MintNft = () => {
         royalty,
         splitOwners,
         splitOwnersPercentage,
-        [],
+        []
       );
 
       setLoadingStatus(true);
@@ -220,7 +220,7 @@ const MintNft = () => {
       connectWalletHandle();
       const tokenid = await mintCall(
         Number(values.supply),
-        Number(values.royalty * 100),
+        Number(values.royalty * 100)
       );
 
       if (Number(tokenid)) {
@@ -262,10 +262,10 @@ const MintNft = () => {
               contractData.chain === process.env.REACT_ETH_CHAINID
                 ? "ETH"
                 : "MATIC",
+            copies_transferred: Number(values.supply),
             transaction_type: "create_nft",
             token_id: tokenid.toString(),
             chain_id: contractData.chain.toString(),
-            blockchain_listingID: "",
           },
         });
       } else {
@@ -373,7 +373,7 @@ const MintNft = () => {
                                 ToastMessage(
                                   "Error",
                                   "Royalty should be less than 100",
-                                  "error",
+                                  "error"
                                 );
                               }
                             }}

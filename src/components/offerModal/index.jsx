@@ -21,6 +21,7 @@ import { ethers } from "ethers";
 import {
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+  CREATE_NEW_TRANSACTION,
 } from "../../gql/mutations";
 import { getStorage } from "../../utills/localStorage";
 
@@ -31,10 +32,12 @@ const OfferModal = ({
   currentBidAmount,
   nftOwner,
   auctionid,
-  itemId,
+  itemDbId,
+  nftId,
+  tokenId,
 }) => {
   const dispatch = useDispatch();
-  const { isConnected } = useAppKitAccount();
+  const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -50,12 +53,14 @@ const OfferModal = ({
   let token = getStorage("token");
 
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
   );
 
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
+
+  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
 
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { contractData } = useSelector((state) => state.chain.contractData);
@@ -107,7 +112,7 @@ const OfferModal = ({
         data?.bidAmount.map((item, i) => {
           const priceDiff = getPriceDiff(
             initialPrice,
-            WeiToETH(`${Number(item)}`),
+            WeiToETH(`${Number(item)}`)
           );
           let obj = {
             key: i + 1,
@@ -193,13 +198,14 @@ const OfferModal = ({
           //   setIsBidModalOpen(true);
           // }
           const res = await tx.wait();
+
           if (res) {
             //saving to bids to DB
             try {
               await create_bid_against_auction({
                 variables: {
                   token: token,
-                  _id: Number(itemId),
+                  _id: itemDbId.toString(),
                   price: Number(offerAmount),
                 },
               });
@@ -207,7 +213,27 @@ const OfferModal = ({
               await updateBiddingTime({
                 variables: {
                   token: token,
-                  nftDbMarketPlaceId: itemId.toString(),
+                  nftDbMarketPlaceId: itemDbId.toString(),
+                },
+              });
+
+              console.log("addd", address, tokenId, itemDbId, auctionid);
+
+              await createNewTransation({
+                variables: {
+                  token,
+                  first_person_wallet_address: address.toString(),
+                  nft_id: nftId.toString(),
+                  amount: Number(offerAmount),
+                  currency:
+                    contractData.chain === process.env.REACT_ETH_CHAINID
+                      ? "ETH"
+                      : "MATIC",
+                  transaction_type: "bidding_transaction",
+                  token_id: tokenId.toString(),
+                  chain_id: contractData.chain.toString(),
+                  blockchain_listingID: auctionid.toString(),
+                  listingID: itemDbId.toString(),
                 },
               });
 
