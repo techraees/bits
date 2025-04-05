@@ -16,6 +16,7 @@ import NftDetailsModal from "./nftDetailsModal";
 import OfferModal from "./offerModal";
 import Loader from "./loaders/loading";
 import ToastMessage from "./toastMessage";
+import TopNftsPopup from "./topNftsPopup/";
 
 export {
   InputComponent,
@@ -36,4 +37,5 @@ export {
   LogoutModal,
   NftDetailsModal,
   OfferModal,
+  TopNftsPopup,
 };
