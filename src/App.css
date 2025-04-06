@@ -22,3 +22,18 @@ w3m-modal {
     right: 5%;
   }
 }
+
+
+
+
+/* Add this to your global styles */
+.scrollbar_hide_custom {
+  overflow: auto;
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.scrollbar_hide_custom::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,283 @@
+.down_side_popup {
+  width: 97%;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.popup_header {
+  border-radius: 10px;
+  padding: 1.5rem 4rem;
+  gap: 16px;
+  border: 1px solid rgb(237, 237, 237);
+  font-family: "Nunito Sans" !important;
+}
+
+.Nunito_font_family {
+  font-family: "Nunito Sans" !important;
+}
+
+.parent_ul_custon_li {
+  gap: 5px;
+}
+
+.custom-li {
+  font-size: 10px;
+  list-style: none;
+  width: 24px;
+  height: 22px;
+  border: 1px solid #d6d6d6;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  color: #b6b6b6;
+}
+
+.custom-li button {
+  width: 100%;
+  height: 100%;
+}
+
+.theme_gradient_red {
+  background: linear-gradient(#f45c5c, #7e1c1c) !important;
+  color: white;
+}
+
+.previous_next_button {
+  color: #b73131;
+  font-size: 14px;
+  margin: 0px 10px;
+  font-weight: 300;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.text_detail_note {
+  color: #8c8a8a;
+  font-weight: 300;
+}
+
+.custom_line {
+  width: 303px;
+  height: 2px;
+  background-color: #c2c2c2;
+}
+
+.custom_line_adjustable {
+  height: 2px;
+  background-color: #c2c2c2;
+  width: 100%;
+}
+
+.popup_header_first_box {
+  width: 35px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: "Nunito Sans";
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-right: 20px;
+}
+
+.popup_header_second_box {
+  width: 35px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: "Nunito Sans";
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-right: 20px;
+  background-color: #bbbbbb;
+  color: white;
+}
+
+.switch_button_data {
+  border-radius: 20px;
+  overflow: hidden;
+  border: none;
+  color: white;
+  font-family: "Nunito Sans" !important;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.switch_button_data_red_button {
+  padding: 5px 12px;
+}
+
+.switch_button_data_gray_button {
+  padding: 5px 12px;
+}
+
+.switch_button_data__dark_color {
+  background-color: #4d4d4d;
+}
+
+.shadow-move {
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(174, 174, 174, 0.3);
+  transition: all 0.3s ease;
+}
+
+.close_button {
+  border: none;
+}
+
+.address_margin {
+  margin-left: 100px;
+}
+
+.price_tag {
+  font-size: 20px;
+}
+.price_tag_currency {
+  color: #239cd0;
+}
+
+.pagination_div_parent {
+  margin: 2rem 0px;
+}
+
+.popup_parent_div {
+  width: 45%;
+}
+
+.custom-card {
+  border: none !important;
+  padding: 1.5rem;
+  background-color: white;
+}
+
+.cross_icon_red {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 20px;
+  height: 20px;
+}
+
+.cross_icon_red img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.green_tick_button {
+  width: 20px;
+  height: 20px;
+  margin-left: 275px;
+}
+
+.green_tick_button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heading_data {
+  margin-left: 1rem;
+}
+
+.heading_data_name {
+  color: #c73a3a;
+  font-size: 1.5rem;
+  line-height: 26px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.total_price_data {
+  display: flex;
+  justify-content: space-between;
+}
+
+.go_button {
+  border: none;
+  border-radius: 25px;
+  padding: 5px 17px;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.input_go_button_parent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2rem 0rem;
+}
+
+.input_go_button_parent__input_div {
+  width: 100%;
+  border: 1px solid #bbbbbb;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 5px 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input_go_button_parent__input_div__p {
+  font-size: 20px;
+}
+
+.input_go_button_parent__input_div__p__value {
+  font-size: 20px;
+}
+
+.input_go_button_parent__input_div__parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-right: 4rem;
+}
+
+.input_go_button_parent__input_div__parent_full {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.increment_decrement_button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.line_vertical {
+  height: 24px;
+  width: 2px;
+  background-color: #f3f3f3;
+}
+
+.connect_wallet_button {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+}
+
+.connect_wallet_button__parent {
+  text-align: center;
+}

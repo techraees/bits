@@ -32,7 +32,7 @@ const ListNft = () => {
   // const { Option } = Select;
 
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE
+    ADD_NFT_TO_NFT_MARKET_PLACE,
   );
 
   const [
@@ -57,6 +57,7 @@ const ListNft = () => {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
+  let auctionid = 10;
   // const [ethBal, setEthBal] = useState(0);
   // const [maticBal, setMaticBal] = useState(0);
 
@@ -75,7 +76,7 @@ const ListNft = () => {
 
   const { userData } = useSelector((state) => state.address.userData);
   const { web3, account, signer } = useSelector(
-    (state) => state.web3.walletData
+    (state) => state.web3.walletData,
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
 
@@ -122,7 +123,7 @@ const ListNft = () => {
   };
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
 
@@ -134,7 +135,7 @@ const ListNft = () => {
     async function getTokens() {
       const data = await contractData.mintContract.balanceOf(
         userData?.address,
-        tokenId
+        tokenId,
       );
       setTokens(Number(data));
     }
@@ -184,13 +185,13 @@ const ListNft = () => {
             endTimeStampParam,
             tokenId,
             copies,
-            mintContract.address
+            mintContract.address,
           )
         : await market.listItemForFixedPrice(
             tokenId,
             copies,
             price,
-            mintContract.address
+            mintContract.address,
           );
 
       const res = await tx.wait();

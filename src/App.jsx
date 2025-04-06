@@ -36,6 +36,8 @@ import {
   GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
   GET_TRANSACTION_DETAILS_OF_SPECIFIC,
 } from "./gql/queries";
+import { TopNftsPopup } from "./components";
+import ShowTopNFTPopup from "./ShowTopNFTPopup";
 
 const projectId = process.env.REACT_APP_REOWN_ID;
 
@@ -229,10 +231,10 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <h1
-          style={{ background: "blue" }}
-          onClick={async () => {
-            try {
+        {/* <h1
+          // style={{ background: "blue" }}
+          // onClick={async () => {
+            // try {
               // const response = await addNftToMarketPlace({
               //   variables: {
               //     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0MDQxNjExOSwiZXhwIjoxNzQwNTAyNTE5fQ.nQw7eeMRIMJmj6zGWjmP-8l0RV8jApDg0WsaKpuP6tQ",
@@ -285,14 +287,14 @@ function App() {
               // });
 
               // Create new Bid
-              const createNewBid = await create_bid_against_auction({
-                variables: {
-                  token:
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0Mjg4MzQ4NCwiZXhwIjoxNzQyOTY5ODg0fQ.q-oEQ55On8rwV82mISVFvkaZtdDUMg57RzrtjRoLOhE",
-                  _id: "67bca55dcc7a16835231eb26",
-                  price: 205,
-                },
-              });
+              // const createNewBid = await create_bid_against_auction({
+              //   variables: {
+              //     token:
+              //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWU1ODAyYzBiNGJmN2E5ZjNhMDI1YSIsImlhdCI6MTc0Mjg4MzQ4NCwiZXhwIjoxNzQyOTY5ODg0fQ.q-oEQ55On8rwV82mISVFvkaZtdDUMg57RzrtjRoLOhE",
+              //     _id: "67bca55dcc7a16835231eb26",
+              //     price: 205,
+              //   },
+              // });
 
               // const response = await createNewNftOwnership({
               //   variables: {
@@ -318,17 +320,18 @@ function App() {
               //   },
               // });
 
-              console.log("Mutation response:", createNewBid.data);
-            } catch (err) {
-              console.error("Error adding NFT:", err);
-            }
-          }}
-        >
-          Hello World
-        </h1>
+            //   console.log("Mutation response:", createNewBid.data);
+            // } catch (err) {
+            //   console.error("Error adding NFT:", err);
+            // }
+          // }}
+        // >
+          // Hello World
+        // </h1> */}
         <Layout />
         <ZendeskComp />
       </Provider>
+      <ShowTopNFTPopup />
     </>
   );
 }
