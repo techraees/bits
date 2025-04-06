@@ -28,15 +28,15 @@ const Dashboard = () => {
   const [showChat, setShowChat] = useState(false);
   const { userData } = useSelector((state) => state.address.userData);
   const { fixedItemData } = useSelector(
-    (state) => state.fixedItemDatas.fixedItemData,
+    (state) => state.fixedItemDatas.fixedItemData
   );
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { auctionItemData } = useSelector(
-    (state) => state.auctionItemDatas.auctionItemData,
+    (state) => state.auctionItemDatas.auctionItemData
   );
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const isLogged = userData?.isLogged;
@@ -67,13 +67,13 @@ const Dashboard = () => {
 
   console.log(
     "the top nfts",
-    getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite,
+    getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite
   );
 
   useEffect(() => {
     if (getAllTopNftsForOneChainForWebsite) {
       setTopNfts(
-        getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite,
+        getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite
       );
     }
   }, [getAllTopNftsForOneChainForWebsite]);
