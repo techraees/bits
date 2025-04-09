@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { motion } from "framer-motion";
 import "./css/index.css";
@@ -6,6 +6,7 @@ import TopNftListingAuctionBodySection from "./TopNftListingAuctionBodySection";
 import TopNftListingAuctionHeader from "./TopNftListingAuctionHeader";
 import TopNftListingQuantityPurchaseHeader from "./TopNftListingQuantityPurchaseHeader";
 import TopNftAddQuantiyPurchaseInputBodySection from "./TopNftAddQuantiyPurchaseInputBodySection";
+import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 
 const customStyles = {
   overlay: {
@@ -35,29 +36,32 @@ const nftData = [
     title: "Redbull",
     price: "1.3",
     address: "0xbb1...8b903",
-    note: "27 NFTs Available",
+    nfts_available: 27,
   },
   {
     title: "Fire NFT",
     price: "0.4",
     address: "0xbb1...8b903",
-    note: "27 NFTs Available",
+    nfts_available: 32,
   },
   {
     title: "Speedy walkover",
     price: "1.3",
     address: "0xbb1...8b903",
-    note: "27 NFTs Available",
+    nfts_available: 1,
   },
   {
     title: "Redbull",
     price: "1.3",
     address: "0xbb1...8b903",
-    note: "1 NFT Available",
+    nfts_available: 23,
   },
 ];
 
 const ListingModal = ({ isOpen, onRequestClose }) => {
+  const [isSwitchValue, setIsSwitchValue] = useState(
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
+  );
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -84,9 +88,14 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         {/* <TopNftListingAuctionHeader /> */}
         <TopNftListingQuantityPurchaseHeader />
 
-        {/* <TopNftListingAuctionBodySection nftData={nftData} /> */}
+        <TopNftListingAuctionBodySection
+          nftData={nftData}
+          isSwitchValue={isSwitchValue}
+          setIsSwitchValue={setIsSwitchValue}
+          onRequestClose={onRequestClose}
+        />
 
-        <TopNftAddQuantiyPurchaseInputBodySection />
+        {/* <TopNftAddQuantiyPurchaseInputBodySection /> */}
       </motion.div>
     </Modal>
   );

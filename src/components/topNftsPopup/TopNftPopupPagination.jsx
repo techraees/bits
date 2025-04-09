@@ -39,24 +39,34 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <>
       <nav>
-        <ul className="justify-content-end mb-0 d-flex parent_ul_custon_li">
-          <p className="previous_next_button cursor_pointer">Prev</p>
+        <ul className="justify-content-end prevent_select mb-0 d-flex parent_ul_custon_li">
+          <p
+            className="previous_next_button prevent_select cursor_pointer"
+            onClick={() => {
+              if (currentPage === 1) {
+              } else {
+                onPageChange(currentPage - 1);
+              }
+            }}
+          >
+            Prev
+          </p>
           <li
-            className={`cursor_pointer custom-li page-item ${currentPage === 1 ? "disabled" : ""}`}
+            className={`cursor_pointer prevent_select custom-li page-item ${currentPage === 1 ? "disabled" : ""}`}
           >
             <button
-              className="page-link"
-              onClick={() => onPageChange(currentPage - 1)}
+              className="page-link prevent_select"
+              onClick={() => onPageChange(1)}
               disabled={currentPage === 1}
             >
               <img src={LeftIconDouble} alt="Previous" />
             </button>
           </li>
           <li
-            className={`cursor_pointer custom-li  page-item ${currentPage === 1 ? "disabled" : ""}`}
+            className={`cursor_pointer prevent_select custom-li  page-item ${currentPage === 1 ? "disabled" : ""}`}
           >
             <button
-              className="page-link"
+              className="page-link prevent_select"
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
@@ -67,7 +77,7 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
           {pageNumbers.map((page, index) => (
             <li
               key={index}
-              className={`custom-li  page-item ${page === currentPage ? "theme_gradient_red" : ""}`}
+              className={`custom-li prevent_select page-item ${page === currentPage ? "theme_gradient_red" : ""}`}
             >
               <button
                 className="page-link  "
@@ -80,10 +90,10 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
           ))}
 
           <li
-            className={`cursor_pointer custom-li  page-item ${currentPage === totalPages ? "disabled" : ""}`}
+            className={`cursor_pointer  prevent_select custom-li  page-item ${currentPage === totalPages ? "disabled" : ""}`}
           >
             <button
-              className="page-link"
+              className="page-link prevent_select"
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
@@ -92,18 +102,28 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
             </button>
           </li>
           <li
-            className={`cursor_pointer custom-li page-item ${currentPage === totalPages ? "disabled" : ""}`}
+            className={`cursor_pointer prevent_select custom-li page-item ${currentPage === totalPages ? "disabled" : ""}`}
           >
             <button
-              className="page-link"
-              onClick={() => onPageChange(currentPage + 1)}
+              className="page-link prevent_select"
+              onClick={() => onPageChange(totalPages)}
               disabled={currentPage === totalPages}
             >
               {/* Add the right arrow icon or any content here */}
               <img src={RightIconDouble} alt="Next" />
             </button>
           </li>
-          <p className="previous_next_button cursor_pointer">Next</p>
+          <p
+            className="previous_next_button cursor_pointer prevent_select"
+            onClick={() => {
+              if (currentPage === totalPages) {
+              } else {
+                onPageChange(currentPage + 1);
+              }
+            }}
+          >
+            Next
+          </p>
         </ul>
       </nav>
     </>

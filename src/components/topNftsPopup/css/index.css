@@ -281,3 +281,18 @@
 .connect_wallet_button__parent {
   text-align: center;
 }
+
+.nft_available_box {
+  width: fit-content;
+  font-size: 7px;
+  background-color: #e8e8e8;
+  border-radius: 5px;
+  padding: 3px 7px;
+  color: #878585;
+}
+
+.prevent_select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
