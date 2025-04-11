@@ -39,7 +39,7 @@ const Layout = () => {
         <div className="footer-logo">
           <img src={logo} width={60} alt="logo" />
         </div>
-        {/* <NavbarComponent dashboardNav /> */}
+        <NavbarComponent dashboardNav />
         <PublicLayout />
         <PrivateLayout />
       </div>

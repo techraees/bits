@@ -39,13 +39,13 @@ const nftData = [
     nfts_available: 27,
   },
   {
-    title: "Fire NFT",
+    title: "Redbull",
     price: "0.4",
     address: "0xbb1...8b903",
     nfts_available: 32,
   },
   {
-    title: "Speedy walkover",
+    title: "Redbull",
     price: "1.3",
     address: "0xbb1...8b903",
     nfts_available: 1,
@@ -86,7 +86,11 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         }}
       >
         {/* <TopNftListingAuctionHeader /> */}
-        <TopNftListingQuantityPurchaseHeader />
+        <TopNftListingQuantityPurchaseHeader
+          isSwitchValue={isSwitchValue}
+          setIsSwitchValue={setIsSwitchValue}
+          onRequestClose={onRequestClose}
+        />
 
         <TopNftListingAuctionBodySection
           nftData={nftData}
