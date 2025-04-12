@@ -10,7 +10,7 @@ const TopNftListingAuctionBodySection = ({
   setIsSwitchValue,
   onRequestClose,
   setIsFixedPriceStep,
-  setIsAuctionStep
+  setIsAuctionStep,
 }) => {
   const [page, setPage] = useState(1);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -52,79 +52,81 @@ const TopNftListingAuctionBodySection = ({
           <div className="">
             {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
               ? nftData.map((nft, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setIsFixedPriceStep(2)
-                  }}
-                  className="shadow-move d-flex justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
-                >
-                  <div className="d-flex align-items-center">
-                    <img
-                      src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="NFT"
-                      className="rounded-circle img-top_nft lg:me-3 me-2"
-                    />
-                    <div>
-                      <div className="d-flex align-items-center ">
-                        <h5 className="mb-1 nft_title text-danger">{nft?.title}</h5>
-                        <p className="mb-0 text-muted  small address_margin">
-                          ({nft?.address})
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setIsFixedPriceStep(2);
+                    }}
+                    className="shadow-move d-flex justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="NFT"
+                        className="rounded-circle img-top_nft lg:me-3 me-2"
+                      />
+                      <div>
+                        <div className="d-flex align-items-center ">
+                          <h5 className="mb-1 nft_title text-danger">
+                            {nft?.title}
+                          </h5>
+                          <p className="mb-0 text-muted  small address_margin">
+                            ({nft?.address})
+                          </p>
+                        </div>
+
+                        <p className="mb-0 nft_available_box">
+                          {`${Number(nft?.nfts_available).toLocaleString("en-US")} NFTs Available`}
                         </p>
                       </div>
-
-                      <p className="mb-0 nft_available_box">
-                        {`${Number(nft?.nfts_available).toLocaleString("en-US")} NFTs Available`}
-                      </p>
                     </div>
+                    <span className="text-black price_tag">
+                      {nft?.price}{" "}
+                      <span className="price_tag_currency">ETH</span>
+                    </span>
                   </div>
-                  <span className="text-black price_tag">
-                    {nft?.price}{" "}
-                    <span className="price_tag_currency">ETH</span>
-                  </span>
-                </div>
-              ))
+                ))
               : nftData.map((nft, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setIsAuctionStep(2)
-                    setIsOfferModalOpen(true)
-                  }}
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setIsAuctionStep(2);
+                      setIsOfferModalOpen(true);
+                    }}
+                    className="shadow-move d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="NFT"
+                        className="rounded-circle img-top_nft lg:me-3 me-2"
+                      />
+                      <div>
+                        <div className="d-flex align-items-center ">
+                          <h5 className="mb-1 nft_title text-danger">
+                            {nft?.title}
+                          </h5>
+                          <p className="mb-0 text-muted small address_margin">
+                            ({nft?.address})
+                          </p>
+                        </div>
 
-                  className="shadow-move d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
-                >
-                  <div className="d-flex align-items-center">
-                    <img
-                      src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="NFT"
-                      className="rounded-circle img-top_nft lg:me-3 me-2"
-
-                    />
-                    <div>
-                      <div className="d-flex align-items-center ">
-                        <h5 className="mb-1 nft_title text-danger">{nft?.title}</h5>
-                        <p className="mb-0 text-muted small address_margin">
-                          ({nft?.address})
+                        <p className="mb-0 nft_available_box">
+                          {'"Bid on this batch" ' +
+                            Number(nft?.nfts_available).toLocaleString(
+                              "en-US"
+                            ) +
+                            " NFTs Available"}
                         </p>
                       </div>
-
-                      <p className="mb-0 nft_available_box">
-                        {'"Bid on this batch" ' +
-                          Number(nft?.nfts_available).toLocaleString(
-                            "en-US",
-                          ) +
-                          " NFTs Available"}
-                      </p>
                     </div>
+                    <span className="text-black price_tag">
+                      {nft?.price}{" "}
+                      <span className="price_tag_currency">ETH</span>
+                    </span>
                   </div>
-                  <span className="text-black price_tag">
-                    {nft?.price}{" "}
-                    <span className="price_tag_currency">ETH</span>
-                  </span>
-                </div>
-              ))}
-            { }
+                ))}
+            {}
           </div>
 
           <div className="w-full d-flex justify-content-center pagination_div_parent">
@@ -139,6 +141,8 @@ const TopNftListingAuctionBodySection = ({
             <button
               onClick={() => {
                 onRequestClose();
+                setIsAuctionStep(1);
+                setIsFixedPriceStep(1);
               }}
               className="theme_gradient_red btn-lg close_button"
             >
@@ -169,8 +173,6 @@ const TopNftListingAuctionBodySection = ({
           customMessage="This is a test of the OfferModal with dummy data."
         />
       </Modal>
-
-
     </>
   );
 };

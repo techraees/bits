@@ -7,7 +7,7 @@ import ButtonComponent from "../button";
 
 const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
   if (!totalPages || totalPages <= 0) {
-    return <tfoot className="h-[27px] w-full">{ }</tfoot>;
+    return <tfoot className="h-[27px] w-full">{}</tfoot>;
   }
 
   const getPageNumbers = () => {

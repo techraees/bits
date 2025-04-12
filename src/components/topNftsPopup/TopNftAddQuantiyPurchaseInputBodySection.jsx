@@ -10,7 +10,11 @@ import BidModal from "../bidModal";
 import ConnectModal from "../connectModal";
 import ButtonComponent from "../button";
 
-const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
+const TopNftAddQuantiyPurchaseInputBodySection = ({
+  setIsFixedPriceStep,
+  onRequestClose,
+  setIsAuctionStep,
+}) => {
   const [activeButton, settActiveButton] = useState(false);
 
   const [connectModal, setConnectModal] = useState(false);
@@ -56,20 +60,34 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
             <div className="card-body position-relative">
               {/* Cross Button */}
               <div className="cross_icon_red">
-                <img src={RedCrossIcon} alt="" className="w-full h-full" />
+                <img
+                  onClick={() => {
+                    if (!activeButton) {
+                      settActiveButton(false);
+                      setIsFixedPriceStep(1);
+                    } else {
+                      settActiveButton(false);
+                      setIsFixedPriceStep(2);
+                    }
+                  }}
+                  src={RedCrossIcon}
+                  alt=""
+                  className="w-full h-full"
+                />
               </div>
               <div className="">
                 <div className="">
-                  <div className="d-flex align-items-center"
+                  <div
+                    className="d-flex align-items-center"
                     style={{
-                      width: "100%"
-                    }} >
+                      width: "100%",
+                    }}
+                  >
                     <img
                       src="https://plus.unsplash.com/premium_photo-1686727103139-2824d4fa46a3?q=80&w=3327&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                       className="rounded-circle img_quantity_top_nft mr-3"
                       alt="Profile Image"
                       style={{
-
                         objectFit: "cover",
                       }}
                     />
@@ -139,6 +157,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
                       className="theme_gradient_red go_button"
                       onClick={() => {
                         settActiveButton(true);
+                        setIsFixedPriceStep(3);
                       }}
                     >
                       GO
@@ -164,10 +183,13 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
                   </p>
                 </div>
               ) : (
-                <div className="connect_wallet_button__parent" onClick={() => {
-                  setIsFixedPriceStep(3)
-                  setConnectModal(true)
-                }}>
+                <div
+                  className="connect_wallet_button__parent"
+                  onClick={() => {
+                    setIsFixedPriceStep(3);
+                    setConnectModal(true);
+                  }}
+                >
                   <button className="connect_wallet_button theme_gradient_red">
                     Connect Wallet
                   </button>
@@ -178,16 +200,20 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
 
           <div className="text-center mt-4 close_button">
             <button
-              onClick={() => { }}
+              onClick={() => {
+                onRequestClose();
+                setIsFixedPriceStep(1);
+                setIsAuctionStep(1);
+                settActiveButton(false);
+                setConnectModal(false);
+              }}
               className="theme_gradient_red btn-lg close_button"
             >
               Close ✕
             </button>
           </div>
         </div>
-      </div >
-
-
+      </div>
     </>
   );
 };
