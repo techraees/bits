@@ -57,7 +57,7 @@ const TopNftListingAuctionBodySection = ({
                     onClick={() => {
                       setIsFixedPriceStep(2);
                     }}
-                    className="shadow-move d-flex justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                    className="shadow-move d-flex nft_listing justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
                   >
                     <div className="d-flex align-items-center">
                       <img
@@ -93,7 +93,7 @@ const TopNftListingAuctionBodySection = ({
                       setIsAuctionStep(2);
                       setIsOfferModalOpen(true);
                     }}
-                    className="shadow-move d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                    className="shadow-move nft_listing d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
                   >
                     <div className="d-flex align-items-center">
                       <img
@@ -114,7 +114,7 @@ const TopNftListingAuctionBodySection = ({
                         <p className="mb-0 nft_available_box">
                           {'"Bid on this batch" ' +
                             Number(nft?.nfts_available).toLocaleString(
-                              "en-US"
+                              "en-US",
                             ) +
                             " NFTs Available"}
                         </p>

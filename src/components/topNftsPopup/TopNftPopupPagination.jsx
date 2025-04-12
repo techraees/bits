@@ -77,7 +77,7 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
           {pageNumbers.map((page, index) => (
             <li
               key={index}
-              className={`custom-li prevent_select page-item ${page === currentPage ? "theme_gradient_red" : ""}`}
+              className={`custom-li prevent_select page-item ${page === currentPage ? "theme_gradient_red_pagiantion" : ""}`}
             >
               <button
                 className="page-link  "
