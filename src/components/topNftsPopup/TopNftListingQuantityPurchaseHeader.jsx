@@ -5,40 +5,47 @@ const TopNftListingQuantityPurchaseHeader = ({
   isSwitchValue,
   setIsSwitchValue,
   onRequestClose,
+  setIsFixedPriceStep,
+  isFixedPriceStep,
+  isAuctionStep
 }) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center w-full bg-white popup_header Nunito_font_family">
         {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? (
           <>
-            <div className="d-flex align-items-center">
-              <span className=" theme_gradient_red text-white popup_header_first_box">
-                1
-              </span>
-              <h2 className="h5 mb-0">Listing</h2>
+            <div className="d-flex align-items-center"
+            >
+              <div className={` ${isFixedPriceStep === 1 ? "theme_gradient_red" : ""
+                } popup_header_second_box`}>1</div>
+              <div className=" ">Listing</div>
             </div>
             <div className="custom_line_adjustable"></div>
-            <div className="d-flex justify-content-center align-items-center">
-              <div className="popup_header_second_box">2</div>
+            <div className="d-flex justify-content-center align-items-center"
+            >
+              <div className={` ${isFixedPriceStep === 2 ? "theme_gradient_red" : ""
+                } popup_header_second_box`}>2</div>
               <div>Quantity</div>
             </div>
             <div className="custom_line_adjustable"></div>
-            <div className="d-flex justify-content-center align-items-center">
-              <div className="popup_header_second_box">3</div>
+            <div className="d-flex justify-content-center align-items-center"
+            >
+              <div className={` ${isFixedPriceStep === 3 ? "theme_gradient_red" : ""
+                } popup_header_second_box`}>3</div>
               <div>Purchase</div>
             </div>
           </>
         ) : (
           <>
             <div className="d-flex align-items-center">
-              <span className=" theme_gradient_red text-white popup_header_first_box">
-                1
-              </span>
-              <h2 className="h5 mb-0">Listing</h2>
+              <div className={` ${isAuctionStep === 1 ? "theme_gradient_red" : ""
+                } popup_header_second_box`}>1</div>
+              <div className="">Listing</div>
             </div>
             <div className="custom_line_adjustable"></div>
             <div className="d-flex justify-content-center align-items-center">
-              <div className="popup_header_second_box">2</div>
+              <div className={` ${isAuctionStep === 2 ? "theme_gradient_red" : ""
+                } popup_header_second_box`}>2</div>
               <div>Auction</div>
             </div>
           </>

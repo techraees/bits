@@ -7,7 +7,7 @@ import ButtonComponent from "../button";
 
 const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
   if (!totalPages || totalPages <= 0) {
-    return <tfoot className="h-[27px] w-full">{}</tfoot>;
+    return <tfoot className="h-[27px] w-full">{ }</tfoot>;
   }
 
   const getPageNumbers = () => {
@@ -39,7 +39,7 @@ const TopNftPopupPagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <>
       <nav>
-        <ul className="justify-content-end prevent_select mb-0 d-flex parent_ul_custon_li">
+        <ul className="lg:justify-content-end p-0 justify-content-center prevent_select mb-0 d-flex parent_ul_custon_li">
           <p
             className="previous_next_button prevent_select cursor_pointer"
             onClick={() => {

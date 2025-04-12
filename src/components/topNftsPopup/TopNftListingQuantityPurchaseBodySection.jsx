@@ -5,8 +5,8 @@ const TopNftListingAuctionBodySection = ({ nftData }) => {
   return (
     <>
       <div className=" d-flex flex-column justify-content-center align-items-center">
-        <div className="down_side_popup p-4 bg-white">
-          <p className="mb-4 text_detail_note">
+        <div className="down_side_popup lg:p-4 p-3 bg-white">
+          <p className="mb-4 lg:mb-4 mb-2 text_detail_note">
             <strong>Note:</strong> This Item Seller is Snap Boogie. Select which
             NFT you would like to proceed with
           </p>
@@ -60,13 +60,13 @@ const TopNftListingAuctionBodySection = ({ nftData }) => {
             <TopNftPopupPagination
               currentPage={1}
               totalPages={10}
-              onPageChange={() => {}}
+              onPageChange={() => { }}
             />
           </div>
 
           <div className="text-center mt-4 close_button">
             <button
-              onClick={() => {}}
+              onClick={() => { }}
               className="theme_gradient_red btn-lg close_button"
             >
               Close ✕

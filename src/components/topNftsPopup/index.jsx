@@ -60,8 +60,12 @@ const nftData = [
 
 const ListingModal = ({ isOpen, onRequestClose }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
-    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
   );
+
+  const [isFixedPriceStep, setIsFixedPriceStep] = useState(1)
+  const [isAuctionStep, setIsAuctionStep] = useState(1)
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -82,7 +86,7 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         exit={{ opacity: 0, scale: 0.9 }}
         className="popup_parent_div shadow-xl text-gray-800 scrollbar_hide_custom"
         style={{
-          zIndex: 1000000,
+          zIndex: 1,
         }}
       >
         {/* <TopNftListingAuctionHeader /> */}
@@ -90,16 +94,24 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
           isSwitchValue={isSwitchValue}
           setIsSwitchValue={setIsSwitchValue}
           onRequestClose={onRequestClose}
+          isFixedPriceStep={isFixedPriceStep}
+          isAuctionStep={isAuctionStep}
         />
-
-        <TopNftListingAuctionBodySection
+        {(isFixedPriceStep === 1) && <TopNftListingAuctionBodySection
           nftData={nftData}
           isSwitchValue={isSwitchValue}
           setIsSwitchValue={setIsSwitchValue}
           onRequestClose={onRequestClose}
-        />
+          setIsFixedPriceStep={setIsFixedPriceStep}
+          setIsAuctionStep={setIsAuctionStep}
 
-        {/* <TopNftAddQuantiyPurchaseInputBodySection /> */}
+        />}
+        {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && (
+          <TopNftAddQuantiyPurchaseInputBodySection setIsFixedPriceStep={setIsFixedPriceStep} />
+        )}
+
+
+
       </motion.div>
     </Modal>
   );
