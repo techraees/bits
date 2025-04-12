@@ -3,12 +3,126 @@
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+
 .popup_header {
   border-radius: 10px;
   padding: 1.5rem 4rem;
   gap: 16px;
   border: 1px solid rgb(237, 237, 237);
   font-family: "Nunito Sans" !important;
+}
+
+.text_detail_note {
+  color: #8c8a8a;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.img-top_nft {
+  width: 40px;
+  height: 40px;
+}
+
+.nft_title {
+  font-size: 16px;
+}
+
+.address_margin {
+  margin-left: 100px;
+  font-size: .875em;
+}
+
+.price_tag {
+  font-size: 20px;
+}
+
+.img_quantity_top_nft {
+  width: 64px;
+  height: 64px;
+}
+
+.heading_data_name {
+  color: #c73a3a;
+  font-size: 1.5rem;
+  line-height: 26px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+/* Mobile screens */
+@media (max-width: 768px) {
+  .popup_header {
+    padding: 1rem 1.5rem;
+    gap: 12px;
+  }
+
+  .text_detail_note {
+    font-size: 10px;
+  }
+
+  .img-top_nft {
+    width: 33px;
+    height: 33px;
+  }
+
+  .nft_title {
+    font-size: 14px;
+  }
+
+  .address_margin {
+    font-size: .675em;
+    margin-left: 50px;
+
+  }
+
+  .price_tag {
+    font-size: 15px;
+  }
+
+  .img_quantity_top_nft {
+    width: 55px;
+    height: 55px;
+  }
+
+  .heading_data_name {
+    font-size: 17px;
+  }
+}
+
+/* Tablet screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .popup_header {
+    padding: 1rem 1rem;
+    gap: 14px;
+  }
+
+  .text_detail_note {
+    font-size: 10px;
+  }
+
+  .img-top_nft {
+    width: 33px;
+    height: 33px;
+  }
+
+  .nft_title {
+    font-size: 14px;
+  }
+
+  .address_margin {
+    font-size: .775em;
+  }
+
+  .price_tag {
+    font-size: 17px;
+  }
+
+  .img_quantity_top_nft {
+    width: 57px;
+    height: 57px;
+  }
 }
 
 .Nunito_font_family {
@@ -30,9 +144,12 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
   color: #b6b6b6;
 }
 
@@ -44,6 +161,8 @@
 .theme_gradient_red {
   background: linear-gradient(#f45c5c, #7e1c1c) !important;
   color: white;
+  font-size: 1.125rem;
+
 }
 
 .previous_next_button {
@@ -57,10 +176,7 @@
   cursor: pointer;
 }
 
-.text_detail_note {
-  color: #8c8a8a;
-  font-weight: 300;
-}
+
 
 .custom_line {
   width: 303px;
@@ -96,13 +212,47 @@
   align-items: center;
   border-radius: 10px;
   overflow: hidden;
-  font-family: "Nunito Sans";
+  font-family: "Nunito Sans", sans-serif;
   font-weight: 600;
   font-size: 1.125rem;
+  /* 18px */
   margin-right: 20px;
   background-color: #bbbbbb;
   color: white;
+  box-sizing: border-box;
 }
+
+/* Mobile screens */
+@media (max-width: 768px) {
+  .popup_header_second_box {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+    /* around 14.4px */
+    margin-right: 12px;
+  }
+
+  .theme_gradient_red {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .popup_header_second_box {
+    width: 32px;
+    height: 30px;
+    font-size: 1rem;
+    /* 16px */
+    margin-right: 16px;
+  }
+
+  .theme_gradient_red {
+    font-size: 1rem;
+
+  }
+}
+
 
 .switch_button_data {
   border-radius: 20px;
@@ -141,13 +291,9 @@
   border: none;
 }
 
-.address_margin {
-  margin-left: 100px;
-}
 
-.price_tag {
-  font-size: 20px;
-}
+
+
 .price_tag_currency {
   color: #239cd0;
 }
@@ -158,6 +304,27 @@
 
 .popup_parent_div {
   width: 45%;
+}
+
+@media (max-width: 768px) {
+  .popup_parent_div {
+    width: 95%;
+  }
+
+  .pagination_div_parent {
+    margin: 0.8rem 0px;
+  }
+}
+
+/* Tablet screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .popup_parent_div {
+    width: 65%;
+  }
+
+  .pagination_div_parent {
+    margin: 1.3rem 0px;
+  }
 }
 
 .custom-card {
@@ -183,7 +350,6 @@
 .green_tick_button {
   width: 20px;
   height: 20px;
-  margin-left: 275px;
 }
 
 .green_tick_button img {
@@ -196,14 +362,7 @@
   margin-left: 1rem;
 }
 
-.heading_data_name {
-  color: #c73a3a;
-  font-size: 1.5rem;
-  line-height: 26px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
+
 
 .total_price_data {
   display: flex;
@@ -292,7 +451,10 @@
 }
 
 .prevent_select {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }

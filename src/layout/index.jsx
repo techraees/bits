@@ -19,7 +19,7 @@ function ScrollToTop() {
 
 const Layout = () => {
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
 
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const Layout = () => {
         <div className="footer-logo">
           <img src={logo} width={60} alt="logo" />
         </div>
-        {/* <NavbarComponent dashboardNav /> */}
+        <NavbarComponent dashboardNav />
         <PublicLayout />
         <PrivateLayout />
       </div>

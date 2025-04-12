@@ -39,13 +39,13 @@ const nftData = [
     nfts_available: 27,
   },
   {
-    title: "Fire NFT",
+    title: "Redbull",
     price: "0.4",
     address: "0xbb1...8b903",
     nfts_available: 32,
   },
   {
-    title: "Speedy walkover",
+    title: "Redbull",
     price: "1.3",
     address: "0xbb1...8b903",
     nfts_available: 1,
@@ -60,8 +60,12 @@ const nftData = [
 
 const ListingModal = ({ isOpen, onRequestClose }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
-    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
   );
+
+  const [isFixedPriceStep, setIsFixedPriceStep] = useState(1)
+  const [isAuctionStep, setIsAuctionStep] = useState(1)
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -82,20 +86,32 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         exit={{ opacity: 0, scale: 0.9 }}
         className="popup_parent_div shadow-xl text-gray-800 scrollbar_hide_custom"
         style={{
-          zIndex: 1000000,
+          zIndex: 1,
         }}
       >
         {/* <TopNftListingAuctionHeader /> */}
-        <TopNftListingQuantityPurchaseHeader />
-
-        <TopNftListingAuctionBodySection
+        <TopNftListingQuantityPurchaseHeader
+          isSwitchValue={isSwitchValue}
+          setIsSwitchValue={setIsSwitchValue}
+          onRequestClose={onRequestClose}
+          isFixedPriceStep={isFixedPriceStep}
+          isAuctionStep={isAuctionStep}
+        />
+        {(isFixedPriceStep === 1) && <TopNftListingAuctionBodySection
           nftData={nftData}
           isSwitchValue={isSwitchValue}
           setIsSwitchValue={setIsSwitchValue}
           onRequestClose={onRequestClose}
-        />
+          setIsFixedPriceStep={setIsFixedPriceStep}
+          setIsAuctionStep={setIsAuctionStep}
 
-        {/* <TopNftAddQuantiyPurchaseInputBodySection /> */}
+        />}
+        {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && (
+          <TopNftAddQuantiyPurchaseInputBodySection setIsFixedPriceStep={setIsFixedPriceStep} />
+        )}
+
+
+
       </motion.div>
     </Modal>
   );
