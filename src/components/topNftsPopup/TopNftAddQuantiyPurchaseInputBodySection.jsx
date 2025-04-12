@@ -10,7 +10,11 @@ import BidModal from "../bidModal";
 import ConnectModal from "../connectModal";
 import ButtonComponent from "../button";
 
-const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
+const TopNftAddQuantiyPurchaseInputBodySection = ({
+  setIsFixedPriceStep,
+  onRequestClose,
+  setIsAuctionStep,
+}) => {
   const [activeButton, settActiveButton] = useState(false);
 
   const [connectModal, setConnectModal] = useState(false);
@@ -56,7 +60,20 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
             <div className="card-body position-relative">
               {/* Cross Button */}
               <div className="cross_icon_red">
-                <img src={RedCrossIcon} alt="" className="w-full h-full" />
+                <img
+                  onClick={() => {
+                    if (!activeButton) {
+                      settActiveButton(false);
+                      setIsFixedPriceStep(1);
+                    } else {
+                      settActiveButton(false);
+                      setIsFixedPriceStep(2);
+                    }
+                  }}
+                  src={RedCrossIcon}
+                  alt=""
+                  className="w-full h-full"
+                />
               </div>
               <div className="">
                 <div className="">
@@ -140,6 +157,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
                       className="theme_gradient_red go_button"
                       onClick={() => {
                         settActiveButton(true);
+                        setIsFixedPriceStep(3);
                       }}
                     >
                       GO
@@ -182,7 +200,13 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({ setIsFixedPriceStep }) => {
 
           <div className="text-center mt-4 close_button">
             <button
-              onClick={() => {}}
+              onClick={() => {
+                onRequestClose();
+                setIsFixedPriceStep(1);
+                setIsAuctionStep(1);
+                settActiveButton(false);
+                setConnectModal(false);
+              }}
               className="theme_gradient_red btn-lg close_button"
             >
               Close ✕

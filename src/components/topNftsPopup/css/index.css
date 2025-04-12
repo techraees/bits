@@ -29,7 +29,7 @@
 
 .address_margin {
   margin-left: 100px;
-  font-size: .875em;
+  font-size: 0.875em;
 }
 
 .price_tag {
@@ -72,9 +72,8 @@
   }
 
   .address_margin {
-    font-size: .675em;
+    font-size: 0.675em;
     margin-left: 50px;
-
   }
 
   .price_tag {
@@ -112,7 +111,7 @@
   }
 
   .address_margin {
-    font-size: .775em;
+    font-size: 0.775em;
   }
 
   .price_tag {
@@ -162,7 +161,6 @@
   background: linear-gradient(#f45c5c, #7e1c1c) !important;
   color: white;
   font-size: 1.125rem;
-
 }
 
 .previous_next_button {
@@ -175,8 +173,6 @@
 .cursor_pointer {
   cursor: pointer;
 }
-
-
 
 .custom_line {
   width: 303px;
@@ -249,10 +245,8 @@
 
   .theme_gradient_red {
     font-size: 1rem;
-
   }
 }
-
 
 .switch_button_data {
   border-radius: 20px;
@@ -290,9 +284,6 @@
 .close_button {
   border: none;
 }
-
-
-
 
 .price_tag_currency {
   color: #239cd0;
@@ -356,13 +347,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  margin-left: 10px;
 }
 
 .heading_data {
   margin-left: 1rem;
 }
-
-
 
 .total_price_data {
   display: flex;

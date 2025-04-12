@@ -114,7 +114,7 @@ const TopNftListingAuctionBodySection = ({
                         <p className="mb-0 nft_available_box">
                           {'"Bid on this batch" ' +
                             Number(nft?.nfts_available).toLocaleString(
-                              "en-US",
+                              "en-US"
                             ) +
                             " NFTs Available"}
                         </p>
@@ -141,6 +141,8 @@ const TopNftListingAuctionBodySection = ({
             <button
               onClick={() => {
                 onRequestClose();
+                setIsAuctionStep(1);
+                setIsFixedPriceStep(1);
               }}
               className="theme_gradient_red btn-lg close_button"
             >

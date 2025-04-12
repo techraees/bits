@@ -60,7 +60,7 @@ const nftData = [
 
 const ListingModal = ({ isOpen, onRequestClose }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
-    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
   );
 
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
@@ -77,9 +77,16 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
       document.body.style.overflow = "auto"; // Cleanup on unmount
     };
   }, [isOpen]);
-
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={() => {
+        onRequestClose();
+        setIsAuctionStep(1);
+        setIsFixedPriceStep(1);
+      }}
+      style={customStyles}
+    >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -110,6 +117,8 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && (
           <TopNftAddQuantiyPurchaseInputBodySection
             setIsFixedPriceStep={setIsFixedPriceStep}
+            onRequestClose={onRequestClose}
+            setIsAuctionStep={setIsAuctionStep}
           />
         )}
       </motion.div>
