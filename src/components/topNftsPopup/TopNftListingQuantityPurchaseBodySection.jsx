@@ -60,13 +60,13 @@ const TopNftListingAuctionBodySection = ({ nftData }) => {
             <TopNftPopupPagination
               currentPage={1}
               totalPages={10}
-              onPageChange={() => { }}
+              onPageChange={() => {}}
             />
           </div>
 
           <div className="text-center mt-4 close_button">
             <button
-              onClick={() => { }}
+              onClick={() => {}}
               className="theme_gradient_red btn-lg close_button"
             >
               Close ✕
