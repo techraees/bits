@@ -224,7 +224,7 @@ const NavbarComponent = ({ dashboardNav }) => {
         className={`${dashboardNav ? "dashboardNavBgColor" : "navbarBgColor"}`}
         expand="lg"
         sticky="top"
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 0 }}
       >
         {isModalOpen && (
           <Modal

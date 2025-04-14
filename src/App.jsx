@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import store from "./store/index";
 import "./App.css";
 import ZendeskComp from "./components/zendesk";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadContractIns } from "./store/actions";
 // import axios from "axios";
 // import { useMutation } from "@apollo/client";
@@ -228,9 +228,12 @@ function App() {
     getAllTopNftsForOneChainForWebsite,
     getAllTopNftsForOneChainForWebsite,
   );
+
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <Provider store={store}>
+        <h1 onClick={() => setIsOpen(true)}>Open Popup</h1>
         {/* <h1
           // style={{ background: "blue" }}
           // onClick={async () => {
@@ -330,8 +333,11 @@ function App() {
         // </h1> */}
         <Layout />
         <ZendeskComp />
+        <ShowTopNFTPopup
+          isOpen={isOpen}
+          onRequestClose={() => setIsOpen(false)}
+        />
       </Provider>
-      <ShowTopNFTPopup />
     </>
   );
 }

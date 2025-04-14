@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { TopNftsPopup } from "./components";
 
-const ShowTopNFTPopup = () => {
+const ShowTopNFTPopup = ({ onRequestClose, isOpen }) => {
   return (
     <div>
       {" "}
-      <TopNftsPopup isOpen={true} onRequestClose={() => {}} />
+      <TopNftsPopup
+        isOpen={isOpen}
+        onRequestClose={() => {
+          onRequestClose();
+        }}
+      />
     </div>
   );
 };
