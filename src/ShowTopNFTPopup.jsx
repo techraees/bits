@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TopNftsPopup } from "./components";
 
-const ShowTopNFTPopup = ({ onRequestClose, isOpen }) => {
+const ShowTopNFTPopup = ({ onRequestClose, isOpen, owners, name }) => {
   return (
     <div>
       {" "}
@@ -10,6 +10,8 @@ const ShowTopNFTPopup = ({ onRequestClose, isOpen }) => {
         onRequestClose={() => {
           onRequestClose();
         }}
+        owners={owners}
+        name={name}
       />
     </div>
   );

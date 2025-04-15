@@ -25,11 +25,11 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   const [quantity, setQuantity] = useState(1);
 
   const increment = () => {
-    setQuantity(prev => prev + 1);
+    setQuantity((prev) => prev + 1);
   };
 
   const decrement = () => {
-    setQuantity(prev => (prev > 1 ? prev - 1 : 1)); // Prevent less than 1
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent less than 1
   };
   return (
     <>
@@ -101,10 +101,12 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         objectFit: "cover",
                       }}
                     />
-                    <div className="heading_data"
+                    <div
+                      className="heading_data"
                       style={{
                         width: "90%",
-                      }}>
+                      }}
+                    >
                       <div className="heading_data_name">
                         <div>Speedy Walkover</div>
                         <div className="green_tick_button">
@@ -137,15 +139,25 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                       </div>
 
                       <div className="increment_decrement_button">
-                        <div className="increment_decrement_button__increment"
-                          onClick={increment}>
-                          <img className="w-full" src={IncrementButtonArr} alt="" />
+                        <div
+                          className="increment_decrement_button__increment"
+                          onClick={increment}
+                        >
+                          <img
+                            className="w-full"
+                            src={IncrementButtonArr}
+                            alt=""
+                          />
                         </div>
                         <div
                           className="increment_decrement_button__increment"
-
-                          onClick={decrement}>
-                          <img className="w-full" src={DecrementButtonArr} alt="" />
+                          onClick={decrement}
+                        >
+                          <img
+                            className="w-full"
+                            src={DecrementButtonArr}
+                            alt=""
+                          />
                         </div>
                       </div>
                     </div>

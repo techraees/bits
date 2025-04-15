@@ -268,11 +268,12 @@ const Dashboard = () => {
                 auctionid={e.auctionid}
                 currentBidAmount={e.currentBidAmount}
                 nftOwner={e?.nft_id?.wallet_address}
-                isAuction={e?.nft_id?.isFixedItem ? false : true}
+                // isAuction={e?.nft_id?.isFixedItem ? false : true}
                 likeCount={e?.nft_id?.likeCount}
                 watchCount={e?.nft_id?.watchCount}
                 isPaid={e?.nft_id?.isPaid}
                 duration={e?.nft_id?.video_duration}
+                isTopNfts={true}
               />
             ))}
 

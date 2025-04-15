@@ -33,36 +33,37 @@ const customStyles = {
 
 const nftData = [
   {
-    title: "Redbull",
+    title: "Redbul",
     price: "1.3",
     address: "0xbb1...8b903",
     nfts_available: 27,
   },
   {
-    title: "Redbull",
+    title: "Redbu",
     price: "0.4",
     address: "0xbb1...8b903",
     nfts_available: 32,
   },
   {
-    title: "Redbull",
+    title: "Redl",
     price: "1.3",
     address: "0xbb1...8b903",
     nfts_available: 1,
   },
   {
-    title: "Redbull",
+    title: "Reull",
     price: "1.3",
     address: "0xbb1...8b903",
     nfts_available: 23,
   },
 ];
 
-const ListingModal = ({ isOpen, onRequestClose }) => {
+const ListingModal = ({ isOpen, onRequestClose, owners, name }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
     ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
   );
 
+  console.log("top owners", owners, name);
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
   const [isAuctionStep, setIsAuctionStep] = useState(1);
 
@@ -106,7 +107,8 @@ const ListingModal = ({ isOpen, onRequestClose }) => {
         />
         {isFixedPriceStep === 1 && (
           <TopNftListingAuctionBodySection
-            nftData={nftData}
+            nftData={owners}
+            name={name}
             isSwitchValue={isSwitchValue}
             setIsSwitchValue={setIsSwitchValue}
             onRequestClose={onRequestClose}

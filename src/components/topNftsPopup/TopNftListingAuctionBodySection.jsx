@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TopNftPopupPagination from "./TopNftPopupPagination";
 import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 import { Modal } from "antd";
 import OfferModal from "../offerModal";
+import { trimWallet } from "../../utills/trimWalletAddr";
+import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 
 const TopNftListingAuctionBodySection = ({
   nftData,
+  name,
   isSwitchValue,
   setIsSwitchValue,
   onRequestClose,
@@ -14,10 +17,21 @@ const TopNftListingAuctionBodySection = ({
 }) => {
   const [page, setPage] = useState(1);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [itemData, setItemData] = useState({});
+  const [ethBal, setEthBal] = useState(0);
+  const [maticBal, setMaticBal] = useState(0);
 
   const handleCancel = () => {
     setIsOfferModalOpen(false);
   };
+
+  ETHTOUSD(1).then((result) => {
+    setEthBal(result);
+  });
+
+  MATICTOUSD(1).then((result) => {
+    setMaticBal(result);
+  });
 
   return (
     <>
@@ -67,22 +81,22 @@ const TopNftListingAuctionBodySection = ({
                       />
                       <div>
                         <div className="d-flex align-items-center ">
-                          <h5 className="mb-1 nft_title text-danger">
-                            {nft?.title}
-                          </h5>
+                          <h5 className="mb-1 nft_title text-danger">{name}</h5>
                           <p className="mb-0 text-muted  small address_margin">
-                            ({nft?.address})
+                            ({trimWallet(nft?.owner)})
                           </p>
                         </div>
 
                         <p className="mb-0 nft_available_box">
-                          {`${Number(nft?.nfts_available).toLocaleString("en-US")} NFTs Available`}
+                          {`${Number(nft?.copies).toLocaleString("en-US")} NFTs Available`}
                         </p>
                       </div>
                     </div>
                     <span className="text-black price_tag">
                       {nft?.price}{" "}
-                      <span className="price_tag_currency">ETH</span>
+                      <span className="price_tag_currency">
+                        {nft?.chainId == 137 ? "MATIC" : "ETH"}
+                      </span>
                     </span>
                   </div>
                 ))
@@ -103,26 +117,24 @@ const TopNftListingAuctionBodySection = ({
                       />
                       <div>
                         <div className="d-flex align-items-center ">
-                          <h5 className="mb-1 nft_title text-danger">
-                            {nft?.title}
-                          </h5>
+                          <h5 className="mb-1 nft_title text-danger">{name}</h5>
                           <p className="mb-0 text-muted small address_margin">
-                            ({nft?.address})
+                            ({trimWallet(nft?.owner)})
                           </p>
                         </div>
 
                         <p className="mb-0 nft_available_box">
                           {'"Bid on this batch" ' +
-                            Number(nft?.nfts_available).toLocaleString(
-                              "en-US",
-                            ) +
+                            Number(nft?.copies).toLocaleString("en-US") +
                             " NFTs Available"}
                         </p>
                       </div>
                     </div>
                     <span className="text-black price_tag">
                       {nft?.price}{" "}
-                      <span className="price_tag_currency">ETH</span>
+                      <span className="price_tag_currency">
+                        {nft?.chainId == 137 ? "MATIC" : "ETH"}
+                      </span>
                     </span>
                   </div>
                 ))}

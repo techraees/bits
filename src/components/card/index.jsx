@@ -32,6 +32,7 @@ import { downloadVideo } from "../../config/deepmotion";
 import { loadStripe } from "@stripe/stripe-js";
 import DownloadModal from "../Modal/DownloadModal";
 import PaymentConfirmation from "../Modal/PaymentConfirmation";
+import ShowTopNFTPopup from "../../ShowTopNFTPopup";
 
 const env = process.env;
 
@@ -73,11 +74,13 @@ const CardCompnent = ({
   duration,
   sellerUsername,
   itemDbId,
+  isTopNfts,
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isNftModalOpen, setIsNftModalOpen] = useState(false);
+  const [isTopModalOpen, setIsTopModalOpen] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
   const [showpayment, setShowPayment] = useState(false);
   const [owners, setOwners] = useState([]);
@@ -101,7 +104,7 @@ const CardCompnent = ({
     isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
   } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
     variables: {
-      // filterObj: '{"listingType":"auction"}',
+      filterObj: '{"listingType":"auction"}',
       _id: id,
     },
   });
@@ -109,14 +112,15 @@ const CardCompnent = ({
   console.log(
     "owner data",
     getOwnersWhoListedTheSameNftWithPrices
-      ?.getOwnersWhoListedTheSameNftWithPrices?.data,
+      ?.getOwnersWhoListedTheSameNftWithPrices?.data
   );
 
   useEffect(() => {
     if (getOwnersWhoListedTheSameNftWithPrices) {
       const newData =
-        getOwnersWhoListedTheSameNftWithPrices?.getOwnersWhoListedTheSameNftWithPrices?.data.map(
-          (item) => ({
+        getOwnersWhoListedTheSameNftWithPrices?.getOwnersWhoListedTheSameNftWithPrices?.data
+          .filter((item) => contractData.chain == item?.chainId)
+          .map((item) => ({
             owner: item?.seller?.user_address,
             copies: item?.numberOfCopies,
             price: item?.price,
@@ -124,11 +128,13 @@ const CardCompnent = ({
             dbid: item?._id,
             tokenId: item?.tokenId,
             nftId: item?.nft_id?._id,
-          }),
-        );
+            chainId: item?.chainId,
+          }));
       setOwners(newData);
     }
   }, [getOwnersWhoListedTheSameNftWithPrices]);
+
+  console.log("ownersss datasss", owners);
 
   ETHTOUSD(1).then((result) => {
     setEthBal(result);
@@ -146,6 +152,10 @@ const CardCompnent = ({
   // 	setIsNftModalOpen(true);
   // };
 
+  const showTopNftsModal = () => {
+    setIsTopModalOpen(true);
+  };
+
   const showOfferModal = () => {
     setIsOfferModalOpen(true);
   };
@@ -156,12 +166,13 @@ const CardCompnent = ({
     setIsModalOpen(false);
     setIsOfferModalOpen(false);
     setIsNftModalOpen(false);
+    setIsTopModalOpen(false);
   };
 
   // stripe payment
   const handleStripePayment = async () => {
     const stripe = await loadStripe(
-      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ",
+      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ"
     );
 
     const body = {
@@ -183,7 +194,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const session = await response.json();
@@ -221,7 +232,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const data = await response.json();
@@ -352,6 +363,12 @@ const CardCompnent = ({
           tokenId={marketplacecard ? tokenId : fixtokenId}
         />
       </Modal>
+      <ShowTopNFTPopup
+        isOpen={isTopModalOpen}
+        onRequestClose={() => handleCancel()}
+        owners={owners}
+        name={name}
+      />
 
       <Card
         hoverable
@@ -654,6 +671,8 @@ const CardCompnent = ({
                           ) {
                             showOfferModal();
                             // ToastMessage("Please contact owner", "", "error");
+                          } else if (isTopNfts) {
+                            showTopNftsModal();
                           } else if (
                             location.pathname.includes("/") &&
                             !isAuction
