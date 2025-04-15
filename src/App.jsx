@@ -103,10 +103,11 @@ function App() {
     data: getOwnersWhoListedTheSameNftWithPrices,
     isLoading: getOwnersWhoListedTheSameNftWithPricesLoading,
     isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
+    refetch,
   } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
     variables: {
-      // filterObj: '{"listingType":"auction"}',
-      _id: "662c321321570927266b46ec",
+      filterObj: '{"listingType":"auction"}',
+      _id: "6658a5c0db40134913175c9a",
     },
   });
   const {
@@ -215,18 +216,18 @@ function App() {
   // }, []);
 
   console.log(
-    getMyNftsThatIOwned,
-    getAllNftsInMarketPlaceAndSupportFilter,
-    getOwnersWhoListedTheSameNftWithPrices,
-    getDetailsOfSingleNftFromMarketPlace,
-    getAllMyTransaction,
-    getTransactionDetailsOfSpecific,
-    getNftsThatISold,
-    getNftsThatIBought,
-    getOwnershipHistoryOfSingleNfts,
-    getAllBidsOfAuctionNftMarketPlace,
-    getAllTopNftsForOneChainForWebsite,
-    getAllTopNftsForOneChainForWebsite
+    // getMyNftsThatIOwned,
+    // getAllNftsInMarketPlaceAndSupportFilter,
+    getOwnersWhoListedTheSameNftWithPrices
+    // getDetailsOfSingleNftFromMarketPlace,
+    // getAllMyTransaction,
+    // getTransactionDetailsOfSpecific,
+    // getNftsThatISold,
+    // getNftsThatIBought,
+    // getOwnershipHistoryOfSingleNfts,
+    // getAllBidsOfAuctionNftMarketPlace,
+    // getAllTopNftsForOneChainForWebsite,
+    // getAllTopNftsForOneChainForWebsite,
   );
 
   const [isOpen, setIsOpen] = useState(false);

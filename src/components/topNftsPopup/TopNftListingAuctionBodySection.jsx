@@ -114,7 +114,7 @@ const TopNftListingAuctionBodySection = ({
                         <p className="mb-0 nft_available_box">
                           {'"Bid on this batch" ' +
                             Number(nft?.nfts_available).toLocaleString(
-                              "en-US"
+                              "en-US",
                             ) +
                             " NFTs Available"}
                         </p>

@@ -60,7 +60,7 @@ const nftData = [
 
 const ListingModal = ({ isOpen, onRequestClose }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
-    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
   );
 
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
