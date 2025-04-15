@@ -216,18 +216,18 @@ function App() {
   // }, []);
 
   console.log(
-    // getMyNftsThatIOwned,
-    // getAllNftsInMarketPlaceAndSupportFilter,
-    getOwnersWhoListedTheSameNftWithPrices
-    // getDetailsOfSingleNftFromMarketPlace,
-    // getAllMyTransaction,
-    // getTransactionDetailsOfSpecific,
-    // getNftsThatISold,
-    // getNftsThatIBought,
-    // getOwnershipHistoryOfSingleNfts,
-    // getAllBidsOfAuctionNftMarketPlace,
-    // getAllTopNftsForOneChainForWebsite,
-    // getAllTopNftsForOneChainForWebsite,
+    getMyNftsThatIOwned,
+    getAllNftsInMarketPlaceAndSupportFilter,
+    getOwnersWhoListedTheSameNftWithPrices,
+    getDetailsOfSingleNftFromMarketPlace,
+    getAllMyTransaction,
+    getTransactionDetailsOfSpecific,
+    getNftsThatISold,
+    getNftsThatIBought,
+    getOwnershipHistoryOfSingleNfts,
+    getAllBidsOfAuctionNftMarketPlace,
+    getAllTopNftsForOneChainForWebsite,
+    getAllTopNftsForOneChainForWebsite
   );
 
   const [isOpen, setIsOpen] = useState(false);

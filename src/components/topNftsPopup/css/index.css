@@ -51,6 +51,60 @@
   align-items: center;
 }
 
+.input_go_button_parent__input_div__p {
+  font-size: 20px;
+}
+
+.input_go_button_parent__input_div {
+  width: 100%;
+  border: 1px solid #bbbbbb;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 5px 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.custom-card {
+  border: none !important;
+  padding: 1.5rem;
+  background-color: white;
+}
+
+.increment_decrement_button__increment {
+  width: 14px;
+  height: 14px;
+}
+
+.go_button {
+  border: none;
+  border-radius: 25px;
+  padding: 5px 17px;
+  font-weight: 600;
+  font-size: 20px;
+  background: linear-gradient(#f45c5c, #7e1c1c) !important;
+  color: white;
+}
+
+.increment_decrement_button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+.input_go_button_parent__input_div__parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-right: 4rem;
+}
+
+
+
 /* Mobile screens */
 @media (max-width: 768px) {
   .popup_header {
@@ -88,6 +142,36 @@
   .heading_data_name {
     font-size: 17px;
   }
+
+  .input_go_button_parent__input_div__p {
+    font-size: 14px;
+  }
+
+  .input_go_button_parent__input_div {
+    padding: 7px 1.2rem;
+  }
+
+  .custom-card {
+    padding: 1rem;
+  }
+
+  .increment_decrement_button__increment {
+    width: 12px;
+    height: 12px;
+  }
+
+  .go_button {
+    padding: 3px 10px;
+    font-size: 16px;
+  }
+
+  .increment_decrement_button {
+    margin-top: -10px;
+  }
+
+  .input_go_button_parent__input_div__parent {
+    margin-right: 2rem;
+  }
 }
 
 /* Tablet screens */
@@ -121,6 +205,37 @@
   .img_quantity_top_nft {
     width: 57px;
     height: 57px;
+  }
+
+  .input_go_button_parent__input_div__p {
+    font-size: 16px;
+  }
+
+  .input_go_button_parent__input_div {
+    padding: 8px 1.5rem;
+  }
+
+  .custom-card {
+    padding: 1rem;
+  }
+
+
+  .increment_decrement_button__increment {
+    width: 12px;
+    height: 12px;
+  }
+
+  .go_button {
+    padding: 3px 10px;
+    font-size: 18px;
+  }
+
+  .increment_decrement_button {
+    margin-top: -10px;
+  }
+
+  .input_go_button_parent__input_div__parent {
+    margin-right: 3rem;
   }
 }
 
@@ -161,6 +276,16 @@
   background: linear-gradient(#f45c5c, #7e1c1c) !important;
   color: white;
   font-size: 1.125rem;
+}
+
+.theme_gradient_red_pagiantion {
+  background: linear-gradient(#f45c5c, #7e1c1c) !important;
+  color: white;
+  font-size: 12px;
+}
+
+.nft_listing:hover {
+  background-color: #dddede;
 }
 
 .previous_next_button {
@@ -318,11 +443,7 @@
   }
 }
 
-.custom-card {
-  border: none !important;
-  padding: 1.5rem;
-  background-color: white;
-}
+
 
 .cross_icon_red {
   position: absolute;
@@ -359,13 +480,7 @@
   justify-content: space-between;
 }
 
-.go_button {
-  border: none;
-  border-radius: 25px;
-  padding: 5px 17px;
-  font-weight: 600;
-  font-size: 1.5rem;
-}
+
 
 .input_go_button_parent {
   display: flex;
@@ -374,32 +489,13 @@
   margin: 2rem 0rem;
 }
 
-.input_go_button_parent__input_div {
-  width: 100%;
-  border: 1px solid #bbbbbb;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 5px 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
-.input_go_button_parent__input_div__p {
-  font-size: 20px;
-}
+
 
 .input_go_button_parent__input_div__p__value {
   font-size: 20px;
 }
 
-.input_go_button_parent__input_div__parent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-right: 4rem;
-}
 
 .input_go_button_parent__input_div__parent_full {
   display: flex;
@@ -408,12 +504,6 @@
   width: 100%;
 }
 
-.increment_decrement_button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 
 .line_vertical {
   height: 24px;
