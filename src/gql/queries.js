@@ -336,8 +336,11 @@ const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
 
 // Used to get owners who listing the same nft with different price
 const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
-  query GetOwnersWhoListedTheSameNftWithPrices($_id: String!) {
-    getOwnersWhoListedTheSameNftWithPrices(_id: $_id)
+  query GetOwnersWhoListedTheSameNftWithPrices(
+    $_id: String!
+    $filterObj: JSON
+  ) {
+    getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj)
   }
 `;
 

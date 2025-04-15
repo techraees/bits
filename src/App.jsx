@@ -64,16 +64,16 @@ createAppKit({
 function App() {
   // const [recordVisit] = useMutation(RECORD_VISIT_MUTATION);
   const [addNftToMarketPlace, { data, loading, error }] = useMutation(
-    ADD_NFT_TO_NFT_MARKET_PLACE,
+    ADD_NFT_TO_NFT_MARKET_PLACE
   );
   const [removeNftFromMarketPlace] = useMutation(REMOVE_NFT_NFT_MARKET_PLACE);
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
   const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
   );
   const {
     data: getMyNftsThatIOwned,
@@ -103,10 +103,11 @@ function App() {
     data: getOwnersWhoListedTheSameNftWithPrices,
     isLoading: getOwnersWhoListedTheSameNftWithPricesLoading,
     isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
+    refetch,
   } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
     variables: {
-      // filterObj: '{"listingType":"auction"}',
-      _id: "662c321321570927266b46ec",
+      filterObj: '{"listingType":"auction"}',
+      _id: "6658a5c0db40134913175c9a",
     },
   });
   const {
@@ -226,7 +227,7 @@ function App() {
     getOwnershipHistoryOfSingleNfts,
     getAllBidsOfAuctionNftMarketPlace,
     getAllTopNftsForOneChainForWebsite,
-    getAllTopNftsForOneChainForWebsite,
+    getAllTopNftsForOneChainForWebsite
   );
 
   const [isOpen, setIsOpen] = useState(false);
