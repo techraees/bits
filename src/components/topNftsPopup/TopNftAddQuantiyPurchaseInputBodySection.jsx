@@ -1,67 +1,228 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import TopNftPopupPagination from "./TopNftPopupPagination";
 import RedCrossIcon from "./redCross.svg";
 import GreenTick from "./GreenTick.svg";
 import DecrementButtonArr from "./DecrementButtonArr.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
 import { Modal } from "antd";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import BidModal from "../bidModal";
 import ConnectModal from "../connectModal";
 import ButtonComponent from "../button";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { GET_PROFILE_DETAILS_QUERY } from "../../gql/queries";
+import {
+  SEND_EMAIL_MUTATION,
+  CREATE_NEW_OWNERSHIP_OF_NFT,
+  CREATE_NEW_TRANSACTION,
+} from "../../gql/mutations";
+import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import { Loader, ToastMessage } from "../../components";
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+import { trimWallet } from "../../utills/trimWalletAddr";
+import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
+import { getStorage } from "../../utills/localStorage";
+import { ETHToWei } from "../../utills/convertWeiAndBnb";
+import { boughtMessage } from "../../utills/emailMessages";
+import { loadContractIns } from "../../store/actions";
+
+const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({
   setIsFixedPriceStep,
+  fixedData,
+  itemData,
   onRequestClose,
   setIsAuctionStep,
 }) => {
+  const dispatch = useDispatch();
+  const { address, isConnected } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
+  const { contractData } = useSelector((state) => state.chain.contractData);
   const [activeButton, settActiveButton] = useState(false);
 
   const [connectModal, setConnectModal] = useState(false);
-  const closeConnectModel = () => {
-    setConnectModal(false);
-  };
+  const [loadingStatus, setLoadingStatus] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [ethBal, setEthBal] = useState(0);
+  const [maticBal, setMaticBal] = useState(0);
 
   const [quantity, setQuantity] = useState(1);
 
+  ETHTOUSD(1).then((result) => {
+    setEthBal(result);
+  });
+
+  MATICTOUSD(1).then((result) => {
+    setMaticBal(result);
+  });
+
   const increment = () => {
-    setQuantity((prev) => prev + 1);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
   };
 
   const decrement = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent less than 1
   };
+
+  let token = getStorage("token");
+
+  const { userData } = useSelector((state) => state.address.userData);
+
+  const [
+    getProfile,
+    {
+      // loading: profileLoadeing,
+      // error: profileError,
+      data: profileData,
+      // refetch,
+    },
+  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {
+    variables: { getProfileDetailsId: userData?.id },
+  });
+
+  const [
+    sendEmail,
+    // { data: emailData, loading: emailLoading, error: emailError },
+  ] = useMutation(SEND_EMAIL_MUTATION);
+
+  const [createNewNftOwnership] = useMutation(CREATE_NEW_OWNERSHIP_OF_NFT);
+  const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
+
+  const closeConnectModel = () => {
+    setConnectModal(false);
+  };
+
+  const connectWalletHandle = () => {
+    if (!isConnected) {
+      setConnectModal(true);
+    }
+  };
+
+  useEffect(() => {
+    if (userData?.id) {
+      getProfile({ variables: userData?.id });
+    }
+  }, [userData?.id]);
+
+  useEffect(() => {
+    if (isConnected) {
+      setConnectModal(false);
+    }
+  }, [isConnected]);
+
+  const handlePurchase = async () => {
+    const provider = new ethers.providers.Web3Provider(walletProvider);
+    const signer = provider.getSigner();
+    const totalcost = Number(quantity * itemData?.price);
+    const amount = ETHToWei(totalcost.toString()).toString();
+    setLoadingStatus(true);
+
+    if (!signer || quantity <= 0) {
+      connectWalletHandle();
+      return;
+    }
+
+    const marketContractWithSigner =
+      contractData.marketContract.connect(signer);
+
+    console.log("all data", itemData?.auctionId, quantity, amount, totalcost);
+
+    try {
+      const tx = await marketContractWithSigner.BuyFixedPriceItem(
+        itemData?.auctionId,
+        quantity,
+        { value: amount }
+      );
+      setLoadingMessage("Transaction Pending...");
+
+      const res = await tx.wait();
+      if (!res) throw new Error("Transaction failed");
+
+      const transactionVariables = {
+        token,
+        nft_id: itemData?.nftId?.toString(),
+        amount: Number(totalcost),
+        currency:
+          contractData.chain === process.env.REACT_ETH_CHAINID
+            ? "ETH"
+            : "MATIC",
+        token_id: itemData?.tokenId?.toString(),
+        chain_id: contractData.chain.toString(),
+        blockchain_listingID: itemData?.itemDbId?.toString(),
+      };
+
+      await createNewNftOwnership({
+        variables: {
+          ...transactionVariables,
+          total_price: Number(totalcost),
+          listingIDFromBlockChain: itemData?.auctionId?.toString(),
+          listingID: itemData?.itemDbId?.toString(),
+          copies: Number(quantity),
+          pricePerItem: Number(totalcost),
+          from_user_wallet: itemData?.owner.toString(),
+          to_user_wallet: address.toString(),
+        },
+      });
+
+      await Promise.all([
+        createNewTransation({
+          variables: {
+            ...transactionVariables,
+            first_person_wallet_address: address.toString(),
+            second_person_wallet_address: itemData?.owner.toString(),
+            transaction_type: "buying_nft",
+            copies_transferred: Number(quantity),
+            listingID: itemData?.itemDbId?.toString(),
+          },
+        }),
+        createNewTransation({
+          variables: {
+            ...transactionVariables,
+            first_person_wallet_address: itemData?.owner.toString(),
+            second_person_wallet_address: address.toString(),
+            transaction_type: "selling_nft",
+            copies_transferred: Number(quantity),
+            listingID: itemData?.itemDbId?.toString(),
+          },
+        }),
+      ]);
+
+      const msgData = boughtMessage(
+        userData?.full_name,
+        itemData?.name,
+        itemData?.name,
+        totalcost
+      );
+      await sendEmail({
+        variables: {
+          to: profileData?.GetProfileDetails?.email,
+          from: environment.REACT_APP_EMAIL_OWNER,
+          subject: msgData.subject,
+          text: msgData.message,
+        },
+      });
+
+      setLoadingStatus(false);
+      setLoadingMessage("");
+      ToastMessage("Purchase Successful", "", "success");
+      dispatch(loadContractIns());
+    } catch (error) {
+      setLoadingStatus(false);
+      const parsedEthersError = getParsedEthersError(error);
+      const errorMessage =
+        parsedEthersError.context === -32603
+          ? "Insufficient Balance"
+          : parsedEthersError.context;
+      ToastMessage("Error", errorMessage, "error");
+    }
+  };
+
   return (
     <>
-      {/* <ConnectModal visible={connectModal} onClose={closeConnectModel} /> */}
-
-      <Modal
-        // wrapClassName={backgroundTheme}
-        style={{ marginTop: "6rem" }}
-        footer={null}
-        // className={backgroundTheme}
-        bodyStyle={{ backgroundColor: "#222222" }}
-        open={connectModal}
-        onOk={closeConnectModel}
-        onCancel={closeConnectModel}
-      >
-        <div>
-          <div className="d-flex mt-3 gap-4   flex-column justify-content-center align-items-center">
-            <ButtonComponent
-              // onClick={handleWalletConnect}
-              text={"Link Wallet"}
-              height={40}
-              width={170}
-            />
-            {/* <ButtonComponent
-            onClick={handleWalletConnect}
-            text={"Link Mobile Wallet"}
-            height={40}
-            width={170}
-          /> */}
-          </div>
-        </div>
-      </Modal>
+      <ConnectModal visible={connectModal} onClose={closeConnectModel} />
 
       <div className="Nunito_font_family d-flex flex-column justify-content-center align-items-center">
         <div className="down_side_popup lg:p-4 p-3 bg-white">
@@ -108,7 +269,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                       }}
                     >
                       <div className="heading_data_name">
-                        <div>Speedy Walkover</div>
+                        <div>{itemData?.name}</div>
                         <div className="green_tick_button">
                           <img
                             src={GreenTick}
@@ -117,7 +278,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                           />
                         </div>
                       </div>
-                      <p className="">From Snap Boogie</p>
+                      <p className="">From {trimWallet(itemData?.nftOwner)}</p>
                     </div>
                   </div>
 
@@ -171,9 +332,15 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         </p>
                         <div className="line_vertical"></div>
                         <p>
-                          1.3{" "}
+                          {quantity * itemData?.price}{" "}
                           <span className="price_tag_currency">
-                            MATIC ($0.00204)
+                            {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
+                            {Number(
+                              quantity *
+                                itemData?.price *
+                                (itemData?.chainId == 137 ? maticBal : ethBal)
+                            ).toFixed(6)}
+                            ){" "}
                           </span>
                         </p>
                       </div>
@@ -200,15 +367,26 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                   <div className="total_price_data">
                     <p>Total Price:</p>
                     <p>
-                      1.3{" "}
+                      {quantity * itemData?.price}{" "}
                       <span className="price_tag_currency">
-                        MATIC ($0.00204)
+                        {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
+                        {Number(
+                          quantity *
+                            itemData?.price *
+                            (itemData?.chainId == 137 ? maticBal : ethBal)
+                        ).toFixed(6)}
+                        ){" "}
                       </span>
                     </p>
                   </div>
                   <p>
-                    <span className="font-weight-bold">1 Ethereum</span> =
-                    <strong> $1250.58</strong>
+                    <span className="font-weight-bold">
+                      1 {itemData?.chainId == 137 ? "MATIC" : "ETH"}
+                    </span>{" "}
+                    =
+                    <strong>
+                      {itemData?.chainId == 137 ? maticBal : ethBal}{" "}
+                    </strong>
                   </p>
                 </div>
               ) : (
@@ -216,11 +394,14 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                   className="connect_wallet_button__parent"
                   onClick={() => {
                     setIsFixedPriceStep(3);
-                    setConnectModal(true);
+                    if (isConnected) {
+                      handlePurchase();
+                    }
+                    connectWalletHandle();
                   }}
                 >
                   <button className="connect_wallet_button theme_gradient_red">
-                    Connect Wallet
+                    {isConnected ? "BuyNow" : "Connect Wallet"}
                   </button>
                 </div>
               )}

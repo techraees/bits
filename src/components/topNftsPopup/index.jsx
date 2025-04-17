@@ -58,14 +58,21 @@ const nftData = [
   },
 ];
 
-const ListingModal = ({ isOpen, onRequestClose, owners, name }) => {
+const ListingModal = ({
+  isOpen,
+  onRequestClose,
+  fixedData,
+  auctionData,
+  name,
+}) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
     ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
   );
 
-  console.log("top owners", owners, name);
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
   const [isAuctionStep, setIsAuctionStep] = useState(1);
+
+  const [itemData, setItemData] = useState({});
 
   useEffect(() => {
     if (isOpen) {
@@ -107,8 +114,11 @@ const ListingModal = ({ isOpen, onRequestClose, owners, name }) => {
         />
         {isFixedPriceStep === 1 && (
           <TopNftListingAuctionBodySection
-            nftData={owners}
+            fixedData={fixedData}
+            auctionData={auctionData}
             name={name}
+            itemData={itemData}
+            setItemData={setItemData}
             isSwitchValue={isSwitchValue}
             setIsSwitchValue={setIsSwitchValue}
             onRequestClose={onRequestClose}
@@ -119,6 +129,8 @@ const ListingModal = ({ isOpen, onRequestClose, owners, name }) => {
         {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && (
           <TopNftAddQuantiyPurchaseInputBodySection
             setIsFixedPriceStep={setIsFixedPriceStep}
+            fixedData={fixedData}
+            itemData={itemData}
             onRequestClose={onRequestClose}
             setIsAuctionStep={setIsAuctionStep}
           />

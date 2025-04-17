@@ -244,6 +244,7 @@ const OfferModal = ({
             }
           }
         } catch (error) {
+          console.log("bid error", error);
           const parsedEthersError = getParsedEthersError(error);
           if (parsedEthersError.context == -32603) {
             ToastMessage("Error", "Insufficient Balance", "error");

@@ -7,8 +7,11 @@ import { trimWallet } from "../../utills/trimWalletAddr";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 
 const TopNftListingAuctionBodySection = ({
-  nftData,
+  fixedData,
+  auctionData,
   name,
+  itemData,
+  setItemData,
   isSwitchValue,
   setIsSwitchValue,
   onRequestClose,
@@ -17,7 +20,6 @@ const TopNftListingAuctionBodySection = ({
 }) => {
   const [page, setPage] = useState(1);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-  const [itemData, setItemData] = useState({});
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
 
@@ -65,10 +67,21 @@ const TopNftListingAuctionBodySection = ({
 
           <div className="">
             {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
-              ? nftData.map((nft, index) => (
+              ? fixedData.map((nft, index) => (
                   <div
                     key={index}
                     onClick={() => {
+                      setItemData({
+                        name: name,
+                        price: nft?.price,
+                        currentBidAmount: nft?.currentBidAmount,
+                        nftOwner: nft?.owner,
+                        auctionId: nft?.fixedid,
+                        itemDbId: nft?.dbid,
+                        nftId: nft?.nftId,
+                        chainId: nft?.chainId,
+                        tokenId: nft?.tokenId,
+                      });
                       setIsFixedPriceStep(2);
                     }}
                     className="shadow-move d-flex nft_listing justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
@@ -100,10 +113,21 @@ const TopNftListingAuctionBodySection = ({
                     </span>
                   </div>
                 ))
-              : nftData.map((nft, index) => (
+              : auctionData.map((nft, index) => (
                   <div
                     key={index}
                     onClick={() => {
+                      setItemData({
+                        name: name,
+                        price: nft?.price,
+                        currentBidAmount: nft?.currentBidAmount,
+                        nftOwner: nft?.owner,
+                        auctionId: nft?.fixedid,
+                        itemDbId: nft?.dbid,
+                        nftId: nft?.nftId,
+                        chainId: nft?.chainId,
+                        tokenId: nft?.tokenId,
+                      });
                       setIsAuctionStep(2);
                       setIsOfferModalOpen(true);
                     }}
@@ -172,15 +196,27 @@ const TopNftListingAuctionBodySection = ({
       >
         <OfferModal
           handleCancel={handleCancel}
-          name="Test NFT"
-          price={(0.05 * 2800).toFixed(4)} // dummy ETH price
-          initialPrice={0.05}
-          currentBidAmount={(0.04 * 2800).toFixed(4)}
-          nftOwner="0xABC123...XYZ"
-          auctionid="auction_dummy_1"
-          itemDbId="item_dummy_1"
-          nftId="nft_dummy_1"
-          tokenId="token_123"
+          name={itemData.name}
+          price={
+            itemData.chainId == 1
+              ? (itemData?.price * ethBal).toFixed(4)
+              : (itemData?.price * maticBal).toFixed(4)
+          }
+          initialPrice={
+            itemData.chainId == 1
+              ? (itemData?.price * ethBal).toFixed(4)
+              : (itemData?.price * maticBal).toFixed(4)
+          }
+          currentBidAmount={
+            itemData.chainId == 1
+              ? (itemData?.currentBidAmount * ethBal).toFixed(4)
+              : (itemData?.currentBidAmount * maticBal).toFixed(4)
+          }
+          nftOwner={itemData.nftOwner}
+          auctionid={itemData.auctionId}
+          itemDbId={itemData.itemDbId}
+          nftId={itemData.nftId}
+          tokenId={itemData.tokenId}
           modalType="test"
           customMessage="This is a test of the OfferModal with dummy data."
         />
