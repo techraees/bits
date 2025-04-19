@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 
 const TopNftListingQuantityPurchaseHeader = ({

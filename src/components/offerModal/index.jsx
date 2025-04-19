@@ -35,6 +35,7 @@ const OfferModal = ({
   itemDbId,
   nftId,
   tokenId,
+  offers,
 }) => {
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
@@ -53,11 +54,11 @@ const OfferModal = ({
   let token = getStorage("token");
 
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
   );
 
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
 
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
@@ -68,7 +69,7 @@ const OfferModal = ({
   const getPriceDiff = (initialPrice, latestprice) => {
     const diff = latestprice - initialPrice;
     const val = diff / initialPrice;
-    return val;
+    return Number(val).toFixed(4);
   };
 
   const handleDropDownClick = () => {
@@ -83,56 +84,64 @@ const OfferModal = ({
     connectWalletHandle();
   };
 
-  ETHTOUSD(1).then((result) => {
-    setEthBal(result);
-  });
-
-  MATICTOUSD(1).then((result) => {
-    setMaticBal(result);
-  });
-
   const handleOffer = (e) => {
     const value = e.target.value;
     setOfferAmount(value);
   };
 
-  const getPrice = (val) => {
-    if (contractData.chain == 1) {
-      return WeiToETH(`${val}`) * ethBal;
-    } else {
-      return WeiToETH(`${val}`) * maticBal;
-    }
-  };
+  useEffect(() => {
+    // Fetch ETH and MATIC prices
+    const fetchPrices = async () => {
+      const [ethPrice, maticPrice] = await Promise.all([
+        ETHTOUSD(1),
+        MATICTOUSD(1),
+      ]);
+      setEthBal(ethPrice);
+      setMaticBal(maticPrice);
+    };
 
+    fetchPrices();
+  }, []);
+
+  // Process bids only when contractData, ethBal, and maticBal are available
   useEffect(() => {
     async function getbids() {
-      const data = await contractData.marketContract.getAllBids(auctionid);
+      // Skip if balances are not loaded yet
+      if (
+        (contractData.chain === 1 && !ethBal) ||
+        (contractData.chain !== 1 && !maticBal)
+      ) {
+        return;
+      }
 
-      if (data && data?.bidAmount.length > 0) {
-        data?.bidAmount.map((item, i) => {
-          const priceDiff = getPriceDiff(
-            initialPrice,
-            WeiToETH(`${Number(item)}`),
-          );
-          let obj = {
+      if (offers?.length > 0) {
+        const newData = offers.map((item, i) => {
+          const priceDiff = getPriceDiff(initialPrice, item?.bid_amount);
+          return {
             key: i + 1,
-            price: WeiToETH(`${Number(item)}`),
-            uprice: getPrice(Number(item)),
+            price: item?.bid_amount,
+            uprice: getPrice(item?.bid_amount),
             quantity: "1",
             fdifference: `${priceDiff}% above`,
             expiration: "in 9 days",
             from: "you",
           };
-
-          setDataSource((prev) => {
-            return [...prev, obj];
-          });
         });
+        setDataSource(newData); // Replace instead of appending
       }
     }
 
     getbids();
-  }, [contractData]);
+  }, [contractData, ethBal, maticBal]); // Add balances as dependencies
+
+  const getPrice = (val) => {
+    console.log("val", ethBal, maticBal);
+    if (contractData.chain == 1) {
+      return Number(val * ethBal).toFixed(4);
+    } else {
+      return Number(val * maticBal).toFixed(4);
+    }
+  };
 
   const columns = [
     {

@@ -137,6 +137,7 @@ const CardCompnent = ({
             nftId: item?.nft_id?._id,
             chainId: item?.chainId,
             currentBidAmount: item?.auction_highest_bid,
+            auctionbids: item?.auction_bids,
           }));
       setAuctionData(newData);
     }
@@ -396,6 +397,7 @@ const CardCompnent = ({
         fixedData={fixedData}
         auctionData={auctionData}
         name={name}
+        marketplacecard={marketplacecard}
       />
 
       <Card
@@ -455,7 +457,7 @@ const CardCompnent = ({
                 </Tooltip>
               </>
             ) : (
-              <button className="buybtn" onClick={showOfferModal}>
+              <button className="buybtn" onClick={showTopNftsModal}>
                 {location.pathname === "/marketplace" ? "Bid Now" : "Buy Now"}
               </button>
             )}

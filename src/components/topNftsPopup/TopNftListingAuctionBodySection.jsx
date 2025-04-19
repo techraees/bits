@@ -127,6 +127,7 @@ const TopNftListingAuctionBodySection = ({
                         nftId: nft?.nftId,
                         chainId: nft?.chainId,
                         tokenId: nft?.tokenId,
+                        offers: nft?.auctionbids,
                       });
                       setIsAuctionStep(2);
                       setIsOfferModalOpen(true);
@@ -217,6 +218,7 @@ const TopNftListingAuctionBodySection = ({
           itemDbId={itemData.itemDbId}
           nftId={itemData.nftId}
           tokenId={itemData.tokenId}
+          offers={itemData.offers}
           modalType="test"
           customMessage="This is a test of the OfferModal with dummy data."
         />

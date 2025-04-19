@@ -64,15 +64,22 @@ const ListingModal = ({
   fixedData,
   auctionData,
   name,
+  marketplacecard,
 }) => {
   const [isSwitchValue, setIsSwitchValue] = useState(
-    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
   );
 
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
   const [isAuctionStep, setIsAuctionStep] = useState(1);
 
   const [itemData, setItemData] = useState({});
+
+  useEffect(() => {
+    if (marketplacecard) {
+      setIsSwitchValue(ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION);
+    }
+  }, [marketplacecard]);
 
   useEffect(() => {
     if (isOpen) {
@@ -111,6 +118,7 @@ const ListingModal = ({
           onRequestClose={onRequestClose}
           isFixedPriceStep={isFixedPriceStep}
           isAuctionStep={isAuctionStep}
+          marketplacecard={marketplacecard}
         />
         {isFixedPriceStep === 1 && (
           <TopNftListingAuctionBodySection

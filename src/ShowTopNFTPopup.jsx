@@ -7,6 +7,7 @@ const ShowTopNFTPopup = ({
   fixedData,
   auctionData,
   name,
+  marketplacecard,
 }) => {
   return (
     <div>
@@ -19,6 +20,7 @@ const ShowTopNFTPopup = ({
         fixedData={fixedData}
         auctionData={auctionData}
         name={name}
+        marketplacecard={marketplacecard}
       />
     </div>
   );

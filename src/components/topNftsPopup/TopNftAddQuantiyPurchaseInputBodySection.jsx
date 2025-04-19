@@ -128,8 +128,6 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
     const marketContractWithSigner =
       contractData.marketContract.connect(signer);
 
-    console.log("all data", itemData?.auctionId, quantity, amount, totalcost);
-
     try {
       const tx = await marketContractWithSigner.BuyFixedPriceItem(
         itemData?.auctionId,
@@ -162,8 +160,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           listingID: itemData?.itemDbId?.toString(),
           copies: Number(quantity),
           pricePerItem: Number(totalcost),
-          from_user_wallet: itemData?.owner.toString(),
-          to_user_wallet: address.toString(),
+          from_user_wallet: itemData?.nftOwner?.toString(),
+          to_user_wallet: address?.toString(),
         },
       });
 
@@ -171,18 +169,19 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
         createNewTransation({
           variables: {
             ...transactionVariables,
-            first_person_wallet_address: address.toString(),
-            second_person_wallet_address: itemData?.owner.toString(),
+            first_person_wallet_address: address?.toString(),
+            second_person_wallet_address: itemData?.nftOwner?.toString(),
             transaction_type: "buying_nft",
             copies_transferred: Number(quantity),
             listingID: itemData?.itemDbId?.toString(),
           },
         }),
+
         createNewTransation({
           variables: {
             ...transactionVariables,
-            first_person_wallet_address: itemData?.owner.toString(),
-            second_person_wallet_address: address.toString(),
+            first_person_wallet_address: itemData?.nftOwner?.toString(),
+            second_person_wallet_address: address?.toString(),
             transaction_type: "selling_nft",
             copies_transferred: Number(quantity),
             listingID: itemData?.itemDbId?.toString(),
@@ -196,6 +195,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
         itemData?.name,
         totalcost
       );
+
       await sendEmail({
         variables: {
           to: profileData?.GetProfileDetails?.email,
@@ -210,6 +210,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
       ToastMessage("Purchase Successful", "", "success");
       dispatch(loadContractIns());
     } catch (error) {
+      console.error("Error in purchase", error);
       setLoadingStatus(false);
       const parsedEthersError = getParsedEthersError(error);
       const errorMessage =
@@ -222,6 +223,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
 
   return (
     <>
+      {loadingStatus && <Loader content={loadingMessage} />}
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
 
       <div className="Nunito_font_family d-flex flex-column justify-content-center align-items-center">
