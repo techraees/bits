@@ -83,18 +83,18 @@ export const loadContractIns = () => async (dispatch) => {
     const ethMarketContractIns = new ethers.Contract(
       ethMarketPlaceContract,
       ethMarketContractAbi,
-      ethProvider,
+      ethProvider
     );
 
     const ethMintingContractIns = new ethers.Contract(
       ethMintingConract,
       ethMintingContractAbi,
-      ethProvider,
+      ethProvider
     );
 
     //polygon
     const polygonProvider = new ethers.providers.JsonRpcProvider(
-      polygonInfuraIns,
+      polygonInfuraIns
     );
     const polygonMarketPlaceContract =
       "0x381c730F1646f00e4Ae9Dfe9589b1E0BDE107a1e";
@@ -102,12 +102,12 @@ export const loadContractIns = () => async (dispatch) => {
     const polygonMarketContractIns = new ethers.Contract(
       polygonMarketPlaceContract,
       polygonMarketContractAbi,
-      polygonProvider,
+      polygonProvider
     );
     const polygonMintingContractIns = new ethers.Contract(
       polygonMintingConract,
       polygonMintingContractAbi,
-      polygonProvider,
+      polygonProvider
     );
 
     // const imguri = extractNFTImage(ethMintingContract, 0)
@@ -164,7 +164,7 @@ export const loadContractIns = () => async (dispatch) => {
 // getting fixed prices
 const getEmoteItems = async (
   ethMarketContractIns,
-  polygonMarketContractIns,
+  polygonMarketContractIns
 ) => {
   const maticcombined = {};
   const ethcombined = {};

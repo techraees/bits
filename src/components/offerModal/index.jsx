@@ -16,7 +16,11 @@ import { ETHToWei, WeiToETH } from "../../utills/convertWeiAndBnb";
 import { ToastMessage } from "../../components";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { loadContractIns } from "../../store/actions";
-import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import {
+  useAppKitProvider,
+  useAppKitAccount,
+  useAppKitNetwork,
+} from "@reown/appkit/react";
 import { ethers } from "ethers";
 import {
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
@@ -39,6 +43,7 @@ const OfferModal = ({
 }) => {
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
+  const { chainId } = useAppKitNetwork();
   const { walletProvider } = useAppKitProvider("eip155");
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -191,82 +196,87 @@ const OfferModal = ({
   };
 
   const handleBid = async () => {
-    const provider = new ethers.providers.Web3Provider(walletProvider);
-    const signer = provider.getSigner();
-    if (offerAmount > 0) {
-      const amount = ETHToWei(`${offerAmount}`);
-      if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
-        const marketContractWithsigner =
-          contractData.marketContract.connect(signer);
-        try {
-          setIsBidModalOpen(true);
-          const tx = await marketContractWithsigner.bid(auctionid, {
-            value: amount,
-          });
-          // if(tx){
-          //   setIsBidModalOpen(true);
-          // }
-          const res = await tx.wait();
+    if (contractData.chain == chainId) {
+      const provider = new ethers.providers.Web3Provider(walletProvider);
+      const signer = provider.getSigner();
+      if (offerAmount > 0) {
+        const amount = ETHToWei(`${offerAmount}`);
+        if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
+          const marketContractWithsigner =
+            contractData.marketContract.connect(signer);
+          try {
+            setIsBidModalOpen(true);
+            const tx = await marketContractWithsigner.bid(auctionid, {
+              value: amount,
+            });
+            // if(tx){
+            //   setIsBidModalOpen(true);
+            // }
+            const res = await tx.wait();
 
-          if (res) {
-            //saving to bids to DB
-            try {
-              await create_bid_against_auction({
-                variables: {
-                  token: token,
-                  _id: itemDbId.toString(),
-                  price: Number(offerAmount),
-                },
-              });
+            if (res) {
+              //saving to bids to DB
+              try {
+                await create_bid_against_auction({
+                  variables: {
+                    token: token,
+                    _id: itemDbId.toString(),
+                    price: Number(offerAmount),
+                  },
+                });
 
-              await updateBiddingTime({
-                variables: {
-                  token: token,
-                  nftDbMarketPlaceId: itemDbId.toString(),
-                },
-              });
+                await updateBiddingTime({
+                  variables: {
+                    token: token,
+                    nftDbMarketPlaceId: itemDbId.toString(),
+                  },
+                });
 
-              console.log("addd", address, tokenId, itemDbId, auctionid);
+                console.log("addd", address, tokenId, itemDbId, auctionid);
 
-              await createNewTransation({
-                variables: {
-                  token,
-                  first_person_wallet_address: address.toString(),
-                  nft_id: nftId.toString(),
-                  amount: Number(offerAmount),
-                  currency:
-                    contractData.chain === process.env.REACT_ETH_CHAINID
-                      ? "ETH"
-                      : "MATIC",
-                  transaction_type: "bidding_transaction",
-                  token_id: tokenId.toString(),
-                  chain_id: contractData.chain.toString(),
-                  blockchain_listingID: auctionid.toString(),
-                  listingID: itemDbId.toString(),
-                },
-              });
+                await createNewTransation({
+                  variables: {
+                    token,
+                    first_person_wallet_address: address.toString(),
+                    nft_id: nftId.toString(),
+                    amount: Number(offerAmount),
+                    currency:
+                      contractData.chain === process.env.REACT_ETH_CHAINID
+                        ? "ETH"
+                        : "MATIC",
+                    transaction_type: "bidding_transaction",
+                    token_id: tokenId.toString(),
+                    chain_id: contractData.chain.toString(),
+                    blockchain_listingID: auctionid.toString(),
+                    listingID: itemDbId.toString(),
+                  },
+                });
 
-              ToastMessage("Bid Successful", "", "success");
-              dispatch(loadContractIns());
-            } catch (error) {
+                ToastMessage("Bid Successful", "", "success");
+                dispatch(loadContractIns());
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          } catch (error) {
+            console.log("bid error", error);
+            const parsedEthersError = getParsedEthersError(error);
+            if (parsedEthersError.context == -32603) {
+              ToastMessage("Error", "Insufficient Balance", "error");
+            } else {
               console.log(error);
+              ToastMessage("Error", `${parsedEthersError.context}`, "error");
             }
           }
-        } catch (error) {
-          console.log("bid error", error);
-          const parsedEthersError = getParsedEthersError(error);
-          if (parsedEthersError.context == -32603) {
-            ToastMessage("Error", "Insufficient Balance", "error");
-          } else {
-            console.log(error);
-            ToastMessage("Error", `${parsedEthersError.context}`, "error");
-          }
+        } else {
+          handleConnect();
         }
       } else {
-        handleConnect();
+        alert("Please provide amount");
       }
     } else {
-      alert("Please provide amount");
+      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+      ToastMessage(`Please select ${network} network`, "", "error");
     }
   };
 
