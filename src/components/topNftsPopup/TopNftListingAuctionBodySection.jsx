@@ -156,7 +156,9 @@ const TopNftListingAuctionBodySection = ({
                       </div>
                     </div>
                     <span className="text-black price_tag">
-                      {nft?.price}{" "}
+                      {nft?.currentBidAmount > 0
+                        ? nft?.currentBidAmount
+                        : nft?.price}{" "}
                       <span className="price_tag_currency">
                         {nft?.chainId == 137 ? "MATIC" : "ETH"}
                       </span>
@@ -203,11 +205,7 @@ const TopNftListingAuctionBodySection = ({
               ? (itemData?.price * ethBal).toFixed(4)
               : (itemData?.price * maticBal).toFixed(4)
           }
-          initialPrice={
-            itemData.chainId == 1
-              ? (itemData?.price * ethBal).toFixed(4)
-              : (itemData?.price * maticBal).toFixed(4)
-          }
+          initialPrice={itemData?.price}
           currentBidAmount={
             itemData.chainId == 1
               ? (itemData?.currentBidAmount * ethBal).toFixed(4)

@@ -131,7 +131,7 @@ const CardCompnent = ({
             owner: item?.seller?.user_address,
             copies: item?.numberOfCopies,
             price: item?.price,
-            fixedid: item?.fixedid,
+            fixedid: item?.auctionid,
             dbid: item?._id,
             tokenId: item?.tokenId,
             nftId: item?.nft_id?._id,
@@ -152,7 +152,7 @@ const CardCompnent = ({
           .filter(
             (item) =>
               contractData.chain == item?.nft_id?.chainId &&
-              item?.numberOfCopies > 0
+              item?.numberOfCopies > 0,
           )
           .map((item) => ({
             owner: item?.seller?.user_address,
@@ -180,7 +180,7 @@ const CardCompnent = ({
   console.log(
     "auc data",
     getOwnersWhoListedTheSameNftWithPricesAuction
-      ?.getOwnersWhoListedTheSameNftWithPrices?.data
+      ?.getOwnersWhoListedTheSameNftWithPrices?.data,
   );
 
   const showModal = () => {
@@ -211,7 +211,7 @@ const CardCompnent = ({
   // stripe payment
   const handleStripePayment = async () => {
     const stripe = await loadStripe(
-      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ"
+      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ",
     );
 
     const body = {
@@ -233,7 +233,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      }
+      },
     );
 
     const session = await response.json();
@@ -271,7 +271,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      }
+      },
     );
 
     const data = await response.json();
