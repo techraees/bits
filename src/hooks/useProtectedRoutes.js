@@ -17,7 +17,7 @@ export const useProtectedRoutes = () => {
   let token = getStorage("token");
 
   useEffect(() => {
-    if (token &&userData) {
+    if (token && userData) {
       setIsAuthenticated(true);
       setLoading(false);
     } else {
