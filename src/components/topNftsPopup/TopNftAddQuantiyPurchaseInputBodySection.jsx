@@ -132,7 +132,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
       const tx = await marketContractWithSigner.BuyFixedPriceItem(
         itemData?.auctionId,
         quantity,
-        { value: amount }
+        { value: amount },
       );
       setLoadingMessage("Transaction Pending...");
 
@@ -193,7 +193,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
         userData?.full_name,
         itemData?.name,
         itemData?.name,
-        totalcost
+        totalcost,
       );
 
       await sendEmail({
@@ -340,7 +340,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {Number(
                               quantity *
                                 itemData?.price *
-                                (itemData?.chainId == 137 ? maticBal : ethBal)
+                                (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -375,7 +375,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {Number(
                           quantity *
                             itemData?.price *
-                            (itemData?.chainId == 137 ? maticBal : ethBal)
+                            (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>

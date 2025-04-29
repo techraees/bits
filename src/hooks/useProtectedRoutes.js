@@ -17,7 +17,7 @@ export const useProtectedRoutes = () => {
   let token = getStorage("token");
 
   useEffect(() => {
-    if (token) {
+    if (token &&userData) {
       setIsAuthenticated(true);
       setLoading(false);
     } else {
@@ -26,7 +26,7 @@ export const useProtectedRoutes = () => {
     }
     // eslint-disable-next-line
   }, [userData, token]);
-  console.log({ check: trimAfterFirstSlash(location?.pathname) });
+
   useEffect(() => {
     if (!validRoutes) return;
     if (!validRoutes?.includes(trimAfterFirstSlash(location?.pathname)))
