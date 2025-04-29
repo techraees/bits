@@ -97,7 +97,7 @@ const CardCompnent = ({
   const [updateNftWatch] = useMutation(UPDATE_NFT_WATCH);
   // const [updateNftPayment] = useMutation(UPDATE_NFT_PAYMENT);
 
-  console.log("Item Id", itemDbId);
+  console.log("Item Id", itemDbId, id);
 
   const {
     data: getOwnersWhoListedTheSameNftWithPricesAuction,
@@ -126,19 +126,20 @@ const CardCompnent = ({
     if (getOwnersWhoListedTheSameNftWithPricesAuction) {
       const newData =
         getOwnersWhoListedTheSameNftWithPricesAuction?.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter((item) => contractData.chain == item?.chainId)
+          .filter((item) => contractData.chain == item?.nft_id?.chainId)
           .map((item) => ({
             owner: item?.seller?.user_address,
             copies: item?.numberOfCopies,
             price: item?.price,
-            fixedid: item?.fixedid,
+            fixedid: item?.auctionid,
             dbid: item?._id,
             tokenId: item?.tokenId,
             nftId: item?.nft_id?._id,
-            chainId: item?.chainId,
+            chainId: item?.nft_id?.chainId,
             currentBidAmount: item?.auction_highest_bid,
             auctionbids: item?.auction_bids,
           }));
+      console.log("new data", newData);
       setAuctionData(newData);
     }
   }, [getOwnersWhoListedTheSameNftWithPricesAuction]);
@@ -148,7 +149,11 @@ const CardCompnent = ({
     if (getOwnersWhoListedTheSameNftWithPricesFixed) {
       const newData =
         getOwnersWhoListedTheSameNftWithPricesFixed?.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter((item) => contractData.chain == item?.chainId)
+          .filter(
+            (item) =>
+              contractData.chain == item?.nft_id?.chainId &&
+              item?.numberOfCopies > 0,
+          )
           .map((item) => ({
             owner: item?.seller?.user_address,
             copies: item?.numberOfCopies,
@@ -157,7 +162,7 @@ const CardCompnent = ({
             dbid: item?._id,
             tokenId: item?.tokenId,
             nftId: item?.nft_id?._id,
-            chainId: item?.chainId,
+            chainId: item?.nft_id?.chainId,
             currentBidAmount: item?.auction_highest_bid,
           }));
       setFixedData(newData);
@@ -171,6 +176,12 @@ const CardCompnent = ({
   MATICTOUSD(1).then((result) => {
     setMaticBal(result);
   });
+
+  console.log(
+    "auc data",
+    getOwnersWhoListedTheSameNftWithPricesAuction
+      ?.getOwnersWhoListedTheSameNftWithPrices?.data,
+  );
 
   const showModal = () => {
     setIsModalOpen(true);

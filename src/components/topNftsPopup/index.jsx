@@ -92,6 +92,8 @@ const ListingModal = ({
       document.body.style.overflow = "auto"; // Cleanup on unmount
     };
   }, [isOpen]);
+
+  console.log("all data", fixedData, auctionData);
   return (
     <Modal
       isOpen={isOpen}

@@ -27,7 +27,11 @@ import ConnectModal from "../../../components/connectModal";
 import CreatorEarningModal from "../../../components/creatorEarningModal";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { mintMessage } from "../../../utills/emailMessages";
-import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import {
+  useAppKitProvider,
+  useAppKitAccount,
+  useAppKitNetwork,
+} from "@reown/appkit/react";
 import { getStorage } from "../../../utills/localStorage";
 
 const environment = process.env;
@@ -37,6 +41,7 @@ const MintNft = () => {
     (state) => state.app.theme.backgroundTheme,
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
+  const { chainId } = useAppKitNetwork();
   const { isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
 
@@ -157,44 +162,49 @@ const MintNft = () => {
   };
 
   const mintCall = async (supply, royalty) => {
-    const provider = new ethers.providers.Web3Provider(walletProvider);
-    const signer = provider.getSigner();
-    const contractWithsigner = contractData.mintContract.connect(signer);
-    const prevTokenId = await contractWithsigner.mintedTokenId();
-    try {
-      const tx = await contractWithsigner.mint(
-        address,
-        supply,
-        createNft.meta,
-        royalty,
-        splitOwners,
-        splitOwnersPercentage,
-        [],
-      );
+    if (contractData.chain == chainId) {
+      const provider = new ethers.providers.Web3Provider(walletProvider);
+      const signer = provider.getSigner();
+      const contractWithsigner = contractData.mintContract.connect(signer);
+      const prevTokenId = await contractWithsigner.mintedTokenId();
+      try {
+        const tx = await contractWithsigner.mint(
+          address,
+          supply,
+          createNft.meta,
+          royalty,
+          splitOwners,
+          splitOwnersPercentage,
+          [],
+        );
 
-      setLoadingStatus(true);
-      setLoadingMessage("Minting...");
+        setLoadingStatus(true);
+        setLoadingMessage("Minting...");
 
-      const res = await tx.wait();
-      if (res) {
-        const token_ID = await contractWithsigner.mintedTokenId();
-        setLoadingStatus(false);
-        setLoadingMessage("");
-        if (Number(prevTokenId) < Number(token_ID)) {
-          return token_ID;
+        const res = await tx.wait();
+        if (res) {
+          const token_ID = await contractWithsigner.mintedTokenId();
+          setLoadingStatus(false);
+          setLoadingMessage("");
+          if (Number(prevTokenId) < Number(token_ID)) {
+            return token_ID;
+          } else {
+            const newTkId = await contractWithsigner.mintedTokenId();
+            return newTkId;
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        const parsedEthersError = getParsedEthersError(error);
+        if (parsedEthersError.context == -32603) {
+          ToastMessage("Error", "Insufficient Balance", "error");
         } else {
-          const newTkId = await contractWithsigner.mintedTokenId();
-          return newTkId;
+          ToastMessage("Error", `${parsedEthersError.context}`, "error");
         }
       }
-    } catch (error) {
-      console.log(error);
-      const parsedEthersError = getParsedEthersError(error);
-      if (parsedEthersError.context == -32603) {
-        ToastMessage("Error", "Insufficient Balance", "error");
-      } else {
-        ToastMessage("Error", `${parsedEthersError.context}`, "error");
-      }
+    } else {
+      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+      ToastMessage(`Please select ${network} network`, "", "error");
     }
   };
 
