@@ -30,11 +30,16 @@ const SellingHistory = () => {
   const [nfts, setNfts] = useState(null);
   const [dropdownValue, setDropdownValue] = useState("Last Week");
   const { userData } = useSelector((state) => state.address.userData);
+  const { contractData } = useSelector((state) => state.chain.contractData);
   const [sellingHistory, setSellingHistory] = useState([]);
 
   useEffect(() => {
     if (getAllMyTransaction) {
-      setSellingHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+      const transactions = getAllMyTransaction?.getAllMyTransaction?.data;
+      const filteredTransactions = transactions?.filter(
+        (transaction) => transaction.chain_id == contractData?.chain
+      );
+      setSellingHistory(filteredTransactions);
     }
   }, [getAllMyTransaction]);
 
@@ -45,7 +50,7 @@ const SellingHistory = () => {
   }, [data]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const menu = (
     <Menu

@@ -26,7 +26,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 export const options = {
@@ -99,14 +99,20 @@ const TransactionHistory = () => {
     }
   };
 
+  const { contractData } = useSelector((state) => state.chain.contractData);
+
   useEffect(() => {
     if (getAllMyTransaction) {
-      setAllHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+      const transactions = getAllMyTransaction?.getAllMyTransaction?.data;
+      const filteredTransactions = transactions?.filter(
+        (transaction) => transaction.chain_id == contractData?.chain
+      );
+      setAllHistory(filteredTransactions);
     }
   }, [getAllMyTransaction]);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
 
   // const handleChange = (value) => {
