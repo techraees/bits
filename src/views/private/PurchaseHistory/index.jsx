@@ -19,6 +19,7 @@ const PurchaseHistory = () => {
     data,
     // refetch
   } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
+  const { contractData } = useSelector((state) => state.chain.contractData);
   const { userData } = useSelector((state) => state.address.userData);
 
   const [transactionHistory, setTransactionHistory] = useState([]);
@@ -26,7 +27,7 @@ const PurchaseHistory = () => {
   const [dropdownValue, setDropdownValue] = useState("Last Week");
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
@@ -44,7 +45,11 @@ const PurchaseHistory = () => {
 
   useEffect(() => {
     if (getAllMyTransaction) {
-      setTransactionHistory(getAllMyTransaction?.getAllMyTransaction?.data);
+      const transactions = getAllMyTransaction?.getAllMyTransaction?.data;
+      const filteredTransactions = transactions?.filter(
+        (transaction) => transaction.chain_id == contractData?.chain
+      );
+      setTransactionHistory(filteredTransactions);
     }
   }, [getAllMyTransaction]);
 
