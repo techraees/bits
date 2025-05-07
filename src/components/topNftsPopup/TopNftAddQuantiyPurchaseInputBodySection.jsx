@@ -139,12 +139,14 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
         const tx = await marketContractWithSigner.BuyFixedPriceItem(
           itemData?.auctionId,
           quantity,
-          { value: amount },
+          { value: amount }
         );
         setLoadingMessage("Transaction Pending...");
 
         const res = await tx.wait();
         if (!res) throw new Error("Transaction failed");
+
+        const transactionHash = res.transactionHash;
 
         const transactionVariables = {
           token,
@@ -181,6 +183,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
               transaction_type: "buying_nft",
               copies_transferred: Number(quantity),
               listingID: itemData?.itemDbId?.toString(),
+              hash_field: transactionHash.toString(),
             },
           }),
 
@@ -192,6 +195,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
               transaction_type: "selling_nft",
               copies_transferred: Number(quantity),
               listingID: itemData?.itemDbId?.toString(),
+              hash_field: transactionHash.toString(),
             },
           }),
         ]);
@@ -200,7 +204,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           userData?.full_name,
           itemData?.name,
           itemData?.name,
-          totalcost,
+          totalcost
         );
 
         await sendEmail({
@@ -350,8 +354,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                              itemData?.price *
-                              (itemData?.chainId == 137 ? maticBal : ethBal),
+                                itemData?.price *
+                                (itemData?.chainId == 137 ? maticBal : ethBal)
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -385,8 +389,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                          itemData?.price *
-                          (itemData?.chainId == 137 ? maticBal : ethBal),
+                            itemData?.price *
+                            (itemData?.chainId == 137 ? maticBal : ethBal)
                         ).toFixed(6)}
                         ){" "}
                       </span>

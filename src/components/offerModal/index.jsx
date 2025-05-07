@@ -59,11 +59,11 @@ const OfferModal = ({
   let token = getStorage("token");
 
   const [create_bid_against_auction] = useMutation(
-    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
+    CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE
   );
 
   const [updateBiddingTime] = useMutation(
-    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
+    UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST
   );
 
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
@@ -216,6 +216,7 @@ const OfferModal = ({
 
             if (res) {
               //saving to bids to DB
+              const transactionHash = res.transactionHash;
               try {
                 await create_bid_against_auction({
                   variables: {
@@ -249,6 +250,7 @@ const OfferModal = ({
                     chain_id: contractData.chain.toString(),
                     blockchain_listingID: auctionid.toString(),
                     listingID: itemDbId.toString(),
+                    hash_field: transactionHash,
                   },
                 });
 

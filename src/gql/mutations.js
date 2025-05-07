@@ -323,6 +323,7 @@ const CREATE_NEW_TRANSACTION = gql`
     $amount: Decimal
     $currency: String
     $copies_transferred: Int
+    $hash_field: String
   ) {
     createNewTransaction(
       token: $token
@@ -337,6 +338,7 @@ const CREATE_NEW_TRANSACTION = gql`
       currency: $currency
       transaction_type: $transaction_type
       copies_transferred: $copies_transferred
+      hash_field: $hash_field
     ) {
       message
       _id

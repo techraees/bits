@@ -112,12 +112,14 @@ function PurchaseStep({
       const tx = await marketContractWithSigner.BuyFixedPriceItem(
         fixedId,
         quantity,
-        { value: amount },
+        { value: amount }
       );
       setLoadingMessage("Transaction Pending...");
 
       const res = await tx.wait();
       if (!res) throw new Error("Transaction failed");
+
+      const transactionHash = res.transactionHash;
 
       const transactionVariables = {
         token,
@@ -154,6 +156,7 @@ function PurchaseStep({
             transaction_type: "buying_nft",
             copies_transferred: Number(quantity),
             listingID: databaseId.toString(),
+            hash_field: transactionHash,
           },
         }),
         createNewTransation({
@@ -164,6 +167,7 @@ function PurchaseStep({
             transaction_type: "selling_nft",
             copies_transferred: Number(quantity),
             listingID: databaseId.toString(),
+            hash_field: transactionHash,
           },
         }),
       ]);
@@ -172,7 +176,7 @@ function PurchaseStep({
         userData?.full_name,
         name,
         sellerUsername,
-        totalPrice,
+        totalPrice
       );
       await sendEmail({
         variables: {
