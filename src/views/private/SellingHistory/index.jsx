@@ -23,7 +23,7 @@ const SellingHistory = () => {
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
       token: token,
-      filterObj: '{"transaction_type":"selling_nft"}',
+      filterObj: `{"transaction_type":"selling_nft","chain_id":${contractData?.chain}}`,
     },
   });
 
@@ -39,7 +39,7 @@ const SellingHistory = () => {
       const filteredTransactions = transactions?.filter(
         (transaction) => transaction.chain_id == contractData?.chain,
       );
-      setSellingHistory(filteredTransactions);
+      setSellingHistory(transactions);
     }
   }, [getAllMyTransaction]);
 

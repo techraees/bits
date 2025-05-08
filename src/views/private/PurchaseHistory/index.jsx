@@ -39,17 +39,17 @@ const PurchaseHistory = () => {
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
       token: token,
-      filterObj: '{"transaction_type":"buying_nft"}',
+      filterObj: `{"transaction_type":"buying_nft","chain_id":${contractData?.chain}}`,
     },
   });
 
   useEffect(() => {
     if (getAllMyTransaction) {
       const transactions = getAllMyTransaction?.getAllMyTransaction?.data;
-      const filteredTransactions = transactions?.filter(
-        (transaction) => transaction.chain_id == contractData?.chain,
-      );
-      setTransactionHistory(filteredTransactions);
+      // const filteredTransactions = transactions?.filter(
+      //   (transaction) => transaction.chain_id == contractData?.chain,
+      // );
+      setTransactionHistory(transactions);
     }
   }, [getAllMyTransaction]);
 

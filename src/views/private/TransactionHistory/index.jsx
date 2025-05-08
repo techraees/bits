@@ -58,6 +58,8 @@ export const data = {
 
 const TransactionHistory = () => {
   let token = getStorage("token");
+  const { contractData } = useSelector((state) => state.chain.contractData);
+
   const {
     data: getAllMyTransaction,
     isLoading: getAllMyTransactionLoading,
@@ -65,6 +67,8 @@ const TransactionHistory = () => {
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
       token: token,
+      filterObj: `{"chain_id":${contractData?.chain}}`,
+
     },
   });
   const { userData } = useSelector((state) => state.address.userData);
@@ -99,7 +103,6 @@ const TransactionHistory = () => {
     }
   };
 
-  const { contractData } = useSelector((state) => state.chain.contractData);
 
   useEffect(() => {
     if (getAllMyTransaction) {
@@ -107,7 +110,7 @@ const TransactionHistory = () => {
       const filteredTransactions = transactions?.filter(
         (transaction) => transaction.chain_id == contractData?.chain,
       );
-      setAllHistory(filteredTransactions);
+      setAllHistory(transactions);
     }
   }, [getAllMyTransaction]);
 
