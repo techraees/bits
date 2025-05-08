@@ -15,6 +15,7 @@ import { getStorage } from "../../../utills/localStorage";
 const SellingHistory = () => {
   let token = getStorage("token");
   const { error, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
+  const { contractData } = useSelector((state) => state.chain.contractData);
 
   const {
     data: getAllMyTransaction,
@@ -30,7 +31,6 @@ const SellingHistory = () => {
   const [nfts, setNfts] = useState(null);
   const [dropdownValue, setDropdownValue] = useState("Last Week");
   const { userData } = useSelector((state) => state.address.userData);
-  const { contractData } = useSelector((state) => state.chain.contractData);
   const [sellingHistory, setSellingHistory] = useState([]);
 
   useEffect(() => {
