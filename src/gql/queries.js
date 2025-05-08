@@ -382,5 +382,6 @@ export {
   GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
   GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE,
   GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
+  
   // ========================= Optimization Queries ======================
 };
