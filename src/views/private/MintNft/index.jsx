@@ -38,7 +38,7 @@ const environment = process.env;
 
 const MintNft = () => {
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { chainId } = useAppKitNetwork();
@@ -114,7 +114,7 @@ const MintNft = () => {
     const sendMsg = async () => {
       const msgData = mintMessage(
         createNft && createNft.artist_name1,
-        createNft && createNft.name,
+        createNft && createNft.name
       );
 
       try {
@@ -175,22 +175,23 @@ const MintNft = () => {
           royalty,
           splitOwners,
           splitOwnersPercentage,
-          [],
+          []
         );
 
         setLoadingStatus(true);
         setLoadingMessage("Minting...");
 
         const res = await tx.wait();
+        const transactionHash = res.transactionHash;
         if (res) {
           const token_ID = await contractWithsigner.mintedTokenId();
           setLoadingStatus(false);
           setLoadingMessage("");
           if (Number(prevTokenId) < Number(token_ID)) {
-            return token_ID;
+            return { token_ID, transactionHash };
           } else {
             const newTkId = await contractWithsigner.mintedTokenId();
-            return newTkId;
+            return { newTkId, transactionHash };
           }
         }
       } catch (error) {
@@ -228,9 +229,9 @@ const MintNft = () => {
     validate: mintValidation,
     onSubmit: async (values) => {
       connectWalletHandle();
-      const tokenid = await mintCall(
+      const { tokenid, transactionHash } = await mintCall(
         Number(values.supply),
-        Number(values.royalty * 100),
+        Number(values.royalty * 100)
       );
 
       if (Number(tokenid)) {
@@ -276,6 +277,7 @@ const MintNft = () => {
             transaction_type: "create_nft",
             token_id: tokenid.toString(),
             chain_id: contractData.chain.toString(),
+            hash_field: transactionHash,
           },
         });
       } else {
@@ -383,7 +385,7 @@ const MintNft = () => {
                                 ToastMessage(
                                   "Error",
                                   "Royalty should be less than 100",
-                                  "error",
+                                  "error"
                                 );
                               }
                             }}
