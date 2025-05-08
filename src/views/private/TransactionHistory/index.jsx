@@ -68,7 +68,6 @@ const TransactionHistory = () => {
     variables: {
       token: token,
       filterObj: `{"chain_id":${contractData?.chain}}`,
-
     },
   });
   const { userData } = useSelector((state) => state.address.userData);
@@ -102,7 +101,6 @@ const TransactionHistory = () => {
       return "Bid";
     }
   };
-
 
   useEffect(() => {
     if (getAllMyTransaction) {

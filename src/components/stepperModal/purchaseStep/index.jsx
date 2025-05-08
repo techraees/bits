@@ -112,7 +112,7 @@ function PurchaseStep({
       const tx = await marketContractWithSigner.BuyFixedPriceItem(
         fixedId,
         quantity,
-        { value: amount }
+        { value: amount },
       );
       setLoadingMessage("Transaction Pending...");
 
@@ -176,7 +176,7 @@ function PurchaseStep({
         userData?.full_name,
         name,
         sellerUsername,
-        totalPrice
+        totalPrice,
       );
       await sendEmail({
         variables: {
