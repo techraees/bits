@@ -1,0 +1,18 @@
+.active.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    border-top: 3px solid black;
+  }
+
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-header-text {
+    color: #696969;
+    font-weight: bold;
+  }
+
+  .ant-collapse-icon-position-end > .ant-collapse-item > .ant-collapse-header {
+    background-color: #f3f3f3;
+    border: 1px solid #D8D8D8;
+  }
+
+  .ant-collapse-content > .ant-collapse-content-box {
+    background: #D8D8D8;
+    color: #696969;
+  }

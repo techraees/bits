@@ -1,0 +1,57 @@
+.privacy-policy-modal .ant-modal-close-icon {
+    color: gray;
+}
+
+.anticon svg {
+    color: gray !important;
+}
+
+.text-info h1 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #000000 !important;
+  }
+  
+  .text-info p {
+    font-size: 14px;
+    font-weight: 100;
+    color: #000000 !important;
+  }
+  
+  .text-info ul li {
+    font-size: 14px;
+    font-weight: 100;
+    color: #000000 !important;
+  }
+  
+  .text-info ul li h5 {
+    font-size: 15px;
+    font-weight: 300;
+    color: #000000 !important;
+  }
+  
+  .text-info ul li h5 span {
+    font-size: 14px;
+    font-weight: 100;
+    color: #000000 !important;
+  }
+  
+  .text-info h5 span {
+    font-size: 14px;
+    font-weight: 100;
+    color: #000000 !important;
+  }
+  
+  .text-info h5 {
+    font-size: 15px;
+    font-weight: 300;
+    color: #000000 !important;
+  }
+  
+  .text-info ul h3 {
+    font-size: 15px;
+    font-weight: 300;
+    color: #000000 !important;
+    text-align: start;
+  }
+  
