@@ -1,6 +1,0 @@
-const ActionTypes = {
-  WEB3CONNECT: "CONNECT_WEB3",
-  WEB3DISCONNECT: "WEB3DISCONNECT",
-  LOAD_CONTRACT: "LOAD_CONTRACT",
-};
-export default ActionTypes;
