@@ -15,7 +15,7 @@ import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
 import { mainnet, polygon } from "@reown/appkit/networks";
 import { createAppKit } from "@reown/appkit/react";
 
-const projectId = process.env.REACT_APP_REOWN_ID;
+const projectId = 'fd388e35073c9b70a9a0fa5f008ae0e4';
 
 const metadata = {
   name: "BITS",
