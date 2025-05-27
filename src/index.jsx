@@ -6,11 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-
+//  uri: `${"http://localhost:4000"}/graphql`,
 const env = process.env;
 const client = new ApolloClient({
 uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
-//  uri: `${"http://localhost:4000"}/graphql`,
   cache: new InMemoryCache(),
 });
 
