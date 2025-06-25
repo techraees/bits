@@ -1,0 +1,60 @@
+.checkoutBtn {
+  background: rgba(182, 49, 49) !important;
+  border: none;
+  border-radius: 100px !important;
+}
+
+.checkoutBtn:hover {
+  background: rgba(182, 49, 49);
+}
+
+.paypalBtn {
+  background: rgba(255, 196, 58, 1) !important;
+  border: none;
+  border-radius: 100px !important;
+}
+
+.checkoutBtn:focus,
+.paypalBtn:focus {
+  box-shadow: none;
+}
+
+.modal-content {
+  max-width: unset;
+}
+
+.paymentHeading {
+  font-size: 32px;
+  line-height: 48px;
+}
+
+.items {
+  font-size: 20px;
+  line-height: 30px;
+  color: rgba(124, 116, 115, 1);
+}
+
+.paymentConfirmationHeading {
+  font-size: 18px;
+}
+
+.modal-header {
+  border-color: rgba(186, 186, 204, 1) !important;
+}
+
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.6); /* Change the color as needed */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  animation: fadeIn 0.5s ease-in-out;
+}

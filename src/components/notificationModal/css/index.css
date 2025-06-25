@@ -1,0 +1,50 @@
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .notification-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #D8D1D1;
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .notification-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+  }
+  
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+  }
+  
+  .notification-image {
+    max-width: 100%;
+    height: auto;
+    margin-right: 1rem;
+  }
+  
+  /* Add more styling as needed */
+  
