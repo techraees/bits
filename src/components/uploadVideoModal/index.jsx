@@ -157,6 +157,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           );
           setImageUpload(false);
 
+          console.log(url, "URL FOR VIDEO");
           setFieldValue("video", url);
           setFieldValue("isEmote", false);
           setFieldValue("download", {});
