@@ -203,7 +203,10 @@ const OfferModal = ({
         const signer = provider.getSigner();
         if (offerAmount > 0) {
           const amount = ETHToWei(`${offerAmount}`);
-          if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
+          if (
+            signer &&
+            (contractData.chain == 1 || contractData.chain == 137)
+          ) {
             const marketContractWithsigner =
               contractData.marketContract.connect(signer);
             try {

@@ -14,6 +14,7 @@ import { WeiToETH } from "../../../utills/convertWeiAndBnb";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { getStorage } from "../../../utills/localStorage";
 import { dbDateToTime } from "../../../utills/timeToTimestamp";
+import CardSkeletal from "./Skeletal/CardSkeletal";
 
 const environment = process.env;
 
@@ -40,8 +41,7 @@ const Marketplace = () => {
   console.log("contract chain", contractData.chain.toString());
   const {
     data: getAllNftsInMarketPlaceAndSupportFilter,
-    isLoading: getAllNftsInMarketPlaceAndSupportFilterLoading,
-    isFetching: getAllNftsInMarketPlaceAndSupportFilterFetching,
+    loading: getAllNftsInMarketPlaceAndSupportFilterLoading,
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
       filterObj: '{"listingType":"auction"}',
@@ -89,51 +89,12 @@ const Marketplace = () => {
     console.log("selected value", value);
   };
 
-  useEffect(() => {
-    let filterdItems;
-    if (categoryFilter && data?.getAllNftsWithoutAddress) {
-      filterdItems = data?.getAllNftsWithoutAddress.filter((item) => {
-        return item.category === categoryFilter;
-      });
-    }
-    setAllNfts(filterdItems);
-  }, [categoryFilter]);
 
-  // useEffect(() => {
-  //   let filteredAuctionItems;
-  //   if (priceFilter && auctionItemData) {
-  //     filteredAuctionItems = auctionItemData.filter((item) => {
-  //       const price = WeiToETH(`${Number(item.initialPrice)}`);
-  //       return (
-  //         Number(price) >= Number(priceFilter[0]) &&
-  //         Number(price) <= Number(priceFilter[1])
-  //       );
-  //     });
-  //   }
-
-  //   setAuctionsDatas(filteredAuctionItems);
-  // }, [priceFilter]);
-
-  useEffect(() => {
-    let filteredAuctionItems;
-    if (auctionItemData) {
-      filteredAuctionItems = auctionItemData.filter((item) => {
-        let copies = Number(item.numberofcopies);
-        return (
-          Number(copies) >= Number(quantityFilter[0]) &&
-          Number(copies) <= Number(quantityFilter[1])
-        );
-      });
-    }
-
-    setAuctionsDatas(filteredAuctionItems);
-  }, [quantityFilter]);
 
   useEffect(() => {
     refetch();
   }, []);
 
-  console.log("auction data", auctionItemData, auctionsDatas);
   const compareTime = (time) => {
     const givenTime = new Date(time);
     const currentTime = new Date();
@@ -144,6 +105,10 @@ const Marketplace = () => {
 
     return true;
   };
+
+
+  console.log(getAllNftsInMarketPlaceAndSupportFilterLoading,
+  )
 
   return (
     <div
@@ -313,42 +278,45 @@ const Marketplace = () => {
           }}
         ></div>
         <div className="row my-3 p-4 p-md-0">
-          {(priceFilter.length > 0 ||
-          quantityFilter.length > 0 ||
-          categoryFilter
-            ? auctionsDatas
-            : auctionItemData
-          )?.map((item, i) => {
-            if (
-              !item?.nft_id?.is_blocked &&
-              compareTime(item?.biddingEndTime) &&
-              item.isSold === false
-            ) {
-              return (
-                <CardCompnent
-                  key={i}
-                  image={imgPaths + item?.user_id?.profileImg}
-                  status={item?.nft_id?.status}
-                  name={item?.nft_id?.name}
-                  videoLink={item?.nft_id?.video}
-                  marketplacecard
-                  collectionBtn
-                  userProfile={!!userProfile}
-                  auctionStartTime={dbDateToTime(item?.biddingStartTime)}
-                  auctionEndTime={dbDateToTime(item?.biddingEndTime)}
-                  initialPrice={Number(item?.price)}
-                  auctionid={item?.listingID}
-                  numberofcopies={item?.numberOfCopies}
-                  currentBidAmount={item?.auction_highest_bid}
-                  nftOwner={item?.seller?.user_address}
-                  royalty={item?.nft_id?.royalty}
-                  tokenId={item.tokenId}
-                  id={item?.nft_id?._id}
-                  itemDbId={item?._id}
-                />
-              );
-            }
-          })}
+          {getAllNftsInMarketPlaceAndSupportFilterLoading ? <CardSkeletal />
+            : getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter
+              ?.data?.length > 0 ? getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter
+                ?.data.map((item, i) => {
+                  if (
+                    true
+                    // !item?.nft_id?.is_blocked &&
+                    // compareTime(item?.biddingEndTime) &&
+                    // item.isSold === false
+                  ) {
+                    return (
+                      <CardCompnent
+                        key={i}
+                        image={imgPaths + item?.user_id?.profileImg}
+                        status={item?.nft_id?.status}
+                        name={item?.nft_id?.name}
+                        videoLink={item?.nft_id?.video}
+                        marketplacecard
+                        collectionBtn
+                        userProfile={!!userProfile}
+                        auctionStartTime={dbDateToTime(item?.biddingStartTime)}
+                        auctionEndTime={dbDateToTime(item?.biddingEndTime)}
+                        initialPrice={Number(item?.price)}
+                        auctionid={item?.listingID}
+                        numberofcopies={item?.numberOfCopies}
+                        currentBidAmount={item?.auction_highest_bid}
+                        nftOwner={item?.seller?.user_address}
+                        royalty={item?.nft_id?.royalty}
+                        tokenId={item.tokenId}
+                        id={item?.nft_id?._id}
+                        itemDbId={item?._id}
+                      />
+                    );
+                  }
+                }) :
+              <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
+                There is no data found
+              </div>
+          }
         </div>
       </div>
     </div>

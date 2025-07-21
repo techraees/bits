@@ -96,7 +96,6 @@ function PurchaseStep({
 
   const handlePurchase = async () => {
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
-
       const provider = new ethers.providers.Web3Provider(walletProvider);
       const signer = provider.getSigner();
       const amount = ETHToWei(totalPrice.toString()).toString();

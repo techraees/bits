@@ -162,8 +162,10 @@ const MintNft = () => {
     setCreatorEarningModal(true);
   };
 
+  console.log(metamaskAddress)
+
   const mintCall = async (supply, royalty) => {
-    console.log("Minting Call")
+    console.log("Minting Call");
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
@@ -246,7 +248,6 @@ const MintNft = () => {
         Number(values.supply),
         Number(values.royalty * 100),
       );
-
 
       if (Number(newTkId)) {
         CreateNft({

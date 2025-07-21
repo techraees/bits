@@ -25,7 +25,7 @@ import ConnectModal from "../connectModal";
 import DecrementButtonArr from "./DecrementButtonArr.svg";
 import GreenTick from "./GreenTick.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
-import './css/index.css';
+import "./css/index.css";
 import RedCrossIcon from "./redCross.svg";
 const environment = process.env;
 
@@ -241,20 +241,18 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   };
 
   const handleChange = (e) => {
-    const inputValue = e.target.value
+    const inputValue = e.target.value;
 
     if (inputValue === "" || /^[1-9][0-9]*$/.test(inputValue)) {
-      setQuantity(inputValue)
+      setQuantity(inputValue);
     }
-
-  }
+  };
 
   const handleBlur = () => {
-    if (quantity === '') {
-      setQuantity('1')
+    if (quantity === "") {
+      setQuantity("1");
     }
-  }
-
+  };
 
   return (
     <>
@@ -338,11 +336,12 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                           className="quantity_change_input"
                           type="number"
                           style={{
-                            width: `${quantity?.toString()?.length > 0 ? quantity?.toString()?.length + 1 : quantity?.toString()?.length + 2}ch`
+                            width: `${quantity?.toString()?.length > 0 ? quantity?.toString()?.length + 1 : quantity?.toString()?.length + 2}ch`,
                           }}
                           value={quantity}
                           onChange={handleChange}
-                          onBlur={handleBlur} />
+                          onBlur={handleBlur}
+                        />
                       </div>
 
                       <div className="increment_decrement_button">
@@ -383,8 +382,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                              itemData?.price *
-                              (itemData?.chainId == 137 ? maticBal : ethBal),
+                                itemData?.price *
+                                (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -418,8 +417,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                          itemData?.price *
-                          (itemData?.chainId == 137 ? maticBal : ethBal),
+                            itemData?.price *
+                            (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>

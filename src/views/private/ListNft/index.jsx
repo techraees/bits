@@ -152,7 +152,6 @@ const ListNft = () => {
     let newItemId;
 
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
-
       if (contractData.chain == chainId) {
         try {
           const provider = new ethers.providers.Web3Provider(walletProvider);
@@ -164,9 +163,15 @@ const ListNft = () => {
           const mint = mintContract.connect(signer);
 
           // // Common approval check
-          const isApproved = await mint.isApprovedForAll(address, market.address);
+          const isApproved = await mint.isApprovedForAll(
+            address,
+            market.address,
+          );
           if (!isApproved) {
-            const approveTx = await mint.setApprovalForAll(market.address, true);
+            const approveTx = await mint.setApprovalForAll(
+              market.address,
+              true,
+            );
             await approveTx.wait();
           }
 
@@ -188,19 +193,19 @@ const ListNft = () => {
 
           const tx = isAuction
             ? await market.listItemForAuction(
-              price,
-              startTimeStamp,
-              endTimeStampParam,
-              tokenId,
-              copies,
-              mintContract.address,
-            )
+                price,
+                startTimeStamp,
+                endTimeStampParam,
+                tokenId,
+                copies,
+                mintContract.address,
+              )
             : await market.listItemForFixedPrice(
-              tokenId,
-              copies,
-              price,
-              mintContract.address,
-            );
+                tokenId,
+                copies,
+                price,
+                mintContract.address,
+              );
 
           const res = await tx.wait();
           const transactionHash = res.transactionHash;
@@ -265,15 +270,18 @@ const ListNft = () => {
           setLoadingStatus(false);
           setLoadingMessage("");
           const parsedError = getParsedEthersError(error);
-          ToastMessage("Error", parsedError.context || "Unknown error", "error");
+          ToastMessage(
+            "Error",
+            parsedError.context || "Unknown error",
+            "error",
+          );
           console.error("Error:", error);
         }
       } else {
         const network = contractData?.chain == 137 ? "polygon" : "ethereum";
         ToastMessage(`Please select ${network} network`, "", "error");
       }
-    }
-    else {
+    } else {
       ToastMessage(
         "Error",
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`,
