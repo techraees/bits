@@ -1,37 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import TopNftPopupPagination from "./TopNftPopupPagination";
-import RedCrossIcon from "./redCross.svg";
-import GreenTick from "./GreenTick.svg";
-import DecrementButtonArr from "./DecrementButtonArr.svg";
-import IncrementButtonArr from "./IncrementButtonArr.svg";
-import { Modal } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import BidModal from "../bidModal";
-import ConnectModal from "../connectModal";
-import ButtonComponent from "../button";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { GET_PROFILE_DETAILS_QUERY } from "../../gql/queries";
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import {
-  SEND_EMAIL_MUTATION,
-  CREATE_NEW_OWNERSHIP_OF_NFT,
-  CREATE_NEW_TRANSACTION,
-} from "../../gql/mutations";
-import {
-  useAppKitProvider,
   useAppKitAccount,
   useAppKitNetwork,
+  useAppKitProvider,
 } from "@reown/appkit/react";
-import { mainnet, polygon } from "@reown/appkit/networks";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader, ToastMessage } from "../../components";
-import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
-import { trimWallet } from "../../utills/trimWalletAddr";
-import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
-import { getStorage } from "../../utills/localStorage";
-import { ETHToWei } from "../../utills/convertWeiAndBnb";
-import { boughtMessage } from "../../utills/emailMessages";
+import {
+  CREATE_NEW_OWNERSHIP_OF_NFT,
+  CREATE_NEW_TRANSACTION,
+  SEND_EMAIL_MUTATION,
+} from "../../gql/mutations";
+import { GET_PROFILE_DETAILS_QUERY } from "../../gql/queries";
 import { loadContractIns } from "../../store/actions";
-
+import { ETHToWei } from "../../utills/convertWeiAndBnb";
+import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
+import { boughtMessage } from "../../utills/emailMessages";
+import { getStorage } from "../../utills/localStorage";
+import { trimWallet } from "../../utills/trimWalletAddr";
+import ConnectModal from "../connectModal";
+import DecrementButtonArr from "./DecrementButtonArr.svg";
+import GreenTick from "./GreenTick.svg";
+import IncrementButtonArr from "./IncrementButtonArr.svg";
+import './css/index.css';
+import RedCrossIcon from "./redCross.svg";
 const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({
@@ -66,12 +61,12 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   });
 
   const increment = () => {
-    const newQuantity = quantity + 1;
+    const newQuantity = parseInt(quantity) + 1;
     setQuantity(newQuantity);
   };
 
   const decrement = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent less than 1
+    setQuantity((prev) => (parseInt(prev) > 1 ? parseInt(prev) - 1 : 1)); // Prevent less than 1
   };
 
   let token = getStorage("token");
@@ -237,7 +232,26 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
         ToastMessage(`Please select ${network} network`, "", "error");
       }
     } else {
-      ToastMessage("Error", `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`, "error");
+      ToastMessage(
+        "Error",
+        `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`,
+        "error",
+      );
+    }
+  };
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value
+
+    if (inputValue === "" || /^[1-9][0-9]*$/.test(inputValue)) {
+      setQuantity(inputValue)
+    }
+
+  }
+
+  const handleBlur = () => {
+    if (quantity === '') {
+      setQuantity('1')
     }
   }
 
@@ -313,13 +327,22 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                 {!activeButton ? (
                   <>
                     <div className="input_go_button_parent__input_div">
-                      <div className="input_go_button_parent__input_div__parent">
+                      <div className="input_go_button_parent__input_div__parent input_go_button_parent__input_div__parent_no_margin">
                         <p className="input_go_button_parent__input_div__p">
                           Select Quantity
                         </p>
-                        <span className="input_go_button_parent__input_div__p">
+                        {/* <span className="input_go_button_parent__input_div__p">
                           {quantity}
-                        </span>
+                        </span> */}
+                        <input
+                          className="quantity_change_input"
+                          type="number"
+                          style={{
+                            width: `${quantity?.toString()?.length > 0 ? quantity?.toString()?.length + 1 : quantity?.toString()?.length + 2}ch`
+                          }}
+                          value={quantity}
+                          onChange={handleChange}
+                          onBlur={handleBlur} />
                       </div>
 
                       <div className="increment_decrement_button">

@@ -42,7 +42,8 @@ const MintNft = () => {
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { chainId } = useAppKitNetwork();
-  const { isConnected } = useAppKitAccount();
+  const { isConnected, address: metamaskAddress } = useAppKitAccount();
+
   const { walletProvider } = useAppKitProvider("eip155");
 
   const [connectModal, setConnectModal] = useState(false);
@@ -162,53 +163,62 @@ const MintNft = () => {
   };
 
   const mintCall = async (supply, royalty) => {
-    if (contractData.chain == chainId) {
-      const provider = new ethers.providers.Web3Provider(walletProvider);
-      const signer = provider.getSigner();
-      const contractWithsigner = contractData.mintContract.connect(signer);
-      const prevTokenId = await contractWithsigner.mintedTokenId();
-      try {
-        const tx = await contractWithsigner.mint(
-          address,
-          supply,
-          createNft.meta,
-          royalty,
-          splitOwners,
-          splitOwnersPercentage,
-          [],
-        );
+    console.log("Minting Call")
+    if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
+      if (contractData.chain == chainId) {
+        const provider = new ethers.providers.Web3Provider(walletProvider);
+        const signer = provider.getSigner();
+        const contractWithsigner = contractData.mintContract.connect(signer);
+        const prevTokenId = await contractWithsigner.mintedTokenId();
+        try {
+          const tx = await contractWithsigner.mint(
+            address,
+            supply,
+            createNft.meta,
+            royalty,
+            splitOwners,
+            splitOwnersPercentage,
+            [],
+          );
 
-        setLoadingStatus(true);
-        setLoadingMessage("Minting...");
+          setLoadingStatus(true);
+          setLoadingMessage("Minting...");
 
-        const res = await tx.wait();
-        const transactionHash = res.transactionHash;
-        let newTkId;
-        if (res) {
-          newTkId = await contractWithsigner.mintedTokenId();
+          const res = await tx.wait();
+          const transactionHash = res.transactionHash;
+          let newTkId;
+          if (res) {
+            newTkId = await contractWithsigner.mintedTokenId();
+            setLoadingStatus(false);
+            setLoadingMessage("");
+            if (Number(prevTokenId) < Number(newTkId)) {
+              return { newTkId, transactionHash };
+            } else {
+              newTkId = await contractWithsigner.mintedTokenId();
+              return { newTkId, transactionHash };
+            }
+          }
+        } catch (error) {
           setLoadingStatus(false);
           setLoadingMessage("");
-          if (Number(prevTokenId) < Number(newTkId)) {
-            return { newTkId, transactionHash };
+          console.log(error);
+          const parsedEthersError = getParsedEthersError(error);
+          if (parsedEthersError.context == -32603) {
+            ToastMessage("Error", "Insufficient Balance", "error");
           } else {
-            newTkId = await contractWithsigner.mintedTokenId();
-            return { newTkId, transactionHash };
+            ToastMessage("Error", `${parsedEthersError.context}`, "error");
           }
         }
-      } catch (error) {
-        setLoadingStatus(false);
-        setLoadingMessage("");
-        console.log(error);
-        const parsedEthersError = getParsedEthersError(error);
-        if (parsedEthersError.context == -32603) {
-          ToastMessage("Error", "Insufficient Balance", "error");
-        } else {
-          ToastMessage("Error", `${parsedEthersError.context}`, "error");
-        }
+      } else {
+        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+        ToastMessage(`Please select ${network} network`, "", "error");
       }
     } else {
-      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-      ToastMessage(`Please select ${network} network`, "", "error");
+      ToastMessage(
+        "Error",
+        `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
+        "error",
+      );
     }
   };
 
@@ -237,7 +247,6 @@ const MintNft = () => {
         Number(values.royalty * 100),
       );
 
-      console.log("newTkId", newTkId);
 
       if (Number(newTkId)) {
         CreateNft({

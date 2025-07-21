@@ -103,6 +103,9 @@
   margin-right: 4rem;
 }
 
+.input_go_button_parent__input_div__parent_no_margin {
+  margin-right: 0rem !important;
+}
 
 
 /* Mobile screens */
@@ -541,4 +544,40 @@
 
 .no_data_found_text_auction {
   font-size: 10px;
+}
+
+.quantity_change_input::-webkit-outer-spin-button,
+.quantity_change_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.quantity_change_input {
+  -moz-appearance: textfield;
+}
+
+.quantity_change_input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+.increment_decrement_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.increment_decrement_button__increment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.increment_decrement_button__increment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

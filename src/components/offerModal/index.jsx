@@ -70,6 +70,7 @@ const OfferModal = ({
 
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { contractData } = useSelector((state) => state.chain.contractData);
+  const { userData } = useSelector((state) => state.address.userData);
 
   const getPriceDiff = (initialPrice, latestprice) => {
     const diff = latestprice - initialPrice;
@@ -196,89 +197,97 @@ const OfferModal = ({
   };
 
   const handleBid = async () => {
-    if (contractData.chain == chainId) {
-      const provider = new ethers.providers.Web3Provider(walletProvider);
-      const signer = provider.getSigner();
-      if (offerAmount > 0) {
-        const amount = ETHToWei(`${offerAmount}`);
-        if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
-          const marketContractWithsigner =
-            contractData.marketContract.connect(signer);
-          try {
-            setIsBidModalOpen(true);
-            const tx = await marketContractWithsigner.bid(auctionid, {
-              value: amount,
-            });
-            // if(tx){
-            //   setIsBidModalOpen(true);
-            // }
-            const res = await tx.wait();
+    if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
+      if (contractData.chain == chainId) {
+        const provider = new ethers.providers.Web3Provider(walletProvider);
+        const signer = provider.getSigner();
+        if (offerAmount > 0) {
+          const amount = ETHToWei(`${offerAmount}`);
+          if (signer && (contractData.chain == 1 || contractData.chain == 137)) {
+            const marketContractWithsigner =
+              contractData.marketContract.connect(signer);
+            try {
+              setIsBidModalOpen(true);
+              const tx = await marketContractWithsigner.bid(auctionid, {
+                value: amount,
+              });
+              // if(tx){
+              //   setIsBidModalOpen(true);
+              // }
+              const res = await tx.wait();
 
-            if (res) {
-              //saving to bids to DB
-              const transactionHash = res.transactionHash;
-              try {
-                await create_bid_against_auction({
-                  variables: {
-                    token: token,
-                    _id: itemDbId.toString(),
-                    price: Number(offerAmount),
-                  },
-                });
+              if (res) {
+                //saving to bids to DB
+                const transactionHash = res.transactionHash;
+                try {
+                  await create_bid_against_auction({
+                    variables: {
+                      token: token,
+                      _id: itemDbId.toString(),
+                      price: Number(offerAmount),
+                    },
+                  });
 
-                await updateBiddingTime({
-                  variables: {
-                    token: token,
-                    nftDbMarketPlaceId: itemDbId.toString(),
-                  },
-                });
+                  await updateBiddingTime({
+                    variables: {
+                      token: token,
+                      nftDbMarketPlaceId: itemDbId.toString(),
+                    },
+                  });
 
-                console.log("addd", address, tokenId, itemDbId, auctionid);
+                  console.log("addd", address, tokenId, itemDbId, auctionid);
 
-                await createNewTransation({
-                  variables: {
-                    token,
-                    first_person_wallet_address: address.toString(),
-                    nft_id: nftId.toString(),
-                    amount: Number(offerAmount),
-                    currency:
-                      contractData.chain === process.env.REACT_ETH_CHAINID
-                        ? "ETH"
-                        : "MATIC",
-                    transaction_type: "bidding_transaction",
-                    token_id: tokenId.toString(),
-                    chain_id: contractData.chain.toString(),
-                    blockchain_listingID: auctionid.toString(),
-                    listingID: itemDbId.toString(),
-                    hash_field: transactionHash,
-                  },
-                });
+                  await createNewTransation({
+                    variables: {
+                      token,
+                      first_person_wallet_address: address.toString(),
+                      nft_id: nftId.toString(),
+                      amount: Number(offerAmount),
+                      currency:
+                        contractData.chain === process.env.REACT_ETH_CHAINID
+                          ? "ETH"
+                          : "MATIC",
+                      transaction_type: "bidding_transaction",
+                      token_id: tokenId.toString(),
+                      chain_id: contractData.chain.toString(),
+                      blockchain_listingID: auctionid.toString(),
+                      listingID: itemDbId.toString(),
+                      hash_field: transactionHash,
+                    },
+                  });
 
-                ToastMessage("Bid Successful", "", "success");
-                dispatch(loadContractIns());
-              } catch (error) {
+                  ToastMessage("Bid Successful", "", "success");
+                  dispatch(loadContractIns());
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+            } catch (error) {
+              console.log("bid error", error);
+              const parsedEthersError = getParsedEthersError(error);
+              if (parsedEthersError.context == -32603) {
+                ToastMessage("Error", "Insufficient Balance", "error");
+              } else {
                 console.log(error);
+                ToastMessage("Error", `${parsedEthersError.context}`, "error");
               }
             }
-          } catch (error) {
-            console.log("bid error", error);
-            const parsedEthersError = getParsedEthersError(error);
-            if (parsedEthersError.context == -32603) {
-              ToastMessage("Error", "Insufficient Balance", "error");
-            } else {
-              console.log(error);
-              ToastMessage("Error", `${parsedEthersError.context}`, "error");
-            }
+          } else {
+            handleConnect();
           }
         } else {
-          handleConnect();
+          ToastMessage("Error", `Please provide amount`, "error");
         }
       } else {
-        ToastMessage("Error", `Please provide amount`, "error");
+        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+        ToastMessage(`Please select ${network} network`, "", "error");
       }
     } else {
-      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-      ToastMessage(`Please select ${network} network`, "", "error");
+      ToastMessage(
+        "Error",
+        `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`,
+        "error",
+      );
     }
   };
 
