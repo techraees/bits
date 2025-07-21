@@ -45,6 +45,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
   const { walletProvider } = useAppKitProvider("eip155");
+
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [activeButton, settActiveButton] = useState(false);
 
@@ -120,8 +121,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   }, [isConnected]);
 
   const handlePurchase = async () => {
-
-    if (userData?.address?.toLowerCase() === address?.toLowerCase()) {
+    if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
         const signer = provider.getSigner();

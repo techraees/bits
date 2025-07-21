@@ -538,3 +538,7 @@
   user-select: none;
   /* Standard syntax */
 }
+
+.no_data_found_text_auction {
+  font-size: 10px;
+}
