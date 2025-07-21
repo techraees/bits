@@ -71,8 +71,9 @@ const TopNftListingAuctionBodySection = ({
           </div>
 
           <div className="">
-            {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE
-              ? fixedData.map((nft, index) => (
+            {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? (
+              fixedData?.length > 0 ? (
+                fixedData.map((nft, index) => (
                   <div
                     key={index}
                     onClick={() => {
@@ -118,58 +119,67 @@ const TopNftListingAuctionBodySection = ({
                     </span>
                   </div>
                 ))
-              : auctionData.map((nft, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      setItemData({
-                        name: name,
-                        price: nft?.price,
-                        currentBidAmount: nft?.currentBidAmount,
-                        nftOwner: nft?.owner,
-                        auctionId: nft?.fixedid,
-                        itemDbId: nft?.dbid,
-                        nftId: nft?.nftId,
-                        chainId: nft?.chainId,
-                        tokenId: nft?.tokenId,
-                        offers: nft?.auctionbids,
-                      });
-                      setIsAuctionStep(2);
-                      setIsOfferModalOpen(true);
-                    }}
-                    className="shadow-move nft_listing d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
-                  >
-                    <div className="d-flex align-items-center">
-                      <img
-                        src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="NFT"
-                        className="rounded-circle img-top_nft lg:me-3 me-2"
-                      />
-                      <div>
-                        <div className="d-flex align-items-center ">
-                          <h5 className="mb-1 nft_title text-danger">{name}</h5>
-                          <p className="mb-0 text-muted small address_margin">
-                            ({trimWallet(nft?.owner)})
-                          </p>
-                        </div>
-
-                        <p className="mb-0 nft_available_box">
-                          {'"Bid on this batch" ' +
-                            Number(nft?.copies).toLocaleString("en-US") +
-                            " NFTs Available"}
+              ) : (
+                <span>There is no fixed item data available</span>
+              )
+            ) : auctionData?.length > 0 ? (
+              auctionData.map((nft, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setItemData({
+                      name: name,
+                      price: nft?.price,
+                      currentBidAmount: nft?.currentBidAmount,
+                      nftOwner: nft?.owner,
+                      auctionId: nft?.fixedid,
+                      itemDbId: nft?.dbid,
+                      nftId: nft?.nftId,
+                      chainId: nft?.chainId,
+                      tokenId: nft?.tokenId,
+                      offers: nft?.auctionbids,
+                    });
+                    setIsAuctionStep(2);
+                    setIsOfferModalOpen(true);
+                  }}
+                  className="shadow-move nft_listing d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                >
+                  <div className="d-flex align-items-center">
+                    <img
+                      src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="NFT"
+                      className="rounded-circle img-top_nft lg:me-3 me-2"
+                    />
+                    <div>
+                      <div className="d-flex align-items-center ">
+                        <h5 className="mb-1 nft_title text-danger">{name}</h5>
+                        <p className="mb-0 text-muted small address_margin">
+                          ({trimWallet(nft?.owner)})
                         </p>
                       </div>
+
+                      <p className="mb-0 nft_available_box">
+                        {'"Bid on this batch" ' +
+                          Number(nft?.copies).toLocaleString("en-US") +
+                          " NFTs Available"}
+                      </p>
                     </div>
-                    <span className="text-black price_tag">
-                      {nft?.currentBidAmount > 0
-                        ? nft?.currentBidAmount
-                        : nft?.price}{" "}
-                      <span className="price_tag_currency">
-                        {nft?.chainId == 137 ? "MATIC" : "ETH"}
-                      </span>
-                    </span>
                   </div>
-                ))}
+                  <span className="text-black price_tag">
+                    {nft?.currentBidAmount > 0
+                      ? nft?.currentBidAmount
+                      : nft?.price}{" "}
+                    <span className="price_tag_currency">
+                      {nft?.chainId == 137 ? "MATIC" : "ETH"}
+                    </span>
+                  </span>
+                </div>
+              ))
+            ) : (
+              <span className="no_data_found_text_auction">
+                There is no auction data available
+              </span>
+            )}
             {}
           </div>
 

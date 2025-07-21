@@ -274,7 +274,7 @@ const OfferModal = ({
           handleConnect();
         }
       } else {
-        alert("Please provide amount");
+        ToastMessage("Error", `Please provide amount`, "error");
       }
     } else {
       const network = contractData?.chain == 137 ? "polygon" : "ethereum";

@@ -45,6 +45,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
   const { walletProvider } = useAppKitProvider("eip155");
+
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [activeButton, settActiveButton] = useState(false);
 
@@ -120,119 +121,127 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   }, [isConnected]);
 
   const handlePurchase = async () => {
-    if (contractData.chain == chainId) {
-      const provider = new ethers.providers.Web3Provider(walletProvider);
-      const signer = provider.getSigner();
-      const totalcost = Number(quantity * itemData?.price);
-      const amount = ETHToWei(totalcost.toString()).toString();
-      setLoadingStatus(true);
+    if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
+      if (contractData.chain == chainId) {
+        const provider = new ethers.providers.Web3Provider(walletProvider);
+        const signer = provider.getSigner();
+        const totalcost = Number(quantity * itemData?.price);
+        const amount = ETHToWei(totalcost.toString()).toString();
+        setLoadingStatus(true);
 
-      if (!signer || quantity <= 0) {
-        connectWalletHandle();
-        return;
-      }
+        if (!signer || quantity <= 0) {
+          connectWalletHandle();
+          return;
+        }
 
-      const marketContractWithSigner =
-        contractData.marketContract.connect(signer);
+        const marketContractWithSigner =
+          contractData.marketContract.connect(signer);
 
-      try {
-        const tx = await marketContractWithSigner.BuyFixedPriceItem(
-          itemData?.auctionId,
-          quantity,
-          { value: amount },
-        );
-        setLoadingMessage("Transaction Pending...");
+        try {
+          const tx = await marketContractWithSigner.BuyFixedPriceItem(
+            itemData?.auctionId,
+            quantity,
+            { value: amount },
+          );
+          setLoadingMessage("Transaction Pending...");
 
-        const res = await tx.wait();
-        if (!res) throw new Error("Transaction failed");
+          const res = await tx.wait();
+          if (!res) throw new Error("Transaction failed");
 
-        const transactionHash = res.transactionHash;
+          const transactionHash = res.transactionHash;
 
-        const transactionVariables = {
-          token,
-          nft_id: itemData?.nftId?.toString(),
-          amount: Number(totalcost),
-          currency:
-            contractData.chain === process.env.REACT_ETH_CHAINID
-              ? "ETH"
-              : "MATIC",
-          token_id: itemData?.tokenId?.toString(),
-          chain_id: contractData.chain.toString(),
-          blockchain_listingID: itemData?.itemDbId?.toString(),
-        };
+          const transactionVariables = {
+            token,
+            nft_id: itemData?.nftId?.toString(),
+            amount: Number(totalcost),
+            currency:
+              contractData.chain === process.env.REACT_ETH_CHAINID
+                ? "ETH"
+                : "MATIC",
+            token_id: itemData?.tokenId?.toString(),
+            chain_id: contractData.chain.toString(),
+            blockchain_listingID: itemData?.itemDbId?.toString(),
+          };
 
-        await createNewNftOwnership({
-          variables: {
-            ...transactionVariables,
-            total_price: Number(totalcost),
-            listingIDFromBlockChain: itemData?.auctionId?.toString(),
-            listingID: itemData?.itemDbId?.toString(),
-            copies: Number(quantity),
-            pricePerItem: Number(totalcost),
-            from_user_wallet: itemData?.nftOwner?.toString(),
-            to_user_wallet: address?.toString(),
-          },
-        });
-
-        await Promise.all([
-          createNewTransation({
+          await createNewNftOwnership({
             variables: {
               ...transactionVariables,
-              first_person_wallet_address: address?.toString(),
-              second_person_wallet_address: itemData?.nftOwner?.toString(),
-              transaction_type: "buying_nft",
-              copies_transferred: Number(quantity),
+              total_price: Number(totalcost),
+              listingIDFromBlockChain: itemData?.auctionId?.toString(),
               listingID: itemData?.itemDbId?.toString(),
-              hash_field: transactionHash.toString(),
+              copies: Number(quantity),
+              pricePerItem: Number(totalcost),
+              from_user_wallet: itemData?.nftOwner?.toString(),
+              to_user_wallet: address?.toString(),
             },
-          }),
+          });
 
-          createNewTransation({
+          await Promise.all([
+            createNewTransation({
+              variables: {
+                ...transactionVariables,
+                first_person_wallet_address: address?.toString(),
+                second_person_wallet_address: itemData?.nftOwner?.toString(),
+                transaction_type: "buying_nft",
+                copies_transferred: Number(quantity),
+                listingID: itemData?.itemDbId?.toString(),
+                hash_field: transactionHash.toString(),
+              },
+            }),
+
+            createNewTransation({
+              variables: {
+                ...transactionVariables,
+                first_person_wallet_address: itemData?.nftOwner?.toString(),
+                second_person_wallet_address: address?.toString(),
+                transaction_type: "selling_nft",
+                copies_transferred: Number(quantity),
+                listingID: itemData?.itemDbId?.toString(),
+                hash_field: transactionHash.toString(),
+              },
+            }),
+          ]);
+
+          const msgData = boughtMessage(
+            userData?.full_name,
+            itemData?.name,
+            itemData?.name,
+            totalcost,
+          );
+
+          await sendEmail({
             variables: {
-              ...transactionVariables,
-              first_person_wallet_address: itemData?.nftOwner?.toString(),
-              second_person_wallet_address: address?.toString(),
-              transaction_type: "selling_nft",
-              copies_transferred: Number(quantity),
-              listingID: itemData?.itemDbId?.toString(),
-              hash_field: transactionHash.toString(),
+              to: profileData?.GetProfileDetails?.email,
+              from: environment.REACT_APP_EMAIL_OWNER,
+              subject: msgData.subject,
+              text: msgData.message,
             },
-          }),
-        ]);
+          });
 
-        const msgData = boughtMessage(
-          userData?.full_name,
-          itemData?.name,
-          itemData?.name,
-          totalcost,
-        );
-
-        await sendEmail({
-          variables: {
-            to: profileData?.GetProfileDetails?.email,
-            from: environment.REACT_APP_EMAIL_OWNER,
-            subject: msgData.subject,
-            text: msgData.message,
-          },
-        });
-
-        setLoadingStatus(false);
-        setLoadingMessage("");
-        ToastMessage("Purchase Successful", "", "success");
-        dispatch(loadContractIns());
-      } catch (error) {
-        console.error("Error in purchase", error);
-        setLoadingStatus(false);
-        const parsedEthersError = getParsedEthersError(error);
-        const errorMessage =
-          parsedEthersError.context === -32603
-            ? "Insufficient Balance"
-            : parsedEthersError.context;
-        ToastMessage("Error", errorMessage, "error");
+          setLoadingStatus(false);
+          setLoadingMessage("");
+          ToastMessage("Purchase Successful", "", "success");
+          dispatch(loadContractIns());
+        } catch (error) {
+          console.error("Error in purchase", error);
+          setLoadingStatus(false);
+          const parsedEthersError = getParsedEthersError(error);
+          const errorMessage =
+            parsedEthersError.context === -32603
+              ? "Insufficient Balance"
+              : parsedEthersError.context;
+          ToastMessage("Error", errorMessage, "error");
+        }
+      } else {
+        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+        ToastMessage(`Please select ${network} network`, "", "error");
       }
     } else {
-      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-      ToastMessage(`Please select ${network} network`, "", "error");
+      ToastMessage(
+        `Error`,
+        `Profile Wallet addres(${userData?.address?.toLowerCase()}) does not match with metamask wallet address(${address?.toLowerCase()})`,
+        "error",
+      );
     }
   };
 
