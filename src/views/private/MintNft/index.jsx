@@ -162,7 +162,7 @@ const MintNft = () => {
     setCreatorEarningModal(true);
   };
 
-  console.log(metamaskAddress)
+  console.log(metamaskAddress);
 
   const mintCall = async (supply, royalty) => {
     console.log("Minting Call");

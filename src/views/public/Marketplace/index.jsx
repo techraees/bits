@@ -19,44 +19,28 @@ import CardSkeletal from "./Skeletal/CardSkeletal";
 const environment = process.env;
 
 const Marketplace = () => {
-  const { data, refetch } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
-
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState([]);
-  const [quantityFilter, setQuantityFilter] = useState([]);
-  const [allnfts, setAllNfts] = useState([]);
-  const [auctionsDatas, setAuctionsDatas] = useState([]);
-  const [auctionItemData, setAuctionItemData] = useState([]);
-
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
   const { userData } = useSelector((state) => state.address.userData);
-  // const { auctionItemData } = useSelector(
-  //   (state) => state.auctionItemDatas.auctionItemData
-  // );
   const { contractData } = useSelector((state) => state.chain.contractData);
 
-  console.log("contract chain", contractData.chain.toString());
+  const [filterObj, setFilterObj] = useState(JSON.stringify({
+    listingType: "auction",
+    available: true
+  }))
+
   const {
     data: getAllNftsInMarketPlaceAndSupportFilter,
     loading: getAllNftsInMarketPlaceAndSupportFilterLoading,
   } = useQuery(GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, {
     variables: {
-      filterObj: '{"listingType":"auction"}',
+      filterObj: filterObj,
       chainId: contractData.chain.toString(),
     },
   });
 
-  useEffect(() => {
-    if (getAllNftsInMarketPlaceAndSupportFilter) {
-      setAuctionItemData(
-        getAllNftsInMarketPlaceAndSupportFilter
-          ?.getAllNftsInMarketPlaceAndSupportFilter?.data,
-      );
-    }
-  }, [getAllNftsInMarketPlaceAndSupportFilter]);
 
   const userProfile = userData?.full_name;
   const backgroundTheme = useSelector(
@@ -64,7 +48,9 @@ const Marketplace = () => {
   );
 
   const handleCategoryChange = (value) => {
-    setCategoryFilter(value);
+    let filterObjCopy = JSON.parse(filterObj)
+    filterObjCopy.category = value
+    setFilterObj(JSON.stringify(filterObjCopy))
   };
 
   const handlePriceChange = async (value) => {
@@ -77,12 +63,13 @@ const Marketplace = () => {
       }),
     );
 
-    setPriceFilter(convertedPrice);
   };
 
   const handleQuantityChange = (value) => {
     const data = value.split("-").map(Number);
-    setQuantityFilter(data);
+    let filterObjCopy = JSON.parse(filterObj)
+    filterObjCopy.quantity = data
+    setFilterObj(JSON.stringify(filterObjCopy))
   };
 
   const handleRankingChange = (value) => {
@@ -90,10 +77,6 @@ const Marketplace = () => {
   };
 
 
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   const compareTime = (time) => {
     const givenTime = new Date(time);
@@ -107,8 +90,6 @@ const Marketplace = () => {
   };
 
 
-  console.log(getAllNftsInMarketPlaceAndSupportFilterLoading,
-  )
 
   return (
     <div
@@ -127,6 +108,11 @@ const Marketplace = () => {
             <Input
               placeholder="Search Here..."
               className={`searchStyle ${bgColor}`}
+              onChange={(e) => {
+                let filterObjCopy = JSON.parse(filterObj)
+                filterObjCopy.q = e.target.value
+                setFilterObj(JSON.stringify(filterObjCopy))
+              }}
             />
           </div>
           <button className="search-btn">Search</button>
@@ -278,45 +264,49 @@ const Marketplace = () => {
           }}
         ></div>
         <div className="row my-3 p-4 p-md-0">
-          {getAllNftsInMarketPlaceAndSupportFilterLoading ? <CardSkeletal />
-            : getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter
-              ?.data?.length > 0 ? getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter
-                ?.data.map((item, i) => {
-                  if (
-                    true
-                    // !item?.nft_id?.is_blocked &&
-                    // compareTime(item?.biddingEndTime) &&
-                    // item.isSold === false
-                  ) {
-                    return (
-                      <CardCompnent
-                        key={i}
-                        image={imgPaths + item?.user_id?.profileImg}
-                        status={item?.nft_id?.status}
-                        name={item?.nft_id?.name}
-                        videoLink={item?.nft_id?.video}
-                        marketplacecard
-                        collectionBtn
-                        userProfile={!!userProfile}
-                        auctionStartTime={dbDateToTime(item?.biddingStartTime)}
-                        auctionEndTime={dbDateToTime(item?.biddingEndTime)}
-                        initialPrice={Number(item?.price)}
-                        auctionid={item?.listingID}
-                        numberofcopies={item?.numberOfCopies}
-                        currentBidAmount={item?.auction_highest_bid}
-                        nftOwner={item?.seller?.user_address}
-                        royalty={item?.nft_id?.royalty}
-                        tokenId={item.tokenId}
-                        id={item?.nft_id?._id}
-                        itemDbId={item?._id}
-                      />
-                    );
-                  }
-                }) :
-              <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
-                There is no data found
-              </div>
-          }
+          {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
+            <CardSkeletal />
+          ) : getAllNftsInMarketPlaceAndSupportFilter
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data.map(
+              (item, i) => {
+                if (
+                  true
+                  // !item?.nft_id?.is_blocked &&
+                  // compareTime(item?.biddingEndTime) &&
+                  // item.isSold === false
+                ) {
+                  return (
+                    <CardCompnent
+                      key={i}
+                      image={imgPaths + item?.user_id?.profileImg}
+                      status={item?.nft_id?.status}
+                      name={item?.nft_id?.name}
+                      videoLink={item?.nft_id?.video}
+                      marketplacecard
+                      collectionBtn
+                      userProfile={!!userProfile}
+                      auctionStartTime={dbDateToTime(item?.biddingStartTime)}
+                      auctionEndTime={dbDateToTime(item?.biddingEndTime)}
+                      initialPrice={Number(item?.price)}
+                      auctionid={item?.listingID}
+                      numberofcopies={item?.numberOfCopies}
+                      currentBidAmount={item?.auction_highest_bid}
+                      nftOwner={item?.seller?.user_address}
+                      royalty={item?.nft_id?.royalty}
+                      tokenId={item.tokenId}
+                      id={item?.nft_id?._id}
+                      itemDbId={item?._id}
+                    />
+                  );
+                }
+              },
+            )
+          ) : (
+            <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
+              There is no data found
+            </div>
+          )}
         </div>
       </div>
     </div>

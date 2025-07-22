@@ -10,8 +10,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 const env = process.env;
 const client = new ApolloClient({
   // uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
-  // uri: `${"http://localhost:4000"}/graphql`,
-  uri: `${"https://api.bitsnft.com"}/graphql`,
+  uri: `${"http://localhost:4000"}/graphql`,
+  // uri: `${"https://api.bitsnft.com"}/graphql`,
   cache: new InMemoryCache(),
 });
 
