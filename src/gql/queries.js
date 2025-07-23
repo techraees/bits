@@ -244,11 +244,19 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
     $token: String!
     $wallet_address: String!
     $ownership_type: String
+    $page: Int
+    $limit: Int
+    $q: String
+    $chainId: String
   ) {
     getMyNftsThatIOwned(
       token: $token
       wallet_address: $wallet_address
       ownership_type: $ownership_type
+      page: $page
+      limit: $limit
+      q: $q
+      chainId: $chainId
     )
   }
 `;
