@@ -28,7 +28,7 @@ const VideoGallery = () => {
 
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(100);
 
   const [filterObj, setFilterObj] = useState(
     JSON.stringify({

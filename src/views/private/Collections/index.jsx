@@ -38,7 +38,7 @@ const environment = process.env;
 const Collections = () => {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState("1");
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchString, setSearchString] = useState("");
 
