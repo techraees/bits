@@ -180,11 +180,6 @@ const CardCompnent = ({
     setMaticBal(result);
   });
 
-  console.log(
-    "auc data",
-    getOwnersWhoListedTheSameNftWithPricesAuction
-      ?.getOwnersWhoListedTheSameNftWithPrices?.data,
-  );
 
   const showModal = () => {
     setIsModalOpen(true);

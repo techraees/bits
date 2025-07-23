@@ -135,7 +135,6 @@ const Collections = () => {
   const [createdNfts, setCreatedNfts] = useState([]);
   const [ownedNfts, setOwnedNfts] = useState([]);
 
-  // get owned nfts and created NFTs
 
   useEffect(() => {
     let isCurrent = true;
@@ -235,21 +234,16 @@ const Collections = () => {
 
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
   let navigate = useNavigate();
-  // const handleChange = (value) => {};
 
-  // const { web3, account } = useSelector((state) => state.web3.walletData);
 
   const imgPath = environment.REACT_APP_BACKEND_BASE_URL + "/" + userProfile;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
-  // pagination
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the index of the first item on the current page
   const startIndex = (currentPage - 1) * pageSize;
 
-  // Slice the nfts array to show only  the items on the current page
 
   let currentNfts;
   currentNfts = nfts && nfts?.slice(startIndex, startIndex + pageSize);
@@ -259,12 +253,10 @@ const Collections = () => {
     currentNfts = nfts && nfts?.slice(startIndex, startIndex + pageSize);
   }
 
-  // Handle page change event
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Render pagination item
   const itemRender = (current, type, originalElement) => {
     if (type === "prev") {
       return <a>Prev</a>;
@@ -278,7 +270,7 @@ const Collections = () => {
     const regex = /ipfs\/([a-zA-Z0-9]+)/;
     const match = url.match(regex);
     if (match) {
-      return match[1]; // Use match[1] to get the captured group (the IPFS hash).
+      return match[1];
     } else {
       return null;
     }
