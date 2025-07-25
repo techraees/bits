@@ -5,25 +5,23 @@ import "./css/index.css";
 const CardSkeletal = () => {
   const [dimensions, setDimensions] = React.useState({
     height: window.innerHeight,
-    width: window.innerWidth
-  })
+    width: window.innerWidth,
+  });
 
   useEffect(() => {
     function handleResize() {
       setDimensions({
         height: window.innerHeight,
-        width: window.innerWidth
-      })
+        width: window.innerWidth,
+      });
 
+      window.addEventListener("resize", handleResize);
 
-      window.addEventListener('resize', handleResize)
-
-      return _ => {
-        window.removeEventListener('resize', handleResize)
-
-      }
+      return (_) => {
+        window.removeEventListener("resize", handleResize);
+      };
     }
-  }, [])
+  }, []);
 
   if (dimensions?.width <= 768) {
     return (
@@ -60,7 +58,6 @@ const CardSkeletal = () => {
             <CardSkeletalCard />
             <CardSkeletalCard />
           </div>
-
         </div>
       </>
     );

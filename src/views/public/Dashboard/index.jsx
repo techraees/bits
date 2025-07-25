@@ -169,7 +169,7 @@ const Dashboard = () => {
             });
           })} */}
 
-            {(getAllTopNftsForOneChainForWebsiteLoading) ? (
+            {getAllTopNftsForOneChainForWebsiteLoading ? (
               <>
                 <CardSkeletal />
               </>

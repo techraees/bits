@@ -180,7 +180,6 @@ const CardCompnent = ({
     setMaticBal(result);
   });
 
-
   const showModal = () => {
     setIsModalOpen(true);
   };

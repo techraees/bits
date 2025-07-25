@@ -6,9 +6,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AZ, grid, profile2, search } from "../../../assets";
 import { CardCompnent } from "../../../components";
-import {
-  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER
-} from "../../../gql/queries";
+import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { getStorage } from "../../../utills/localStorage";
 import "./css/index.css";
@@ -25,10 +23,9 @@ const VideoGallery = () => {
 
   let token = getStorage("token");
 
-
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(100);
+  const [pageSize, setPageSize] = useState(4);
 
   const [filterObj, setFilterObj] = useState(
     JSON.stringify({
@@ -49,14 +46,12 @@ const VideoGallery = () => {
     },
   });
 
-
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
 
   const { userData } = useSelector((state) => state.address.userData);
   const userProfile = userData?.full_name;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
-
 
   const handleCategoryChange = (value) => {
     let filterObjCopy = JSON.parse(filterObj);
@@ -75,7 +70,8 @@ const VideoGallery = () => {
     );
 
     let filterObjCopy = JSON.parse(filterObj);
-    filterObjCopy.price = convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
+    filterObjCopy.price =
+      convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
     setFilterObj(JSON.stringify(filterObjCopy));
   };
 
@@ -106,7 +102,6 @@ const VideoGallery = () => {
     }
     return originalElement;
   };
-
 
   return (
     <div
@@ -289,7 +284,10 @@ const VideoGallery = () => {
 
         <div className="d-flex gap-2 align-items-center justify-content-end mb-1 my-3 pagination-wrapper">
           <Pagination
-            total={getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.totalItems}
+            total={
+              getAllNftsInMarketPlaceAndSupportFilter
+                ?.getAllNftsInMarketPlaceAndSupportFilter?.totalItems
+            }
             pageSize={pageSize}
             current={currentPage}
             onChange={handlePageChange}
@@ -299,41 +297,42 @@ const VideoGallery = () => {
         <div className="row my-3  p-4 p-md-0">
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
-          ) : (getAllNftsInMarketPlaceAndSupportFilter
-            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
-              getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data
-            )?.map((item, i) => {
-              if (!item?.nft_id?.is_blocked && item.isSold == false) {
-                return (
-                  <CardCompnent
-                    key={i}
-                    image={profile2}
-                    status={item?.nft_id?.status}
-                    name={item?.nft_id?.name}
-                    videoLink={item?.nft_id?.video}
-                    topName
-                    collectionBtn
-                    detailBtn
-                    userProfile={userProfile ? true : false}
-                    userId={item?.seller?._id}
-                    sellerUsername={item?.seller?.user_name}
-                    owners={item?.owners}
-                    fixtokenId={item?.tokenid}
-                    fixOwner={item?.seller?.user_address}
-                    fixRoyalty={item?.nft_id?.royalty}
-                    fixCopies={item?.nft_id?.supply}
-                    id={item?.nft_id?._id}
-                    likeCount={item?.nft_id?.likeCount}
-                    watchCount={item?.nft_id?.watchCount}
-                  />
-                );
-              }
-            })
-            :
-            (<div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
+          ) : getAllNftsInMarketPlaceAndSupportFilter
+              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
+              (item, i) => {
+                if (!item?.nft_id?.is_blocked && item.isSold == false) {
+                  return (
+                    <CardCompnent
+                      key={i}
+                      image={profile2}
+                      status={item?.nft_id?.status}
+                      name={item?.nft_id?.name}
+                      videoLink={item?.nft_id?.video}
+                      topName
+                      collectionBtn
+                      detailBtn
+                      userProfile={userProfile ? true : false}
+                      userId={item?.seller?._id}
+                      sellerUsername={item?.seller?.user_name}
+                      owners={item?.owners}
+                      fixtokenId={item?.tokenid}
+                      fixOwner={item?.seller?.user_address}
+                      fixRoyalty={item?.nft_id?.royalty}
+                      fixCopies={item?.nft_id?.supply}
+                      id={item?.nft_id?._id}
+                      likeCount={item?.nft_id?.likeCount}
+                      watchCount={item?.nft_id?.watchCount}
+                    />
+                  );
+                }
+              },
+            )
+          ) : (
+            <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
               There is no data found
-            </div>))
-          }
+            </div>
+          )}
         </div>
       </div>
     </div>

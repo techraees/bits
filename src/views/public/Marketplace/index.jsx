@@ -5,9 +5,7 @@ import { BsFilterLeft } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { AZ, grid, search } from "../../../assets";
 import { CardCompnent } from "../../../components";
-import {
-  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER
-} from "../../../gql/queries";
+import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { dbDateToTime } from "../../../utills/timeToTimestamp";
 import "./css/index.css";
@@ -55,7 +53,6 @@ const Marketplace = () => {
     setFilterObj(JSON.stringify(filterObjCopy));
   };
 
-
   const handlePriceChange = async (value) => {
     const data = value.split("-").map(Number);
 
@@ -66,9 +63,10 @@ const Marketplace = () => {
       }),
     );
 
-    console.log(convertedPrice)
+    console.log(convertedPrice);
     let filterObjCopy = JSON.parse(filterObj);
-    filterObjCopy.price = convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
+    filterObjCopy.price =
+      convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
     setFilterObj(JSON.stringify(filterObjCopy));
   };
 
@@ -82,8 +80,6 @@ const Marketplace = () => {
   const handleRankingChange = (value) => {
     console.log("selected value", value);
   };
-
-
 
   const handlePageChange = (page) => {
     let filterObjCopy = JSON.parse(filterObj);
@@ -101,10 +97,6 @@ const Marketplace = () => {
     }
     return originalElement;
   };
-
-
-
-
 
   return (
     <div
@@ -281,7 +273,10 @@ const Marketplace = () => {
 
         <div className="d-flex gap-2 align-items-center justify-content-end mb-1 my-3 pagination-wrapper">
           <Pagination
-            total={getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.totalItems}
+            total={
+              getAllNftsInMarketPlaceAndSupportFilter
+                ?.getAllNftsInMarketPlaceAndSupportFilter?.totalItems
+            }
             pageSize={pageSize}
             current={currentPage}
             onChange={handlePageChange}
@@ -292,7 +287,7 @@ const Marketplace = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data.map(
               (item, i) => {
                 if (

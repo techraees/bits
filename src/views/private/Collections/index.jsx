@@ -42,19 +42,18 @@ const Collections = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchString, setSearchString] = useState("");
 
-  const {
-    data: profileData,
-    loading: profileLoading
-  } = useQuery(GET_PROFILE_DETAILS_QUERY, {
-    variables: { getProfileDetailsId: userId },
-  });
+  const { data: profileData, loading: profileLoading } = useQuery(
+    GET_PROFILE_DETAILS_QUERY,
+    {
+      variables: { getProfileDetailsId: userId },
+    },
+  );
 
   let token = getStorage("token");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
-  const { data: getAllNftIOwnedData, loading: getAllNftIOwnedLoading } = useQuery(
-    Get_MY_NFTS_THAT_I_OWNED,
-    {
+  const { data: getAllNftIOwnedData, loading: getAllNftIOwnedLoading } =
+    useQuery(Get_MY_NFTS_THAT_I_OWNED, {
       variables: {
         token: getStorage("token"),
         wallet_address: profileData?.GetProfileDetails?.user_address,
@@ -62,12 +61,11 @@ const Collections = () => {
         page: currentPage,
         limit: pageSize,
         q: searchString,
-        chainId: contractData?.chain?.toString()
+        chainId: contractData?.chain?.toString(),
       },
-    }
-  );
+    });
 
-  console.log(profileData?.GetProfileDetails?.user_address)
+  console.log(profileData?.GetProfileDetails?.user_address);
 
   const { userData } = useSelector((state) => state.address.userData);
   const [tokenIdsByOwner, setTokenIdsByOwner] = useState([]);
@@ -85,17 +83,16 @@ const Collections = () => {
     getTokenIds();
   }, [profileData]);
 
-
-
-
-
-  const { textColor, textColor2, textColor3, bgColor, backgroundTheme } = useSelector((state) => state.app.theme);
+  const { textColor, textColor2, textColor3, bgColor, backgroundTheme } =
+    useSelector((state) => state.app.theme);
 
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
   let navigate = useNavigate();
 
-
-  const imgPath = environment.REACT_APP_BACKEND_BASE_URL + "/" + profileData?.GetProfileDetails?.profileImg;
+  const imgPath =
+    environment.REACT_APP_BACKEND_BASE_URL +
+    "/" +
+    profileData?.GetProfileDetails?.profileImg;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
   const handlePageChange = (page) => {
@@ -111,9 +108,6 @@ const Collections = () => {
     }
     return originalElement;
   };
-
-
-
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
@@ -178,10 +172,14 @@ const Collections = () => {
               </div>
 
               <div className="ms-3 no_margin pt-2">
-                <h3 className="red-gradient-color semi-bold">{profileData?.GetProfileDetails?.full_name}</h3>
+                <h3 className="red-gradient-color semi-bold">
+                  {profileData?.GetProfileDetails?.full_name}
+                </h3>
                 {profileData?.GetProfileDetails?.country && (
                   <div className="d-flex mb-1 ms-5">
-                    <h5 className={`m-0 ${textColor}`}>{profileData?.GetProfileDetails?.country}</h5>
+                    <h5 className={`m-0 ${textColor}`}>
+                      {profileData?.GetProfileDetails?.country}
+                    </h5>
                     <img
                       className="ms-2"
                       alt="location"
@@ -190,7 +188,9 @@ const Collections = () => {
                   </div>
                 )}
 
-                <span className={`ms-5 ${textColor2}`}>{profileData?.GetProfileDetails?.bio}</span>
+                <span className={`ms-5 ${textColor2}`}>
+                  {profileData?.GetProfileDetails?.bio}
+                </span>
                 <div className="ms-5 mt-4">
                   {profileData?.GetProfileDetails?.id === userData?.id && (
                     <ButtonComponent
@@ -226,7 +226,9 @@ const Collections = () => {
             <Input
               placeholder="Search Here..."
               className={`searchStyle ${bgColor}`}
-              onChange={(e) => { setSearchString(e.target.value) }}
+              onChange={(e) => {
+                setSearchString(e.target.value);
+              }}
             />
 
             <img className="me-3 cursor" style={{ width: 15 }} src={search} />
@@ -234,8 +236,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => {
-            }}
+            onClick={() => {}}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -252,42 +253,51 @@ const Collections = () => {
             <Tabs defaultActiveKey="1" onChange={setActiveTab}>
               <Tabs.TabPane tab="NFT’s Created" key="1">
                 <div className="row mt-5 mt-sm-5 p-4 p-md-0">
-                  {getAllNftIOwnedLoading ? <CardSkeletal /> : getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length > 0 ? (
-                    getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e, i) =>
-                      <CardCompnent
-                        key={i}
-                        image={imgPaths + e?.nft_id?.user_id?.profileImg}
-                        status={e?.nft_id?.status}
-                        name={e?.nft_id?.name}
-                        artistName={e?.nft_id?.artist_name1}
-                        videoLink={e?.nft_id?.video}
-                        isEmote={e?.nft_id?.isEmote}
-                        rid={e?.nft_id?.rid}
-                        bvh={e?.nft_id?.bvh}
-                        fbx={e?.nft_id?.fbx}
-                        topName
-                        userProfile={profileData?.GetProfileDetails?.full_name ? true : false}
-                        likeCount={e?.nft_id?.likeCount}
-                        watchCount={e?.nft_id?.watchCount}
-                        isPaid={e?.nft_id?.isPaid}
-                        duration={e?.nft_id?.video_duration}
-                        id={e?.nft_id?._id}
-                        navigateTo={() =>
-                          navigate(`/list-nft/${e?.nft_id?._id}`, {
-                            state: {
-                              name: e?.nft_id?.name,
-                              royalty: e?.nft_id?.royalty,
-                              artistName: e?.nft_id?.artist_name1,
-                              tokenId: e?.nft_id?.token_id,
-                              videoLink: e?.nft_id?.video,
-                              nftId: e?.nft_id?._id,
-                            },
-                          })
-                        }
-                        isOwner={
-                          profileData?.GetProfileDetails?.id === userData?.id
-                        }
-                      />
+                  {getAllNftIOwnedLoading ? (
+                    <CardSkeletal />
+                  ) : getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
+                    0 ? (
+                    getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map(
+                      (e, i) => (
+                        <CardCompnent
+                          key={i}
+                          image={imgPaths + e?.nft_id?.user_id?.profileImg}
+                          status={e?.nft_id?.status}
+                          name={e?.nft_id?.name}
+                          artistName={e?.nft_id?.artist_name1}
+                          videoLink={e?.nft_id?.video}
+                          isEmote={e?.nft_id?.isEmote}
+                          rid={e?.nft_id?.rid}
+                          bvh={e?.nft_id?.bvh}
+                          fbx={e?.nft_id?.fbx}
+                          topName
+                          userProfile={
+                            profileData?.GetProfileDetails?.full_name
+                              ? true
+                              : false
+                          }
+                          likeCount={e?.nft_id?.likeCount}
+                          watchCount={e?.nft_id?.watchCount}
+                          isPaid={e?.nft_id?.isPaid}
+                          duration={e?.nft_id?.video_duration}
+                          id={e?.nft_id?._id}
+                          navigateTo={() =>
+                            navigate(`/list-nft/${e?.nft_id?._id}`, {
+                              state: {
+                                name: e?.nft_id?.name,
+                                royalty: e?.nft_id?.royalty,
+                                artistName: e?.nft_id?.artist_name1,
+                                tokenId: e?.nft_id?.token_id,
+                                videoLink: e?.nft_id?.video,
+                                nftId: e?.nft_id?._id,
+                              },
+                            })
+                          }
+                          isOwner={
+                            profileData?.GetProfileDetails?.id === userData?.id
+                          }
+                        />
+                      ),
                     )
                   ) : (
                     <p className="text-white">No results found</p>
@@ -299,9 +309,9 @@ const Collections = () => {
                 key="2"
                 className={textColor === "black" ? "ant-light" : ""}
               >
-
                 <div className="row">
-                  {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length > 0 ? (
+                  {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
+                  0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
@@ -311,7 +321,9 @@ const Collections = () => {
                         artistName={e?.nft_id?.artist_name1}
                         videoLink={e?.nft_id?.video}
                         topName
-                        userProfile={!!profileData?.GetProfileDetails?.full_name}
+                        userProfile={
+                          !!profileData?.GetProfileDetails?.full_name
+                        }
                         navigateTo={() =>
                           navigate(`/list-nft/${e?.nft_id?._id}`, {
                             state: {
@@ -334,8 +346,6 @@ const Collections = () => {
                   )}
                 </div>
               </Tabs.TabPane>
-
-
             </Tabs>
             <div
               className="d-flex gap-4 align-items-center pagination-postion"
