@@ -1,5 +1,7 @@
 export const getStorage = (key) => {
-  return localStorage.getItem(key);
+  const value =  localStorage.getItem(key);
+  window.dispatchEvent(new Event("storageChange"));
+  return value  
 };
 export const setStorage = (key, value) => {
   return localStorage.setItem(key, value);

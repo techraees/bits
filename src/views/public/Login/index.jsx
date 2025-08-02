@@ -224,6 +224,8 @@ function Login() {
         },
       });
       navigate(`/collections/${_id}`);
+      // window.location.href = `/collections/${_id}`;
+
 
       signUpResetValue();
       signUpSetValue("full_name", "");

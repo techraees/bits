@@ -149,16 +149,28 @@ const NavbarComponent = ({ dashboardNav }) => {
   // console.log(menuBar, "menu");
 
   useEffect(() => {
-    let token = getStorage("token");
-    console.log("token", token);
-    if (token) {
-      profile({
-        variables: {
-          token: token,
-        },
-      });
-    }
+    const handleStorageChange = () => {
+      const token = getStorage("token");
+      console.log("Updated token:", token);
+      if (token) {
+        profile({
+          variables: {
+            token: token,
+          },
+        });
+      }
+    };
+
+    window.addEventListener("storageChange", handleStorageChange);
+
+    // Call once on mount too
+    handleStorageChange();
+
+    return () => {
+      window.removeEventListener("storageChange", handleStorageChange);
+    };
   }, []);
+
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
