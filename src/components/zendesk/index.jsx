@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Zendesk, { ZendeskAPI } from "../../zendeskConfig";
-import { useEffect } from "react";
 import help from "../../assets/images/help.png";
 
 const environment = process.env;
 
 const ZendeskComp = () => {
-  const [showChat, setShowChat] = useState(false);
+  console.log(environment.REACT_APP_ZENDESK_KEY);
+  const [ready, setReady] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const handleLoaded = (status) => {
-    ZendeskAPI("messenger", status);
+  const handleLoaded = () => {
+    ZendeskAPI("messenger", "hide");
+    ZendeskAPI("messenger", "close");
+    setReady(true);
   };
 
   useEffect(() => {
-    if (showChat) {
-      handleLoaded("open");
+    if (!ready) return;
+    if (open) {
+      ZendeskAPI("messenger", "show");
+      ZendeskAPI("messenger", "open");
     } else {
-      handleLoaded("close");
+      ZendeskAPI("messenger", "close");
+      ZendeskAPI("messenger", "hide");
     }
-  }, [showChat]);
+  }, [open, ready]);
 
   return (
     <div>
@@ -27,10 +33,11 @@ const ZendeskComp = () => {
         zendeskKey={environment.REACT_APP_ZENDESK_KEY}
         onLoaded={handleLoaded}
       />
+
       <div
         className="img-wrapper"
         onClick={() => {
-          setShowChat(!showChat);
+          setOpen((v) => !v);
         }}
       >
         <img src={help} alt="help_icon" />
