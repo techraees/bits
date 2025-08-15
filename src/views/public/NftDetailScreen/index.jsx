@@ -133,7 +133,7 @@ const NftDetailsScreen = () => {
               <div className="my-3">
                 <p className={`${textColor} mb-1 fs-6`}>Circulating Supply</p>
                 <p className={`${textColor2} m-0 fs-6`}>
-                  {data?.DetailsOfANft?.supply}
+                  {data?.DetailsOfANft?.availableSupply}
                 </p>
               </div>
               <div className="my-3">

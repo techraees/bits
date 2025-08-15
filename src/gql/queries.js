@@ -176,6 +176,7 @@ const DETAILS_OF_A_NFT = gql`
       token_id
       chainId
       supply
+      availableSupply
       royalty
       name
       isPaid
