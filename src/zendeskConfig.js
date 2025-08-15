@@ -28,7 +28,7 @@ class Zendesk extends Component {
   componentDidMount() {
     if (canUseDOM() && !window.zE) {
       const { defer, zendeskKey, ...other } = this.props;
-      window.zESettings = other; 
+      window.zESettings = other;
       this.insertScript(zendeskKey, defer);
     }
   }
