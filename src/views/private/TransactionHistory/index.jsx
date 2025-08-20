@@ -66,7 +66,6 @@ const TransactionHistory = () => {
     isFetching: getAllMyTransactionFetching,
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
-      token: token,
       filterObj: `{"chain_id":${contractData?.chain}}`,
     },
   });
