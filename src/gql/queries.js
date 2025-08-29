@@ -176,6 +176,7 @@ const DETAILS_OF_A_NFT = gql`
       token_id
       chainId
       supply
+      availableSupply
       royalty
       name
       isPaid
@@ -283,24 +284,25 @@ const GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE = gql`
 
 // Used to get all my transactions
 const GET_ALL_MY_TRANSACTION = gql`
-  query GetAllMyTransaction($token: String!, $filterObj: JSON) {
-    getAllMyTransaction(token: $token, filterObj: $filterObj)
+  query GetAllMyTransaction($filterObj: JSON) {
+    getAllMyTransaction(filterObj: $filterObj)
   }
 `;
 
 //  Used to fetch transaction details of specific transaction
 const GET_TRANSACTION_DETAILS_OF_SPECIFIC = gql`
-  query GetTransactionDetailsOfSpecific($token: String!, $_id: String!) {
-    getTransactionDetailsOfSpecific(token: $token, _id: $_id)
+  query GetTransactionDetailsOfSpecific($_id: String!) {
+    getTransactionDetailsOfSpecific(_id: $_id)
   }
 `;
 
 //  Used to fetch nfts that I sold
 const GET_NFTS_THAT_I_SOLD = gql`
-  query GetNftsThatISold($token: String!) {
-    getNftsThatISold(token: $token)
+  query GetNftsThatISold {
+    getNftsThatISold
   }
 `;
+
 
 //  Used to fetch nfts that I bought
 const GET_NFTS_THAT_I_BOUGHT = gql`

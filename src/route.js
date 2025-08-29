@@ -101,7 +101,7 @@ const routes = [
     icon: right_arrow,
     component: <MintNft />,
     visible: true,
-    isNav: true,
+    isNav: false,
     key: 17,
   },
   {

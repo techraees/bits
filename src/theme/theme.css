@@ -112,7 +112,7 @@
 }
 
 .dark-grey-bg {
-  background-color: #2b2b2b !important;
+  background-color: hsl(0, 0%, 17%) !important;
 }
 
 .white2 {
@@ -121,10 +121,31 @@
 
 
 iframe {
-  /* position: absolute !important; */
+  position: absolute !important;
   width: none !important;
   top: none !important;
   left: none !important;
   right: none !important;
-  z-index: -5 !important;
+  z-index: 100000 !important;
+}
+
+
+iframe[title="Button to launch messaging window, conversation in progress"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+iframe#launcher {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+iframe[title="Messaging window"] {
+  z-index: 2147483647 !important;
+}
+
+iframe[title*="launcher" i] {
+  display: none !important;
 }

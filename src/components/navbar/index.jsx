@@ -171,7 +171,6 @@ const NavbarComponent = ({ dashboardNav }) => {
     };
   }, []);
 
-
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -379,7 +378,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                 className="white mobile_navlink text-nowrap"
                 onClick={() => navigate("/marketplace")}
               >
-                NFT Marketplace
+                Auctioned NFTs
               </Nav.Link>
               <Nav.Link
                 className="white mobile_navlink"
