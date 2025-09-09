@@ -18,8 +18,6 @@ const env = process.env;
 
 const httpLink = createHttpLink({
   uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
-  // if your API needs cookies too, uncomment:
-  // credentials: "include",
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -303,7 +303,6 @@ const GET_NFTS_THAT_I_SOLD = gql`
   }
 `;
 
-
 //  Used to fetch nfts that I bought
 const GET_NFTS_THAT_I_BOUGHT = gql`
   query GetNftsThatIBought($token: String!) {
