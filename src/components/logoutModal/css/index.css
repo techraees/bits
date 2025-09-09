@@ -13,12 +13,13 @@
   margin-top: 2rem;
 }
 
-.flexDiv > .logOutText {
+.flexDiv>.logOutText {
   margin: 0;
   color: #000;
   font-weight: 400 !important;
 }
-.flexDiv > .logOutvalue {
+
+.flexDiv>.logOutvalue {
   margin: 0;
   color: #000;
   font-weight: 400 !important;
@@ -41,4 +42,9 @@
 
 .btnDiv {
   margin-top: 1rem;
+}
+
+
+.logoutModal .ant-modal {
+  top: 63px !important;
 }

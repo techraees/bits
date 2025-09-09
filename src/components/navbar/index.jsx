@@ -229,7 +229,25 @@ const NavbarComponent = ({ dashboardNav }) => {
     )?.name;
     return pageName === "Home" ? "" : pageName;
   };
+
+
+  const [validImage, setValidImage] = useState(false);
+
+  useEffect(() => {
+    if (!userProfile) return;
+
+    const img = new Image();
+    img.src = `${environment.REACT_APP_BACKEND_BASE_URL}/${userProfile}`;
+
+    img.onload = () => setValidImage(true);   // image exists
+    img.onerror = () => setValidImage(false); // not found
+  }, [userProfile]);
+
+
+
+
   if (nonNavbarRoutes?.includes(location?.pathname)) return null;
+
 
   return (
     <>
@@ -237,7 +255,7 @@ const NavbarComponent = ({ dashboardNav }) => {
         className={`${dashboardNav ? "dashboardNavBgColor" : "navbarBgColor"}`}
         expand="lg"
         sticky="top"
-        style={{ zIndex: 1000 }}
+        style={{ zIndex: 100000000 }}
       >
         {isModalOpen && (
           <Modal
@@ -246,8 +264,12 @@ const NavbarComponent = ({ dashboardNav }) => {
             onCancel={handleCancel}
             footer={false}
             className="logoutModal"
+
             width={300}
             centered={width < 992 && true}
+            zIndex={100000200}
+            maskStyle={{ zIndex: 100000190 }}
+            wrapClassName="logoutWrap"
           >
             <LogoutModal handleOk={handleOk} />
           </Modal>
@@ -324,23 +346,15 @@ const NavbarComponent = ({ dashboardNav }) => {
                     onClick={() => showModal()}
                   >
                     <span className="me-2 mt-1">{full_name}</span>
-                    {userProfile ? (
-                      <img
-                        src={imgPath}
-                        width={30}
-                        className=""
-                        style={{ borderRadius: "50%" }}
-                        alt="imgPath"
-                      />
-                    ) : (
-                      <img
-                        src={profileimg}
-                        width={30}
-                        className=""
-                        style={{ borderRadius: "50%" }}
-                        alt="profileImg"
-                      />
-                    )}
+                    <img
+                      src={validImage
+                        ? `${environment.REACT_APP_BACKEND_BASE_URL}/${userProfile}`
+                        : profileimg}
+                      width={30}
+                      style={{ borderRadius: "50%" }}
+                      alt="profile"
+                    />
+
                   </Nav.Link>
                   {/* <Nav.Link className="white">
                     <SwitchBtn toggleBtn={textColor === "white"} />

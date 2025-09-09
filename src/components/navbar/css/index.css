@@ -33,6 +33,7 @@
 .mob-nav {
   display: none;
 }
+
 .web-nav {
   display: block;
 }
@@ -93,6 +94,7 @@
   .web-nav {
     display: none;
   }
+
   .mob-nav {
     display: block;
   }
@@ -206,7 +208,7 @@
 
 .logoutModal .ant-modal-content {
   background-color: #fff !important;
-  left: 150%;
+  left: 170%;
 }
 
 .logoutModal .ant-modal-body {
@@ -238,8 +240,7 @@
 }
 
 .red {
-  filter: invert(28%) sepia(95%) saturate(5744%) hue-rotate(343deg)
-    brightness(101%) contrast(98%);
+  filter: invert(28%) sepia(95%) saturate(5744%) hue-rotate(343deg) brightness(101%) contrast(98%);
 }
 
 .hidden {
@@ -269,5 +270,12 @@
 
   .navBarPadding {
     padding: 0 10px;
+  }
+}
+
+
+@media (min-width: 992px) {
+  .logoutWrap .ant-modal {
+    top: 63px !important;
   }
 }
