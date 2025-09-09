@@ -230,7 +230,6 @@ const NavbarComponent = ({ dashboardNav }) => {
     return pageName === "Home" ? "" : pageName;
   };
 
-
   const [validImage, setValidImage] = useState(false);
 
   useEffect(() => {
@@ -239,15 +238,11 @@ const NavbarComponent = ({ dashboardNav }) => {
     const img = new Image();
     img.src = `${environment.REACT_APP_BACKEND_BASE_URL}/${userProfile}`;
 
-    img.onload = () => setValidImage(true);   // image exists
+    img.onload = () => setValidImage(true); // image exists
     img.onerror = () => setValidImage(false); // not found
   }, [userProfile]);
 
-
-
-
   if (nonNavbarRoutes?.includes(location?.pathname)) return null;
-
 
   return (
     <>
@@ -264,7 +259,6 @@ const NavbarComponent = ({ dashboardNav }) => {
             onCancel={handleCancel}
             footer={false}
             className="logoutModal"
-
             width={300}
             centered={width < 992 && true}
             zIndex={100000200}
@@ -347,14 +341,15 @@ const NavbarComponent = ({ dashboardNav }) => {
                   >
                     <span className="me-2 mt-1">{full_name}</span>
                     <img
-                      src={validImage
-                        ? `${environment.REACT_APP_BACKEND_BASE_URL}/${userProfile}`
-                        : profileimg}
+                      src={
+                        validImage
+                          ? `${environment.REACT_APP_BACKEND_BASE_URL}/${userProfile}`
+                          : profileimg
+                      }
                       width={30}
                       style={{ borderRadius: "50%" }}
                       alt="profile"
                     />
-
                   </Nav.Link>
                   {/* <Nav.Link className="white">
                     <SwitchBtn toggleBtn={textColor === "white"} />

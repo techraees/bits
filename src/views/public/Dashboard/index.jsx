@@ -125,11 +125,15 @@ const Dashboard = () => {
             </div>
           </Col>
           <Col lg={12} md={12} sm={24} xs={24} className="my-2">
-            <ReactPlayer
-              width="100%"
-              height="300px"
-              url="https://www.youtube.com/watch?v=sXQH-R_0gtQ"
-            />
+            <div className="video-wrap">
+              <ReactPlayer
+                className="react-player"
+                width="100%"
+                height="300px"
+                url="https://www.youtube.com/watch?v=sXQH-R_0gtQ"
+                style={{ position: "relative", zIndex: 1 }}
+              />
+            </div>
           </Col>
         </Row>
         <div className="d-flex justify-content-between align-items-center mt-4">
