@@ -105,12 +105,20 @@ function Login() {
   useEffect(() => {
     if (loginData) {
       // need to check if LoginUser has linkingInfo
-      signInResetValue();
-
       const { LoginUser } = loginData;
       const { user_address, id, token, full_name, country, bio, profileImg } =
         LoginUser;
       setStorage("token", token);
+
+      console.log(signWatch("email"))
+      if (rememberCheckbox) {
+        localStorage.setItem("rememberedEmail", signWatch("email") || "");
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
+
+      // ab reset karo
+      signInResetValue();
 
       Cookies.set("your-cookie-name", "cookie-value", {
         expires: 7,
@@ -137,7 +145,7 @@ function Login() {
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");
     }
-  }, [loginData, loginError]);
+  }, [loginData, loginError, rememberCheckbox]);
 
   // login
 
@@ -373,6 +381,14 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    const saved = localStorage.getItem("rememberedEmail");
+    if (saved) {
+      setValue("email", saved);
+      setRememberCheckbox(true);
+    }
+  }, []);
+
   return (
     <div style={{ background: "black" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
@@ -396,7 +412,7 @@ function Login() {
         <img src={logo} className="logoSize mb-5" alt="logo" />
         <div className="d-flex formMobView" style={{ width: "100%" }}>
           <div className="formContainer">
-            <form autoComplete="off">
+            <form autoComplete="on">
               <div className="d-flex justify-content-center mb-5">
                 <img src={account} alt="" />
                 <span className="ms-4 semi-bold fs-5">Sign in</span>
@@ -406,9 +422,9 @@ function Login() {
                   placeholder={"E-mail"}
                   name="email"
                   ref={register}
+                  autoComplete="username"
                   onChange={handleChange}
                   value={signWatch("email")}
-                  autoComplete="off"
                 />
                 {errors.email && <span>{errors.email.message}</span>}
 
@@ -419,7 +435,7 @@ function Login() {
                   ref={register}
                   onChange={handleChange}
                   value={signWatch("password")}
-                  autoComplete="new-password"
+                  autoComplete="current-password"
                   {...register("password")}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {

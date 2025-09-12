@@ -38,12 +38,19 @@ const AboutUs = () => {
             gap: "5rem",
             justifyContent: "center",
             alignItems: "center",
+            cursor: "auto",
           }}
           className="socialIcons socialIcons_mobile"
         >
-          <img src={discord} height={70} />
-          <img src={telegram} height={70} />
-          <img src={twitter} height={70} />
+          <a href="#" >
+            <img src={discord} height={70} />
+          </a>
+          <a href="#" >
+            <img src={telegram} height={70} />
+          </a>
+          <a href="#" >
+            <img src={twitter} height={70} />
+          </a>
         </div>
       </div>
     </div>

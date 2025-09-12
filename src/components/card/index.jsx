@@ -22,7 +22,7 @@ import { Modal } from "antd";
 import { NftDetailsModal } from "../index";
 import React, { useEffect, useState } from "react";
 import Timercomp from "../timerComp";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profileimg from "../../assets/images/profile1.png";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { useSelector } from "react-redux";
@@ -489,6 +489,8 @@ const CardCompnent = ({
             >
               Nft Detail
             </button>
+
+
             <div>
               <img src={profile} style={{ width: 15 }} alt="profile" />
               <span className="light-grey2 ms-2" style={{ fontSize: "1rem" }}>
@@ -552,15 +554,21 @@ const CardCompnent = ({
 
                   <div>
                     {detailBtn && (
-                      <button
-                        className="detail-btn"
-                        onClick={() => {
-                          navigate("/nft-detail/" + id);
-                        }}
-                      >
+                      // <button
+                      //   className="detail-btn"
+                      //   onClick={() => {
+                      //     navigate("/nft-detail/" + id);
+                      //   }}
+                      // >
+                      //   Nft Detail
+                      // </button>
+
+                      <Link to={`/nft-detail/${id}`}>
                         Nft Detail
-                      </button>
+                      </Link>
                     )}
+
+
                   </div>
                 </div>
                 <div>
@@ -580,7 +588,7 @@ const CardCompnent = ({
                       }}
                     />
 
-                    <button
+                    {/* <button
                       className="buybtn"
                       style={{ width: "80px" }}
                       onClick={() => {
@@ -588,7 +596,11 @@ const CardCompnent = ({
                       }}
                     >
                       Nft Detail
-                    </button>
+                    </button> */}
+
+                    <Link to={`/nft-detail/${id}`}>
+                      Nft Detail
+                    </Link>
                   </div>
                   <span
                     className="ms-2 light-grey2"
