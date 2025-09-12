@@ -100,7 +100,7 @@ const MenuComponent = ({ menuHandle, className }) => {
   return (
     <div
       style={{
-        zIndex: 1,
+        zIndex: 1000,
         position: "fixed",
         // top: width < 600 ? "70px" : "",
         top: "70px",

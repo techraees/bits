@@ -22,7 +22,7 @@ import { Modal } from "antd";
 import { NftDetailsModal } from "../index";
 import React, { useEffect, useState } from "react";
 import Timercomp from "../timerComp";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profileimg from "../../assets/images/profile1.png";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { useSelector } from "react-redux";
@@ -579,7 +579,7 @@ const CardCompnent = ({
                         e.target.src = profileimg;
                       }}
                     />
-
+                    {/* 
                     <button
                       className="buybtn"
                       style={{ width: "80px" }}
@@ -588,7 +588,9 @@ const CardCompnent = ({
                       }}
                     >
                       Nft Detail
-                    </button>
+                    </button> */}
+
+                    <Link to={`/nft-detail/${id}`}>Nft Detail</Link>
                   </div>
                   <span
                     className="ms-2 light-grey2"
