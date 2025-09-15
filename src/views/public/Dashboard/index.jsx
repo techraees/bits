@@ -28,6 +28,7 @@ const Dashboard = () => {
 
   const [showChat, setShowChat] = useState(false);
   const { userData } = useSelector((state) => state.address.userData);
+
   const { fixedItemData } = useSelector(
     (state) => state.fixedItemDatas.fixedItemData,
   );
@@ -40,6 +41,8 @@ const Dashboard = () => {
     (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
+  const isLight = textColor === "black";
+  const bgColor = useSelector((state) => state.app.theme.bgColor);
   const isLogged = userData?.isLogged;
   const userProfile = userData?.full_name;
 
@@ -252,7 +255,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="dark-grey-bg d-flex justify-content-center">
+      {/* <div className="dark-grey-bg d-flex justify-content-center"> */}
+      <div className={`${bgColor} d-flex justify-content-center ${isLight ? "socialBar-light" : "socialBar-dark"}`}>
         <div className="py-2" style={{ border: "1px" }}>
           <img src={discord_grey} className="mx-2" alt="discord" />
           <img src={telegram_grey} className="mx-2" alt="telegram" />

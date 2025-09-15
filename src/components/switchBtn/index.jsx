@@ -22,7 +22,8 @@ const SwitchBtn = ({ toggleBtn }) => {
       type: "THEME",
       theme: {
         backgroundTheme: `${checked ? "black-background" : "light-background"}`,
-        headerTheme: `${checked ? "black-background2" : "red-background2"}`,
+        // headerTheme: `${checked ? "black-background2" : "red-background2"}`,
+        headerTheme: `${checked ? "black-background2" : "white-navbar"}`,
         textColor: `${checked ? "white" : "black"}`,
         textColor2: `${checked ? "light-grey" : "dark-grey"}`,
         textColor3: `${checked ? "white" : "red"}`,

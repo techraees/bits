@@ -76,6 +76,8 @@ const CardCompnent = ({
   itemDbId,
   isTopNfts,
 }) => {
+  const isLight = useSelector((s) => s.app?.theme?.textColor === "black");
+
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -423,7 +425,7 @@ const CardCompnent = ({
 
       <Card
         hoverable
-        className="cardContainer"
+        className={`cardContainer ${isLight ? "card-light" : ""}`}
         cover={
           <ReactPlayer
             controls={true}

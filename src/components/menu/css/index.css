@@ -22,3 +22,45 @@
 .ant-menu-dark.ant-menu-inline .ant-menu-submenu-title {
   cursor: not-allowed;
 } */
+
+/* ====== LIGHT MODE ONLY (new) ====== */
+.menu-light {
+  background-color: #ffffffe0 !important;
+  /* override manuStyle dark bg */
+  border: 1px solid #eee;
+  /* optional subtle border */
+}
+
+/* submenu container */
+.menu-light .ant-menu-sub {
+  background-color: #ffffff !important;
+}
+
+/* yeh selector dark me global tha; light me override karna zaroori hai */
+.menu-light .ant-menu-submenu .ant-menu-sub {
+  background-color: #ffffff !important;
+}
+
+/* normal items / titles */
+.menu-light .ant-menu-item,
+.menu-light .ant-menu-submenu-title {
+  color: #111 !important;
+}
+
+/* hover state */
+.menu-light .ant-menu-item:hover,
+.menu-light .ant-menu-submenu-title:hover {
+  background-color: #f7f7f7 !important;
+  color: #111 !important;
+}
+
+/* selected item */
+.menu-light .ant-menu-item-selected {
+  background-color: #f3f4f6 !important;
+  /* soft grey */
+  color: #b83131 !important;
+  /* brand red text */
+}
+
+/* icons (agar dark icons aa rahe hon) */
+/* .menu-light img { filter: none; } */
