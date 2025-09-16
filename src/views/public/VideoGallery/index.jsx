@@ -48,6 +48,7 @@ const VideoGallery = () => {
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
+  const isLight = textColor === "black";
 
   const { userData } = useSelector((state) => state.address.userData);
   const userProfile = userData?.full_name;
@@ -103,6 +104,11 @@ const VideoGallery = () => {
     return originalElement;
   };
 
+
+  useEffect(() => {
+    document.body.classList.remove("app-light", "app-dark");
+    document.body.classList.add(isLight ? "app-light" : "app-dark");
+  }, [isLight]);
   return (
     <div
       className={`${backgroundTheme} pb-2`}
@@ -298,7 +304,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {

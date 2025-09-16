@@ -64,3 +64,34 @@
 
 /* icons (agar dark icons aa rahe hon) */
 /* .menu-light img { filter: none; } */
+
+/* ===== Collapsed-hover submenu (popup) for LIGHT mode ===== */
+.app-light .ant-menu-submenu-popup,
+.app-light .ant-menu-submenu-popup .ant-menu,
+.app-light .ant-menu-submenu .ant-menu-sub {
+  background-color: #ffffff !important;
+  color: #111 !important;
+}
+
+/* Items inside popup */
+.app-light .ant-menu-submenu-popup .ant-menu-item,
+.app-light .ant-menu-submenu-popup .ant-menu-submenu-title {
+  color: #111 !important;
+}
+
+.app-light .ant-menu-submenu-popup .ant-menu-item:hover,
+.app-light .ant-menu-submenu-popup .ant-menu-submenu-title:hover {
+  background-color: #f7f7f7 !important;
+  color: #111 !important;
+}
+
+.app-light .ant-menu-submenu-popup .ant-menu-item-selected {
+  background-color: #f3f4f6 !important;
+  color: #b83131 !important;
+  /* your brand red */
+}
+
+/* Optional: thin border so it blends with your light panel */
+.app-light .ant-menu-submenu-popup {
+  border: 1px solid #eee;
+}

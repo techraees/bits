@@ -15,7 +15,6 @@ const MenuComponent = ({ menuHandle, className }) => {
   const textColor = useSelector((state) => state.app.theme.textColor);
   const isLight = textColor === "black";
 
-
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -101,6 +100,13 @@ const MenuComponent = ({ menuHandle, className }) => {
       routes?.find((route) => route?.path === location?.pathname)?.key,
     );
   };
+
+
+  // MenuComponent.jsx
+  useEffect(() => {
+    document.body.classList.remove("app-light", "app-dark");
+    document.body.classList.add(isLight ? "app-light" : "app-dark");
+  }, [isLight]);
 
   return (
     <div

@@ -249,9 +249,11 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${dashboardNav
-          ? headerTheme || "dashboardNavBgColor"
-          : headerTheme || "navbarBgColor"}`}
+        className={`dashboardNavBgColor ${
+          dashboardNav
+            ? headerTheme || "dashboardNavBgColor"
+            : headerTheme || "navbarBgColor"
+        }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}
@@ -362,8 +364,11 @@ const NavbarComponent = ({ dashboardNav }) => {
               )}
             </div>
           </div>
-          <Navbar.Toggle aria-controls="basic-navbar-nav"
-            className={headerTheme === "white-navbar" ? "toggle-light" : "toggle-dark"}
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            className={
+              headerTheme === "white-navbar" ? "toggle-light" : "toggle-dark"
+            }
           />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav
@@ -405,7 +410,9 @@ const NavbarComponent = ({ dashboardNav }) => {
                 Contact
               </NavLink>
             </Nav>
-            <div className={`chainDiv ${isLight ? "chain-light" : "chain-dark"}`}>
+            <div
+              className={`chainDiv ${isLight ? "chain-light" : "chain-dark"}`}
+            >
               <div className="leftChainDiv">Chains</div>
               <div className="rightChainDiv">
                 <FaEthereum

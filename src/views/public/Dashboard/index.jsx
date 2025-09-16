@@ -256,7 +256,9 @@ const Dashboard = () => {
         </div>
       </div>
       {/* <div className="dark-grey-bg d-flex justify-content-center"> */}
-      <div className={`${bgColor} d-flex justify-content-center ${isLight ? "socialBar-light" : "socialBar-dark"}`}>
+      <div
+        className={`${bgColor} d-flex justify-content-center ${isLight ? "socialBar-light" : "socialBar-dark"}`}
+      >
         <div className="py-2" style={{ border: "1px" }}>
           <img src={discord_grey} className="mx-2" alt="discord" />
           <img src={telegram_grey} className="mx-2" alt="telegram" />
