@@ -645,15 +645,17 @@ const CardCompnent = ({
                       }
                     }}
                   />
-                  <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
-                    <img
-                      style={{ width: 25 }}
-                      className="mb-1"
-                      src={thumb}
-                      alt="thumb"
-                      onClick={handleLikeClick}
-                    />
-                  </div>
+                  {userData &&
+                    <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
+                      <img
+                        style={{ width: 25 }}
+                        className="mb-1"
+                        src={thumb}
+                        alt="thumb"
+                        onClick={handleLikeClick}
+                      />
+                    </div>
+                  }
                 </div>
                 {collectionBtn && (
                   <Button
@@ -744,15 +746,16 @@ const CardCompnent = ({
                       />
                     </>
                   )}
-
-                  <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
-                    <img
-                      style={{ width: 25 }}
-                      className="mb-1"
-                      src={thumb}
-                      onClick={handleLikeClick}
-                    />
-                  </div>
+                  {userData &&
+                    <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
+                      <img
+                        style={{ width: 25 }}
+                        className="mb-1"
+                        src={thumb}
+                        onClick={handleLikeClick}
+                      />
+                    </div>
+                  }
                 </div>
 
                 <Button

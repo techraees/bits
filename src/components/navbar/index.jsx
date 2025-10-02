@@ -44,6 +44,7 @@ const NavbarComponent = ({ dashboardNav }) => {
   };
   const nonNavbarRoutes = [
     "/login",
+    "/signup",
     "/reset-password",
     "/reset-password/success",
     "/404",
@@ -249,11 +250,10 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${
-          dashboardNav
+        className={`dashboardNavBgColor ${dashboardNav
             ? headerTheme || "dashboardNavBgColor"
             : headerTheme || "navbarBgColor"
-        }`}
+          }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}
