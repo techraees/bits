@@ -94,6 +94,7 @@ const CardCompnent = ({
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
   const { contractData } = useSelector((state) => state.chain.contractData);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const [updateNftLike, { data }] = useMutation(UPDATE_NFT_LIKE);
 
@@ -427,12 +428,18 @@ const CardCompnent = ({
         hoverable
         className={`cardContainer ${isLight ? "card-light" : ""}`}
         cover={
-          <ReactPlayer
-            controls={true}
-            className="card_video"
-            url={videoLink}
-            onPlay={handleWatchClick}
-          />
+          <div
+            onClick={() => setIsVideoOpen(true)}
+            style={{ position: "relative", cursor: "pointer" }}
+
+          >
+            <ReactPlayer
+              className="card_video"
+              controls={false}
+              url={videoLink}
+              onPlay={handleWatchClick}
+            />
+          </div>
         }
       >
         <Space
@@ -786,6 +793,34 @@ const CardCompnent = ({
           handlePaypal={handlePaypalPayment}
         />
       )}
+
+      <Modal
+        open={isVideoOpen}
+        footer={false}
+        centered
+        onCancel={() => setIsVideoOpen(false)}
+        width="auto"
+        style={{ maxWidth: "90vw" }}                 // responsive width
+        bodyStyle={{ padding: 0 }}                   // no extra padding
+      >
+        {/* Responsive 16:9 wrapper (YouTube style). Need different ratio? change below */}
+        <div style={{
+          position: "relative",
+          width: "90vw",
+          maxWidth: 1000,                             // hard cap, optional
+          aspectRatio: "16 / 9",                      // keeps height in sync automatically
+        }}>
+          <ReactPlayer
+            url={videoLink}
+            controls
+            playing
+            width="100%"
+            height="100%"
+            onStart={handleWatchClick}                // watch count on start
+          />
+        </div>
+      </Modal>
+
 
       {/* <PaymentConfirmation setShow={setShowPayment} show={showpayment} /> */}
     </div>

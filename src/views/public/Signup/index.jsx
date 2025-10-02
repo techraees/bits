@@ -396,38 +396,138 @@ function Login() {
         <img src={logo} className="logoSize mb-5" alt="logo" />
         <div className="d-flex formMobView" style={{ width: "100%" }}>
           <div className="formContainer">
-            <form autoComplete="off">
+            <form>
               <div className="d-flex justify-content-center mb-5">
                 <img src={account} alt="" />
-                <span className="ms-4 semi-bold fs-5">Sign in</span>
+                <span className="ms-4 semi-bold fs-5">Create Account</span>
               </div>
-              <div className="mb-5">
+              <div className="mb-3">
+                <InputComponent
+                  placeholder={"Full Name"}
+                  name="full_name"
+                  ref={signUpRegister}
+                  value={watch("full_name")}
+                  onChange={handleChangeSignUp}
+                  autocomplete="off"
+                />
+                {signUpFormError.full_name && (
+                  <span>{signUpFormError.full_name.message}</span>
+                )}
+                <InputComponent
+                  placeholder={"User Name"}
+                  ref={signUpRegister}
+                  name="user_name"
+                  value={watch("user_name")}
+                  onChange={handleChangeSignUp}
+                  autocomplete="off"
+                />
+                {signUpFormError.user_name && (
+                  <span>{signUpFormError.user_name.message}</span>
+                )}
                 <InputComponent
                   placeholder={"E-mail"}
+                  ref={signUpRegister}
                   name="email"
-                  ref={register}
-                  onChange={handleChange}
-                  value={signWatch("email")}
-                  autoComplete="off"
+                  value={watch("email")}
+                  onChange={handleChangeSignUp}
+                  autocomplete="off"
                 />
-                {errors.email && <span>{errors.email.message}</span>}
-
-                <input
+                {signUpFormError.email && (
+                  <span>{signUpFormError.email.message}</span>
+                )}
+                <InputComponent
+                  password
                   placeholder={"Password"}
-                  type="password"
+                  ref={signUpRegister}
                   name="password"
-                  ref={register}
-                  onChange={handleChange}
-                  value={signWatch("password")}
-                  autoComplete="new-password"
-                  {...register("password")}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleSubmit(onSubmit)();
-                    }
-                  }}
+                  value={watch("password")}
+                  onChange={handleChangeSignUp}
+                  autocomplete="off"
                 />
-                {errors.password && <span>{errors.password.message}</span>}
+                {signUpFormError.password && (
+                  <span>{signUpFormError.password.message}</span>
+                )}
+                <InputComponent
+                  placeholder={"Phone number"}
+                  ref={signUpRegister}
+                  name="phone_number"
+                  value={watch("phone_number")}
+                  onChange={handleChangeSignUp}
+                  autocomplete="off"
+                />
+                {signUpFormError.phone_number && (
+                  <span>{signUpFormError.phone_number.message}</span>
+                )}
+
+                <div className="mt-3">
+                  <label> Date of Birth</label>
+                  <Row gutter={16}>
+                    <Col span={8} className="my-3 mb-2">
+                      <Select
+                        defaultValue="MM"
+                        style={{
+                          width: "100%",
+                        }}
+                        dropdownStyle={{
+                          color: "#dcdcdc",
+                        }}
+                        name="month"
+                        className={"black"}
+                        onChange={handleMonth}
+                        options={monthsOptions}
+                      />
+                    </Col>
+
+                    <Col span={8} className="my-3 mb-2">
+                      <Select
+                        defaultValue="DD"
+                        style={{
+                          width: "100%",
+                        }}
+                        name="day"
+                        className={"black"}
+                        onChange={handleDay}
+                        options={daysOptions}
+                      />
+                    </Col>
+
+                    <Col span={8} className="my-3 mb-2">
+                      <Select
+                        defaultValue="YYYY"
+                        style={{
+                          width: "100%",
+                          color: "black",
+                        }}
+                        name="year"
+                        className={"black"}
+                        onChange={handleYear}
+                        options={yearsOptions}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+
+                <p style={{ fontSize: "12px" }}>
+                  Disclaimer: Users must be 18 or older to sign up. Our platform
+                  involves buying and selling NFTs with crypto. By proceeding,
+                  you confirm you meet the age requirement.
+                </p>
+
+                <Divider style={{ border: "1.5px solid #dcdcdc" }} />
+              </div>
+
+              <div className="my-2 d-flex" style={{ alignItems: "center" }}>
+                <CustomCheckbox
+                  active={signUpAgreeCheckbox}
+                  setActive={setSignUpAgreeCheckbox}
+                />
+                <Link to="/privacy-security">
+                  <span className="ms-3 light-grey">
+                    I agree to BITS’s{" "}
+                    <span className="red">Terms & Conditions</span> and{" "}
+                    <span className="red">Privacy Policy</span>
+                  </span>
+                </Link>
               </div>
               <div className="my-2 d-flex" style={{ alignItems: "center" }}>
                 <CustomCheckbox
@@ -437,20 +537,25 @@ function Login() {
                 <span className="ms-3 light-grey">Remember me</span>
               </div>
               <div className="my-5">
-                <ButtonComponent
-                  onClick={handleSubmit(onSubmit)}
-                  text={"SIGN IN"}
-                />
-              </div>
-              <div className="my-4 d-flex justify-content-center">
-                <span className="red cursor" onClick={handleOpenForgotPass}>
-                  Forgot Password?
-                </span>
+                {!isConnected ? (
+                  <ButtonComponent
+                    onClick={() => {
+                      connectWalletHandle();
+                    }}
+                    text={"CONNECT WALLET"}
+                  />
+                ) : (
+                  <ButtonComponent
+                    onClick={signUpSubmit(signUpHandle)}
+                    text={"CREATE ACCOUNT"}
+                    disabled={!signUpAgreeCheckbox}
+                  />
+                )}
               </div>
               <div className="my-4 d-flex justify-content-center">
                 <span>
-                  Don't have account?{" "}
-                  <Link to={'/signup'} className="red cursor">Signup</Link>
+                  Already have Account?{" "}
+                  <Link to={'/login'} className="red cursor">Login</Link>
                 </span>
               </div>
               <div className="my-2 d-flex justify-content-center">
@@ -471,9 +576,9 @@ function Login() {
               <div className="d-flex justify-content-center">
                 <img
                   src={metamaskwithmascot}
-                  alt=""
                   style={{ cursor: "pointer" }}
                   onClick={openMetaMaskLink}
+                  alt=""
                 />
               </div>
             </form>

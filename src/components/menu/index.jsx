@@ -101,7 +101,6 @@ const MenuComponent = ({ menuHandle, className }) => {
     );
   };
 
-
   // MenuComponent.jsx
   useEffect(() => {
     document.body.classList.remove("app-light", "app-dark");

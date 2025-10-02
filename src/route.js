@@ -20,6 +20,7 @@ import {
 } from "./assets";
 import Dashboard from "./views/public/Dashboard";
 import Login from "./views/public/Login";
+import Signup from "./views/public/Signup";
 import NftDetailsScreen from "./views/public/NftDetailScreen";
 import HelpCenter from "./views/public/HelpCenter";
 import PrivacySecurity from "./views/public/PrivacySecurity";
@@ -233,6 +234,15 @@ const routes = [
     path: "/login",
     icon: "",
     component: <Login />,
+    visible: true,
+    key: 2,
+  },
+  {
+    name: "Signup",
+    layout: "public",
+    path: "/signup",
+    icon: "",
+    component: <Signup />,
     visible: true,
     key: 2,
   },
