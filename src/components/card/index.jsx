@@ -336,6 +336,7 @@ const CardCompnent = ({
     }
   }, [searchParams.get("payment")]);
 
+  console.log(artistName)
   return (
     <div className="my-4 col-lg-3 col-md-6 col-sm-6 col-12 d-flex justify-content-center">
       <Modal
@@ -431,18 +432,20 @@ const CardCompnent = ({
           <div
             onClick={() => setIsVideoOpen(true)}
             style={{ position: "relative", cursor: "pointer" }}
-
           >
             <ReactPlayer
               className="card_video"
               controls={false}
+              style={{
+                objectFit: "cover",
+              }}
               url={videoLink}
               onPlay={handleWatchClick}
             />
           </div>
         }
       >
-        <Space
+        {/* <Space
           direction="horizontal"
           style={{
             width: "100%",
@@ -459,7 +462,75 @@ const CardCompnent = ({
             <img src={watchedIcon} alt="Watched" style={{ color: "#756E6E" }} />
             <p style={{ fontSize: "0.75rem" }}>{watchCount}</p>
           </Space>
+        </Space> */}
+        <Space
+          direction="horizontal"
+          style={{
+            width: "100%",
+            top: "10px",
+            left: "10px",
+            position: "absolute",
+            background: "transparent",
+            zIndex: 5,
+          }}
+        >
+          {/* ❤️ Likes */}
+          <Space
+            direction="vertical"
+            align="center"
+            style={{
+              backdropFilter: "blur(6px)",
+              backgroundColor: isLight ? "rgba(255, 255, 255, 0.55)" : "rgba(0, 0, 0, 0.45)",
+              borderRadius: "8px",
+              padding: "4px 8px",
+              color: isLight ? "#000" : "#fff",
+              minWidth: "36px",
+              boxShadow: isLight
+                ? "0 0 4px rgba(0,0,0,0.1)"
+                : "0 0 4px rgba(255,255,255,0.1)",
+            }}
+          >
+            <img
+              src={likedIcon}
+              alt="Liked"
+              width="16"
+              height="16"
+              style={{
+                filter: isLight ? "brightness(0)" : "brightness(0) invert(1)",
+              }}
+            />
+            <p style={{ fontSize: "0.75rem", marginBottom: 0 }}>{likeCount}</p>
+          </Space>
+
+          {/* ▶️ Watched */}
+          <Space
+            direction="vertical"
+            align="center"
+            style={{
+              backdropFilter: "blur(6px)",
+              backgroundColor: isLight ? "rgba(255, 255, 255, 0.55)" : "rgba(0, 0, 0, 0.45)",
+              borderRadius: "8px",
+              padding: "4px 8px",
+              color: isLight ? "#000" : "#fff",
+              minWidth: "36px",
+              boxShadow: isLight
+                ? "0 0 4px rgba(0,0,0,0.1)"
+                : "0 0 4px rgba(255,255,255,0.1)",
+            }}
+          >
+            <img
+              src={watchedIcon}
+              alt="Watched"
+              width="16"
+              height="16"
+              style={{
+                filter: isLight ? "brightness(0)" : "brightness(0) invert(1)",
+              }}
+            />
+            <p style={{ fontSize: "0.75rem", marginBottom: 0 }}>{watchCount}</p>
+          </Space>
         </Space>
+
         {marketplacecard ? (
           <>
             <div className="price-wrapper d-flex justify-content-between">
@@ -553,9 +624,21 @@ const CardCompnent = ({
                         }}
                         alt="profile"
                       />
-                      <span className="light-grey2 mt-2 fs-5">
+                      {/* <span className="light-grey2 mt-2 fs-5">
                         {artistName}
-                      </span>
+                      </span> */}
+                      <abbr
+                        title={artistName}
+                        className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                        style={{
+                          maxWidth: "60px",
+                          textDecoration: "none",  // remove dotted underline
+                          cursor: "pointer"        // pointer on hover
+                        }}
+                      >
+                        {artistName}
+                      </abbr>
+
                     </div>
                   </div>
 
@@ -579,36 +662,52 @@ const CardCompnent = ({
               </>
             ) : (
               <>
-                <div className="d-flex">
-                  <div className="top-btn-div">
+                <div className="d-flex align-items-center gap-2 flex-wrap justify-content-between">
+                  <div className="d-flex align-items-center">
                     <img
                       src={image}
                       alt="profile"
                       onError={(e) => {
                         e.target.src = profileimg;
                       }}
+                      className="rounded-circle"
+                      style={{ width: 24, height: 24, objectFit: "cover" }}
                     />
-                    {/* 
-                    <button
-                      className="buybtn"
-                      style={{ width: "80px" }}
-                      onClick={() => {
-                        navigate(`/nft-detail/${id}`);
+
+                    <abbr
+                      title={artistName}
+                      className="light-grey2 fs-6 ms-2 text-truncate d-inline-block"
+                      style={{
+                        maxWidth: "80px",
+                        textDecoration: "none",
+                        cursor: "pointer",
                       }}
                     >
-                      Nft Detail
-                    </button> */}
-
-                    <Link to={`/nft-detail/${id}`}>Nft Detail</Link>
+                      {artistName}
+                    </abbr>
                   </div>
-                  <span
+
+                  <Link
+                    to={`/nft-detail/${id}`}
+                    className="text-primary fw-semibold"
+                    style={{
+                      whiteSpace: "nowrap",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Nft Detail
+                  </Link>
+
+                  {/* <span
                     className="ms-2 light-grey2"
-                    style={{ fontSize: "0.80rem" }}
+                    style={{ fontSize: "0.8rem", whiteSpace: "nowrap" }}
                   >
                     {status}
-                  </span>
+                  </span> */}
                 </div>
-                <h5 className="light-grey2 mt-2">{name}</h5>
+
+                <h5 className="light-grey2 mt-2 mb-0">{name}</h5>
+
               </>
             )}
             {sellnft ? (
@@ -645,7 +744,7 @@ const CardCompnent = ({
                       }
                     }}
                   />
-                  {userData &&
+                  {userProfile && (
                     <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
                       <img
                         style={{ width: 25 }}
@@ -655,7 +754,7 @@ const CardCompnent = ({
                         onClick={handleLikeClick}
                       />
                     </div>
-                  }
+                  )}
                 </div>
                 {collectionBtn && (
                   <Button
@@ -746,7 +845,7 @@ const CardCompnent = ({
                       />
                     </>
                   )}
-                  {userData &&
+                  {userProfile && (
                     <div className="red-gradient ms-3 d-flex justify-content-center thumbView">
                       <img
                         style={{ width: 25 }}
@@ -755,7 +854,7 @@ const CardCompnent = ({
                         onClick={handleLikeClick}
                       />
                     </div>
-                  }
+                  )}
                 </div>
 
                 <Button
@@ -778,24 +877,27 @@ const CardCompnent = ({
               </>
             )}
           </>
-        )}
-      </Card>
-      {isPaid ? (
-        <PaymentConfirmation
-          setShow={setShowPayment}
-          show={showpayment}
-          paymentConfirm={true}
-          handleDownloadClick={handleDownloadClick}
-        />
-      ) : (
-        <DownloadModal
-          setShow={setShowDownload}
-          show={showDownload}
-          duration={duration}
-          handelStripe={handleStripePayment}
-          handlePaypal={handlePaypalPayment}
-        />
-      )}
+        )
+        }
+      </Card >
+      {
+        isPaid ? (
+          <PaymentConfirmation
+            setShow={setShowPayment}
+            show={showpayment}
+            paymentConfirm={true}
+            handleDownloadClick={handleDownloadClick}
+          />
+        ) : (
+          <DownloadModal
+            setShow={setShowDownload}
+            show={showDownload}
+            duration={duration}
+            handelStripe={handleStripePayment}
+            handlePaypal={handlePaypalPayment}
+          />
+        )
+      }
 
       <Modal
         open={isVideoOpen}
@@ -803,30 +905,36 @@ const CardCompnent = ({
         centered
         onCancel={() => setIsVideoOpen(false)}
         width="auto"
-        style={{ maxWidth: "90vw" }}                 // responsive width
-        bodyStyle={{ padding: 0 }}                   // no extra padding
+        style={{ maxWidth: "90vw" }} // responsive width
+        bodyStyle={{ padding: 0 }} // no extra padding
       >
         {/* Responsive 16:9 wrapper (YouTube style). Need different ratio? change below */}
-        <div style={{
-          position: "relative",
-          width: "90vw",
-          maxWidth: 1000,                             // hard cap, optional
-          aspectRatio: "16 / 9",                      // keeps height in sync automatically
-        }}>
+        <div
+          style={{
+            position: "relative",
+            width: "90vw",
+            maxWidth: 1000, // hard cap, optional
+            aspectRatio: "16 / 9", // keeps height in sync automatically
+          }}
+        >
           <ReactPlayer
             url={videoLink}
+            className="card_video"
             controls
             playing
+            objec
             width="100%"
             height="100%"
-            onStart={handleWatchClick}                // watch count on start
+            style={{
+              objectFit: "cover",
+            }}
+            onStart={handleWatchClick} // watch count on start
           />
         </div>
       </Modal>
 
-
       {/* <PaymentConfirmation setShow={setShowPayment} show={showpayment} /> */}
-    </div>
+    </div >
   );
 };
 

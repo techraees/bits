@@ -450,7 +450,9 @@ function Login() {
               <div className="my-4 d-flex justify-content-center">
                 <span>
                   Don't have account?{" "}
-                  <Link to={'/signup'} className="red cursor">Signup</Link>
+                  <Link to={"/signup"} className="red cursor">
+                    Signup
+                  </Link>
                 </span>
               </div>
               <div className="my-2 d-flex justify-content-center">

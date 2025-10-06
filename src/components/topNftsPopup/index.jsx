@@ -83,7 +83,6 @@ const ListingModal = ({
         setIsFixedPriceStep(1);
       }}
       style={customStyles}
-
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}

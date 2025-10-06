@@ -555,7 +555,9 @@ function Login() {
               <div className="my-4 d-flex justify-content-center">
                 <span>
                   Already have Account?{" "}
-                  <Link to={'/login'} className="red cursor">Login</Link>
+                  <Link to={"/login"} className="red cursor">
+                    Login
+                  </Link>
                 </span>
               </div>
               <div className="my-2 d-flex justify-content-center">

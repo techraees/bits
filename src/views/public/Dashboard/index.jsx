@@ -193,6 +193,7 @@ const Dashboard = () => {
                   userId={e?.nft_id?.user_id}
                   fixtokenId={e.fixtokenId}
                   fixOwner={e?.nft_id?.wallet_address}
+                  artistName={e?.nft_id?.artist_name1}
                   fixRoyalty={e?.nft_id?.royalty}
                   fixCopies={e?.nft_id?.supply}
                   numberofcopies={e.supply}

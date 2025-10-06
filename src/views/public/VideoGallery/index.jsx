@@ -303,7 +303,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {
@@ -324,6 +324,7 @@ const VideoGallery = () => {
                       fixtokenId={item?.tokenid}
                       fixOwner={item?.seller?.user_address}
                       fixRoyalty={item?.nft_id?.royalty}
+                      artistName={item?.nft_id?.artist_name1}
                       fixCopies={item?.nft_id?.supply}
                       id={item?.nft_id?._id}
                       likeCount={item?.nft_id?.likeCount}
