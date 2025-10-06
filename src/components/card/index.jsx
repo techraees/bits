@@ -336,7 +336,7 @@ const CardCompnent = ({
     }
   }, [searchParams.get("payment")]);
 
-  console.log(artistName)
+  console.log(artistName);
   return (
     <div className="my-4 col-lg-3 col-md-6 col-sm-6 col-12 d-flex justify-content-center">
       <Modal
@@ -480,7 +480,9 @@ const CardCompnent = ({
             align="center"
             style={{
               backdropFilter: "blur(6px)",
-              backgroundColor: isLight ? "rgba(255, 255, 255, 0.55)" : "rgba(0, 0, 0, 0.45)",
+              backgroundColor: isLight
+                ? "rgba(255, 255, 255, 0.55)"
+                : "rgba(0, 0, 0, 0.45)",
               borderRadius: "8px",
               padding: "4px 8px",
               color: isLight ? "#000" : "#fff",
@@ -508,7 +510,9 @@ const CardCompnent = ({
             align="center"
             style={{
               backdropFilter: "blur(6px)",
-              backgroundColor: isLight ? "rgba(255, 255, 255, 0.55)" : "rgba(0, 0, 0, 0.45)",
+              backgroundColor: isLight
+                ? "rgba(255, 255, 255, 0.55)"
+                : "rgba(0, 0, 0, 0.45)",
               borderRadius: "8px",
               padding: "4px 8px",
               color: isLight ? "#000" : "#fff",
@@ -632,13 +636,12 @@ const CardCompnent = ({
                         className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
                         style={{
                           maxWidth: "60px",
-                          textDecoration: "none",  // remove dotted underline
-                          cursor: "pointer"        // pointer on hover
+                          textDecoration: "none", // remove dotted underline
+                          cursor: "pointer", // pointer on hover
                         }}
                       >
                         {artistName}
                       </abbr>
-
                     </div>
                   </div>
 
@@ -707,7 +710,6 @@ const CardCompnent = ({
                 </div>
 
                 <h5 className="light-grey2 mt-2 mb-0">{name}</h5>
-
               </>
             )}
             {sellnft ? (
@@ -877,27 +879,24 @@ const CardCompnent = ({
               </>
             )}
           </>
-        )
-        }
-      </Card >
-      {
-        isPaid ? (
-          <PaymentConfirmation
-            setShow={setShowPayment}
-            show={showpayment}
-            paymentConfirm={true}
-            handleDownloadClick={handleDownloadClick}
-          />
-        ) : (
-          <DownloadModal
-            setShow={setShowDownload}
-            show={showDownload}
-            duration={duration}
-            handelStripe={handleStripePayment}
-            handlePaypal={handlePaypalPayment}
-          />
-        )
-      }
+        )}
+      </Card>
+      {isPaid ? (
+        <PaymentConfirmation
+          setShow={setShowPayment}
+          show={showpayment}
+          paymentConfirm={true}
+          handleDownloadClick={handleDownloadClick}
+        />
+      ) : (
+        <DownloadModal
+          setShow={setShowDownload}
+          show={showDownload}
+          duration={duration}
+          handelStripe={handleStripePayment}
+          handlePaypal={handlePaypalPayment}
+        />
+      )}
 
       <Modal
         open={isVideoOpen}
@@ -934,7 +933,7 @@ const CardCompnent = ({
       </Modal>
 
       {/* <PaymentConfirmation setShow={setShowPayment} show={showpayment} /> */}
-    </div >
+    </div>
   );
 };
 

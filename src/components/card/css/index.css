@@ -190,16 +190,6 @@
   color: #fff;
 }
 
-.cardContainer.card-light {
-  background-color: #fff;
-  color: #000;
-}
-
-/* If you want to fix blur box colors for light mode: */
-.cardContainer.card-light .ant-space {
-  background-color: rgba(255, 255, 255, 0.4) !important;
-  color: #000 !important;
-}
 
 
 .card_video video {

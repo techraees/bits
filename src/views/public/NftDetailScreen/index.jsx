@@ -76,9 +76,11 @@ const NftDetailsScreen = () => {
                   />
                 </div>
                 <a
-                  href={`https://${contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
-                    }/token/${contractData.mintContract.address}?a=${data?.DetailsOfANft?.token_id
-                    }`}
+                  href={`https://${
+                    contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
+                  }/token/${contractData.mintContract.address}?a=${
+                    data?.DetailsOfANft?.token_id
+                  }`}
                   target="_blank"
                   className={`${textColor2}`}
                   rel="noreferrer"
@@ -155,7 +157,9 @@ const NftDetailsScreen = () => {
               </div>
               <div className="my-3">
                 <p className={`${textColor} mb-1 fs-6`}>Description</p>
-                <p className={`${textColor2} m-0 fs-7`}>{data?.DetailsOfANft?.description}</p>
+                <p className={`${textColor2} m-0 fs-7`}>
+                  {data?.DetailsOfANft?.description}
+                </p>
               </div>
             </div>
           </Col>
