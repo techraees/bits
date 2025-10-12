@@ -32,7 +32,6 @@ import {
   useAppKitAccount,
   useAppKitNetwork,
 } from "@reown/appkit/react";
-import { getStorage } from "../../../utills/localStorage";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;

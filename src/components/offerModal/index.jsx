@@ -1,34 +1,33 @@
-import React, { useState, useEffect } from "react";
-import "./css/index.css";
-import { logo } from "../../assets";
-import BidModal from "../bidModal";
+import { useMutation } from "@apollo/client";
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+import {
+  useAppKitAccount,
+  useAppKitNetwork,
+  useAppKitProvider,
+} from "@reown/appkit/react";
 import { Modal, Table } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import ConnectModal from "../connectModal";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { useMutation } from "@apollo/client";
-import { trimWallet } from "../../utills/trimWalletAddr";
-import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
-import { ETHToWei, WeiToETH } from "../../utills/convertWeiAndBnb";
+import { useDispatch, useSelector } from "react-redux";
+import { logo } from "../../assets";
 import { ToastMessage } from "../../components";
-import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
-import { loadContractIns } from "../../store/actions";
-import {
-  useAppKitProvider,
-  useAppKitAccount,
-  useAppKitNetwork,
-} from "@reown/appkit/react";
-import { ethers } from "ethers";
 import {
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
-  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
   CREATE_NEW_TRANSACTION,
+  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
 } from "../../gql/mutations";
-import { getStorage } from "../../utills/localStorage";
+import { loadContractIns } from "../../store/actions";
+import { ETHToWei } from "../../utills/convertWeiAndBnb";
 import { getCookieStorage } from "../../utills/cookieStorage";
+import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
+import { trimWallet } from "../../utills/trimWalletAddr";
+import BidModal from "../bidModal";
+import ConnectModal from "../connectModal";
+import "./css/index.css";
 
 const OfferModal = ({
   name,

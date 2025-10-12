@@ -30,7 +30,6 @@ import {
   CREATE_NEW_TRANSACTION,
 } from "../../../gql/mutations";
 
-import { getStorage } from "../../../utills/localStorage";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const ListNft = () => {

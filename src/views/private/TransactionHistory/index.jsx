@@ -7,7 +7,6 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
 import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
 import { dbDateToReadableDate } from "../../../utills/timeToTimestamp";
-import { getStorage } from "../../../utills/localStorage";
 
 import {
   Chart as ChartJS,

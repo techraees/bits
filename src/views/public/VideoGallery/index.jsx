@@ -8,7 +8,6 @@ import { AZ, grid, profile2, search } from "../../../assets";
 import { CardCompnent } from "../../../components";
 import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
-import { getStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 import CardSkeletal from "../Dashboard/Skeletal/CardSkeletal";
 import { getCookieStorage } from "../../../utills/cookieStorage";

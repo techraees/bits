@@ -10,7 +10,6 @@ import {
   GET_ALL_NFTS_WITHOUT_ADDRESS,
   GET_ALL_MY_TRANSACTION,
 } from "../../../gql/queries";
-import { getStorage } from "../../../utills/localStorage";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const SellingHistory = () => {

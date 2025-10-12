@@ -17,9 +17,9 @@ import {
 import { GET_PROFILE_DETAILS_QUERY } from "../../gql/queries";
 import { loadContractIns } from "../../store/actions";
 import { ETHToWei } from "../../utills/convertWeiAndBnb";
+import { getCookieStorage } from "../../utills/cookieStorage";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { boughtMessage } from "../../utills/emailMessages";
-import { getStorage } from "../../utills/localStorage";
 import { trimWallet } from "../../utills/trimWalletAddr";
 import ConnectModal from "../connectModal";
 import DecrementButtonArr from "./DecrementButtonArr.svg";
@@ -27,7 +27,6 @@ import GreenTick from "./GreenTick.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
 import "./css/index.css";
 import RedCrossIcon from "./redCross.svg";
-import { getCookieStorage } from "../../utills/cookieStorage";
 const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({

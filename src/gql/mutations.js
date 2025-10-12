@@ -93,14 +93,8 @@ const CREATE_USER = gql`
       dob: $dob
     ) {
       _id
-      email
-      full_name
-      password
-      phone_number
-      user_name
-      user_address
-      dob
-      token
+      access_token
+      refresh_token
     }
   }
 `;

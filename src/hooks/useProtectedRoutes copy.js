@@ -2,11 +2,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { getStorage } from "../utills/localStorage";
 import { Loader } from "../components";
 import routes from "../route";
-import { trimAfterFirstSlash } from "../utills/reusableFunctions";
 import { getCookieStorage } from "../utills/cookieStorage";
+import { trimAfterFirstSlash } from "../utills/reusableFunctions";
 
 export const useProtectedRoutes = () => {
   const { userData } = useSelector((state) => state.address.userData);

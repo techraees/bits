@@ -23,7 +23,6 @@ import CookieConsent from "react-cookie-consent";
 import NotificationModal from "../notificationModal";
 import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
-import { getStorage } from "../../utills/localStorage";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
 import { getCookieStorage } from "../../utills/cookieStorage";
@@ -252,8 +251,8 @@ const NavbarComponent = ({ dashboardNav }) => {
     <>
       <Navbar
         className={`dashboardNavBgColor ${dashboardNav
-            ? headerTheme || "dashboardNavBgColor"
-            : headerTheme || "navbarBgColor"
+          ? headerTheme || "dashboardNavBgColor"
+          : headerTheme || "navbarBgColor"
           }`}
         expand="lg"
         sticky="top"

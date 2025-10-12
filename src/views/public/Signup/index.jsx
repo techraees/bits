@@ -23,6 +23,7 @@ import { Col, Divider, Row, Select } from "antd";
 import { setStorage } from "../../../utills/localStorage";
 import ForgotPassModal from "../../../components/ForgotPassModal";
 import { useAppKitAccount } from "@reown/appkit/react";
+import { setCookieStorage } from "../../../utills/cookieStorage";
 
 const env = process.env;
 
@@ -108,29 +109,25 @@ function Login() {
       signInResetValue();
 
       const { LoginUser } = loginData;
-      const { user_address, id, token, full_name, country, bio, profileImg } =
-        LoginUser;
-      setStorage("token", token);
+      const { access_token, refresh_token } = LoginUser;
 
-      Cookies.set("your-cookie-name", "cookie-value", {
-        expires: 7,
-        secure: true,
-        sameSite: "Lax",
-      });
+      setCookieStorage("access_token", access_token);
+      setCookieStorage("refresh_token", refresh_token);
 
-      dispatch({
-        type: "NFT_ADDRESS",
-        userData: {
-          address: user_address,
-          full_name: full_name,
-          country: country,
-          bio: bio,
-          profileImg: profileImg,
-          id,
-          token,
-          isLogged: true,
-        },
-      });
+
+      // dispatch({
+      //   type: "NFT_ADDRESS",
+      //   userData: {
+      //     address: user_address,
+      //     full_name: full_name,
+      //     country: country,
+      //     bio: bio,
+      //     profileImg: profileImg,
+      //     id,
+      //     token,
+      //     isLogged: true,
+      //   },
+      // });
       // navigate("/");
       window.location.href = "/";
     }
@@ -206,25 +203,28 @@ function Login() {
   useEffect(() => {
     if (signUpData) {
       const { CreateUser } = signUpData;
-      const { user_address, _id, token, user_name, country, bio, profileImg } =
-        CreateUser;
 
-      setStorage("token", token);
-      dispatch({
-        type: "NFT_ADDRESS",
-        userData: {
-          address: address,
-          user_name: user_name,
-          country: country,
-          bio: bio,
-          profileImg: profileImg,
-          id: _id,
-          token,
-          isLogged: true,
-        },
-      });
-      navigate(`/collections/${_id}`);
-      // window.location.href = `/collections/${_id}`;
+      const { access_token, refresh_token, _id } = CreateUser;
+
+      setCookieStorage("access_token", access_token);
+      setCookieStorage("refresh_token", refresh_token);
+
+      // setStorage("token", token);
+      // dispatch({
+      //   type: "NFT_ADDRESS",
+      //   userData: {
+      //     address: address,
+      //     user_name: user_name,
+      //     country: country,
+      //     bio: bio,
+      //     profileImg: profileImg,
+      //     id: _id,
+      //     token,
+      //     isLogged: true,
+      //   },
+      // });
+      // navigate(`/collections/${_id}`);
+      window.location.href = `/collections/${_id}`;
 
       signUpResetValue();
       signUpSetValue("full_name", "");

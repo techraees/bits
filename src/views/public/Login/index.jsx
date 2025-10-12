@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useEffect, useState } from "react";
@@ -16,11 +16,9 @@ import {
 import ConnectModal from "../../../components/connectModal";
 import ForgotPassModal from "../../../components/ForgotPassModal";
 import Loading from "../../../components/loaders/loading";
-import { signInSchema, signUpSchema } from "../../../components/validations";
-import { CREATE_USER } from "../../../gql/mutations";
+import { signInSchema } from "../../../components/validations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
-import { setStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 
 const env = process.env;
@@ -86,7 +84,6 @@ function Login() {
 
       const { LoginUser } = loginData;
       const { access_token, refresh_token } = LoginUser;
-      // setStorage("token", token);
 
       setCookieStorage("access_token", access_token);
       setCookieStorage("refresh_token", refresh_token);
@@ -106,7 +103,7 @@ function Login() {
       // });
 
       // navigate("/");
-      // window.location.href = "/";
+      window.location.href = "/";
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");

@@ -30,7 +30,6 @@ import {
 // import { USDTOETH } from "../../../utills/currencyConverter";
 import { getAllNftsByAddressAlchemy } from "../../../config/infura";
 import { useAppKitAccount } from "@reown/appkit/react";
-import { getStorage } from "../../../utills/localStorage";
 import CardSkeletal from "../../public/Dashboard/Skeletal/CardSkeletal";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 

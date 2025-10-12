@@ -1,7 +1,6 @@
-import React from "react";
-import "./css/index.css";
 import { Switch } from "antd";
 import { useDispatch } from "react-redux";
+import "./css/index.css";
 
 const SwitchBtn = ({ toggleBtn }) => {
   // const [toggle, setToggle] = useState(true);
