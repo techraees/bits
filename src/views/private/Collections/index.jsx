@@ -32,6 +32,7 @@ import { getAllNftsByAddressAlchemy } from "../../../config/infura";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { getStorage } from "../../../utills/localStorage";
 import CardSkeletal from "../../public/Dashboard/Skeletal/CardSkeletal";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -49,13 +50,13 @@ const Collections = () => {
     },
   );
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const { data: getAllNftIOwnedData, loading: getAllNftIOwnedLoading } =
     useQuery(Get_MY_NFTS_THAT_I_OWNED, {
       variables: {
-        token: getStorage("token"),
+        token: getCookieStorage("access_token"),
         wallet_address: profileData?.GetProfileDetails?.user_address,
         ownership_type: activeTab === "1" ? "created" : "owned",
         page: currentPage,
@@ -236,7 +237,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -312,7 +313,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                  0 ? (
+                    0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index

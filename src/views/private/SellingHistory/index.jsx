@@ -11,9 +11,10 @@ import {
   GET_ALL_MY_TRANSACTION,
 } from "../../../gql/queries";
 import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const SellingHistory = () => {
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const { error, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
   const { contractData } = useSelector((state) => state.chain.contractData);
 

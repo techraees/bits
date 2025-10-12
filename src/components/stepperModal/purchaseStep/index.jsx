@@ -22,6 +22,7 @@ import { loadContractIns } from "../../../store/actions";
 import { boughtMessage } from "../../../utills/emailMessages";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -50,7 +51,7 @@ function PurchaseStep({
 
   const { userData } = useSelector((state) => state.address.userData);
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [
     getProfile,

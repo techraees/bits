@@ -199,3 +199,21 @@
   border-radius: 8px;
   /* optional */
 }
+
+.nft_details_button {
+  color: white !important;
+}
+
+.nft_details_button:hover {
+  text-decoration: underline !important;
+  color: red !important;
+}
+
+.nft_details_button_dark {
+  color: black !important;
+}
+
+.nft_details_button_dark:hover {
+  text-decoration: underline !important;
+  color: red !important;
+}

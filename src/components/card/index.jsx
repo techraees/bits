@@ -565,14 +565,21 @@ const CardCompnent = ({
                 {location.pathname === "/marketplace" ? "Bid Now" : "Buy Now"}
               </button>
             )}
-            <button
-              className="buybtn"
+            {/* <button
+              className="buybtn nft_details_button"
               onClick={() => {
                 navigate(`/nft-detail/${id}`);
               }}
             >
               Nft Detail
-            </button>
+            </button> */}
+            <Link
+              to={`/nft-detail/${id}`}
+              className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+              style={{}}
+            >
+              Nft Detail
+            </Link>
             <div>
               <img src={profile} style={{ width: 15 }} alt="profile" />
               <span className="light-grey2 ms-2" style={{ fontSize: "1rem" }}>
@@ -647,14 +654,22 @@ const CardCompnent = ({
 
                   <div>
                     {detailBtn && (
-                      <button
-                        className="detail-btn"
-                        onClick={() => {
-                          navigate("/nft-detail/" + id);
-                        }}
+                      // <button
+                      //   className="detail-btn"
+                      //   onClick={() => {
+                      //     navigate("/nft-detail/" + id);
+                      //   }}
+                      // >
+                      //   Nft Detail
+                      // </button>
+
+                      <Link
+                        to={`/nft-detail/${id}`}
+                        className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                        style={{}}
                       >
                         Nft Detail
-                      </button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -692,11 +707,8 @@ const CardCompnent = ({
 
                   <Link
                     to={`/nft-detail/${id}`}
-                    className="text-primary fw-semibold"
-                    style={{
-                      whiteSpace: "nowrap",
-                      textDecoration: "none",
-                    }}
+                    className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                    style={{}}
                   >
                     Nft Detail
                   </Link>

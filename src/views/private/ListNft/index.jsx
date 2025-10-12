@@ -31,6 +31,7 @@ import {
 } from "../../../gql/mutations";
 
 import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const ListNft = () => {
   // const { Option } = Select;
@@ -89,7 +90,7 @@ const ListNft = () => {
 
   const { name, royalty, artistName, tokenId, videoLink, nftId } = state;
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const handleEndTimeStamp = (value, dateString) => {
     const time = timeToTimeStamp(dateString);
@@ -193,19 +194,19 @@ const ListNft = () => {
 
           const tx = isAuction
             ? await market.listItemForAuction(
-                price,
-                startTimeStamp,
-                endTimeStampParam,
-                tokenId,
-                copies,
-                mintContract.address,
-              )
+              price,
+              startTimeStamp,
+              endTimeStampParam,
+              tokenId,
+              copies,
+              mintContract.address,
+            )
             : await market.listItemForFixedPrice(
-                tokenId,
-                copies,
-                price,
-                mintContract.address,
-              );
+              tokenId,
+              copies,
+              price,
+              mintContract.address,
+            );
 
           const res = await tx.wait();
           const transactionHash = res.transactionHash;

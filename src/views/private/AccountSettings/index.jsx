@@ -13,6 +13,7 @@ import {
 } from "../../../components/validations";
 import { logoutWallet } from "../../../store/actions";
 import { getStorage, removeStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const AccountSettings = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const AccountSettings = () => {
 
   const username = userData?.user_name;
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [updatePassword, { loading, error, data }] = useMutation(
     UPDATE_PASSWORD_MUTATION,

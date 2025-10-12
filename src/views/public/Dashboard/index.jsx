@@ -84,7 +84,7 @@ const Dashboard = () => {
 
   return (
     <div className={backgroundTheme}>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       <UploadVideoModal
         visible={uploadVideoModal}
         onClose={() => setUploadVideoModal(false)}

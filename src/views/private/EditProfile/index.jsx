@@ -22,13 +22,14 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_USER_PROFILE } from "../../../gql/queries";
 import { Link } from "react-router-dom";
 import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
 const EditProfile = () => {
   const { userData } = useSelector((state) => state.address.userData);
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [updateUserProfile, { loading, error, data }] =
     useMutation(UPDATE_USER_PROFILE);

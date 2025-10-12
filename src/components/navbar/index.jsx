@@ -26,6 +26,7 @@ import ManageCookiesModal from "../manageCookiesModal";
 import { getStorage } from "../../utills/localStorage";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
+import { getCookieStorage } from "../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -153,7 +154,7 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const token = getStorage("token");
+      const token = getCookieStorage("access_token");
       console.log("Updated token:", token);
       if (token) {
         profile({
@@ -250,11 +251,10 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${
-          dashboardNav
+        className={`dashboardNavBgColor ${dashboardNav
             ? headerTheme || "dashboardNavBgColor"
             : headerTheme || "navbarBgColor"
-        }`}
+          }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}

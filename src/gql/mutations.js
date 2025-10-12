@@ -389,6 +389,17 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   }
 `;
 
+// Get Refresh Token Mutation
+const REFRESH_TOKEN_MUTATION = gql`
+  mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
+    createNewAccessTokenFromRefreshToken(refresh_token: $refresh_token) {
+      payload {
+        access_token
+      }
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -421,4 +432,7 @@ export {
   // Create Bid
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   // ========================= Optimization Mutations ======================
+
+  // Refresh Token
+  REFRESH_TOKEN_MUTATION,
 };

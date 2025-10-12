@@ -11,9 +11,10 @@ import {
   GET_ALL_MY_TRANSACTION,
 } from "../../../gql/queries";
 import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const PurchaseHistory = () => {
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const {
     // loading, error,
     data,

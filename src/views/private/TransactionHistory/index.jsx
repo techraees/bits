@@ -19,6 +19,7 @@ import {
   Legend,
 } from "chart.js";
 import faker from "faker";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 ChartJS.register(
   CategoryScale,
@@ -57,7 +58,7 @@ export const data = {
 };
 
 const TransactionHistory = () => {
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const {

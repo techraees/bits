@@ -11,6 +11,7 @@ import { USDTOMATIC } from "../../../utills/currencyConverter";
 import { getStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 import CardSkeletal from "../Dashboard/Skeletal/CardSkeletal";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -21,7 +22,7 @@ const VideoGallery = () => {
 
   // const [tokenData, setTokenData] = useState({});
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -303,7 +304,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {

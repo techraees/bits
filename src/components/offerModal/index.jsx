@@ -28,6 +28,7 @@ import {
   CREATE_NEW_TRANSACTION,
 } from "../../gql/mutations";
 import { getStorage } from "../../utills/localStorage";
+import { getCookieStorage } from "../../utills/cookieStorage";
 
 const OfferModal = ({
   name,
@@ -56,7 +57,7 @@ const OfferModal = ({
 
   const [dataSource, setDataSource] = useState([]);
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [create_bid_against_auction] = useMutation(
     CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,

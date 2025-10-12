@@ -27,6 +27,7 @@ import GreenTick from "./GreenTick.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
 import "./css/index.css";
 import RedCrossIcon from "./redCross.svg";
+import { getCookieStorage } from "../../utills/cookieStorage";
 const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({
@@ -69,7 +70,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
     setQuantity((prev) => (parseInt(prev) > 1 ? parseInt(prev) - 1 : 1)); // Prevent less than 1
   };
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const { userData } = useSelector((state) => state.address.userData);
 
@@ -382,8 +383,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                                itemData?.price *
-                                (itemData?.chainId == 137 ? maticBal : ethBal),
+                              itemData?.price *
+                              (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -417,8 +418,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                            itemData?.price *
-                            (itemData?.chainId == 137 ? maticBal : ethBal),
+                          itemData?.price *
+                          (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>

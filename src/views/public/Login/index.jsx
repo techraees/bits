@@ -1,28 +1,27 @@
 /* eslint-disable no-useless-escape */
-import React, { useEffect, useState } from "react";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useAppKitAccount } from "@reown/appkit/react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logo, metamaskwithmascot } from "../../../assets";
-import { useSelector, useDispatch } from "react-redux";
 import {
   ButtonComponent,
   CustomCheckbox,
   InputComponent,
   ToastMessage,
 } from "../../../components";
-import "./css/index.css";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import ConnectModal from "../../../components/connectModal";
+import ForgotPassModal from "../../../components/ForgotPassModal";
 import Loading from "../../../components/loaders/loading";
 import { signInSchema, signUpSchema } from "../../../components/validations";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { LOGIN_USER, GET_PLAYER } from "../../../gql/queries";
-import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../gql/mutations";
-import ConnectModal from "../../../components/connectModal";
-import Cookies from "js-cookie";
-import { Col, Divider, Row, Select } from "antd";
+import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
+import { setCookieStorage } from "../../../utills/cookieStorage";
 import { setStorage } from "../../../utills/localStorage";
-import ForgotPassModal from "../../../components/ForgotPassModal";
-import { useAppKitAccount } from "@reown/appkit/react";
+import "./css/index.css";
 
 const env = process.env;
 
@@ -39,12 +38,6 @@ function Login() {
 
   // sign in checkbox
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
-
-  // sign up checkbox
-  const [signUpAgreeCheckbox, setSignUpAgreeCheckbox] = useState(false);
-  const [monthsOptions, setMonthsOptions] = useState([]);
-  const [daysOptions, setDaysOptions] = useState([]);
-  const [yearsOptions, setYearsOptions] = useState([]);
 
   let navigate = useNavigate();
 
@@ -86,185 +79,40 @@ function Login() {
     setValue(e.target.name, e.target.value);
   };
 
-  const [day, setDay] = useState();
-  const [month, setMonth] = useState();
-  const [year, setYear] = useState();
-
-  const handleDay = (e) => {
-    setDay(e);
-  };
-
-  const handleMonth = (e) => {
-    setMonth(e);
-  };
-
-  const handleYear = (e) => {
-    setYear(e);
-  };
-
   useEffect(() => {
     if (loginData) {
       // need to check if LoginUser has linkingInfo
       signInResetValue();
 
       const { LoginUser } = loginData;
-      const { user_address, id, token, full_name, country, bio, profileImg } =
-        LoginUser;
-      setStorage("token", token);
+      const { access_token, refresh_token } = LoginUser;
+      // setStorage("token", token);
 
-      Cookies.set("your-cookie-name", "cookie-value", {
-        expires: 7,
-        secure: true,
-        sameSite: "Lax",
-      });
+      setCookieStorage("access_token", access_token);
+      setCookieStorage("refresh_token", refresh_token);
 
-      dispatch({
-        type: "NFT_ADDRESS",
-        userData: {
-          address: user_address,
-          full_name: full_name,
-          country: country,
-          bio: bio,
-          profileImg: profileImg,
-          id,
-          token,
-          isLogged: true,
-        },
-      });
+      // dispatch({
+      //   type: "NFT_ADDRESS",
+      //   userData: {
+      //     address: user_address,
+      //     full_name: full_name,
+      //     country: country,
+      //     bio: bio,
+      //     profileImg: profileImg,
+      //     id,
+      //     token,
+      //     isLogged: true,
+      //   },
+      // });
+
       // navigate("/");
-      window.location.href = "/";
+      // window.location.href = "/";
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");
     }
   }, [loginData, loginError]);
 
-  // login
-
-  // signUp
-
-  const {
-    register: signUpRegister,
-    handleSubmit: signUpSubmit,
-    setValue: signUpSetValue,
-    formState: { errors: signUpFormError },
-    watch,
-    reset: signUpResetValue,
-  } = useForm({
-    resolver: yupResolver(signUpSchema),
-    defaultValues: {
-      user_name: "",
-      full_name: "",
-      email: "",
-    },
-  });
-
-  useEffect(() => {
-    const options = [];
-    for (let i = 1; i <= 12; i++) {
-      options.push({
-        value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString(),
-      });
-    }
-    setMonthsOptions(options);
-
-    const daysOptions = [];
-    for (let i = 1; i <= 31; i++) {
-      daysOptions.push({
-        value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString(),
-      });
-    }
-    setDaysOptions(daysOptions);
-
-    const optionsYears = [];
-    for (let i = 1960; i <= 2024; i++) {
-      optionsYears.push({
-        value: i.toString(),
-        label: i.toString(),
-      });
-    }
-    setYearsOptions(optionsYears);
-  }, []);
-
-  const [
-    createUser,
-    { loading: signUpLoading, error: singUpError, data: signUpData },
-  ] = useMutation(CREATE_USER);
-
-  useEffect(() => {
-    if (day && month && year) {
-      const combined = `${month}/${day}/${year}`;
-      const dateFormat = new Date(combined);
-      signUpSetValue("dob", dateFormat.toString());
-    }
-  }, [day, month, year]);
-
-  // signUp useEffect to check if any error
-
-  useEffect(() => {
-    if (signUpData) {
-      const { CreateUser } = signUpData;
-      const { user_address, _id, token, user_name, country, bio, profileImg } =
-        CreateUser;
-
-      setStorage("token", token);
-      dispatch({
-        type: "NFT_ADDRESS",
-        userData: {
-          address: address,
-          user_name: user_name,
-          country: country,
-          bio: bio,
-          profileImg: profileImg,
-          id: _id,
-          token,
-          isLogged: true,
-        },
-      });
-      navigate(`/collections/${_id}`);
-      // window.location.href = `/collections/${_id}`;
-
-      signUpResetValue();
-      signUpSetValue("full_name", "");
-      signUpSetValue("email", "");
-      signUpSetValue("user_name", "");
-      signUpSetValue("dob", "");
-      ToastMessage("success", "Account Created Successfully", "success");
-    }
-    if (singUpError) {
-      ToastMessage("error", singUpError?.message, "error");
-    }
-  }, [signUpData, singUpError]);
-
-  async function signUpHandle(data) {
-    if (
-      validatePassword(data.password) &&
-      validateEmail(data.email) &&
-      validateUsername(data.user_name) &&
-      validatePhoneNumber(data.phone_number)
-    ) {
-      const variables = {
-        userName: data.user_name,
-        email: data.email,
-        fullName: data.full_name,
-        password: data.password,
-        phoneNumber: data.phone_number,
-        userAddress: address,
-        dob: data.dob,
-      };
-      createUser({
-        variables: variables,
-      });
-    } else {
-      ToastMessage("Error", "Incorrect input format", "error");
-    }
-  }
-
-  const handleChangeSignUp = (e) => {
-    signUpSetValue(e.target.name, e.target.value);
-  };
 
   // get Player
   const [{ loading: playerLoading }] = useLazyQuery(GET_PLAYER, {
@@ -273,11 +121,6 @@ function Login() {
 
   const closeConnectModel = () => {
     setConnectModal(false);
-  };
-  const connectWalletHandle = () => {
-    if (!isConnected) {
-      setConnectModal(true);
-    }
   };
   const openMetaMaskLink = () => {
     window.open("https://metamask.io/", "_blank");
@@ -344,40 +187,12 @@ function Login() {
     return data;
   };
 
-  const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-    return passwordRegex.test(password);
-  };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateUsername = (username) => {
-    var regex = /^[a-zA-Z0-9_]+$/;
-    if (regex.test(username)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  const validatePhoneNumber = (phoneNumber) => {
-    var regex = /^\d{1,3}\d{5,}$/;
-    if (regex.test(phoneNumber)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   return (
     <div style={{ background: "black" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
       {playerLoading ||
-        signUpLoading ||
         (loading && <Loading content="Loading" />)}
 
       {forgotPassModal && (
