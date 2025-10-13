@@ -18,7 +18,11 @@ export const useProtectedRoutes = () => {
   const token = getCookieStorage("access_token");
 
   // Apollo Query to verify profile
-  const { data, loading: queryLoading, error } = useQuery(GET_PROFILE, {
+  const {
+    data,
+    loading: queryLoading,
+    error,
+  } = useQuery(GET_PROFILE, {
     variables: { token },
     skip: !token,
     fetchPolicy: "network-only",

@@ -11,7 +11,10 @@ import {
 } from "../../../components/validations";
 import { UPDATE_EMAIL, UPDATE_PASSWORD_MUTATION } from "../../../gql/mutations";
 import { logoutWallet } from "../../../store/actions";
-import { getCookieStorage, removeCookieStorage } from "../../../utills/cookieStorage";
+import {
+  getCookieStorage,
+  removeCookieStorage,
+} from "../../../utills/cookieStorage";
 import { removeStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 

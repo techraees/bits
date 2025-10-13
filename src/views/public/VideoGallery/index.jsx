@@ -303,7 +303,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {

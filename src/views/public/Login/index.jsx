@@ -110,7 +110,6 @@ function Login() {
     }
   }, [loginData, loginError]);
 
-
   // get Player
   const [{ loading: playerLoading }] = useLazyQuery(GET_PLAYER, {
     fetchPolicy: "network-only",
@@ -184,13 +183,10 @@ function Login() {
     return data;
   };
 
-
-
   return (
     <div style={{ background: "black" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
-      {playerLoading ||
-        (loading && <Loading content="Loading" />)}
+      {playerLoading || (loading && <Loading content="Loading" />)}
 
       {forgotPassModal && (
         <ForgotPassModal
