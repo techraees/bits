@@ -59,6 +59,14 @@ function Login() {
   );
 
   const loginUser = (values) => {
+    if (rememberCheckbox) {
+      localStorage.setItem("rememberEmail", values.email);
+      localStorage.setItem("rememberPassword", values.password);
+    } else {
+      localStorage.removeItem("rememberEmail");
+      localStorage.removeItem("rememberPassword");
+    }
+
     login({
       variables: {
         email: values.email,
@@ -182,6 +190,17 @@ function Login() {
     const data = await response.json();
     return data;
   };
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberEmail");
+    const savedPassword = localStorage.getItem("rememberPassword");
+
+    if (savedEmail && savedPassword) {
+      setValue("email", savedEmail);
+      setValue("password", savedPassword);
+      setRememberCheckbox(true);
+    }
+  }, [setValue]);
 
   return (
     <div style={{ background: "black" }}>

@@ -394,7 +394,7 @@ const MintNft = () => {
                             className={"royaltyInputField  me-5"}
                             placeholder={"royalty"}
                             onChange={(e) => {
-                              if (e.target.value < 100) {
+                              if (e.target.value < 101) {
                                 setFieldValue("royalty", e.target.value);
                               } else {
                                 ToastMessage(

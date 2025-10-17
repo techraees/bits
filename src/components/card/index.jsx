@@ -582,9 +582,18 @@ const CardCompnent = ({
             </Link>
             <div>
               <img src={profile} style={{ width: 15 }} alt="profile" />
-              <span className="light-grey2 ms-2" style={{ fontSize: "1rem" }}>
+              <abbr
+                title={name}
+                className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                style={{
+                  maxWidth: "170px",
+                  textDecoration: "none", // remove dotted underline
+                  cursor: "pointer", // pointer on hover
+                  fontSize: "1rem"
+                }}
+              >
                 {name}
-              </span>
+              </abbr>
             </div>
             <div>
               <img src={cross} style={{ width: 15 }} alt="cross" />
@@ -674,7 +683,18 @@ const CardCompnent = ({
                   </div>
                 </div>
                 <div>
-                  <span className="light-grey2  fs-5">{name}</span>
+                  <abbr
+                    title={name}
+                    className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                    style={{
+                      maxWidth: "170px",
+                      textDecoration: "none", // remove dotted underline
+                      cursor: "pointer", // pointer on hover
+                      fontSize: "1rem"
+                    }}
+                  >
+                    {name}
+                  </abbr>
                   {/* <div style={{ border: "1px solid #5e2a2a" }}></div> */}
                 </div>
               </>
@@ -721,7 +741,17 @@ const CardCompnent = ({
                   </span> */}
                 </div>
 
-                <h5 className="light-grey2 mt-2 mb-0">{name}</h5>
+                <abbr
+                  title={name}
+                  className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                  style={{
+                    maxWidth: "170px",
+                    textDecoration: "none", // remove dotted underline
+                    cursor: "pointer", // pointer on hover
+                  }}
+                >
+                  {name}
+                </abbr>
               </>
             )}
             {sellnft ? (
