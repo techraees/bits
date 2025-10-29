@@ -8,9 +8,9 @@ import { AZ, grid, profile2, search } from "../../../assets";
 import { CardCompnent } from "../../../components";
 import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
-import { getStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 import CardSkeletal from "../Dashboard/Skeletal/CardSkeletal";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -21,7 +21,7 @@ const VideoGallery = () => {
 
   // const [tokenData, setTokenData] = useState({});
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const { contractData } = useSelector((state) => state.chain.contractData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +48,7 @@ const VideoGallery = () => {
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
+  const isLight = textColor === "black";
 
   const { userData } = useSelector((state) => state.address.userData);
   const userProfile = userData?.full_name;
@@ -103,6 +104,10 @@ const VideoGallery = () => {
     return originalElement;
   };
 
+  useEffect(() => {
+    document.body.classList.remove("app-light", "app-dark");
+    document.body.classList.add(isLight ? "app-light" : "app-dark");
+  }, [isLight]);
   return (
     <div
       className={`${backgroundTheme} pb-2`}
@@ -319,6 +324,7 @@ const VideoGallery = () => {
                       fixtokenId={item?.tokenid}
                       fixOwner={item?.seller?.user_address}
                       fixRoyalty={item?.nft_id?.royalty}
+                      artistName={item?.nft_id?.artist_name1}
                       fixCopies={item?.nft_id?.supply}
                       id={item?.nft_id?._id}
                       likeCount={item?.nft_id?.likeCount}

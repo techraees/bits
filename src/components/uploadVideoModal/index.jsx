@@ -389,10 +389,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
           <form>
             <div className="my-4">
               <p style={{ color: "#C44040" }} className="mb-2">
-                Dance Moment Name
+                NFT Name
               </p>
               <Input
-                placeholder="Dance Moment Name"
+                placeholder="NFT Name"
                 className="greyBgInput"
                 name="name"
                 value={values.name}

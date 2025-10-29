@@ -35,13 +35,8 @@ const GET_ALL_NFTS = gql`
 const LOGIN_USER = gql`
   query LoginUser($email: String!, $password: String!) {
     LoginUser(email: $email, password: $password) {
-      token
-      user_address
-      full_name
-      country
-      bio
-      profileImg
-      id
+      access_token
+      refresh_token
     }
   }
 `;

@@ -1,50 +1,80 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { getStorage } from "../utills/localStorage";
+import { useQuery } from "@apollo/client";
 import { Loader } from "../components";
 import routes from "../route";
 import { trimAfterFirstSlash } from "../utills/reusableFunctions";
+import { getCookieStorage } from "../utills/cookieStorage";
+import { GET_PROFILE } from "../gql/queries";
 
 export const useProtectedRoutes = () => {
-  const { userData } = useSelector((state) => state.address.userData);
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const validRoutes = routes?.map((route) => trimAfterFirstSlash(route?.path));
-  let token = getStorage("token");
 
+  const validRoutes = routes?.map((route) => trimAfterFirstSlash(route?.path));
+  const token = getCookieStorage("access_token");
+
+  // Apollo Query to verify profile
+  const {
+    data,
+    loading: queryLoading,
+    error,
+  } = useQuery(GET_PROFILE, {
+    variables: { token },
+    skip: !token,
+    fetchPolicy: "network-only",
+  });
+
+  // Update auth state once verification completes
   useEffect(() => {
-    if (token && userData) {
+    if (queryLoading) return;
+
+    if (data?.GetProfile) {
       setIsAuthenticated(true);
-      setLoading(false);
     } else {
       setIsAuthenticated(false);
-      setLoading(false);
     }
-    // eslint-disable-next-line
-  }, [userData, token]);
 
+    if (error) {
+      setIsAuthenticated(false);
+    }
+
+    setLoading(false);
+  }, [data, error, queryLoading]);
+
+  // Validate allowed routes
   useEffect(() => {
     if (!validRoutes) return;
-    if (!validRoutes?.includes(trimAfterFirstSlash(location?.pathname)))
-      return navigate("/404");
+    if (!validRoutes?.includes(trimAfterFirstSlash(location?.pathname))) {
+      navigate("/404");
+    }
   }, [validRoutes]);
 
+  // ✅ Protected route wrapper
   const Protected = ({ redirectPath = "/login", children }) => {
-    return loading ? (
-      <Loader content="authenticating..." />
-    ) : isAuthenticated ? (
-      children
-    ) : (
-      <Navigate to={redirectPath} />
-    );
+    if (loading) return <Loader content="authenticating..." />;
+
+    // If authenticated → stay on current page (no forced redirect)
+    if (isAuthenticated) return children;
+
+    // Only redirect to login if not authenticated
+    return <Navigate to={redirectPath} state={{ from: location }} replace />;
   };
 
+  // ✅ Public route wrapper
   const Public = ({ redirectPath = "/", children }) => {
-    return <>{!isAuthenticated ? children : <Navigate to={redirectPath} />}</>;
+    if (loading) return <Loader content="authenticating..." />;
+
+    // If user is authenticated and already on /login or /signup → stay where they came from
+    if (isAuthenticated) {
+      const from = location.state?.from?.pathname || redirectPath;
+      return <Navigate to={from} replace />;
+    }
+
+    return children;
   };
 
   return { Protected, Public };

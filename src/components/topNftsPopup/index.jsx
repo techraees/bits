@@ -11,6 +11,7 @@ import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 10000,
   },
   content: {
     top: "0px",

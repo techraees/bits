@@ -6,7 +6,12 @@ import { useProtectedRoutes } from "../../hooks/useProtectedRoutes";
 const PublicLayout = () => {
   const { Public } = useProtectedRoutes();
   const location = useLocation();
-  const publicRoutes = ["/login", "/reset-password", "/reset-password/success"];
+  const publicRoutes = [
+    "/login",
+    "/reset-password",
+    "/reset-password/success",
+    "/signup",
+  ];
   return (
     <>
       <Routes>

@@ -1,18 +1,20 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
+import { onError } from "@apollo/client/link/error";
 
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  from,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
 
 const env = process.env;
 
@@ -30,8 +32,61 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
+  const hasAuthError = graphQLErrors?.some(
+    (err) =>
+      err.extensions?.code === "UNAUTHENTICATED" ||
+      err.message?.includes("expired") ||
+      err.message?.includes("invalid token"),
+  );
+
+  if (!hasAuthError) return;
+
+  const refresh_token = localStorage.getItem("refresh_token");
+  if (!refresh_token) return;
+
+  // Apollo client just for token refresh
+  const tempClient = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+  });
+
+  return tempClient
+    .mutate({
+      mutation: REFRESH_TOKEN_MUTATION,
+      variables: { refresh_token },
+    })
+    .then(({ data }) => {
+      const newAccessToken = data?.refreshToken?.payload?.access_token;
+      if (newAccessToken) {
+        localStorage.setItem("access_token", newAccessToken);
+
+        const oldHeaders = operation.getContext().headers;
+        operation.setContext({
+          headers: {
+            ...oldHeaders,
+            authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+
+        // retry the original request
+        return forward(operation);
+      } else {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        window.location.href = "/login";
+      }
+    })
+    .catch(() => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      window.location.href = "/login";
+    });
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // link: authLink.concat(httpLink),
+  link: from([refreshLink, authLink.concat(httpLink)]),
   cache: new InMemoryCache(),
 });
 

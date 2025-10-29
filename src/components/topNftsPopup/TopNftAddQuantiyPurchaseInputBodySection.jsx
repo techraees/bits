@@ -17,9 +17,9 @@ import {
 import { GET_PROFILE_DETAILS_QUERY } from "../../gql/queries";
 import { loadContractIns } from "../../store/actions";
 import { ETHToWei } from "../../utills/convertWeiAndBnb";
+import { getCookieStorage } from "../../utills/cookieStorage";
 import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { boughtMessage } from "../../utills/emailMessages";
-import { getStorage } from "../../utills/localStorage";
 import { trimWallet } from "../../utills/trimWalletAddr";
 import ConnectModal from "../connectModal";
 import DecrementButtonArr from "./DecrementButtonArr.svg";
@@ -69,7 +69,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
     setQuantity((prev) => (parseInt(prev) > 1 ? parseInt(prev) - 1 : 1)); // Prevent less than 1
   };
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const { userData } = useSelector((state) => state.address.userData);
 

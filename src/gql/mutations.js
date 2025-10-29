@@ -93,14 +93,8 @@ const CREATE_USER = gql`
       dob: $dob
     ) {
       _id
-      email
-      full_name
-      password
-      phone_number
-      user_name
-      user_address
-      dob
-      token
+      access_token
+      refresh_token
     }
   }
 `;
@@ -389,6 +383,17 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   }
 `;
 
+// Get Refresh Token Mutation
+const REFRESH_TOKEN_MUTATION = gql`
+  mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
+    createNewAccessTokenFromRefreshToken(refresh_token: $refresh_token) {
+      payload {
+        access_token
+      }
+    }
+  }
+`;
+
 export {
   CREATE_NFT,
   CREATE_USER,
@@ -421,4 +426,7 @@ export {
   // Create Bid
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   // ========================= Optimization Mutations ======================
+
+  // Refresh Token
+  REFRESH_TOKEN_MUTATION,
 };

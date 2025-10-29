@@ -32,7 +32,7 @@ import {
   useAppKitAccount,
   useAppKitNetwork,
 } from "@reown/appkit/react";
-import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -58,7 +58,7 @@ const MintNft = () => {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
@@ -394,7 +394,7 @@ const MintNft = () => {
                             className={"royaltyInputField  me-5"}
                             placeholder={"royalty"}
                             onChange={(e) => {
-                              if (e.target.value < 100) {
+                              if (e.target.value < 101) {
                                 setFieldValue("royalty", e.target.value);
                               } else {
                                 ToastMessage(

@@ -5,6 +5,7 @@
   border-radius: 10px !important;
   overflow: hidden !important;
 }
+
 .card_video {
   width: 260px !important;
   height: 180px !important;
@@ -90,6 +91,7 @@
   .cardContainer {
     width: 100%;
   }
+
   .card_video {
     width: 100% !important;
     height: 200px !important;
@@ -106,4 +108,112 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+
+
+/* =========================
+   LIGHT THEME ONLY
+   (dark CSS untouched)
+   ========================= */
+
+.card-light {
+  background-color: #ffffff !important;
+  border: 1px solid #eeeeee !important;
+  /* soft edge */
+}
+
+/* AntD Card body/text contrast */
+.card-light .ant-card-body {
+  color: #111;
+  /* default text */
+}
+
+/* Video container ko light border (optional) */
+.card-light .card_video {
+  background: #f7f7f7;
+  /* fallback bg behind player */
+  border-bottom: 1px solid #eee;
+}
+
+/* Price row */
+.card-light .price-wrapper h5,
+.card-light .price-wrapper p {
+  color: #333 !important;
+}
+
+.card-light .price-wrapper span {
+  color: #a22525;
+  /* brand red remains */
+}
+
+/* “Go to Collection”/buttons with border */
+.card-light .collectionBtn {
+  border: 1px solid #d54343 !important;
+  background-color: #fff !important;
+  color: #333 !important;
+}
+
+.card-light .collectionBtn:hover {
+  background-color: #f9f9f9 !important;
+}
+
+/* Top “detail” button already gradient — keep as is (white text ok) */
+.card-light .detail-btn {
+  color: #fff !important;
+}
+
+/* Small meta text that used light-grey2 (if it's too light on white) */
+.card-light .light-grey2 {
+  color: #555 !important;
+  /* better contrast on white */
+}
+
+/* Card hover feel (optional) */
+.card-light.ant-card-hoverable:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Mint card variant (if used) */
+.card-light.mintCardContainer {
+  background-color: #ffffff !important;
+  border: 1px solid #eeeeee !important;
+}
+
+/* Like/watch counters readability (optional) */
+.card-light p {
+  color: #444;
+}
+
+.cardContainer {
+  background-color: #1c1c1c;
+  color: #fff;
+}
+
+
+
+.card_video video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 8px;
+  /* optional */
+}
+
+.nft_details_button {
+  color: white !important;
+}
+
+.nft_details_button:hover {
+  text-decoration: underline !important;
+  color: red !important;
+}
+
+.nft_details_button_dark {
+  color: black !important;
+}
+
+.nft_details_button_dark:hover {
+  text-decoration: underline !important;
+  color: red !important;
 }

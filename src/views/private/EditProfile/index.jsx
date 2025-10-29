@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "./css/index.css";
-import { ButtonComponent, Loader, ToastMessage } from "../../../components";
 import { Input } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   account2,
   account_dark,
@@ -12,23 +11,24 @@ import {
   location2,
   location_dark2,
 } from "../../../assets";
-import { useDispatch, useSelector } from "react-redux";
+import { ButtonComponent, Loader, ToastMessage } from "../../../components";
+import "./css/index.css";
 
+import { useMutation } from "@apollo/client";
+import axios from "axios";
+import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 import profileimg from "../../../assets/images/profile1.svg";
 import { editProfileValidate } from "../../../components/validations";
-import { useFormik } from "formik";
-import axios from "axios";
-import { useMutation } from "@apollo/client";
 import { UPDATE_USER_PROFILE } from "../../../gql/queries";
-import { Link } from "react-router-dom";
-import { getStorage } from "../../../utills/localStorage";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
 const EditProfile = () => {
   const { userData } = useSelector((state) => state.address.userData);
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [updateUserProfile, { loading, error, data }] =
     useMutation(UPDATE_USER_PROFILE);

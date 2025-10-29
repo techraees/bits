@@ -1,18 +1,22 @@
-import React, { useEffect } from "react";
-import "./css/index.css";
-import { ButtonComponent, Loader, ToastMessage } from "../../../components";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
-import { UPDATE_EMAIL, UPDATE_PASSWORD_MUTATION } from "../../../gql/mutations";
-import { useFormik } from "formik";
 import { Input } from "antd";
+import { useFormik } from "formik";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ButtonComponent, Loader, ToastMessage } from "../../../components";
 import {
   emailValidate,
   passwordValidate,
 } from "../../../components/validations";
+import { UPDATE_EMAIL, UPDATE_PASSWORD_MUTATION } from "../../../gql/mutations";
 import { logoutWallet } from "../../../store/actions";
-import { getStorage, removeStorage } from "../../../utills/localStorage";
+import {
+  getCookieStorage,
+  removeCookieStorage,
+} from "../../../utills/cookieStorage";
+import { removeStorage } from "../../../utills/localStorage";
+import "./css/index.css";
 
 const AccountSettings = () => {
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ const AccountSettings = () => {
 
   const username = userData?.user_name;
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [updatePassword, { loading, error, data }] = useMutation(
     UPDATE_PASSWORD_MUTATION,
@@ -121,7 +125,8 @@ const AccountSettings = () => {
           token: "",
         },
       });
-      removeStorage("token");
+      removeCookieStorage("access_token");
+      removeCookieStorage("refresh_token");
       dispatch(logoutWallet());
       navigate("/login");
     }
@@ -146,7 +151,8 @@ const AccountSettings = () => {
           token: "",
         },
       });
-      removeStorage("token");
+      removeCookieStorage("access_token");
+      removeCookieStorage("refresh_token");
       dispatch(logoutWallet());
       navigate("/login");
     }
