@@ -589,7 +589,7 @@ const CardCompnent = ({
                   maxWidth: "170px",
                   textDecoration: "none", // remove dotted underline
                   cursor: "pointer", // pointer on hover
-                  fontSize: "1rem"
+                  fontSize: "1rem",
                 }}
               >
                 {name}
@@ -690,7 +690,7 @@ const CardCompnent = ({
                       maxWidth: "170px",
                       textDecoration: "none", // remove dotted underline
                       cursor: "pointer", // pointer on hover
-                      fontSize: "1rem"
+                      fontSize: "1rem",
                     }}
                   >
                     {name}
