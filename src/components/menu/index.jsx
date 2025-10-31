@@ -11,6 +11,10 @@ const MenuComponent = ({ menuHandle, className }) => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
   const isLogged = userData?.isLogged;
 
+  // 🔹 Theme from Redux
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const isLight = textColor === "black";
+
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -97,10 +101,16 @@ const MenuComponent = ({ menuHandle, className }) => {
     );
   };
 
+  // MenuComponent.jsx
+  useEffect(() => {
+    document.body.classList.remove("app-light", "app-dark");
+    document.body.classList.add(isLight ? "app-light" : "app-dark");
+  }, [isLight]);
+
   return (
     <div
       style={{
-        zIndex: 1,
+        zIndex: 1000,
         position: "fixed",
         // top: width < 600 ? "70px" : "",
         top: "70px",
@@ -113,9 +123,9 @@ const MenuComponent = ({ menuHandle, className }) => {
       />
       <Menu
         defaultSelectedKeys={[getSelectedKey()]}
-        className="manuStyle"
+        className={`manuStyle ${isLight ? "menu-light" : ""}`}
         mode="inline"
-        theme="dark"
+        theme={isLight ? "light" : "dark"}
         inlineCollapsed={menuHandle}
         items={getItems()}
         onClick={(item) => handleClick(item?.key)}

@@ -30,8 +30,8 @@ import {
 // import { USDTOETH } from "../../../utills/currencyConverter";
 import { getAllNftsByAddressAlchemy } from "../../../config/infura";
 import { useAppKitAccount } from "@reown/appkit/react";
-import { getStorage } from "../../../utills/localStorage";
 import CardSkeletal from "../../public/Dashboard/Skeletal/CardSkeletal";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -49,13 +49,13 @@ const Collections = () => {
     },
   );
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const { data: getAllNftIOwnedData, loading: getAllNftIOwnedLoading } =
     useQuery(Get_MY_NFTS_THAT_I_OWNED, {
       variables: {
-        token: getStorage("token"),
+        token: getCookieStorage("access_token"),
         wallet_address: profileData?.GetProfileDetails?.user_address,
         ownership_type: activeTab === "1" ? "created" : "owned",
         page: currentPage,
@@ -270,6 +270,7 @@ const Collections = () => {
                           rid={e?.nft_id?.rid}
                           bvh={e?.nft_id?.bvh}
                           fbx={e?.nft_id?.fbx}
+                          detailBtn={true}
                           topName
                           userProfile={
                             profileData?.GetProfileDetails?.full_name

@@ -7,7 +7,6 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
 import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
 import { dbDateToReadableDate } from "../../../utills/timeToTimestamp";
-import { getStorage } from "../../../utills/localStorage";
 
 import {
   Chart as ChartJS,
@@ -19,6 +18,7 @@ import {
   Legend,
 } from "chart.js";
 import faker from "faker";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 
 ChartJS.register(
   CategoryScale,
@@ -57,7 +57,7 @@ export const data = {
 };
 
 const TransactionHistory = () => {
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const {

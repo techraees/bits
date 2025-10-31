@@ -52,3 +52,75 @@
         padding: 0 10px;
     }
 }
+
+
+/* ====== LIGHT MODE: pill wrappers (your divs) ====== */
+.app-light .filter-wrapper,
+.app-light .marketplace-selct-div,
+.app-light .grid-wrapper {
+    background-color: #f6f6f6 !important;
+    color: #111 !important;
+    border: 0 !important;
+    border-radius: 28px !important;
+}
+
+/* Divider line inside grid wrapper can keep your brand color */
+
+/* ====== LIGHT MODE: AntD Select (collapsed state) ====== */
+.app-light .ant-select-single .ant-select-selector {
+    background-color: #f6f6f6 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    height: 40px;
+    /* match pill height */
+    border-radius: 28px !important;
+    padding: 0 14px !important;
+}
+
+.app-light .ant-select-selection-item,
+.app-light .ant-select-selection-placeholder {
+    color: #111 !important;
+}
+
+/* Arrow color */
+.app-light .ant-select .ant-select-arrow {
+    color: #777 !important;
+}
+
+/* ====== LIGHT MODE: Select dropdown menu (the popup) ====== */
+.app-light .ant-select-dropdown {
+    background: #ffffff !important;
+    border: 1px solid #eee !important;
+}
+
+.app-light .ant-select-item {
+    color: #111 !important;
+}
+
+.app-light .ant-select-item-option-active {
+    background: #f7f7f7 !important;
+}
+
+.app-light .ant-select-item-option-selected {
+    background: #f3f4f6 !important;
+    color: #b83131 !important;
+    /* your brand red */
+}
+
+/* Pagination text (optional, to keep consistent) */
+.app-light .ant-pagination .ant-pagination-item a,
+.app-light .ant-pagination .ant-pagination-prev a,
+.app-light .ant-pagination .ant-pagination-next a {
+    color: #111 !important;
+}
+
+/* Alternative/local scope if you keep the `light` class on Select */
+.light.ant-select .ant-select-selector {
+    background: #f6f6f6 !important;
+    border: 0 !important;
+}
+
+.light.ant-select .ant-select-selection-item,
+.light.ant-select .ant-select-selection-placeholder {
+    color: #111 !important;
+}

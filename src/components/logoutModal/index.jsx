@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutWallet } from "../../store/actions";
 import { removeStorage } from "../../utills/localStorage";
+import { removeCookieStorage } from "../../utills/cookieStorage";
 function LogoutModal({ handleOk }) {
   const navigate = useNavigate();
   const { userData } = useSelector((state) => state.address.userData);
@@ -25,7 +26,8 @@ function LogoutModal({ handleOk }) {
         isLogged: false,
       },
     });
-    removeStorage("token");
+    removeCookieStorage("access_token");
+    removeCookieStorage("refresh_token");
     dispatch(logoutWallet());
     handleOk();
     // window.location.href = "/";

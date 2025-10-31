@@ -279,3 +279,87 @@
     top: 63px !important;
   }
 }
+
+
+.white-navbar {
+  background: #ffffff !important;
+  /* agar border/shadow chahiye to: */
+  border-bottom: 1px solid #eee;
+}
+
+.white-navbar .nav-link,
+.white-navbar .white,
+/* tum "white" class use karte ho text ke liye */
+.white-navbar span,
+.white-navbar a {
+  color: #000 !important;
+  /* text ko dark rakho taake contrast sahi rahe */
+}
+
+/* icons ka color */
+.white-navbar .fa,
+.white-navbar svg {
+  fill: #000;
+  color: #000;
+}
+
+
+/* Light mode ke liye */
+.toggle-light {
+  border: 1px solid #ccc !important;
+  background-color: #fff !important;
+}
+
+.toggle-light .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+/* Dark mode ke liye */
+.toggle-dark {
+  border: 1px solid #171717 !important;
+}
+
+.toggle-dark .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 0.85)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+/* ---- Container ---- */
+.chainDiv {
+  display: flex;
+  align-items: center;
+}
+
+.chain-light {
+  background: #ffffff !important;
+  border-color: #eee;
+}
+
+.chain-dark {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.chain-light .leftChainDiv {
+  color: #111 !important;
+  background-color: #fff !important;
+  border-left: 1px solid #d7d7d7 !important;
+  border-top: 1px solid #d7d7d7 !important;
+  border-bottom: 1px solid #d7d7d7 !important;
+}
+
+.chain-light .rightChainDiv {
+  color: #111 !important;
+  background-color: #d7d7d7 !important;
+  border: none !important;
+  /* 👈 is line se right div se border gayab */
+}
+
+.chain-dark .leftChainDiv {
+  color: #fff !important;
+}
+
+/* ---- Icons (SVG + IMG) ---- */
+.chainIcon {
+  font-size: 18px;
+  line-height: 0;
+}

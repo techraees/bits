@@ -117,6 +117,12 @@ const NftDetailsScreen = () => {
                     </p>
                   </div>
                   <div className="my-3">
+                    <p className={`${textColor} m-0 fs-5`}>Artist Name</p>
+                    <p className={`${textColor2} m-0 fs-6`}>
+                      {data?.DetailsOfANft?.artist_name1}
+                    </p>
+                  </div>
+                  <div className="my-3">
                     <div className="d-flex label-input">
                       <p className={`${textColor} m-0 fs-5`}>
                         Royalty % : {data?.DetailsOfANft?.royalty / 100}{" "}
@@ -148,6 +154,12 @@ const NftDetailsScreen = () => {
               <div className="my-3">
                 <p className={`${textColor} mb-1 fs-6`}>Supply Type</p>
                 <p className={`${textColor2} m-0 fs-7`}>Non Fungible Token</p>
+              </div>
+              <div className="my-3">
+                <p className={`${textColor} mb-1 fs-6`}>Description</p>
+                <p className={`${textColor2} m-0 fs-7`}>
+                  {data?.DetailsOfANft?.description}
+                </p>
               </div>
             </div>
           </Col>

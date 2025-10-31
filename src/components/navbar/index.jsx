@@ -23,9 +23,9 @@ import CookieConsent from "react-cookie-consent";
 import NotificationModal from "../notificationModal";
 import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
-import { getStorage } from "../../utills/localStorage";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
+import { getCookieStorage } from "../../utills/cookieStorage";
 
 const environment = process.env;
 
@@ -44,6 +44,7 @@ const NavbarComponent = ({ dashboardNav }) => {
   };
   const nonNavbarRoutes = [
     "/login",
+    "/signup",
     "/reset-password",
     "/reset-password/success",
     "/404",
@@ -80,6 +81,8 @@ const NavbarComponent = ({ dashboardNav }) => {
   const { contractData } = useSelector((state) => state.chain.contractData);
   const contracts = useSelector((state) => state.contract);
   const fixedItems = useSelector((state) => state.fixedItems);
+
+  const isLight = textColor === "black";
 
   const full_name = userData?.full_name;
   const userProfile = userData?.profileImg;
@@ -150,7 +153,7 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const token = getStorage("token");
+      const token = getCookieStorage("access_token");
       console.log("Updated token:", token);
       if (token) {
         profile({
@@ -247,7 +250,11 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`${dashboardNav ? "dashboardNavBgColor" : "navbarBgColor"}`}
+        className={`dashboardNavBgColor ${
+          dashboardNav
+            ? headerTheme || "dashboardNavBgColor"
+            : headerTheme || "navbarBgColor"
+        }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}
@@ -328,9 +335,9 @@ const NavbarComponent = ({ dashboardNav }) => {
                         Connect Wallet
                       </span>
                     </Nav.Link>
-                    {/* <div style={{ margin: "5px 0 0 1rem" }}>
+                    <div style={{ margin: "5px 0 0 1rem" }}>
                       <SwitchBtn toggleBtn={textColor === "white"} />
-                    </div> */}
+                    </div>
                   </div>
                 </>
               ) : (
@@ -351,14 +358,19 @@ const NavbarComponent = ({ dashboardNav }) => {
                       alt="profile"
                     />
                   </Nav.Link>
-                  {/* <Nav.Link className="white">
+                  <Nav.Link className="white">
                     <SwitchBtn toggleBtn={textColor === "white"} />
-                  </Nav.Link> */}
+                  </Nav.Link>
                 </div>
               )}
             </div>
           </div>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="" />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            className={
+              headerTheme === "white-navbar" ? "toggle-light" : "toggle-dark"
+            }
+          />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav
               className={
@@ -399,15 +411,15 @@ const NavbarComponent = ({ dashboardNav }) => {
                 Contact
               </NavLink>
             </Nav>
-            <div className="chainDiv">
+            <div
+              className={`chainDiv ${isLight ? "chain-light" : "chain-dark"}`}
+            >
               <div className="leftChainDiv">Chains</div>
               <div className="rightChainDiv">
-                {/* <FaEthereum cursor="pointer"  onClick={handleChain}/>
-                <img className="ethIcon" src={polygon} /> */}
                 <FaEthereum
                   cursor="pointer"
                   onClick={toggleIconColor}
-                  className={iconClicked ? "red" : ""}
+                  className={`chainIcon ${iconClicked ? "red" : ""}`}
                 />
                 <img
                   className={`ethIcon ${showRedImage ? "" : "hidden"}`}
@@ -439,7 +451,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                   >
                     <span>Connect Wallet</span>
                   </Nav.Link>
-                  {/* <SwitchBtn toggleBtn={textColor === "white"} /> */}
+                  <SwitchBtn toggleBtn={textColor === "white"} />
                 </div>
               ) : (
                 <div className="d-flex align-items-center justify-content-center">
@@ -473,9 +485,9 @@ const NavbarComponent = ({ dashboardNav }) => {
                       />
                     )}
                   </Nav.Link>
-                  {/* <Nav.Link className="white">
+                  <Nav.Link className="white">
                     <SwitchBtn toggleBtn={textColor === "white"} />
-                  </Nav.Link> */}
+                  </Nav.Link>
                 </div>
               )}
             </Nav>

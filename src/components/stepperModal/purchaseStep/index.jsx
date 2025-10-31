@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import { useSelector, useDispatch } from "react-redux";
-import "./css/index.css";
-import { AiFillCheckCircle } from "react-icons/ai";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { GET_PROFILE_DETAILS_QUERY } from "../../../gql/queries";
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
+import { Modal } from "antd";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { test } from "../../../assets";
+import { Loader, ToastMessage } from "../../../components";
 import {
-  SEND_EMAIL_MUTATION,
   CREATE_NEW_OWNERSHIP_OF_NFT,
   CREATE_NEW_TRANSACTION,
+  SEND_EMAIL_MUTATION,
 } from "../../../gql/mutations";
-import { test } from "../../../assets";
-import { SuccessModal } from "../../index";
-import ConnectModal from "../../connectModal";
-import { Modal } from "antd";
-import { trimWallet } from "../../../utills/trimWalletAddr";
-import { ETHToWei } from "../../../utills/convertWeiAndBnb";
-import { Loader, ToastMessage } from "../../../components";
-import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+import { GET_PROFILE_DETAILS_QUERY } from "../../../gql/queries";
 import { loadContractIns } from "../../../store/actions";
+import { ETHToWei } from "../../../utills/convertWeiAndBnb";
+import { getCookieStorage } from "../../../utills/cookieStorage";
 import { boughtMessage } from "../../../utills/emailMessages";
-import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
-import { getStorage } from "../../../utills/localStorage";
+import { trimWallet } from "../../../utills/trimWalletAddr";
+import ConnectModal from "../../connectModal";
+import { SuccessModal } from "../../index";
+import "./css/index.css";
 
 const environment = process.env;
 
@@ -50,7 +50,7 @@ function PurchaseStep({
 
   const { userData } = useSelector((state) => state.address.userData);
 
-  let token = getStorage("token");
+  let token = getCookieStorage("access_token");
 
   const [
     getProfile,

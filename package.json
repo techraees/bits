@@ -33,6 +33,7 @@
     "framer-motion": "^12.6.3",
     "graphql": "^16.6.0",
     "ipfs-http-client": "^54.0.1",
+    "js-cookie": "^3.0.5",
     "moment": "^2.29.4",
     "multicoin-address-validator": "^0.5.11",
     "prop-types": "^15.8.1",

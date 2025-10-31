@@ -1,7 +1,6 @@
-import React from "react";
-import "./css/index.css";
 import { Switch } from "antd";
 import { useDispatch } from "react-redux";
+import "./css/index.css";
 
 const SwitchBtn = ({ toggleBtn }) => {
   // const [toggle, setToggle] = useState(true);
@@ -22,7 +21,8 @@ const SwitchBtn = ({ toggleBtn }) => {
       type: "THEME",
       theme: {
         backgroundTheme: `${checked ? "black-background" : "light-background"}`,
-        headerTheme: `${checked ? "black-background2" : "red-background2"}`,
+        // headerTheme: `${checked ? "black-background2" : "red-background2"}`,
+        headerTheme: `${checked ? "black-background2" : "white-navbar"}`,
         textColor: `${checked ? "white" : "black"}`,
         textColor2: `${checked ? "light-grey" : "dark-grey"}`,
         textColor3: `${checked ? "white" : "red"}`,
