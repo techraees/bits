@@ -42,8 +42,8 @@ const LOGIN_USER = gql`
 `;
 
 const GET_PROFILE = gql`
-  query GetProfile($token: String!) {
-    GetProfile(token: $token) {
+  query GetProfile {
+    GetProfile {
       bio
       country
       id
@@ -286,7 +286,7 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
         user {
           profileImg
         }
-        
+
         nft_id {
           _id
           status
@@ -353,7 +353,10 @@ const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
 
 // Used to get owners who listing the same nft with different price
 const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
-  query GetOwnersWhoListedTheSameNftWithPrices($_id: String!, $filterObj: JSON) {
+  query GetOwnersWhoListedTheSameNftWithPrices(
+    $_id: String!
+    $filterObj: JSON
+  ) {
     getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj) {
       totalItems
       totalPages
@@ -373,7 +376,7 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
           _id
           chainId
         }
-        
+
         auction_bids {
           bid_amount
           bidder
@@ -388,7 +391,6 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
     }
   }
 `;
-
 
 // Used to get all bids of auction nft market place
 const GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE = gql`
