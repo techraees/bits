@@ -69,11 +69,6 @@ const Dashboard = () => {
     },
   });
 
-  console.log(
-    "the top nfts",
-    getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite,
-  );
-
   useEffect(() => {
     if (getAllTopNftsForOneChainForWebsite) {
       setTopNfts(

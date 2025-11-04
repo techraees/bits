@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { Col, Input, Pagination, Row, Tabs } from "antd";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  location,
-  upload,
-  search,
   AZ,
-  grid,
   ellipse,
+  grid,
+  location,
   location_dark,
+  search,
+  upload,
   upload_red,
 } from "../../../assets";
+import profileimg from "../../../assets/images/profile1.svg";
 import {
   ButtonComponent,
   CardCompnent,
   UploadVideoModal,
 } from "../../../components";
-import profileimg from "../../../assets/images/profile1.svg";
-import "./css/index.css";
-import { Col, Input, Pagination, Row, Tabs } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useQuery, useLazyQuery } from "@apollo/client";
 import {
-  GET_ALL_NFTS,
-  GET_PROFILE_DETAILS_QUERY,
-  GET_ALL_NFTS_WITHOUT_ADDRESS,
   Get_MY_NFTS_THAT_I_OWNED,
+  GET_PROFILE_DETAILS_QUERY
 } from "../../../gql/queries";
+import "./css/index.css";
 // import { MINT_ASSET_MUTATION } from "../../../gql/mutations";
 // import { USDTOETH } from "../../../utills/currencyConverter";
 import { getAllNftsByAddressAlchemy } from "../../../config/infura";
-import { useAppKitAccount } from "@reown/appkit/react";
-import CardSkeletal from "../../public/Dashboard/Skeletal/CardSkeletal";
 import { getCookieStorage } from "../../../utills/cookieStorage";
+import CardSkeletal from "../../public/Dashboard/Skeletal/CardSkeletal";
 
 const environment = process.env;
 
@@ -236,7 +233,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -312,7 +309,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                  0 ? (
+                    0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index

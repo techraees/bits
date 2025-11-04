@@ -42,13 +42,13 @@ const AboutUs = () => {
           }}
           className="socialIcons socialIcons_mobile"
         >
-          <a href="#" >
+          <a href="#">
             <img src={discord} height={70} />
           </a>
-          <a href="#" >
+          <a href="#">
             <img src={telegram} height={70} />
           </a>
-          <a href="#" >
+          <a href="#">
             <img src={twitter} height={70} />
           </a>
         </div>

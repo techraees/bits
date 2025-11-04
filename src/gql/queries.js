@@ -100,7 +100,22 @@ const UPDATE_USER_PROFILE = gql`
 
 const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
   query GetAllNftsWithoutAddress {
-    getAllNftsWithoutAddress
+    getAllNftsWithoutAddress {
+      _id
+      user {
+        full_name
+        user_address
+        profileImg
+      }
+      status
+      name
+      video
+      royalty
+      artist_name1
+      supply
+      likeCount
+      watchCount
+    }
   }
 `;
 
@@ -162,29 +177,13 @@ const DETAILS_OF_A_NFT = gql`
       _id
       artist_name1
       description
-      metauri
-      status
-      isEmote
-      rid
       video
       wallet_address
       token_id
-      chainId
       supply
       availableSupply
       royalty
       name
-      isPaid
-      video_duration
-      category
-      likeCount
-      watchCount
-      user_id {
-        id
-        user_name
-        user_address
-        profileImg
-      }
     }
   }
 `;
@@ -266,7 +265,47 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
     getAllNftsInMarketPlaceAndSupportFilter(
       filterObj: $filterObj
       chainId: $chainId
-    )
+    ) {
+      totalItems
+      totalPages
+      currentPage
+      currentCount
+      data {
+        _id
+        biddingStartTime
+        biddingEndTime
+        price
+        listingID
+        numberOfCopies
+        auction_highest_bid
+        auction_highest_bid
+        tokenId
+        id
+        owners
+
+        user {
+          profileImg
+        }
+        
+        nft_id {
+          _id
+          status
+          name
+          video
+          royalty
+          artist_name1
+          supply
+          likeCount
+          watchCount
+        }
+
+        seller {
+          user_address
+          _id
+          user_name
+        }
+      }
+    }
   }
 `;
 
@@ -314,13 +353,42 @@ const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
 
 // Used to get owners who listing the same nft with different price
 const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
-  query GetOwnersWhoListedTheSameNftWithPrices(
-    $_id: String!
-    $filterObj: JSON
-  ) {
-    getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj)
+  query GetOwnersWhoListedTheSameNftWithPrices($_id: String!, $filterObj: JSON) {
+    getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj) {
+      totalItems
+      totalPages
+      currentPage
+      currentCount
+      data {
+        numberOfCopies
+        price
+        auctionId
+        listingType
+        _id
+        tokenId
+        chainId
+        auction_highest_bid
+
+        nft_id {
+          _id
+          chainId
+        }
+        
+        auction_bids {
+          bid_amount
+          bidder
+          _id
+          bid_time
+        }
+
+        seller {
+          user_address
+        }
+      }
+    }
   }
 `;
+
 
 // Used to get all bids of auction nft market place
 const GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE = gql`
