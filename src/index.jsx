@@ -15,6 +15,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
+import { getCookieStorage } from "./utills/cookieStorage";
 
 const env = process.env;
 
@@ -23,7 +24,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  const token = getCookieStorage("access_token");
   return {
     headers: {
       ...headers,
@@ -42,7 +43,7 @@ const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
 
   if (!hasAuthError) return;
 
-  const refresh_token = localStorage.getItem("refresh_token");
+  const refresh_token = getCookieStorage("refresh_token");
   if (!refresh_token) return;
 
   // Apollo client just for token refresh

@@ -42,8 +42,8 @@ const LOGIN_USER = gql`
 `;
 
 const GET_PROFILE = gql`
-  query GetProfile($token: String!) {
-    GetProfile(token: $token) {
+  query GetProfile {
+    GetProfile {
       bio
       country
       id
@@ -100,13 +100,28 @@ const UPDATE_USER_PROFILE = gql`
 
 const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
   query GetAllNftsWithoutAddress {
-    getAllNftsWithoutAddress
+    getAllNftsWithoutAddress {
+      _id
+      user {
+        full_name
+        user_address
+        profileImg
+      }
+      status
+      name
+      video
+      royalty
+      artist_name1
+      supply
+      likeCount
+      watchCount
+    }
   }
 `;
 
 const GET_PROFILE_DETAILS_QUERY = gql`
-  query GetProfileDetails($getProfileDetailsId: String!) {
-    GetProfileDetails(id: $getProfileDetailsId) {
+  query GetProfileDetails {
+    GetProfileDetails {
       country
       id
       profileImg
@@ -162,29 +177,13 @@ const DETAILS_OF_A_NFT = gql`
       _id
       artist_name1
       description
-      metauri
-      status
-      isEmote
-      rid
       video
       wallet_address
       token_id
-      chainId
       supply
       availableSupply
       royalty
       name
-      isPaid
-      video_duration
-      category
-      likeCount
-      watchCount
-      user_id {
-        id
-        user_name
-        user_address
-        profileImg
-      }
     }
   }
 `;
@@ -237,8 +236,6 @@ const GET_TOP_NFTS = gql`
 // Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
-    $token: String!
-    $wallet_address: String!
     $ownership_type: String
     $page: Int
     $limit: Int
@@ -246,14 +243,49 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
     $chainId: String
   ) {
     getMyNftsThatIOwned(
-      token: $token
       wallet_address: $wallet_address
       ownership_type: $ownership_type
       page: $page
       limit: $limit
       q: $q
       chainId: $chainId
-    )
+    ){
+        totalItems
+        totalPages
+        currentPage
+        currentCount
+        data {
+          nft_id {
+            _id
+            status
+            name
+            artist_name1
+            video
+            isEmote
+            rid
+            bvh
+            fbx
+            likeCount
+            watchCount
+            isPaid
+            royalty
+            token_id
+            user_id {
+              profileImg
+            }
+          }
+          primary_owner
+          listingIDFromBlockChain
+          listing_id
+          total_price
+          copies
+          pricePerItem
+          from_user_wallet
+          to_user_wallet
+          createdAt
+          updatedAt
+        }
+    }
   }
 `;
 
@@ -266,7 +298,47 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
     getAllNftsInMarketPlaceAndSupportFilter(
       filterObj: $filterObj
       chainId: $chainId
-    )
+    ) {
+      totalItems
+      totalPages
+      currentPage
+      currentCount
+      data {
+        _id
+        biddingStartTime
+        biddingEndTime
+        price
+        listingID
+        numberOfCopies
+        auction_highest_bid
+        auction_highest_bid
+        tokenId
+        id
+        owners
+
+        user {
+          profileImg
+        }
+
+        nft_id {
+          _id
+          status
+          name
+          video
+          royalty
+          artist_name1
+          supply
+          likeCount
+          watchCount
+        }
+
+        seller {
+          user_address
+          _id
+          user_name
+        }
+      }
+    }
   }
 `;
 
@@ -318,7 +390,38 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
     $_id: String!
     $filterObj: JSON
   ) {
-    getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj)
+    getOwnersWhoListedTheSameNftWithPrices(_id: $_id, filterObj: $filterObj) {
+      totalItems
+      totalPages
+      currentPage
+      currentCount
+      data {
+        numberOfCopies
+        price
+        auctionId
+        listingType
+        _id
+        tokenId
+        chainId
+        auction_highest_bid
+
+        nft_id {
+          _id
+          chainId
+        }
+
+        auction_bids {
+          bid_amount
+          bidder
+          _id
+          bid_time
+        }
+
+        seller {
+          user_address
+        }
+      }
+    }
   }
 `;
 

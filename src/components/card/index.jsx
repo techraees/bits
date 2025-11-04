@@ -145,7 +145,6 @@ const CardCompnent = ({
             currentBidAmount: item?.auction_highest_bid,
             auctionbids: item?.auction_bids,
           }));
-      console.log("new data", newData);
       setAuctionData(newData);
     }
   }, [getOwnersWhoListedTheSameNftWithPricesAuction]);
@@ -680,8 +679,6 @@ const CardCompnent = ({
                         Nft Detail
                       </Link>
                     )}
-
-
                   </div>
                 </div>
                 <div>
