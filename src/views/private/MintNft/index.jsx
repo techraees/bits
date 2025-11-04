@@ -98,8 +98,7 @@ const MintNft = () => {
       data: profileData,
       // refetch,
     },
-  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {
-  });
+  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {});
 
   const address = userData?.address;
   const id = userData?.id;

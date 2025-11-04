@@ -60,8 +60,7 @@ function PurchaseStep({
       data: profileData,
       // refetch,
     },
-  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {
-  });
+  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {});
 
   const [
     sendEmail,

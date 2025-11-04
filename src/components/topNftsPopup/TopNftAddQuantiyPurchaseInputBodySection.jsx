@@ -81,8 +81,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
       data: profileData,
       // refetch,
     },
-  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {
-  });
+  ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {});
 
   const [
     sendEmail,
@@ -381,8 +380,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                              itemData?.price *
-                              (itemData?.chainId == 137 ? maticBal : ethBal),
+                                itemData?.price *
+                                (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -416,8 +415,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                          itemData?.price *
-                          (itemData?.chainId == 137 ? maticBal : ethBal),
+                            itemData?.price *
+                            (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>

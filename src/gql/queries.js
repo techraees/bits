@@ -233,6 +233,8 @@ const GET_TOP_NFTS = gql`
   }
 `;
 
+
+
 // Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
@@ -248,26 +250,31 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
       limit: $limit
       q: $q
       chainId: $chainId
-    ){
+    ) {
+      totalItems
+      totalPages
+      currentPage
+      currentCount
+      data {
         nft_id {
-          _id
-          status
-          name
-          artist_name1
-          video
-          isEmote
-          rid
-          bvh
-          fbx
-          likeCount
-          watchCount
-          isPaid
-          royalty
-          token_id
-          user_id {
-            profileImg
-          }
+        _id
+        status
+        name
+        artist_name1
+        video
+        isEmote
+        rid
+        bvh
+        fbx
+        likeCount
+        watchCount
+        isPaid
+        royalty
+        token_id
+        user_id {
+          profileImg
         }
+      }
         primary_owner
         listingIDFromBlockChain
         listing_id
@@ -278,6 +285,7 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
         to_user_wallet
         createdAt
         updatedAt
+      }
     }
   }
 `;

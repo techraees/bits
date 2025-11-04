@@ -228,7 +228,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => { }}
+            onClick={() => {}}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -304,7 +304,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                    0 ? (
+                  0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
