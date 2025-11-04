@@ -314,6 +314,7 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
         auction_highest_bid
         auction_highest_bid
         tokenId
+        isSold
         id
         owners
 
@@ -330,6 +331,7 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
           artist_name1
           supply
           likeCount
+          is_blocked
           watchCount
         }
 

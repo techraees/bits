@@ -154,12 +154,8 @@ const NavbarComponent = ({ dashboardNav }) => {
   useEffect(() => {
     const handleStorageChange = () => {
       const token = getCookieStorage("access_token");
-      console.log("Updated token:", token);
       if (token) {
         profile({
-          variables: {
-            token: token,
-          },
         });
       }
     };
@@ -250,11 +246,10 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${
-          dashboardNav
-            ? headerTheme || "dashboardNavBgColor"
-            : headerTheme || "navbarBgColor"
-        }`}
+        className={`dashboardNavBgColor ${dashboardNav
+          ? headerTheme || "dashboardNavBgColor"
+          : headerTheme || "navbarBgColor"
+          }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}
