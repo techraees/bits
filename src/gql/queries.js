@@ -33,8 +33,8 @@ const GET_ALL_NFTS = gql`
 `;
 
 const LOGIN_USER = gql`
-  query LoginUser($email: String!, $password: String!) {
-    LoginUser(email: $email, password: $password) {
+  query LoginUser($email: String!, $password: String!, $recaptchaToken: String!) {
+    LoginUser(email: $email, password: $password, recaptchaToken: $recaptchaToken) {
       access_token
       refresh_token
     }

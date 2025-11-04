@@ -19,11 +19,15 @@ import Loading from "../../../components/loaders/loading";
 import { signInSchema } from "../../../components/validations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+
 import "./css/index.css";
 
 const env = process.env;
 
 function Login() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
 
@@ -58,7 +62,7 @@ function Login() {
     },
   );
 
-  const loginUser = (values) => {
+  const loginUser = async (values) => {
     if (rememberCheckbox) {
       localStorage.setItem("rememberEmail", values.email);
       localStorage.setItem("rememberPassword", values.password);
@@ -67,10 +71,19 @@ function Login() {
       localStorage.removeItem("rememberPassword");
     }
 
+    if (!executeRecaptcha) {
+      ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+      return;
+    }
+
+    const token = await executeRecaptcha("form_submit");
+
+
     login({
       variables: {
         email: values.email,
         password: values.password,
+        recaptchaToken: token
       },
     }).catch((err) => {
       console.log("errr", err);
