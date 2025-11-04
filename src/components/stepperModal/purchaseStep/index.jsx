@@ -61,7 +61,6 @@ function PurchaseStep({
       // refetch,
     },
   ] = useLazyQuery(GET_PROFILE_DETAILS_QUERY, {
-    variables: { getProfileDetailsId: userData?.id },
   });
 
   const [

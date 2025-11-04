@@ -120,8 +120,8 @@ const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
 `;
 
 const GET_PROFILE_DETAILS_QUERY = gql`
-  query GetProfileDetails($getProfileDetailsId: String!) {
-    GetProfileDetails(id: $getProfileDetailsId) {
+  query GetProfileDetails {
+    GetProfileDetails {
       country
       id
       profileImg
@@ -236,8 +236,6 @@ const GET_TOP_NFTS = gql`
 // Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
-    $token: String!
-    $wallet_address: String!
     $ownership_type: String
     $page: Int
     $limit: Int
@@ -245,14 +243,49 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
     $chainId: String
   ) {
     getMyNftsThatIOwned(
-      token: $token
       wallet_address: $wallet_address
       ownership_type: $ownership_type
       page: $page
       limit: $limit
       q: $q
       chainId: $chainId
-    )
+    ){
+        totalItems
+        totalPages
+        currentPage
+        currentCount
+        data {
+          nft_id {
+            _id
+            status
+            name
+            artist_name1
+            video
+            isEmote
+            rid
+            bvh
+            fbx
+            likeCount
+            watchCount
+            isPaid
+            royalty
+            token_id
+            user_id {
+              profileImg
+            }
+          }
+          primary_owner
+          listingIDFromBlockChain
+          listing_id
+          total_price
+          copies
+          pricePerItem
+          from_user_wallet
+          to_user_wallet
+          createdAt
+          updatedAt
+        }
+    }
   }
 `;
 

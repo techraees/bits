@@ -41,9 +41,6 @@ const Collections = () => {
 
   const { data: profileData, loading: profileLoading } = useQuery(
     GET_PROFILE_DETAILS_QUERY,
-    {
-      variables: { getProfileDetailsId: userId },
-    },
   );
 
   let token = getCookieStorage("access_token");
@@ -52,8 +49,6 @@ const Collections = () => {
   const { data: getAllNftIOwnedData, loading: getAllNftIOwnedLoading } =
     useQuery(Get_MY_NFTS_THAT_I_OWNED, {
       variables: {
-        token: getCookieStorage("access_token"),
-        wallet_address: profileData?.GetProfileDetails?.user_address,
         ownership_type: activeTab === "1" ? "created" : "owned",
         page: currentPage,
         limit: pageSize,
@@ -233,7 +228,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -309,7 +304,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                  0 ? (
+                    0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
