@@ -243,48 +243,41 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
     $chainId: String
   ) {
     getMyNftsThatIOwned(
-      wallet_address: $wallet_address
       ownership_type: $ownership_type
       page: $page
       limit: $limit
       q: $q
       chainId: $chainId
     ){
-        totalItems
-        totalPages
-        currentPage
-        currentCount
-        data {
-          nft_id {
-            _id
-            status
-            name
-            artist_name1
-            video
-            isEmote
-            rid
-            bvh
-            fbx
-            likeCount
-            watchCount
-            isPaid
-            royalty
-            token_id
-            user_id {
-              profileImg
-            }
+        nft_id {
+          _id
+          status
+          name
+          artist_name1
+          video
+          isEmote
+          rid
+          bvh
+          fbx
+          likeCount
+          watchCount
+          isPaid
+          royalty
+          token_id
+          user_id {
+            profileImg
           }
-          primary_owner
-          listingIDFromBlockChain
-          listing_id
-          total_price
-          copies
-          pricePerItem
-          from_user_wallet
-          to_user_wallet
-          createdAt
-          updatedAt
         }
+        primary_owner
+        listingIDFromBlockChain
+        listing_id
+        total_price
+        copies
+        pricePerItem
+        from_user_wallet
+        to_user_wallet
+        createdAt
+        updatedAt
     }
   }
 `;
