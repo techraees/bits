@@ -8,6 +8,7 @@ import {
   thumb,
   watchedIcon,
   likedIcon,
+  search,
 } from "../../assets";
 
 import { useMutation } from "@apollo/client";
@@ -157,7 +158,7 @@ const CardCompnent = ({
           .filter(
             (item) =>
               contractData.chain == item?.nft_id?.chainId &&
-              item?.numberOfCopies > 0,
+              item?.numberOfCopies > 0
           )
           .map((item) => ({
             owner: item?.seller?.user_address,
@@ -210,7 +211,7 @@ const CardCompnent = ({
   // stripe payment
   const handleStripePayment = async () => {
     const stripe = await loadStripe(
-      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ",
+      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ"
     );
 
     const body = {
@@ -232,7 +233,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const session = await response.json();
@@ -270,7 +271,7 @@ const CardCompnent = ({
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-      },
+      }
     );
 
     const data = await response.json();
@@ -334,6 +335,13 @@ const CardCompnent = ({
       // handleDownload();
     }
   }, [searchParams.get("payment")]);
+
+  useEffect(() => {
+    const searchParamsVideoLink = searchParams.get("videoLink");
+    if (searchParamsVideoLink && searchParamsVideoLink === videoLink) {
+      setIsVideoOpen(true);
+    }
+  }, [searchParams.get("videoLink")]);
 
   console.log(artistName);
   return (
@@ -429,7 +437,14 @@ const CardCompnent = ({
         className={`cardContainer ${isLight ? "card-light" : ""}`}
         cover={
           <div
-            onClick={() => setIsVideoOpen(true)}
+            onClick={() => {
+              setIsVideoOpen(true);
+
+              //set videoLink in url params to the videoLink of the card
+              const url = new URL(window.location.href);
+              url.searchParams.set("videoLink", videoLink);
+              window.history.replaceState(null, "", url);
+            }}
             style={{ position: "relative", cursor: "pointer" }}
           >
             <ReactPlayer
@@ -943,7 +958,14 @@ const CardCompnent = ({
         open={isVideoOpen}
         footer={false}
         centered
-        onCancel={() => setIsVideoOpen(false)}
+        onCancel={() => {
+          //remove videoLink from url search params
+          const url = new URL(window.location.href);
+          url.searchParams.delete("videoLink"); // remove the key
+          window.history.replaceState(null, "", url);
+
+          setIsVideoOpen(false);
+        }}
         width="auto"
         style={{ maxWidth: "90vw" }} // responsive width
         bodyStyle={{ padding: 0 }} // no extra padding

@@ -33,8 +33,16 @@ const GET_ALL_NFTS = gql`
 `;
 
 const LOGIN_USER = gql`
-  query LoginUser($email: String!, $password: String!, $recaptchaToken: String!) {
-    LoginUser(email: $email, password: $password, recaptchaToken: $recaptchaToken) {
+  query LoginUser(
+    $email: String!
+    $password: String!
+    $recaptchaToken: String!
+  ) {
+    LoginUser(
+      email: $email
+      password: $password
+      recaptchaToken: $recaptchaToken
+    ) {
       access_token
       refresh_token
     }
@@ -233,8 +241,6 @@ const GET_TOP_NFTS = gql`
   }
 `;
 
-
-
 // Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
@@ -257,24 +263,24 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
       currentCount
       data {
         nft_id {
-        _id
-        status
-        name
-        artist_name1
-        video
-        isEmote
-        rid
-        bvh
-        fbx
-        likeCount
-        watchCount
-        isPaid
-        royalty
-        token_id
-        user_id {
-          profileImg
+          _id
+          status
+          name
+          artist_name1
+          video
+          isEmote
+          rid
+          bvh
+          fbx
+          likeCount
+          watchCount
+          isPaid
+          royalty
+          token_id
+          user_id {
+            profileImg
+          }
         }
-      }
         primary_owner
         listingIDFromBlockChain
         listing_id

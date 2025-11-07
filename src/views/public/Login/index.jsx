@@ -78,12 +78,11 @@ function Login() {
 
     const token = await executeRecaptcha("form_submit");
 
-
     login({
       variables: {
         email: values.email,
         password: values.password,
-        recaptchaToken: token
+        recaptchaToken: token,
       },
     }).catch((err) => {
       console.log("errr", err);

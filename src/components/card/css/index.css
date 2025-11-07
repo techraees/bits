@@ -7,8 +7,8 @@
 }
 
 .card_video {
-  width: 260px !important;
-  height: 180px !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .mintCardContainer {
@@ -110,8 +110,6 @@
   width: 100%;
 }
 
-
-
 /* =========================
    LIGHT THEME ONLY
    (dark CSS untouched)
@@ -189,8 +187,6 @@
   background-color: #1c1c1c;
   color: #fff;
 }
-
-
 
 .card_video video {
   width: 100% !important;
