@@ -283,11 +283,9 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
 // Used to add the time by 5 mints
 const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
   mutation UpdateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-    $token: String!
     $nftDbMarketPlaceId: String!
   ) {
     updateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-      token: $token
       nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
       message
@@ -300,7 +298,6 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
 
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
-    $token: String!
     $transaction_type: String!
     $nft_id: String
     $first_person_wallet_address: String
@@ -315,7 +312,6 @@ const CREATE_NEW_TRANSACTION = gql`
     $hash_field: String
   ) {
     createNewTransaction(
-      token: $token
       nft_id: $nft_id
       first_person_wallet_address: $first_person_wallet_address
       second_person_wallet_address: $second_person_wallet_address
