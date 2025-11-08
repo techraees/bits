@@ -27,6 +27,7 @@ import GreenTick from "./GreenTick.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
 import "./css/index.css";
 import RedCrossIcon from "./redCross.svg";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({
@@ -36,6 +37,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   onRequestClose,
   setIsAuctionStep,
 }) => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
@@ -144,7 +147,6 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           const transactionHash = res.transactionHash;
 
           const transactionVariables = {
-            token,
             nft_id: itemData?.nftId?.toString(),
             amount: Number(totalcost),
             currency:
@@ -194,6 +196,14 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
               },
             }),
           ]);
+
+          if (!executeRecaptcha) {
+            ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+            return;
+          }
+
+          const token = await executeRecaptcha("form_submit");
+
 
           const msgData = boughtMessage(
             userData?.full_name,
@@ -380,8 +390,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                                itemData?.price *
-                                (itemData?.chainId == 137 ? maticBal : ethBal),
+                              itemData?.price *
+                              (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -415,8 +425,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                            itemData?.price *
-                            (itemData?.chainId == 137 ? maticBal : ethBal),
+                          itemData?.price *
+                          (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>

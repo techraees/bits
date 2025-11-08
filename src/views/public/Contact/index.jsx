@@ -19,10 +19,13 @@ import { useMutation } from "@apollo/client";
 import { SEND_EMAIL_MUTATION } from "../../../gql/mutations";
 import { useFormik } from "formik";
 import { contactValidate } from "../../../components/validations";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const environment = process.env;
 
 const Contact = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
@@ -65,14 +68,20 @@ const Contact = () => {
 
     onSubmit: async (values) => {
       try {
+        if (!executeRecaptcha) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
+        const token = await executeRecaptcha("form_submit");
+
         await sendEmail({
           variables: {
             to: values?.email,
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: `Contact Email From ${values?.fullName}`,
-            text: `${values?.message} and here is my ${
-              values?.phoneNumber && `phone number ${values?.phoneNumber} /`
-            } email ${values?.email}`,
+            text: `${values?.message} and here is my ${values?.phoneNumber && `phone number ${values?.phoneNumber} /`
+              } email ${values?.email}`,
           },
         });
       } catch (e) {

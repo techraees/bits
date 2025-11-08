@@ -20,7 +20,6 @@ const CREATE_NFT = gql`
     $category: String!
     $likeCount: Int
     $watchCount: Int
-    $user_id: String!
   ) {
     CreateNft(
       name: $name
@@ -41,7 +40,6 @@ const CREATE_NFT = gql`
       category: $category
       likeCount: $likeCount
       watchCount: $watchCount
-      user_id: $user_id
     ) {
       _id
       description
@@ -190,8 +188,9 @@ const SEND_EMAIL_MUTATION = gql`
     $from: String!
     $subject: String!
     $text: String!
+    $recaptchaToken: String!
   ) {
-    SendEmail(to: $to, from: $from, subject: $subject, text: $text) {
+    SendEmail(to: $to, from: $from, subject: $subject, text: $text, recaptchaToken: $recaptchaToken) {
       message
       status
     }
@@ -236,7 +235,6 @@ const UPDATE_NFT_PAYMENT = gql`
 // Add Nft to Nft Market Place
 const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
   mutation AddNftToNftMarketPlace(
-    $token: String!
     $tokenId: String!
     $numberOfCopies: Int!
     $price: Decimal!
@@ -250,7 +248,6 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
     $biddingEndTime: Date
   ) {
     addNftToNftMarketPlace(
-      token: $token
       tokenId: $tokenId
       numberOfCopies: $numberOfCopies
       price: $price
@@ -272,11 +269,9 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
 // Remove Nft From Nft Market Place
 const REMOVE_NFT_NFT_MARKET_PLACE = gql`
   mutation RemoveNftFromNftMarketPlace(
-    $token: String!
     $nftDbMarketPlaceId: String!
   ) {
     removeNftFromNftMarketPlace(
-      token: $token
       nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
       message
@@ -343,7 +338,6 @@ const CREATE_NEW_TRANSACTION = gql`
 // Used to create New ownership of nft
 const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
   mutation CreateNewOwnershipOfNft(
-    $token: String!
     $total_price: Decimal!
     $listingIDFromBlockChain: String!
     $copies: Int!
@@ -353,7 +347,6 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
     $to_user_wallet: String!
   ) {
     createNewOwnershipOfNft(
-      token: $token
       total_price: $total_price
       listingIDFromBlockChain: $listingIDFromBlockChain
       copies: $copies
@@ -371,12 +364,10 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
 // Used to create New ownership of nft
 const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   mutation CreateBidAgainstAuctionNftMarketPlace(
-    $token: String!
     $_id: String!
     $price: Decimal!
   ) {
     createBidAgainstAuctionNftMarketPlace(
-      token: $token
       _id: $_id
       price: $price
     )

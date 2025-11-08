@@ -22,6 +22,7 @@ import { trimWallet } from "../../../utills/trimWalletAddr";
 import ConnectModal from "../../connectModal";
 import { SuccessModal } from "../../index";
 import "./css/index.css";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const environment = process.env;
 
@@ -37,6 +38,8 @@ function PurchaseStep({
   tokenId,
   NFTId,
 }) {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
@@ -121,7 +124,6 @@ function PurchaseStep({
         const transactionHash = res.transactionHash;
 
         const transactionVariables = {
-          token,
           nft_id: NFTId.toString(),
           amount: Number(totalPrice),
           currency:
@@ -171,6 +173,15 @@ function PurchaseStep({
           }),
         ]);
 
+
+        if (!executeRecaptcha) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
+        const token = await executeRecaptcha("form_submit");
+
+
         const msgData = boughtMessage(
           userData?.full_name,
           name,
@@ -183,6 +194,7 @@ function PurchaseStep({
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: msgData.subject,
             text: msgData.message,
+            recaptchaToken: token
           },
         });
 

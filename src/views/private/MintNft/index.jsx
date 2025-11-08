@@ -33,10 +33,13 @@ import {
   useAppKitNetwork,
 } from "@reown/appkit/react";
 import { getCookieStorage } from "../../../utills/cookieStorage";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const environment = process.env;
 
 const MintNft = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
@@ -117,6 +120,14 @@ const MintNft = () => {
       );
 
       try {
+
+        if (!executeRecaptcha) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
+        const token = await executeRecaptcha("form_submit");
+
         const res = await sendEmail({
           variables: {
             to: profileData?.GetProfileDetails?.email,
@@ -271,14 +282,12 @@ const MintNft = () => {
             category: createNft && createNft.category,
             likeCount: 0,
             watchCount: 0,
-            user_id: values.id,
           },
         });
 
         //create transaction
         await createNewTransation({
           variables: {
-            token: token,
             first_person_wallet_address: values.walletAddress.toString(),
             nft_id: "",
             amount: 0,

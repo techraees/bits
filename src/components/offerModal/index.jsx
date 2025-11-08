@@ -225,7 +225,6 @@ const OfferModal = ({
                 try {
                   await create_bid_against_auction({
                     variables: {
-                      token: token,
                       _id: itemDbId.toString(),
                       price: Number(offerAmount),
                     },
@@ -233,7 +232,6 @@ const OfferModal = ({
 
                   await updateBiddingTime({
                     variables: {
-                      token: token,
                       nftDbMarketPlaceId: itemDbId.toString(),
                     },
                   });
@@ -242,7 +240,6 @@ const OfferModal = ({
 
                   await createNewTransation({
                     variables: {
-                      token,
                       first_person_wallet_address: address.toString(),
                       nft_id: nftId.toString(),
                       amount: Number(offerAmount),

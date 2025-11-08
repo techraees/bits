@@ -193,19 +193,19 @@ const ListNft = () => {
 
           const tx = isAuction
             ? await market.listItemForAuction(
-                price,
-                startTimeStamp,
-                endTimeStampParam,
-                tokenId,
-                copies,
-                mintContract.address,
-              )
+              price,
+              startTimeStamp,
+              endTimeStampParam,
+              tokenId,
+              copies,
+              mintContract.address,
+            )
             : await market.listItemForFixedPrice(
-                tokenId,
-                copies,
-                price,
-                mintContract.address,
-              );
+              tokenId,
+              copies,
+              price,
+              mintContract.address,
+            );
 
           const res = await tx.wait();
           const transactionHash = res.transactionHash;
@@ -228,7 +228,6 @@ const ListNft = () => {
             //save data to DB
             const response = await addNftToMarketPlace({
               variables: {
-                token: token,
                 tokenId,
                 numberOfCopies: Number(copies),
                 price: Number(isAuction ? auctionStartPrice : fixedPrice),
@@ -245,7 +244,6 @@ const ListNft = () => {
 
             await createNewTransation({
               variables: {
-                token: token,
                 first_person_wallet_address: address.toString(),
                 nft_id: nftId.toString(),
                 amount: Number(isAuction ? auctionStartPrice : fixedPrice),
