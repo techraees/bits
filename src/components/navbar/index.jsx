@@ -155,8 +155,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     const handleStorageChange = () => {
       const token = getCookieStorage("access_token");
       if (token) {
-        profile({
-        });
+        profile({});
       }
     };
 
@@ -246,10 +245,11 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${dashboardNav
-          ? headerTheme || "dashboardNavBgColor"
-          : headerTheme || "navbarBgColor"
-          }`}
+        className={`dashboardNavBgColor ${
+          dashboardNav
+            ? headerTheme || "dashboardNavBgColor"
+            : headerTheme || "navbarBgColor"
+        }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}

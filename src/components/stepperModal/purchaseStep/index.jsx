@@ -173,14 +173,12 @@ function PurchaseStep({
           }),
         ]);
 
-
         if (!executeRecaptcha) {
           ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
           return;
         }
 
         const token = await executeRecaptcha("form_submit");
-
 
         const msgData = boughtMessage(
           userData?.full_name,
@@ -194,7 +192,7 @@ function PurchaseStep({
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: msgData.subject,
             text: msgData.message,
-            recaptchaToken: token
+            recaptchaToken: token,
           },
         });
 

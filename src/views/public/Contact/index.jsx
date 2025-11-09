@@ -80,8 +80,9 @@ const Contact = () => {
             to: values?.email,
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: `Contact Email From ${values?.fullName}`,
-            text: `${values?.message} and here is my ${values?.phoneNumber && `phone number ${values?.phoneNumber} /`
-              } email ${values?.email}`,
+            text: `${values?.message} and here is my ${
+              values?.phoneNumber && `phone number ${values?.phoneNumber} /`
+            } email ${values?.email}`,
           },
         });
       } catch (e) {

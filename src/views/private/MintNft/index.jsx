@@ -120,7 +120,6 @@ const MintNft = () => {
       );
 
       try {
-
         if (!executeRecaptcha) {
           ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
           return;

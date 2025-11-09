@@ -190,7 +190,13 @@ const SEND_EMAIL_MUTATION = gql`
     $text: String!
     $recaptchaToken: String!
   ) {
-    SendEmail(to: $to, from: $from, subject: $subject, text: $text, recaptchaToken: $recaptchaToken) {
+    SendEmail(
+      to: $to
+      from: $from
+      subject: $subject
+      text: $text
+      recaptchaToken: $recaptchaToken
+    ) {
       message
       status
     }
@@ -268,12 +274,8 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
 
 // Remove Nft From Nft Market Place
 const REMOVE_NFT_NFT_MARKET_PLACE = gql`
-  mutation RemoveNftFromNftMarketPlace(
-    $nftDbMarketPlaceId: String!
-  ) {
-    removeNftFromNftMarketPlace(
-      nftDbMarketPlaceId: $nftDbMarketPlaceId
-    ) {
+  mutation RemoveNftFromNftMarketPlace($nftDbMarketPlaceId: String!) {
+    removeNftFromNftMarketPlace(nftDbMarketPlaceId: $nftDbMarketPlaceId) {
       message
       _id
     }
@@ -363,10 +365,7 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
     $_id: String!
     $price: Decimal!
   ) {
-    createBidAgainstAuctionNftMarketPlace(
-      _id: $_id
-      price: $price
-    )
+    createBidAgainstAuctionNftMarketPlace(_id: $_id, price: $price)
   }
 `;
 

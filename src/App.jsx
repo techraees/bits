@@ -48,13 +48,14 @@ function App() {
 
   return (
     <>
-      <GoogleReCaptchaProvider reCaptchaKey={"6LeNeAIsAAAAADSjc8bO8iTGFPyoMJj8tATp5BnS"} >
+      <GoogleReCaptchaProvider
+        reCaptchaKey={"6LeNeAIsAAAAADSjc8bO8iTGFPyoMJj8tATp5BnS"}
+      >
         <Provider store={store}>
           <Layout />
           <ZendeskComp />
         </Provider>
       </GoogleReCaptchaProvider>
-
     </>
   );
 }
