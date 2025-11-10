@@ -2,7 +2,7 @@
 import { useLazyQuery } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppKitAccount } from "@reown/appkit/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -19,14 +19,15 @@ import Loading from "../../../components/loaders/loading";
 import { signInSchema } from "../../../components/validations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import "./css/index.css";
 
 const env = process.env;
 
 function Login() {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
@@ -71,18 +72,16 @@ function Login() {
       localStorage.removeItem("rememberPassword");
     }
 
-    if (!executeRecaptcha) {
+    if (!recaptchaToken) {
       ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
       return;
     }
-
-    const token = await executeRecaptcha("form_submit");
 
     login({
       variables: {
         email: values.email,
         password: values.password,
-        recaptchaToken: token,
+        recaptchaToken: recaptchaToken,
       },
     }).catch((err) => {
       console.log("errr", err);
@@ -125,6 +124,8 @@ function Login() {
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     }
   }, [loginData, loginError, rememberCheckbox]);
 
@@ -220,6 +221,8 @@ function Login() {
     }
   }, []);
 
+  console.log(process.env.REACT_APP_RECAPTCH_SITE_KEY, "keyasdasdadad");
+
   return (
     <div style={{ background: "black" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
@@ -281,6 +284,18 @@ function Login() {
                 />
                 <span className="ms-3 light-grey">Remember me</span>
               </div>
+              <div className="mt-3">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+                  onChange={(t) => setRecaptchaToken(t)}
+                  onExpired={() => setRecaptchaToken(null)}
+                // Optional:
+                // theme="dark"
+                // size="compact"
+                />
+              </div>
+
               <div className="my-5">
                 <ButtonComponent
                   onClick={handleSubmit(onSubmit)}

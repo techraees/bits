@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 import { right_arrow } from "../../../assets";
 import {
@@ -33,12 +33,15 @@ import {
   useAppKitNetwork,
 } from "@reown/appkit/react";
 import { getCookieStorage } from "../../../utills/cookieStorage";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 const environment = process.env;
 
 const MintNft = () => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+
 
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
@@ -120,12 +123,10 @@ const MintNft = () => {
       );
 
       try {
-        if (!executeRecaptcha) {
+        if (!recaptchaToken) {
           ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
           return;
         }
-
-        const token = await executeRecaptcha("form_submit");
 
         const res = await sendEmail({
           variables: {
@@ -133,6 +134,7 @@ const MintNft = () => {
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: msgData.subject,
             text: msgData.message,
+            recaptchaToken: recaptchaToken,
           },
         });
 
@@ -170,7 +172,6 @@ const MintNft = () => {
     setCreatorEarningModal(true);
   };
 
-  console.log(metamaskAddress);
 
   const mintCall = async (supply, royalty) => {
     console.log("Minting Call");
@@ -597,6 +598,18 @@ const MintNft = () => {
               text={"Mint NFT"}
               width={150}
               height={40}
+            />
+          </div>
+
+          <div className="mt-3">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+              onChange={(t) => setRecaptchaToken(t)}
+              onExpired={() => setRecaptchaToken(null)}
+            // Optional:
+            // theme="dark"
+            // size="compact"
             />
           </div>
         </div>
