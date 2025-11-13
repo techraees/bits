@@ -38,8 +38,6 @@ function PurchaseStep({
   tokenId,
   NFTId,
 }) {
-
-
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
@@ -295,9 +293,9 @@ function PurchaseStep({
             sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
             onChange={(t) => setRecaptchaToken(t)}
             onExpired={() => setRecaptchaToken(null)}
-          // Optional:
-          // theme="dark"
-          // size="compact"
+            // Optional:
+            // theme="dark"
+            // size="compact"
           />
         </div>
       </div>

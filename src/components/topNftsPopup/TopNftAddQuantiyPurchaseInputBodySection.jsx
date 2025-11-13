@@ -38,8 +38,6 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   onRequestClose,
   setIsAuctionStep,
 }) => {
-
-
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
@@ -390,8 +388,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                              itemData?.price *
-                              (itemData?.chainId == 137 ? maticBal : ethBal),
+                                itemData?.price *
+                                (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -425,8 +423,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                          itemData?.price *
-                          (itemData?.chainId == 137 ? maticBal : ethBal),
+                            itemData?.price *
+                            (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>
@@ -464,9 +462,9 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                       sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
                       onChange={(t) => setRecaptchaToken(t)}
                       onExpired={() => setRecaptchaToken(null)}
-                    // Optional:
-                    // theme="dark"
-                    // size="compact"
+                      // Optional:
+                      // theme="dark"
+                      // size="compact"
                     />
                   </div>
                 </>

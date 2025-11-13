@@ -290,9 +290,9 @@ function Login() {
                   sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
                   onChange={(t) => setRecaptchaToken(t)}
                   onExpired={() => setRecaptchaToken(null)}
-                // Optional:
-                // theme="dark"
-                // size="compact"
+                  // Optional:
+                  // theme="dark"
+                  // size="compact"
                 />
               </div>
 

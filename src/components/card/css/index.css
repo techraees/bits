@@ -6,6 +6,11 @@
   overflow: hidden !important;
 }
 
+.card_video2 {
+  width: 100%;
+  height: 200px;
+}
+
 .card_video {
   width: 260px !important;
   height: 180px !important;
@@ -92,6 +97,11 @@
     width: 100%;
   }
 
+  .card_video2 {
+    width: 100%;
+    height: 200px;
+  }
+
   .card_video {
     width: 100% !important;
     height: 200px !important;
@@ -131,6 +141,12 @@
 
 /* Video container ko light border (optional) */
 .card-light .card_video {
+  background: #f7f7f7;
+  /* fallback bg behind player */
+  border-bottom: 1px solid #eee;
+}
+
+.card-light .card_video2 {
   background: #f7f7f7;
   /* fallback bg behind player */
   border-bottom: 1px solid #eee;
@@ -190,6 +206,15 @@
   color: #fff;
 }
 
+
+
+.card_video2 video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 8px;
+  /* optional */
+}
 
 
 .card_video video {

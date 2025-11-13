@@ -35,13 +35,11 @@ import {
 import { getCookieStorage } from "../../../utills/cookieStorage";
 import ReCAPTCHA from "react-google-recaptcha";
 
-
 const environment = process.env;
 
 const MintNft = () => {
   const recaptchaRef = useRef(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
-
 
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
@@ -171,7 +169,6 @@ const MintNft = () => {
   const handleSplitOwnership = () => {
     setCreatorEarningModal(true);
   };
-
 
   const mintCall = async (supply, royalty) => {
     console.log("Minting Call");
@@ -607,9 +604,9 @@ const MintNft = () => {
               sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
               onChange={(t) => setRecaptchaToken(t)}
               onExpired={() => setRecaptchaToken(null)}
-            // Optional:
-            // theme="dark"
-            // size="compact"
+              // Optional:
+              // theme="dark"
+              // size="compact"
             />
           </div>
         </div>

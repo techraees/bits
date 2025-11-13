@@ -75,14 +75,14 @@ const Contact = () => {
           return;
         }
 
-
         await sendEmail({
           variables: {
             to: values?.email,
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: `Contact Email From ${values?.fullName}`,
-            text: `${values?.message} and here is my ${values?.phoneNumber && `phone number ${values?.phoneNumber} /`
-              } email ${values?.email}`,
+            text: `${values?.message} and here is my ${
+              values?.phoneNumber && `phone number ${values?.phoneNumber} /`
+            } email ${values?.email}`,
             recaptchaToken: recaptchaToken,
           },
         });
@@ -220,9 +220,9 @@ const Contact = () => {
               sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
               onChange={(t) => setRecaptchaToken(t)}
               onExpired={() => setRecaptchaToken(null)}
-            // Optional:
-            // theme="dark"
-            // size="compact"
+              // Optional:
+              // theme="dark"
+              // size="compact"
             />
           </div>
           <Row gutter={{ xs: 8, sm: 16, md: 20, lg: 32 }} className="mt-5 mb-2">
