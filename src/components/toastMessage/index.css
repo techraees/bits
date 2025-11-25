@@ -1,0 +1,12 @@
+/* notification override */
+.ant-notification {
+    z-index: 100000000 !important;
+}
+
+.ant-notification-notice {
+    z-index: 100000000 !important;
+}
+
+.custom-toast {
+    z-index: 100000000 !important;
+}
