@@ -62,7 +62,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
       };
       const metaUri = await sendMetaToIPFS(data);
 
-      alert("TERI MAA LO LUN");
 
       dispatch({
         type: "CREATE_NFT",
