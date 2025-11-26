@@ -84,7 +84,7 @@ const ConnectModal = ({ visible, onClose }) => {
       // wrapClassName={backgroundTheme}
       style={{
         marginTop: "6rem",
-        zIndex: 999999999
+        zIndex: 999999999,
       }}
       footer={null}
       className={backgroundTheme}

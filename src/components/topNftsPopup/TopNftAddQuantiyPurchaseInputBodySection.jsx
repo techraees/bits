@@ -143,8 +143,10 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           setLoadingMessage("Transaction Pending...");
 
           const res = await tx.wait();
-          if (!res) throw new Error("Transaction failed");
-
+          if (!res) {
+            ToastMessage("Transaction failed", "", "error");
+            return
+          };
           const transactionHash = res.transactionHash;
 
           const transactionVariables = {
@@ -388,8 +390,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                                itemData?.price *
-                                (itemData?.chainId == 137 ? maticBal : ethBal),
+                              itemData?.price *
+                              (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -423,8 +425,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                            itemData?.price *
-                            (itemData?.chainId == 137 ? maticBal : ethBal),
+                          itemData?.price *
+                          (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>
@@ -462,9 +464,9 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                       sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
                       onChange={(t) => setRecaptchaToken(t)}
                       onExpired={() => setRecaptchaToken(null)}
-                      // Optional:
-                      // theme="dark"
-                      // size="compact"
+                    // Optional:
+                    // theme="dark"
+                    // size="compact"
                     />
                   </div>
                 </>

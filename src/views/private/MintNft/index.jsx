@@ -172,6 +172,26 @@ const MintNft = () => {
 
   const mintCall = async (supply, royalty) => {
     console.log("Minting Call");
+
+    if (!isConnected) {
+      ToastMessage(
+        "Error",
+        `Please Connect Meta mask with site first`,
+        "error",
+      );
+      return;
+    }
+
+    if (!metamaskAddress) {
+      ToastMessage(
+        "Error",
+        `AppKitAccount Wallet Address Not Found` + metamaskAddress
+          ? metamaskAddress
+          : ".",
+        "error",
+      );
+    }
+
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
@@ -227,8 +247,7 @@ const MintNft = () => {
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
         "error",
       );
-
-      throw Error("Error Found")
+      return
     }
   };
 
@@ -319,6 +338,8 @@ const MintNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
+
+  console.log(metamaskAddress, "I am getting metamassaddress");
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
  */
 export const getCookieStorage = (key) => {
   const value = Cookies.get(key);
-  window.dispatchEvent(new Event("storageChange"));
+  // window.dispatchEvent(new Event("storageChange"));
   return value;
 };
 

@@ -1,6 +1,7 @@
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { urlSource } from "ipfs-http-client";
 import axios from "axios";
+import { ToastMessage } from "../components";
 
 const env = process.env;
 
@@ -13,7 +14,7 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
       const response = await fetch(file);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        ToastMessage(`HTTP error! Status: ${response.status}`, "", "error");
       }
 
       const blob = await response.blob();
