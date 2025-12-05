@@ -981,7 +981,7 @@ const CardCompnent = ({
         >
           <ReactPlayer
             url={videoLink}
-            className="card_video"
+            className="card_video2"
             controls
             playing
             objec

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 import { right_arrow } from "../../../assets";
 import {
@@ -33,10 +33,14 @@ import {
   useAppKitNetwork,
 } from "@reown/appkit/react";
 import { getCookieStorage } from "../../../utills/cookieStorage";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const environment = process.env;
 
 const MintNft = () => {
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
@@ -117,12 +121,18 @@ const MintNft = () => {
       );
 
       try {
+        if (!recaptchaToken) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
         const res = await sendEmail({
           variables: {
             to: profileData?.GetProfileDetails?.email,
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: msgData.subject,
             text: msgData.message,
+            recaptchaToken: recaptchaToken,
           },
         });
 
@@ -160,10 +170,28 @@ const MintNft = () => {
     setCreatorEarningModal(true);
   };
 
-  console.log(metamaskAddress);
-
   const mintCall = async (supply, royalty) => {
     console.log("Minting Call");
+
+    if (!isConnected) {
+      ToastMessage(
+        "Error",
+        `Please Connect Meta mask with site first`,
+        "error",
+      );
+      return;
+    }
+
+    if (!metamaskAddress) {
+      ToastMessage(
+        "Error",
+        `AppKitAccount Wallet Address Not Found` + metamaskAddress
+          ? metamaskAddress
+          : ".",
+        "error",
+      );
+    }
+
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
@@ -219,6 +247,7 @@ const MintNft = () => {
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
         "error",
       );
+      return
     }
   };
 
@@ -271,14 +300,12 @@ const MintNft = () => {
             category: createNft && createNft.category,
             likeCount: 0,
             watchCount: 0,
-            user_id: values.id,
           },
         });
 
         //create transaction
         await createNewTransation({
           variables: {
-            token: token,
             first_person_wallet_address: values.walletAddress.toString(),
             nft_id: "",
             amount: 0,
@@ -311,6 +338,8 @@ const MintNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
+
+  console.log(metamaskAddress, "I am getting metamassaddress");
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
@@ -589,6 +618,18 @@ const MintNft = () => {
               text={"Mint NFT"}
               width={150}
               height={40}
+            />
+          </div>
+
+          <div className="mt-3">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+              onChange={(t) => setRecaptchaToken(t)}
+              onExpired={() => setRecaptchaToken(null)}
+            // Optional:
+            // theme="dark"
+            // size="compact"
             />
           </div>
         </div>

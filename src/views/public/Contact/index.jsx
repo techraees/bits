@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   map_img,
   user_icon,
@@ -20,9 +20,14 @@ import { SEND_EMAIL_MUTATION } from "../../../gql/mutations";
 import { useFormik } from "formik";
 import { contactValidate } from "../../../components/validations";
 
+import ReCAPTCHA from "react-google-recaptcha";
+
 const environment = process.env;
 
 const Contact = () => {
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
@@ -65,6 +70,11 @@ const Contact = () => {
 
     onSubmit: async (values) => {
       try {
+        if (!recaptchaToken) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
         await sendEmail({
           variables: {
             to: values?.email,
@@ -73,6 +83,7 @@ const Contact = () => {
             text: `${values?.message} and here is my ${
               values?.phoneNumber && `phone number ${values?.phoneNumber} /`
             } email ${values?.email}`,
+            recaptchaToken: recaptchaToken,
           },
         });
       } catch (e) {
@@ -88,6 +99,8 @@ const Contact = () => {
     }
     if (emailError) {
       ToastMessage("error", emailError.message, "error");
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     }
   }, [emailError, emailData]);
 
@@ -199,6 +212,17 @@ const Contact = () => {
               height={40}
               onClick={handleSubmit}
               text={"Submit"}
+            />
+          </div>
+          <div className="mt-3">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+              onChange={(t) => setRecaptchaToken(t)}
+              onExpired={() => setRecaptchaToken(null)}
+              // Optional:
+              // theme="dark"
+              // size="compact"
             />
           </div>
           <Row gutter={{ xs: 8, sm: 16, md: 20, lg: 32 }} className="mt-5 mb-2">

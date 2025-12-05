@@ -14,7 +14,6 @@ import { removeStorage } from "./utills/localStorage";
 import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
 import { mainnet, polygon } from "@reown/appkit/networks";
 import { createAppKit } from "@reown/appkit/react";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 const projectId = process.env.REACT_APP_REOWN_ID;
 
@@ -48,14 +47,10 @@ function App() {
 
   return (
     <>
-      <GoogleReCaptchaProvider
-        reCaptchaKey={"6LeNeAIsAAAAADSjc8bO8iTGFPyoMJj8tATp5BnS"}
-      >
-        <Provider store={store}>
-          <Layout />
-          <ZendeskComp />
-        </Provider>
-      </GoogleReCaptchaProvider>
+      <Provider store={store}>
+        <Layout />
+        <ZendeskComp />
+      </Provider>
     </>
   );
 }

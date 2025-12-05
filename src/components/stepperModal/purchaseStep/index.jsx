@@ -3,7 +3,7 @@ import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
 import { Modal } from "antd";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { test } from "../../../assets";
@@ -22,6 +22,7 @@ import { trimWallet } from "../../../utills/trimWalletAddr";
 import ConnectModal from "../../connectModal";
 import { SuccessModal } from "../../index";
 import "./css/index.css";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const environment = process.env;
 
@@ -42,6 +43,8 @@ function PurchaseStep({
   const { walletProvider } = useAppKitProvider("eip155");
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { web3, signer } = useSelector((state) => state.web3.walletData);
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [connectModal, setConnectModal] = useState(false);
@@ -116,12 +119,14 @@ function PurchaseStep({
         setLoadingMessage("Transaction Pending...");
 
         const res = await tx.wait();
-        if (!res) throw new Error("Transaction failed");
+        if (!res) {
+          ToastMessage("Transaction failed", "", "error");
+          return
+        };
 
         const transactionHash = res.transactionHash;
 
         const transactionVariables = {
-          token,
           nft_id: NFTId.toString(),
           amount: Number(totalPrice),
           currency:
@@ -171,6 +176,11 @@ function PurchaseStep({
           }),
         ]);
 
+        if (!recaptchaToken) {
+          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          return;
+        }
+
         const msgData = boughtMessage(
           userData?.full_name,
           name,
@@ -183,6 +193,7 @@ function PurchaseStep({
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: msgData.subject,
             text: msgData.message,
+            recaptchaToken: recaptchaToken,
           },
         });
 
@@ -279,6 +290,17 @@ function PurchaseStep({
         >
           {isConnected ? "Buy Now" : "Connect Wallet"}
         </button>
+        <div className="mt-3">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+            onChange={(t) => setRecaptchaToken(t)}
+            onExpired={() => setRecaptchaToken(null)}
+          // Optional:
+          // theme="dark"
+          // size="compact"
+          />
+        </div>
       </div>
     </div>
   );

@@ -82,13 +82,17 @@ const ConnectModal = ({ visible, onClose }) => {
   return (
     <Modal
       // wrapClassName={backgroundTheme}
-      style={{ marginTop: "6rem" }}
+      style={{
+        marginTop: "6rem",
+        zIndex: 999999999,
+      }}
       footer={null}
       className={backgroundTheme}
       bodyStyle={{ backgroundColor: "#222222" }}
       open={buttonVisible}
       onOk={onClose}
       onCancel={onClose}
+      zIndex={99999}
     >
       <div>
         <div className="d-flex mt-3 gap-4   flex-column justify-content-center align-items-center">

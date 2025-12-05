@@ -6,7 +6,7 @@ import {
   useAppKitProvider,
 } from "@reown/appkit/react";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader, ToastMessage } from "../../components";
 import {
@@ -27,6 +27,8 @@ import GreenTick from "./GreenTick.svg";
 import IncrementButtonArr from "./IncrementButtonArr.svg";
 import "./css/index.css";
 import RedCrossIcon from "./redCross.svg";
+import ReCAPTCHA from "react-google-recaptcha";
+
 const environment = process.env;
 
 const TopNftAddQuantiyPurchaseInputBodySection = ({
@@ -49,6 +51,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   const [loadingMessage, setLoadingMessage] = useState("");
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
+  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -139,12 +143,13 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           setLoadingMessage("Transaction Pending...");
 
           const res = await tx.wait();
-          if (!res) throw new Error("Transaction failed");
-
+          if (!res) {
+            ToastMessage("Transaction failed", "", "error");
+            return
+          };
           const transactionHash = res.transactionHash;
 
           const transactionVariables = {
-            token,
             nft_id: itemData?.nftId?.toString(),
             amount: Number(totalcost),
             currency:
@@ -195,6 +200,10 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
             }),
           ]);
 
+          if (!recaptchaToken) {
+            ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+            return;
+          }
           const msgData = boughtMessage(
             userData?.full_name,
             itemData?.name,
@@ -208,6 +217,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
               from: environment.REACT_APP_EMAIL_OWNER,
               subject: msgData.subject,
               text: msgData.message,
+              recaptchaToken: recaptchaToken,
             },
           });
 
@@ -380,8 +390,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                             {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                             {Number(
                               quantity *
-                                itemData?.price *
-                                (itemData?.chainId == 137 ? maticBal : ethBal),
+                              itemData?.price *
+                              (itemData?.chainId == 137 ? maticBal : ethBal),
                             ).toFixed(6)}
                             ){" "}
                           </span>
@@ -415,8 +425,8 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                         {itemData?.chainId == 137 ? "MATIC" : "ETH"} ( $
                         {Number(
                           quantity *
-                            itemData?.price *
-                            (itemData?.chainId == 137 ? maticBal : ethBal),
+                          itemData?.price *
+                          (itemData?.chainId == 137 ? maticBal : ethBal),
                         ).toFixed(6)}
                         ){" "}
                       </span>
@@ -433,20 +443,33 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
                   </p>
                 </div>
               ) : (
-                <div
-                  className="connect_wallet_button__parent"
-                  onClick={() => {
-                    setIsFixedPriceStep(3);
-                    if (isConnected) {
-                      handlePurchase();
-                    }
-                    connectWalletHandle();
-                  }}
-                >
-                  <button className="connect_wallet_button theme_gradient_red">
-                    {isConnected ? "BuyNow" : "Connect Wallet"}
-                  </button>
-                </div>
+                <>
+                  <div
+                    className="connect_wallet_button__parent"
+                    onClick={() => {
+                      setIsFixedPriceStep(3);
+                      if (isConnected) {
+                        handlePurchase();
+                      }
+                      connectWalletHandle();
+                    }}
+                  >
+                    <button className="connect_wallet_button theme_gradient_red">
+                      {isConnected ? "BuyNow" : "Connect Wallet"}
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
+                      onChange={(t) => setRecaptchaToken(t)}
+                      onExpired={() => setRecaptchaToken(null)}
+                    // Optional:
+                    // theme="dark"
+                    // size="compact"
+                    />
+                  </div>
+                </>
               )}
             </div>
           </div>

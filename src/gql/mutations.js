@@ -20,7 +20,6 @@ const CREATE_NFT = gql`
     $category: String!
     $likeCount: Int
     $watchCount: Int
-    $user_id: String!
   ) {
     CreateNft(
       name: $name
@@ -41,7 +40,6 @@ const CREATE_NFT = gql`
       category: $category
       likeCount: $likeCount
       watchCount: $watchCount
-      user_id: $user_id
     ) {
       _id
       description
@@ -190,8 +188,15 @@ const SEND_EMAIL_MUTATION = gql`
     $from: String!
     $subject: String!
     $text: String!
+    $recaptchaToken: String!
   ) {
-    SendEmail(to: $to, from: $from, subject: $subject, text: $text) {
+    SendEmail(
+      to: $to
+      from: $from
+      subject: $subject
+      text: $text
+      recaptchaToken: $recaptchaToken
+    ) {
       message
       status
     }
@@ -236,7 +241,6 @@ const UPDATE_NFT_PAYMENT = gql`
 // Add Nft to Nft Market Place
 const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
   mutation AddNftToNftMarketPlace(
-    $token: String!
     $tokenId: String!
     $numberOfCopies: Int!
     $price: Decimal!
@@ -250,7 +254,6 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
     $biddingEndTime: Date
   ) {
     addNftToNftMarketPlace(
-      token: $token
       tokenId: $tokenId
       numberOfCopies: $numberOfCopies
       price: $price
@@ -271,14 +274,8 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
 
 // Remove Nft From Nft Market Place
 const REMOVE_NFT_NFT_MARKET_PLACE = gql`
-  mutation RemoveNftFromNftMarketPlace(
-    $token: String!
-    $nftDbMarketPlaceId: String!
-  ) {
-    removeNftFromNftMarketPlace(
-      token: $token
-      nftDbMarketPlaceId: $nftDbMarketPlaceId
-    ) {
+  mutation RemoveNftFromNftMarketPlace($nftDbMarketPlaceId: String!) {
+    removeNftFromNftMarketPlace(nftDbMarketPlaceId: $nftDbMarketPlaceId) {
       message
       _id
     }
@@ -288,11 +285,9 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
 // Used to add the time by 5 mints
 const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
   mutation UpdateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-    $token: String!
     $nftDbMarketPlaceId: String!
   ) {
     updateNftMarketPlaceBiddingTimeByMintsForEachRequest(
-      token: $token
       nftDbMarketPlaceId: $nftDbMarketPlaceId
     ) {
       message
@@ -305,7 +300,6 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
 
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
-    $token: String!
     $transaction_type: String!
     $nft_id: String
     $first_person_wallet_address: String
@@ -320,7 +314,6 @@ const CREATE_NEW_TRANSACTION = gql`
     $hash_field: String
   ) {
     createNewTransaction(
-      token: $token
       nft_id: $nft_id
       first_person_wallet_address: $first_person_wallet_address
       second_person_wallet_address: $second_person_wallet_address
@@ -343,7 +336,6 @@ const CREATE_NEW_TRANSACTION = gql`
 // Used to create New ownership of nft
 const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
   mutation CreateNewOwnershipOfNft(
-    $token: String!
     $total_price: Decimal!
     $listingIDFromBlockChain: String!
     $copies: Int!
@@ -353,7 +345,6 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
     $to_user_wallet: String!
   ) {
     createNewOwnershipOfNft(
-      token: $token
       total_price: $total_price
       listingIDFromBlockChain: $listingIDFromBlockChain
       copies: $copies
@@ -371,15 +362,10 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
 // Used to create New ownership of nft
 const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   mutation CreateBidAgainstAuctionNftMarketPlace(
-    $token: String!
     $_id: String!
     $price: Decimal!
   ) {
-    createBidAgainstAuctionNftMarketPlace(
-      token: $token
-      _id: $_id
-      price: $price
-    )
+    createBidAgainstAuctionNftMarketPlace(_id: $_id, price: $price)
   }
 `;
 

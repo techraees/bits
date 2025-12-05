@@ -62,6 +62,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
       };
       const metaUri = await sendMetaToIPFS(data);
 
+
       dispatch({
         type: "CREATE_NFT",
         createNft: {
