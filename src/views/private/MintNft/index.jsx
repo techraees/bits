@@ -71,7 +71,7 @@ const MintNft = () => {
   let navigate = useNavigate();
 
   const { createNft } = useSelector((state) => state.nft.createNft);
-
+  console.log(createNft);
   const [CreateNft, { data, loading, error }] = useMutation(CREATE_NFT);
   const [
     createNewTransation,
@@ -192,6 +192,8 @@ const MintNft = () => {
       );
     }
 
+    console.log(chainId);
+
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
@@ -247,7 +249,7 @@ const MintNft = () => {
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
         "error",
       );
-      return
+      return;
     }
   };
 
@@ -338,8 +340,6 @@ const MintNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
-
-  console.log(metamaskAddress, "I am getting metamassaddress");
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
@@ -627,9 +627,9 @@ const MintNft = () => {
               sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
               onChange={(t) => setRecaptchaToken(t)}
               onExpired={() => setRecaptchaToken(null)}
-            // Optional:
-            // theme="dark"
-            // size="compact"
+              // Optional:
+              // theme="dark"
+              // size="compact"
             />
           </div>
         </div>

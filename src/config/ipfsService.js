@@ -84,6 +84,7 @@ export const sendFileToIPFS = async (file, isEmote) => {
 };
 
 export const sendMetaToIPFS = async (data) => {
+  console.log(data);
   if (data) {
     try {
       const authorization =

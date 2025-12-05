@@ -193,19 +193,19 @@ const ListNft = () => {
 
           const tx = isAuction
             ? await market.listItemForAuction(
-              price,
-              startTimeStamp,
-              endTimeStampParam,
-              tokenId,
-              copies,
-              mintContract.address,
-            )
+                price,
+                startTimeStamp,
+                endTimeStampParam,
+                tokenId,
+                copies,
+                mintContract.address,
+              )
             : await market.listItemForFixedPrice(
-              tokenId,
-              copies,
-              price,
-              mintContract.address,
-            );
+                tokenId,
+                copies,
+                price,
+                mintContract.address,
+              );
 
           const res = await tx.wait();
           const transactionHash = res.transactionHash;
@@ -217,7 +217,7 @@ const ListNft = () => {
             newItemId = Number(event.args[0]);
           } else {
             ToastMessage(`Event not found`, "", "error");
-            return
+            return;
           }
 
           // Update database

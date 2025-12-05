@@ -121,8 +121,8 @@ function PurchaseStep({
         const res = await tx.wait();
         if (!res) {
           ToastMessage("Transaction failed", "", "error");
-          return
-        };
+          return;
+        }
 
         const transactionHash = res.transactionHash;
 
@@ -296,9 +296,9 @@ function PurchaseStep({
             sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
             onChange={(t) => setRecaptchaToken(t)}
             onExpired={() => setRecaptchaToken(null)}
-          // Optional:
-          // theme="dark"
-          // size="compact"
+            // Optional:
+            // theme="dark"
+            // size="compact"
           />
         </div>
       </div>
