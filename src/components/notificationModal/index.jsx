@@ -70,7 +70,7 @@ const NotificationModal = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <Nav.Link className="white mx-1" onClick={handleToggleModal}>
         <img src={bell} className="" alt="bell" />
         {notificationCount > 0 && (
@@ -78,7 +78,8 @@ const NotificationModal = () => {
         )}
       </Nav.Link>
       {showModal && (
-        <div className="notification-modal modal fade show">
+        // <div className="notification-modal modal">
+        <div className="notification-modal modal fade show ">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Notifications</h5>

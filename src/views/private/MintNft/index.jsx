@@ -42,7 +42,7 @@ const MintNft = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const { chainId } = useAppKitNetwork();
@@ -117,7 +117,7 @@ const MintNft = () => {
     const sendMsg = async () => {
       const msgData = mintMessage(
         createNft && createNft.artist_name1,
-        createNft && createNft.name,
+        createNft && createNft.name
       );
 
       try {
@@ -177,7 +177,7 @@ const MintNft = () => {
       ToastMessage(
         "Error",
         `Please Connect Meta mask with site first`,
-        "error",
+        "error"
       );
       return;
     }
@@ -188,7 +188,7 @@ const MintNft = () => {
         `AppKitAccount Wallet Address Not Found` + metamaskAddress
           ? metamaskAddress
           : ".",
-        "error",
+        "error"
       );
     }
 
@@ -206,7 +206,7 @@ const MintNft = () => {
             royalty,
             splitOwners,
             splitOwnersPercentage,
-            [],
+            []
           );
 
           setLoadingStatus(true);
@@ -245,9 +245,9 @@ const MintNft = () => {
       ToastMessage(
         "Error",
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
-        "error",
+        "error"
       );
-      return
+      return;
     }
   };
 
@@ -273,7 +273,7 @@ const MintNft = () => {
       connectWalletHandle();
       const { newTkId, transactionHash } = await mintCall(
         Number(values.supply),
-        Number(values.royalty * 100),
+        Number(values.royalty * 100)
       );
 
       if (Number(newTkId)) {
@@ -362,151 +362,166 @@ const MintNft = () => {
             <span className={`${textColor2} fs-5 py-3 ms-2`}>NFT Details</span>
           </div>
         </div>
-        <Row
-          style={{ width: "100%" }}
-          className={`d-flex searchStyle ${bgColor} my-4 p-5`}
-        >
-          <Col lg={14} sm={24} xs={24} className="borderBottom">
-            <Row gutter={{ xs: 8, sm: 16, md: 30, lg: 50 }}>
-              <Col lg={12} sm={24} md={12} xs={24}>
-                <div
-                  className="cardContainer mintCardContainer"
-                  style={{ width: "100%" }}
-                >
-                  <ReactPlayer
-                    controls={true}
-                    width="100%"
-                    height={220}
-                    url={createNft && createNft.video}
-                  />
-                </div>
-                <div
-                  style={{ border: "1px solid  #B23232" }}
-                  className="p-1 mt-4 text-center rounded-3"
-                >
-                  <span className={`${textColor2}`}>
-                    View on{" "}
-                    {contractData.chain == 1 ? "Etherscan" : "Polygonscan"}
-                  </span>
-                </div>
-              </Col>
-              <Col lg={12} sm={24} md={12} xs={24}>
-                <div>
-                  <div className="my-3">
-                    <p className={`${textColor} mb-1 fs-5`}>Name</p>
-
-                    <p className={`${textColor2} m-0 fs-6`}>
-                      {createNft && createNft.name}
-                    </p>
-                    <p className="red fs-6">
-                      {createNft ? createNft.artist_name1 : "Snap Boogie"}
-                    </p>
-                  </div>
-                  <div className="my-3">
-                    <p className={`${textColor} m-0 fs-5`}>NFT ID</p>
-                    <p className={`${textColor2} m-0 fs-6`}>#89832823289</p>
-                  </div>
-                  <div className="my-3">
-                    <div className="d-flex label-input">
-                      <p className={`${textColor} m-0 fs-5`}>Royalty%: </p>
-                      <span
-                        style={{
-                          marginTop: "-2.3rem",
-                          marginLeft: "1rem",
-                        }}
-                      >
-                        <div>
-                          <Input
-                            name="royalty"
-                            className={"royaltyInputField  me-5"}
-                            placeholder={"royalty"}
-                            onChange={(e) => {
-                              if (e.target.value < 101) {
-                                setFieldValue("royalty", e.target.value);
-                              } else {
-                                ToastMessage(
-                                  "Error",
-                                  "Royalty should be less than 100",
-                                  "error",
-                                );
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (
-                                e.key === "-" ||
-                                e.key === "+" ||
-                                e.key === "*" ||
-                                e.key === "/" ||
-                                e.key === "e"
-                              ) {
-                                e.preventDefault();
-                              }
-                            }}
-                            onWheel={(event) => event.currentTarget.blur()}
-                            type="number"
-                            value={values.royalty}
-                            autoComplete="off"
-                          />
-                        </div>
-                      </span>
-                    </div>
-                    <ErrorMessage
-                      message={
-                        touched.royalty && errors.royalty
-                          ? errors.royalty
-                          : null
-                      }
+        <div className={`searchStyle ${bgColor} my-4 p-5`}>
+          <Row
+            style={{ width: "100%" }}
+            className={`d-flex searchStyle ${bgColor} my-4 p-5`}
+          >
+            <Col lg={14} sm={24} xs={24} className="borderBottom">
+              <Row gutter={{ xs: 8, sm: 16, md: 30, lg: 50 }}>
+                <Col lg={12} sm={24} md={12} xs={24}>
+                  <div
+                    className="cardContainer mintCardContainer"
+                    style={{ width: "100%" }}
+                  >
+                    <ReactPlayer
+                      controls={true}
+                      width="100%"
+                      height={220}
+                      url={createNft && createNft.video}
                     />
                   </div>
                   <div
-                    style={{
-                      border: "1px solid  #B23232",
-                      cursor: "pointer",
-                    }}
-                    className="p-1 mt-5 text-center rounded-3 red-background"
+                    style={{ border: "1px solid  #B23232" }}
+                    className="p-1 mt-4 text-center rounded-3"
                   >
-                    <span
-                      className={`${textColor2}`}
-                      onClick={handleSplitOwnership}
-                    >
-                      Split Ownership
+                    <span className={`${textColor2}`}>
+                      View on{" "}
+                      {contractData.chain == 1 ? "Etherscan" : "Polygonscan"}
                     </span>
                   </div>
+                </Col>
+                <Col lg={12} sm={24} md={12} xs={24}>
+                  <div>
+                    <div className="my-3">
+                      <p className={`${textColor} mb-1 fs-5`}>Name</p>
+
+                      <p className={`${textColor2} m-0 fs-6`}>
+                        {createNft && createNft.name}
+                      </p>
+                      <p className="red fs-6">
+                        {createNft ? createNft.artist_name1 : "Snap Boogie"}
+                      </p>
+                    </div>
+                    <div className="my-3">
+                      <p className={`${textColor} m-0 fs-5`}>NFT ID</p>
+                      <p className={`${textColor2} m-0 fs-6`}>#89832823289</p>
+                    </div>
+                    <div className="my-3">
+                      <div className="d-flex label-input">
+                        <p className={`${textColor} m-0 fs-5`}>Royalty%: </p>
+                        <span
+                          style={{
+                            marginTop: "-2.3rem",
+                            marginLeft: "1rem",
+                          }}
+                        >
+                          <div>
+                            <Input
+                              name="royalty"
+                              className={"royaltyInputField  me-5"}
+                              placeholder={"royalty"}
+                              onChange={(e) => {
+                                if (e.target.value < 101) {
+                                  setFieldValue("royalty", e.target.value);
+                                } else {
+                                  ToastMessage(
+                                    "Error",
+                                    "Royalty should be less than 100",
+                                    "error"
+                                  );
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (
+                                  e.key === "-" ||
+                                  e.key === "+" ||
+                                  e.key === "*" ||
+                                  e.key === "/" ||
+                                  e.key === "e"
+                                ) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              onWheel={(event) => event.currentTarget.blur()}
+                              type="number"
+                              value={values.royalty}
+                              autoComplete="off"
+                            />
+                          </div>
+                        </span>
+                      </div>
+                      <ErrorMessage
+                        message={
+                          touched.royalty && errors.royalty
+                            ? errors.royalty
+                            : null
+                        }
+                      />
+                    </div>
+                    <div
+                      style={{
+                        border: "1px solid  #B23232",
+                        cursor: "pointer",
+                      }}
+                      className="p-1 mt-5 text-center rounded-3 red-background"
+                    >
+                      <span
+                        className={`${textColor2}`}
+                        onClick={handleSplitOwnership}
+                      >
+                        Split Ownership
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ borderRight: "1px solid #B23232" }} />
+                </Col>
+              </Row>
+            </Col>
+            <Col lg={10} sm={24} xs={24}>
+              <div className="supplyView">
+                <div className="my-3">
+                  <p className={`${textColor} mb-1 fs-5`}>Circulating Supply</p>
+                  <p className={`${textColor2} m-0 fs-6`}>{values.supply}</p>
                 </div>
-                <div style={{ borderRight: "1px solid #B23232" }} />
-              </Col>
-            </Row>
-          </Col>
-          <Col lg={10} sm={24} xs={24}>
-            <div className="supplyView">
-              <div className="my-3">
-                <p className={`${textColor} mb-1 fs-5`}>Circulating Supply</p>
-                <p className={`${textColor2} m-0 fs-6`}>{values.supply}</p>
+                <div className="my-3">
+                  <p className={`${textColor} mb-1 fs-5`}>
+                    Maximum Total Supply Supply
+                  </p>
+                  <p className={`${textColor2} m-0 fs-6`}>{values.supply}</p>
+                </div>
+                <div className="my-3">
+                  <p className={`${textColor} mb-1 fs-5`}>Supply Type</p>
+                  <p className={`${textColor2} m-0 fs-6`}>Non Fungible Token</p>
+                </div>
               </div>
-              <div className="my-3">
-                <p className={`${textColor} mb-1 fs-5`}>
-                  Maximum Total Supply Supply
-                </p>
-                <p className={`${textColor2} m-0 fs-6`}>{values.supply}</p>
-              </div>
-              <div className="my-3">
-                <p className={`${textColor} mb-1 fs-5`}>Supply Type</p>
-                <p className={`${textColor2} m-0 fs-6`}>Non Fungible Token</p>
-              </div>
-            </div>
-            <div
-              style={{ border: "1px solid  #B23232" }}
-              className="p-1 mt-4 text-center rounded-3"
-            >
-              <span
-                className={`${textColor2}`}
-                onClick={() => navigate(`/collections/${userData?.id}`)}
+              <div
+                style={{ border: "1px solid  #B23232" }}
+                className="p-1 mt-4 text-center rounded-3"
               >
-                Go to Collection
-              </span>
+                <span
+                  className={`${textColor2}`}
+                  onClick={() => navigate(`/collections/${userData?.id}`)}
+                >
+                  Go to Collection
+                </span>
+              </div>
+            </Col>
+          </Row>
+          <Row
+            style={{ width: "100%" }}
+            className={`d-grid searchStyle ${bgColor} `}
+          >
+            <hr />
+            <div>
+              <p className={`${textColor} m-0 fs-5`}>Description</p>
             </div>
-          </Col>
-        </Row>
+            <div className={`${textColor2} m-0 fs-6`}>
+              {createNft && createNft.description}
+            </div>
+          </Row>
+        </div>
+
         <div className="d-flex align-items-center">
           <img src={right_arrow} />
           <span className={`${textColor2} fs-5 py-3 ms-2`}>Mint Details</span>
@@ -627,9 +642,9 @@ const MintNft = () => {
               sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
               onChange={(t) => setRecaptchaToken(t)}
               onExpired={() => setRecaptchaToken(null)}
-            // Optional:
-            // theme="dark"
-            // size="compact"
+              // Optional:
+              // theme="dark"
+              // size="compact"
             />
           </div>
         </div>

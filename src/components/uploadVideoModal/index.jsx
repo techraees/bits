@@ -14,7 +14,7 @@ import { sendMetaToIPFS, sendFileToStorj } from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
 
-const UploadVideoModal = ({ visible, onClose }) => {
+const UploadVideoModal = ({ visible, onClose}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const backgroundTheme = useSelector(
@@ -33,6 +33,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+    const { userData } = useSelector((state) => state.address.userData);
 
   const {
     handleSubmit,
@@ -45,7 +46,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   } = useFormik({
     initialValues: {
       name: "",
-      artist_name1: "",
+      artist_name1: userData?.full_name,
       description: "",
       video: "",
       meta: "",
@@ -61,7 +62,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
         },
       };
       const metaUri = await sendMetaToIPFS(data);
-
 
       dispatch({
         type: "CREATE_NFT",
@@ -412,9 +412,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 placeholder="Artist"
                 className="greyBgInput"
                 name="artist_name1"
-                value={values.artist_name1}
+                value={userData?.full_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={true}
               />
               <ErrorMessage
                 message={
