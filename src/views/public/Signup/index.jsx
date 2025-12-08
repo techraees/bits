@@ -1,29 +1,27 @@
 /* eslint-disable no-useless-escape */
-import React, { useEffect, useState } from "react";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useAppKitAccount } from "@reown/appkit/react";
+import { Col, Divider, Row, Select } from "antd";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logo, metamaskwithmascot } from "../../../assets";
-import { useSelector, useDispatch } from "react-redux";
 import {
   ButtonComponent,
   CustomCheckbox,
   InputComponent,
   ToastMessage,
 } from "../../../components";
-import "./css/index.css";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import ConnectModal from "../../../components/connectModal";
+import ForgotPassModal from "../../../components/ForgotPassModal";
 import Loading from "../../../components/loaders/loading";
 import { signInSchema, signUpSchema } from "../../../components/validations";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { LOGIN_USER, GET_PLAYER } from "../../../gql/queries";
-import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../gql/mutations";
-import ConnectModal from "../../../components/connectModal";
-import Cookies from "js-cookie";
-import { Col, Divider, Row, Select } from "antd";
-import { setStorage } from "../../../utills/localStorage";
-import ForgotPassModal from "../../../components/ForgotPassModal";
-import { useAppKitAccount } from "@reown/appkit/react";
+import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
+import "./css/index.css";
 
 const env = process.env;
 
@@ -547,7 +545,8 @@ function Login() {
                   <ButtonComponent
                     onClick={signUpSubmit(signUpHandle)}
                     text={"CREATE ACCOUNT"}
-                    disabled={!signUpAgreeCheckbox}
+                    disabled={!signUpAgreeCheckbox || signUpLoading}
+                    loading={signUpLoading}
                   />
                 )}
               </div>

@@ -45,9 +45,9 @@ const Collections = () => {
     GET_GENERAL_USER_INFO,
     {
       variables: {
-        _id: userId
-      }
-    }
+        _id: userId,
+      },
+    },
   );
 
   let token = getCookieStorage("access_token");
@@ -64,7 +64,6 @@ const Collections = () => {
         chainId: contractData?.chain?.toString(),
       },
     });
-
 
   const { userData } = useSelector((state) => state.address.userData);
   const [tokenIdsByOwner, setTokenIdsByOwner] = useState([]);
@@ -89,9 +88,10 @@ const Collections = () => {
   let navigate = useNavigate();
 
   const imgPath =
-    environment.REACT_APP_BACKEND_BASE_URL +
-      "/" +
-      userData?.id == profileData?.GetGeneralUserInfo?._id ? userData?.profileImg : profileData?.GetGeneralUserInfo?.profileImg;
+    environment.REACT_APP_BACKEND_BASE_URL + "/" + userData?.id ==
+    profileData?.GetGeneralUserInfo?._id
+      ? userData?.profileImg
+      : profileData?.GetGeneralUserInfo?.profileImg;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
   const handlePageChange = (page) => {
@@ -107,7 +107,6 @@ const Collections = () => {
     }
     return originalElement;
   };
-
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
@@ -128,7 +127,8 @@ const Collections = () => {
                   height: "150px",
                 }}
               >
-                {(profileData?.GetGeneralUserInfo?.profileImg || userData?.profileImg) ? (
+                {profileData?.GetGeneralUserInfo?.profileImg ||
+                userData?.profileImg ? (
                   <img
                     alt="dp"
                     src={imgPath}
@@ -173,12 +173,17 @@ const Collections = () => {
 
               <div className="ms-3 no_margin pt-2">
                 <h3 className="red-gradient-color semi-bold">
-                  {userData?.id == profileData?.GetGeneralUserInfo?._id ? userData?.full_name : profileData?.GetGeneralUserInfo?.full_name}
+                  {userData?.id == profileData?.GetGeneralUserInfo?._id
+                    ? userData?.full_name
+                    : profileData?.GetGeneralUserInfo?.full_name}
                 </h3>
-                {(profileData?.GetGeneralUserInfo?.country || userData?.country) && (
+                {(profileData?.GetGeneralUserInfo?.country ||
+                  userData?.country) && (
                   <div className="d-flex mb-1 ms-5">
                     <h5 className={`m-0 ${textColor}`}>
-                      {userData?.id != profileData?.GetGeneralUserInfo?._id ? profileData?.GetGeneralUserInfo?.country : userData?.country}
+                      {userData?.id != profileData?.GetGeneralUserInfo?._id
+                        ? profileData?.GetGeneralUserInfo?.country
+                        : userData?.country}
                     </h5>
                     <img
                       className="ms-2"
@@ -189,7 +194,9 @@ const Collections = () => {
                 )}
 
                 <span className={`ms-5 ${textColor2}`}>
-                  {userData?.id != profileData?.GetGeneralUserInfo?._id ? profileData?.GetGeneralUserInfo?.bio : userData?.bio}
+                  {userData?.id != profileData?.GetGeneralUserInfo?._id
+                    ? profileData?.GetGeneralUserInfo?.bio
+                    : userData?.bio}
                 </span>
                 <div className="ms-5 mt-4">
                   {profileData?.GetGeneralUserInfo?._id === userData?.id && (
@@ -236,7 +243,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => { }}
+            onClick={() => {}}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -296,7 +303,8 @@ const Collections = () => {
                             })
                           }
                           isOwner={
-                            profileData?.GetGeneralUserInfo?._id === userData?.id
+                            profileData?.GetGeneralUserInfo?._id ===
+                            userData?.id
                           }
                         />
                       ),
@@ -313,7 +321,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                    0 ? (
+                  0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
