@@ -64,6 +64,16 @@ const GET_PROFILE = gql`
   }
 `;
 
+const GET_GENERAL_USER_INFO = gql`
+  query GetGeneralUserInfo($_id: String!) {
+    GetGeneralUserInfo(_id: $_id) {
+      _id
+      full_name
+      profileImg
+    }
+  }
+`;
+
 const GET_PLAYER = gql`
   query Query($id: String!) {
     GetPlayer(id: $id) {
@@ -246,6 +256,7 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
     $ownership_type: String
     $page: Int
+    $user_id: String!
     $limit: Int
     $q: String
     $chainId: String
@@ -254,6 +265,7 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
       ownership_type: $ownership_type
       page: $page
       limit: $limit
+      user_id: $user_id
       q: $q
       chainId: $chainId
     ) {
@@ -454,6 +466,7 @@ export {
   GET_PLAYER,
   UPDATE_USER_PROFILE,
   GET_PROFILE,
+  GET_GENERAL_USER_INFO,
   GET_ALL_NFTS_WITHOUT_ADDRESS,
   GET_PROFILE_DETAILS_QUERY,
   GET_NFT_DETAIL_QUERY,

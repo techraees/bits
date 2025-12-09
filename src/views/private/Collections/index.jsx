@@ -20,6 +20,7 @@ import {
   UploadVideoModal,
 } from "../../../components";
 import {
+  GET_GENERAL_USER_INFO,
   Get_MY_NFTS_THAT_I_OWNED,
   GET_PROFILE_DETAILS_QUERY,
 } from "../../../gql/queries";
@@ -34,13 +35,19 @@ const environment = process.env;
 
 const Collections = () => {
   const { userId } = useParams();
+
   const [activeTab, setActiveTab] = useState("1");
   const [pageSize, setPageSize] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchString, setSearchString] = useState("");
 
   const { data: profileData, loading: profileLoading } = useQuery(
-    GET_PROFILE_DETAILS_QUERY,
+    GET_GENERAL_USER_INFO,
+    {
+      variables: {
+        _id: userId,
+      },
+    },
   );
 
   let token = getCookieStorage("access_token");
@@ -53,11 +60,10 @@ const Collections = () => {
         page: currentPage,
         limit: pageSize,
         q: searchString,
+        user_id: userId,
         chainId: contractData?.chain?.toString(),
       },
     });
-
-  console.log(getAllNftIOwnedData, "ASDASDADSASDASDASD");
 
   const { userData } = useSelector((state) => state.address.userData);
   const [tokenIdsByOwner, setTokenIdsByOwner] = useState([]);
@@ -66,7 +72,7 @@ const Collections = () => {
   useEffect(() => {
     async function getTokenIds() {
       const tokens = await getAllNftsByAddressAlchemy(
-        profileData?.GetProfileDetails?.user_address,
+        profileData?.GetGeneralUserInfo?.user_address,
         contractData.chain,
         contractData.mintContract.address,
       );
@@ -82,9 +88,10 @@ const Collections = () => {
   let navigate = useNavigate();
 
   const imgPath =
-    environment.REACT_APP_BACKEND_BASE_URL +
-    "/" +
-    profileData?.GetProfileDetails?.profileImg;
+    environment.REACT_APP_BACKEND_BASE_URL + "/" + userData?.id ==
+    profileData?.GetGeneralUserInfo?._id
+      ? userData?.profileImg
+      : profileData?.GetGeneralUserInfo?.profileImg;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
 
   const handlePageChange = (page) => {
@@ -120,7 +127,8 @@ const Collections = () => {
                   height: "150px",
                 }}
               >
-                {profileData?.GetProfileDetails?.profileImg ? (
+                {profileData?.GetGeneralUserInfo?.profileImg ||
+                userData?.profileImg ? (
                   <img
                     alt="dp"
                     src={imgPath}
@@ -165,12 +173,17 @@ const Collections = () => {
 
               <div className="ms-3 no_margin pt-2">
                 <h3 className="red-gradient-color semi-bold">
-                  {profileData?.GetProfileDetails?.full_name}
+                  {userData?.id == profileData?.GetGeneralUserInfo?._id
+                    ? userData?.full_name
+                    : profileData?.GetGeneralUserInfo?.full_name}
                 </h3>
-                {profileData?.GetProfileDetails?.country && (
+                {(profileData?.GetGeneralUserInfo?.country ||
+                  userData?.country) && (
                   <div className="d-flex mb-1 ms-5">
                     <h5 className={`m-0 ${textColor}`}>
-                      {profileData?.GetProfileDetails?.country}
+                      {userData?.id != profileData?.GetGeneralUserInfo?._id
+                        ? profileData?.GetGeneralUserInfo?.country
+                        : userData?.country}
                     </h5>
                     <img
                       className="ms-2"
@@ -181,10 +194,12 @@ const Collections = () => {
                 )}
 
                 <span className={`ms-5 ${textColor2}`}>
-                  {profileData?.GetProfileDetails?.bio}
+                  {userData?.id != profileData?.GetGeneralUserInfo?._id
+                    ? profileData?.GetGeneralUserInfo?.bio
+                    : userData?.bio}
                 </span>
                 <div className="ms-5 mt-4">
-                  {profileData?.GetProfileDetails?.id === userData?.id && (
+                  {profileData?.GetGeneralUserInfo?._id === userData?.id && (
                     <ButtonComponent
                       onClick={() => navigate("/account-settings/edit-profile")}
                       simple
@@ -259,13 +274,14 @@ const Collections = () => {
                           artistName={e?.nft_id?.artist_name1}
                           videoLink={e?.nft_id?.video}
                           isEmote={e?.nft_id?.isEmote}
+                          userId={userId}
                           rid={e?.nft_id?.rid}
                           bvh={e?.nft_id?.bvh}
                           fbx={e?.nft_id?.fbx}
                           detailBtn={true}
                           topName
                           userProfile={
-                            profileData?.GetProfileDetails?.full_name
+                            profileData?.GetGeneralUserInfo?.full_name
                               ? true
                               : false
                           }
@@ -287,7 +303,8 @@ const Collections = () => {
                             })
                           }
                           isOwner={
-                            profileData?.GetProfileDetails?.id === userData?.id
+                            profileData?.GetGeneralUserInfo?._id ===
+                            userData?.id
                           }
                         />
                       ),
@@ -313,9 +330,10 @@ const Collections = () => {
                         name={e?.nft_id?.name}
                         artistName={e?.nft_id?.artist_name1}
                         videoLink={e?.nft_id?.video}
+                        userId={userId}
                         topName
                         userProfile={
-                          !!profileData?.GetProfileDetails?.full_name
+                          !!profileData?.GetGeneralUserInfo?.full_name
                         }
                         navigateTo={() =>
                           navigate(`/list-nft/${e?.nft_id?._id}`, {
@@ -330,7 +348,7 @@ const Collections = () => {
                           })
                         }
                         isOwner={
-                          profileData?.GetProfileDetails?.id === userData?.id
+                          profileData?.GetGeneralUserInfo?._id === userData?.id
                         }
                       />
                     ))

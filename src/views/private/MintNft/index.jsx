@@ -71,7 +71,7 @@ const MintNft = () => {
   let navigate = useNavigate();
 
   const { createNft } = useSelector((state) => state.nft.createNft);
-
+  console.log(createNft);
   const [CreateNft, { data, loading, error }] = useMutation(CREATE_NFT);
   const [
     createNewTransation,
@@ -191,6 +191,8 @@ const MintNft = () => {
         "error",
       );
     }
+
+    console.log(chainId);
 
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
@@ -338,8 +340,6 @@ const MintNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
-
-  console.log(metamaskAddress, "I am getting metamassaddress");
 
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
