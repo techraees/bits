@@ -14,7 +14,7 @@ import { sendMetaToIPFS, sendFileToStorj } from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
 
-const UploadVideoModal = ({ visible, onClose}) => {
+const UploadVideoModal = ({ visible, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const backgroundTheme = useSelector(
@@ -33,7 +33,7 @@ const UploadVideoModal = ({ visible, onClose}) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-    const { userData } = useSelector((state) => state.address.userData);
+  const { userData } = useSelector((state) => state.address.userData);
 
   const {
     handleSubmit,

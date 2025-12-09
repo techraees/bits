@@ -40,7 +40,7 @@ const ForgotPassModal = ({
       const response = await fetch(
         `${env.REACT_APP_BACKEND_BASE_URL}/forgot-password`,
         {
-          method: "POST",
+          method: "OPTIONS",
           headers: headers,
           body: JSON.stringify(body),
         },
