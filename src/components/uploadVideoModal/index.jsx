@@ -53,6 +53,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     },
     validate: uploadValidation,
     onSubmit: async (values) => {
+      console.log("FORM VALUES", values);
       const data = {
         name: values.name,
         description: values.description,
@@ -63,6 +64,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
       };
       const metaUri = await sendMetaToIPFS(data);
 
+      console.log("META URI", metaUri);
       dispatch({
         type: "CREATE_NFT",
         createNft: {
@@ -415,7 +417,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 value={userData?.full_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                disabled={true}
               />
               <ErrorMessage
                 message={
