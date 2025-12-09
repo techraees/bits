@@ -40,7 +40,7 @@ const ForgotPassModal = ({
       const response = await fetch(
         `${env.REACT_APP_BACKEND_BASE_URL}/forgot-password`,
         {
-          method: "OPTIONS",
+          method: "POST",
           headers: headers,
           body: JSON.stringify(body),
         },
@@ -51,7 +51,7 @@ const ForgotPassModal = ({
       if (data.success) {
         setStep((step) => step + 1);
       } else {
-        ToastMessage("Error", data.message, "error");
+          ToastMessage("Error", data.message.message.toString(), "error");
       }
     } else {
       ToastMessage("Error", "Wrong email format", "error");
