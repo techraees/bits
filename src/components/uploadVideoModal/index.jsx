@@ -33,6 +33,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const { userData } = useSelector((state) => state.address.userData);
 
   const {
     handleSubmit,
@@ -45,13 +46,14 @@ const UploadVideoModal = ({ visible, onClose }) => {
   } = useFormik({
     initialValues: {
       name: "",
-      artist_name1: "",
+      artist_name1: userData?.full_name,
       description: "",
       video: "",
       meta: "",
     },
     validate: uploadValidation,
     onSubmit: async (values) => {
+      console.log("FORM VALUES", values);
       const data = {
         name: values.name,
         description: values.description,
@@ -62,6 +64,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
       };
       const metaUri = await sendMetaToIPFS(data);
 
+      console.log("META URI", metaUri);
       dispatch({
         type: "CREATE_NFT",
         createNft: {
@@ -411,7 +414,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 placeholder="Artist"
                 className="greyBgInput"
                 name="artist_name1"
-                value={values.artist_name1}
+                value={userData?.full_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />

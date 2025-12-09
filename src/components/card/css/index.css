@@ -12,8 +12,8 @@
 }
 
 .card_video {
-  width: 260px !important;
-  height: 180px !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .mintCardContainer {
@@ -119,8 +119,6 @@
   align-items: center;
   width: 100%;
 }
-
-
 
 /* =========================
    LIGHT THEME ONLY
