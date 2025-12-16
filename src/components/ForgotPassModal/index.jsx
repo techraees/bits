@@ -51,7 +51,7 @@ const ForgotPassModal = ({
       if (data.success) {
         setStep((step) => step + 1);
       } else {
-          ToastMessage("Error", data.message.message.toString(), "error");
+        ToastMessage("Error", data.message.message.toString(), "error");
       }
     } else {
       ToastMessage("Error", "Wrong email format", "error");

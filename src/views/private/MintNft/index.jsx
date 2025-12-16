@@ -71,7 +71,7 @@ const MintNft = () => {
   let navigate = useNavigate();
 
   const { createNft } = useSelector((state) => state.nft.createNft);
-  console.log(createNft);
+  console.log(createNft, "Creating the New NFT");
   const [CreateNft, { data, loading, error }] = useMutation(CREATE_NFT);
   const [
     createNewTransation,
