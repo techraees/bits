@@ -10,15 +10,22 @@ import { uploadValidation } from "../validations";
 import ErrorMessage from "../error";
 import { useMutation } from "@apollo/client";
 import { CREATE_SIGNED_URL_FOR_NFTS } from "../../gql/mutations";
-import { sendMetaToIPFS, sendFileToStorj } from "../../config/ipfsService";
+import {
+  sendMetaToIPFS,
+  sendFileToStorj,
+  sendMetaToIPFSPINATA,
+} from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
 
 const UploadVideoModal = ({ visible, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { userData } = useSelector((state) => state.address.userData);
+
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
+    (state) => state.app.theme.backgroundTheme
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
@@ -33,7 +40,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const { userData } = useSelector((state) => state.address.userData);
 
   const {
     handleSubmit,
@@ -44,15 +50,17 @@ const UploadVideoModal = ({ visible, onClose }) => {
     touched,
     errors,
   } = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: "",
-      artist_name1: userData?.full_name,
+      artist_name1: userData?.full_name || "",
       description: "",
       video: "",
       meta: "",
     },
     validate: uploadValidation,
     onSubmit: async (values) => {
+      // console.clear()
       console.log("FORM VALUES", values);
       const data = {
         name: values.name,
@@ -62,7 +70,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           video: values.video,
         },
       };
-      const metaUri = await sendMetaToIPFS(data);
+      const metaUri = await sendMetaToIPFSPINATA(data);
 
       console.log("META URI", metaUri);
       dispatch({
@@ -126,7 +134,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         ToastMessage(
           "Uploading .avi files is not allowed. Please select another file.",
           "",
-          "error",
+          "error"
         );
       } else {
         if (isEmote) {
@@ -134,16 +142,17 @@ const UploadVideoModal = ({ visible, onClose }) => {
           setImageUpload(true);
           const response = await handleDeepMotionUpload(
             fileUploaded,
-            fileUploaded.name,
+            fileUploaded.name
           );
           if (response) {
             const url = await sendFileToStorj(
               response.mp4,
               isEmote,
-              createSignedUrl,
+              createSignedUrl
             );
             setImageUpload(false);
 
+            console.log(url, "URL FOR VIDEO");
             setFieldValue("video", url);
             setFieldValue("isEmote", true);
             setFieldValue("download", response);
@@ -156,7 +165,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           const url = await sendFileToStorj(
             fileUploaded,
             isEmote,
-            createSignedUrl,
+            createSignedUrl
           );
           setImageUpload(false);
 
@@ -179,7 +188,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     function (e) {
       e.preventDefault();
     },
-    false,
+    false
   );
   window.addEventListener("drop", async (e) => {
     if (isSelected) {
@@ -192,7 +201,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           ToastMessage(
             "Uploading .avi files is not allowed. Please select another file.",
             "",
-            "error",
+            "error"
           );
         } else {
           if (isEmote) {
@@ -200,13 +209,13 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setImageUpload(true);
             const response = await handleDeepMotionUpload(
               fileUploaded,
-              fileUploaded.name,
+              fileUploaded.name
             );
             if (response) {
               const url = await sendFileToStorj(
                 response.mp4,
                 isEmote,
-                createSignedUrl,
+                createSignedUrl
               );
               setImageUpload(false);
 
@@ -222,7 +231,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             const url = await sendFileToStorj(
               fileUploaded,
               isEmote,
-              createSignedUrl,
+              createSignedUrl
             );
             setImageUpload(false);
 
@@ -414,8 +423,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 placeholder="Artist"
                 className="greyBgInput"
                 name="artist_name1"
-                value={userData?.full_name}
-                onChange={handleChange}
+                // value={userData?.full_name}
+                value={values.artist_name1}
+                // onChange={handleChange}
                 onBlur={handleBlur}
               />
               <ErrorMessage

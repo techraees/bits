@@ -2,6 +2,10 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import { urlSource } from "ipfs-http-client";
 import axios from "axios";
 import { ToastMessage } from "../components";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { UPLOAD_META_TO_IPFS } from "../gql/mutations";
+import { getCookieStorage } from "../utills/cookieStorage";
 
 const env = process.env;
 
@@ -106,6 +110,58 @@ export const sendMetaToIPFS = async (data) => {
     } catch (error) {
       console.log("Error sending File to IPFS: ");
       console.log(error);
+    }
+  }
+};
+
+export const sendMetaToIPFSPINATA = async (data) => {
+  console.log("sendMetaToIPFSPINATA data: ");
+  console.log(data);
+  if (data) {
+    try {
+      const token = getCookieStorage("access_token");
+
+      if (!token) {
+        throw new Error("Authentication required. Please log in.");
+      }
+
+      // Create Apollo client with auth
+      const httpLink = createHttpLink({
+        // uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
+        uri: `http://localhost:3001/graphql`,
+      });
+
+      const authLink = setContext((_, { headers }) => {
+        return {
+          headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : "",
+          },
+        };
+      });
+
+      const client = new ApolloClient({
+        link: authLink.concat(httpLink),
+        cache: new InMemoryCache(),
+      });
+
+      // Call GraphQL mutation
+      const { data: result } = await client.mutate({
+        mutation: UPLOAD_META_TO_IPFS,
+        variables: {
+          data: data,
+        },
+      });
+
+      if (result?.uploadMetaToIPFS?.metaHash) {
+        return result.uploadMetaToIPFS.metaHash;
+      } else {
+        throw new Error("IPFS upload failed");
+      }
+    } catch (error) {
+      console.log("Error sending File to IPFS: ");
+      console.log(error);
+      throw error;
     }
   }
 };

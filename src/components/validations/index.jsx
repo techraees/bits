@@ -11,11 +11,11 @@ const uploadValidation = (values) => {
     errors.name = "Must be 50 characters or less";
   }
 
-  if (!values.artist_name1) {
-    errors.artist_name1 = "Required";
-  } else if (values.artist_name1.length > 50) {
-    errors.artist_name1 = "Must be 50 characters or less";
-  }
+  // if (!values.artist_name1) {
+  //   errors.artist_name1 = "Required";
+  // } else if (values.artist_name1.length > 50) {
+  //   errors.artist_name1 = "Must be 50 characters or less";
+  // }
   if (!values.description) {
     errors.description = "Required";
   } else if (values.description.length > 200) {

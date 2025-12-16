@@ -369,6 +369,15 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   }
 `;
 
+// Upload Metadata to IPFS Mutation
+const UPLOAD_META_TO_IPFS = gql`
+  mutation UploadMetaToIPFS($data: JSON!) {
+    uploadMetaToIPFS(data: $data) {
+      metaHash
+    }
+  }
+`;
+
 // Get Refresh Token Mutation
 const REFRESH_TOKEN_MUTATION = gql`
   mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
@@ -412,6 +421,9 @@ export {
   // Create Bid
   CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
   // ========================= Optimization Mutations ======================
+
+  // IPFS Upload
+  UPLOAD_META_TO_IPFS,
 
   // Refresh Token
   REFRESH_TOKEN_MUTATION,
