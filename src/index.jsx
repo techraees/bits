@@ -85,9 +85,38 @@ const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
     });
 });
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  let message;
+
+  // GraphQL errors (status 200)
+  if (graphQLErrors?.length) {
+    message = graphQLErrors[0].message;
+  }
+
+  // Network errors (status 500)
+  else if (
+    networkError?.response?.errors?.length
+  ) {
+    message = networkError.response.errors[0].message;
+  }
+
+  // Fallback
+  else if (networkError?.message) {
+    message = networkError.message;
+  }
+
+  if (message) {
+    console.log("GLOBAL ERROR:", message);
+    ToastMessage(message, "", "error");
+  }
+
+  console.log(message)
+});
+
+
 const client = new ApolloClient({
   // link: authLink.concat(httpLink),
-  link: from([refreshLink, authLink.concat(httpLink)]),
+  link: from([errorLink,refreshLink, authLink.concat(httpLink)]),
   cache: new InMemoryCache(),
 });
 

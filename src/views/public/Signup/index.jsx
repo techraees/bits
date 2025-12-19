@@ -57,6 +57,8 @@ function Login() {
     reset: signInResetValue,
   } = useForm({
     resolver: yupResolver(signInSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   const [login, { loading, error: loginError, data: loginData }] = useLazyQuery(
@@ -141,6 +143,7 @@ function Login() {
     register: signUpRegister,
     handleSubmit: signUpSubmit,
     setValue: signUpSetValue,
+    trigger,
     formState: { errors: signUpFormError },
     watch,
     reset: signUpResetValue,
@@ -271,6 +274,19 @@ function Login() {
   const closeConnectModel = () => {
     setConnectModal(false);
   };
+
+  const forceValidateAndConnect = async () => {
+    const isValid = await trigger(); // 🔥 force validate all fields
+
+    if (!isValid) {
+      // ToastMessage("Error", "Please fix form errors", "error");
+      return;
+    }
+
+    // form valid hai
+    setConnectModal(true);
+  };
+
   const connectWalletHandle = () => {
     if (!isConnected) {
       setConnectModal(true);
@@ -408,7 +424,9 @@ function Login() {
                   autocomplete="off"
                 />
                 {signUpFormError.full_name && (
-                  <span>{signUpFormError.full_name.message}</span>
+                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                    {signUpFormError.full_name.message}
+                  </span>
                 )}
                 <InputComponent
                   placeholder={"User Name"}
@@ -419,7 +437,9 @@ function Login() {
                   autocomplete="off"
                 />
                 {signUpFormError.user_name && (
-                  <span>{signUpFormError.user_name.message}</span>
+                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                    {signUpFormError.user_name.message}
+                  </span>
                 )}
                 <InputComponent
                   placeholder={"E-mail"}
@@ -430,7 +450,9 @@ function Login() {
                   autocomplete="off"
                 />
                 {signUpFormError.email && (
-                  <span>{signUpFormError.email.message}</span>
+                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                    {signUpFormError.email.message}
+                  </span>
                 )}
                 <InputComponent
                   password
@@ -442,7 +464,9 @@ function Login() {
                   autocomplete="off"
                 />
                 {signUpFormError.password && (
-                  <span>{signUpFormError.password.message}</span>
+                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                    {signUpFormError.password.message}
+                  </span>
                 )}
                 <InputComponent
                   placeholder={"Phone number"}
@@ -453,7 +477,9 @@ function Login() {
                   autocomplete="off"
                 />
                 {signUpFormError.phone_number && (
-                  <span>{signUpFormError.phone_number.message}</span>
+                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                    {signUpFormError.phone_number.message}
+                  </span>
                 )}
 
                 <div className="mt-3">
@@ -537,7 +563,7 @@ function Login() {
                 {!isConnected ? (
                   <ButtonComponent
                     onClick={() => {
-                      connectWalletHandle();
+                      forceValidateAndConnect();
                     }}
                     text={"CONNECT WALLET"}
                   />

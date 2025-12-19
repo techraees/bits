@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { upload, upload_file_icon, upload_red, loader } from "../../assets";
 import { ButtonComponent } from "../index";
 import { Modal, Row, Col, Progress, Input, Select } from "antd";
@@ -46,7 +46,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   } = useFormik({
     initialValues: {
       name: "",
-      artist_name1: userData?.full_name,
+      artist_name1: "",
       description: "",
       video: "",
       meta: "",
@@ -258,6 +258,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    if (userData?.full_name) {
+      setFieldValue("artist_name1", userData.full_name);
+    }
+  }, [userData]);
+
   return (
     <Modal
       // wrapClassName={backgroundTheme}
@@ -414,7 +420,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 placeholder="Artist"
                 className="greyBgInput"
                 name="artist_name1"
-                value={userData?.full_name}
+                value={values.artist_name1}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
