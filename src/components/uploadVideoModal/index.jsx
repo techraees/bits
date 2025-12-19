@@ -25,7 +25,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const { userData } = useSelector((state) => state.address.userData);
 
   const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme
+    (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
@@ -134,7 +134,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         ToastMessage(
           "Uploading .avi files is not allowed. Please select another file.",
           "",
-          "error"
+          "error",
         );
       } else {
         if (isEmote) {
@@ -142,13 +142,13 @@ const UploadVideoModal = ({ visible, onClose }) => {
           setImageUpload(true);
           const response = await handleDeepMotionUpload(
             fileUploaded,
-            fileUploaded.name
+            fileUploaded.name,
           );
           if (response) {
             const url = await sendFileToStorj(
               response.mp4,
               isEmote,
-              createSignedUrl
+              createSignedUrl,
             );
             setImageUpload(false);
 
@@ -165,7 +165,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           const url = await sendFileToStorj(
             fileUploaded,
             isEmote,
-            createSignedUrl
+            createSignedUrl,
           );
           setImageUpload(false);
 
@@ -188,7 +188,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     function (e) {
       e.preventDefault();
     },
-    false
+    false,
   );
   window.addEventListener("drop", async (e) => {
     if (isSelected) {
@@ -201,7 +201,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           ToastMessage(
             "Uploading .avi files is not allowed. Please select another file.",
             "",
-            "error"
+            "error",
           );
         } else {
           if (isEmote) {
@@ -209,13 +209,13 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setImageUpload(true);
             const response = await handleDeepMotionUpload(
               fileUploaded,
-              fileUploaded.name
+              fileUploaded.name,
             );
             if (response) {
               const url = await sendFileToStorj(
                 response.mp4,
                 isEmote,
-                createSignedUrl
+                createSignedUrl,
               );
               setImageUpload(false);
 
@@ -231,7 +231,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             const url = await sendFileToStorj(
               fileUploaded,
               isEmote,
-              createSignedUrl
+              createSignedUrl,
             );
             setImageUpload(false);
 

@@ -127,8 +127,8 @@ export const sendMetaToIPFSPINATA = async (data) => {
 
       // Create Apollo client with auth
       const httpLink = createHttpLink({
-        // uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
-        uri: `http://localhost:3001/graphql`,
+        uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
+        // uri: `http://localhost:3001/graphql`,
       });
 
       const authLink = setContext((_, { headers }) => {
@@ -162,6 +162,6 @@ export const sendMetaToIPFSPINATA = async (data) => {
       console.log("Error sending File to IPFS: ");
       console.log(error);
       throw error;
-    }
+  }
   }
 };

@@ -41,6 +41,7 @@ const OfferModal = ({
   tokenId,
   offers,
 }) => {
+  auctionid = 1; //--- TEMPORARY FOR TESTING ---
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
@@ -69,7 +70,9 @@ const OfferModal = ({
   const [createNewTransation] = useMutation(CREATE_NEW_TRANSACTION);
 
   const { web3, signer } = useSelector((state) => state.web3.walletData);
-  const { contractData } = useSelector((state) => state.chain.contractData);
+  const { contractData = {} } = useSelector(
+    (state) => state.chain.contractData || {},
+  );
   const { userData } = useSelector((state) => state.address.userData);
 
   const getPriceDiff = (initialPrice, latestprice) => {
@@ -112,8 +115,9 @@ const OfferModal = ({
   // Process bids only when contractData, ethBal, and maticBal are available
   useEffect(() => {
     async function getbids() {
-      // Skip if balances are not loaded yet
+      // Skip if contractData.chain is not set or balances are not loaded yet
       if (
+        !contractData.chain ||
         (contractData.chain === 1 && !ethBal) ||
         (contractData.chain !== 1 && !maticBal)
       ) {
@@ -207,17 +211,24 @@ const OfferModal = ({
             signer &&
             (contractData.chain == 1 || contractData.chain == 137)
           ) {
+            console.log("contractData", contractData);
+            if (!contractData.marketContract) {
+              ToastMessage("Error", "Market contract not initialized", "error");
+              return;
+            }
             const marketContractWithsigner =
               contractData.marketContract.connect(signer);
             try {
               setIsBidModalOpen(true);
               const tx = await marketContractWithsigner.bid(auctionid, {
-                value: amount,
+                value: amount.toString(),
               });
               // if(tx){
               //   setIsBidModalOpen(true);
               // }
               const res = await tx.wait();
+
+              console.log("bid res", res);
 
               if (res) {
                 //saving to bids to DB
@@ -263,6 +274,9 @@ const OfferModal = ({
                 }
               }
             } catch (error) {
+              // console.clear()
+              console.log("amount: ", amount.toString());
+              // console.log("auctionid: ", auctionid);
               console.log("bid error", error);
               const parsedEthersError = getParsedEthersError(error);
               if (parsedEthersError.context == -32603) {
@@ -298,7 +312,7 @@ const OfferModal = ({
   }, [isConnected]);
 
   return (
-    <div>
+    <div className="z-12" style={{ zIndex: 1, position: "fixedss" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
       <Modal
         open={isBidModalOpen}

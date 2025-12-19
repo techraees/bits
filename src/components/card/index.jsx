@@ -131,21 +131,28 @@ const CardCompnent = ({
   //auction part
   useEffect(() => {
     if (getOwnersWhoListedTheSameNftWithPricesAuction) {
+      console.log(
+        "getOwnersWhoListedTheSameNftWithPricesAuction",
+        getOwnersWhoListedTheSameNftWithPricesAuction,
+      );
       const newData =
         getOwnersWhoListedTheSameNftWithPricesAuction?.getOwnersWhoListedTheSameNftWithPrices?.data
           .filter((item) => contractData.chain == item?.nft_id?.chainId)
-          .map((item) => ({
-            owner: item?.seller?.user_address,
-            copies: item?.numberOfCopies,
-            price: item?.price,
-            fixedid: item?.auctionid,
-            dbid: item?._id,
-            tokenId: item?.tokenId,
-            nftId: item?.nft_id?._id,
-            chainId: item?.nft_id?.chainId,
-            currentBidAmount: item?.auction_highest_bid,
-            auctionbids: item?.auction_bids,
-          }));
+          .map((item) => {
+            console.log(item, "itemmmmmmmmmmm");
+            return {
+              owner: item?.seller?.user_address,
+              copies: item?.numberOfCopies,
+              price: item?.price,
+              fixedid: item?.fixedid | item?.auctionId,
+              dbid: item?._id,
+              tokenId: item?.tokenId,
+              nftId: item?.nft_id?._id,
+              chainId: item?.nft_id?.chainId,
+              currentBidAmount: item?.auction_highest_bid,
+              auctionbids: item?.auction_bids,
+            };
+          });
       setAuctionData(newData);
     }
   }, [getOwnersWhoListedTheSameNftWithPricesAuction]);
@@ -164,7 +171,7 @@ const CardCompnent = ({
             owner: item?.seller?.user_address,
             copies: item?.numberOfCopies,
             price: item?.price,
-            fixedid: item?.fixedid,
+            fixedid: item?.fixedid | item?.auctionId,
             dbid: item?._id,
             tokenId: item?.tokenId,
             nftId: item?.nft_id?._id,
