@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { upload, upload_file_icon, upload_red, loader } from "../../assets";
 import { ButtonComponent } from "../index";
 import { Modal, Row, Col, Progress, Input, Select } from "antd";
@@ -266,6 +266,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
       // handleFiles(e.dataTransfer.files);
     }
   };
+
+  useEffect(() => {
+    if (userData?.full_name) {
+      setFieldValue("artist_name1", userData.full_name);
+    }
+  }, [userData]);
 
   return (
     <Modal
