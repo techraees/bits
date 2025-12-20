@@ -133,10 +133,10 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
 
         const marketContractWithSigner =
           contractData.marketContract.connect(signer);
-
         try {
           const tx = await marketContractWithSigner.BuyFixedPriceItem(
             itemData?.auctionId,
+            // 1, //--- TEMPORARY FOR TESTING ---
             quantity,
             { value: amount },
           );

@@ -11,7 +11,7 @@ import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 10000,
+    zIndex: 10,
   },
   content: {
     top: "0px",
@@ -73,6 +73,7 @@ const ListingModal = ({
     };
   }, [isOpen]);
 
+  console.log("all data", fixedData, auctionData);
   console.log("all data", fixedData, auctionData);
   return (
     <Modal
