@@ -162,6 +162,6 @@ export const sendMetaToIPFSPINATA = async (data) => {
       console.log("Error sending File to IPFS: ");
       console.log(error);
       throw error;
-  }
+    }
   }
 };
