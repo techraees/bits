@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import { onError } from "@apollo/client/link/error";
+import { ToastMessage } from "./components";
 
 import {
   ApolloClient,
@@ -116,7 +117,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const client = new ApolloClient({
   // link: authLink.concat(httpLink),
-  link: from([errorLink,refreshLink, authLink.concat(httpLink)]),
+  link: from([errorLink, refreshLink, authLink.concat(httpLink)]),
   cache: new InMemoryCache(),
 });
 
