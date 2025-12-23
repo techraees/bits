@@ -95,9 +95,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 
   // Network errors (status 500)
-  else if (
-    networkError?.response?.errors?.length
-  ) {
+  else if (networkError?.response?.errors?.length) {
     message = networkError.response.errors[0].message;
   }
 
@@ -111,9 +109,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     ToastMessage(message, "", "error");
   }
 
-  console.log(message)
+  console.log(message);
 });
-
 
 const client = new ApolloClient({
   // link: authLink.concat(httpLink),
