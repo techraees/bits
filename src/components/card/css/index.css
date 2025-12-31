@@ -13,7 +13,8 @@
 
 .card_video {
   width: 100% !important;
-  height: 100% !important;
+  height: 200px !important;
+  margin-bottom: 10px;
 }
 
 .mintCardContainer {
