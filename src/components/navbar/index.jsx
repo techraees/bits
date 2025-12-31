@@ -20,7 +20,7 @@ import profileimg from "../../assets/images/profile1.svg";
 import { Col, Modal } from "antd";
 import LogoutModal from "../logoutModal";
 import CookieConsent from "react-cookie-consent";
-import NotificationModal from "../notificationModal";
+// import NotificationModal from "../notificationModal";
 import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
@@ -453,7 +453,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                   <Nav.Link className="white mx-1">
                     <img src={search} className="" alt="search" />
                   </Nav.Link>
-                  <NotificationModal />
+                  {/* <NotificationModal /> */}
                   <Nav.Link
                     className="white mx-1 d-flex"
                     onClick={() => showModal()}
