@@ -15,7 +15,7 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
   let finalFile;
   if (isEmote) {
     try {
-      const response = await fetch(file);
+      const response = await fetch(file.file);
 
       if (!response.ok) {
         ToastMessage(`HTTP error! Status: ${response.status}`, "", "error");
@@ -23,7 +23,7 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
 
       const blob = await response.blob();
 
-      finalFile = new File([blob], "filename");
+      finalFile = new File([blob], file.name);
     } catch (error) {
       console.error("Error fetching file:", error);
     }
@@ -77,7 +77,7 @@ export const sendFileToIPFS = async (file, isEmote) => {
 
       // console.log("ImgHash", res)
       const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-        "z",
+        "z"
       )}`;
       return ImgHash;
     } catch (error) {
