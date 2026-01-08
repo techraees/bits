@@ -279,6 +279,7 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
           status
           name
           artist_name1
+          video_duration
           video
           isEmote
           rid
@@ -343,6 +344,7 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
         nft_id {
           _id
           status
+          video_duration
           name
           video
           royalty
@@ -429,6 +431,7 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
         nft_id {
           _id
           chainId
+          video_duration
         }
 
         auction_bids {
