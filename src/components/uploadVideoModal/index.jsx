@@ -311,7 +311,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         >
           <Col lg={10} md={10} sm={24} xs={24}>
             <form onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
-              <div className=" d-flex flex-column align-items-center">
+              <div className=" d-flex flex-column align-items-start">
                 <div
                   className={
                     "uploadIconView d-flex align-items-center justify-content-center"
@@ -348,7 +348,65 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 )}
               </div>
             </form>
+
           </Col>
+          {isEmote && (
+            <div className="px-3">
+              <div
+                className="mt-3 p-3"
+                style={{
+                  backgroundColor: "rgba(196, 64, 64, 0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(196, 64, 64, 0.2)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#C44040",
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    flexShrink: 0,
+                    marginTop: "2px",
+                  }}
+                >
+                  !
+                </div>
+                <div>
+                  <p
+                    className={`${textColor2} m-0`}
+                    style={{ fontSize: "14px", fontWeight: "600" }}
+                  >
+                    Processing Note
+                  </p>
+                  <p
+                    className={textColor3}
+                    style={{
+                      fontSize: "12.5px",
+                      margin: "4px 0 0 0",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    Creating an Emote involves advanced AI motion extraction.
+                    This process usually takes about{" "}
+                    <span style={{ color: "#C44040", fontWeight: "bold" }}>
+                      5 to 7 minutes
+                    </span>
+                    . Thank you for your patience!
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           {imageUploadLoader && (
             <Row>
               <Col span={24}>

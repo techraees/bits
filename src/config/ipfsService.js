@@ -61,60 +61,57 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
   }
 };
 
-// export const sendFileToIPFS = async (file, isEmote) => {
-//   if (file) {
-//     try {
-//       const authorization =
-//         "Basic " +
-//         btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
-//       const ipfs = ipfsHttpClient({
-//         url: env.REACT_APP_INFURA,
-//         headers: {
-//           authorization,
-//         },
-//       });
-//       const result = await ipfs.add(isEmote ? urlSource(`${file}`) : file);
+export const sendFileToIPFS = async (file, isEmote) => {
+  if (file) {
+    try {
+      const authorization =
+        "Basic " +
+        btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
+      const ipfs = ipfsHttpClient({
+        url: env.REACT_APP_INFURA,
+        headers: {
+          authorization,
+        },
+      });
+      const result = await ipfs.add(isEmote ? urlSource(`${file}`) : file);
 
-//       // console.log("ImgHash", res)
-//       const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-//         "z",
-//       )}`;
-//       return ImgHash;
-//     } catch (error) {
-//       console.log("Error sending File to IPFS: ");
-//       console.log(error);
-//     }
-//   }
-// };
+      // console.log("ImgHash", res)
+      const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
+        "z",
+      )}`;
+      return ImgHash;
+    } catch (error) {
+      console.log("Error sending File to IPFS: ");
+      console.log(error);
+    }
+  }
+};
 
-// export const sendMetaToIPFS = async (data) => {
-//   console.log(data, "THOS OS TJE DATA");
-//   if (data) {
-//     try {
-//       const authorization =
-//         "Basic " +
-//         btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
-//       const ipfs = ipfsHttpClient({
-//         url: env.REACT_APP_INFURA,
-//         headers: {
-//           authorization,
-//         },
-//       });
+export const sendMetaToIPFS = async (data) => {
+  if (data) {
+    try {
+      const authorization =
+        "Basic " +
+        btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
+      const ipfs = ipfsHttpClient({
+        url: env.REACT_APP_INFURA,
+        headers: {
+          authorization,
+        },
+      });
 
-//       const finalData = JSON.stringify(data);
-//       const result = await ipfs.add(finalData);
+      const finalData = JSON.stringify(data);
+      const result = await ipfs.add(finalData);
 
-//       console.log("THOS OS TJE DATA", result);
 
-//       // console.log("ImgHash", res)
-//       const metaHash = `${env.REACT_APP_IPFS_PATH}/${result.path}`;
-//       return metaHash;
-//     } catch (error) {
-//       console.log("THOS OS TJE DATA", error);
-//       console.log(error);
-//     }
-//   }
-// };
+      // console.log("ImgHash", res)
+      const metaHash = `${env.REACT_APP_IPFS_PATH}/${result.path}`;
+      return metaHash;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 export const sendMetaToIPFSPINATA = async (data) => {
   console.log("sendMetaToIPFSPINATA data: ");

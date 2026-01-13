@@ -303,7 +303,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {
@@ -314,6 +314,7 @@ const VideoGallery = () => {
                       status={item?.nft_id?.status}
                       name={item?.nft_id?.name}
                       videoLink={item?.nft_id?.video}
+                      duration={item?.nft_id?.video_duration}
                       topName
                       collectionBtn
                       detailBtn
