@@ -1,6 +1,9 @@
 import axios from "axios";
 import { ToastMessage } from "../../components";
-// import videofile from "../../assets/images/video.mp4";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { GET_DEEPMOTION_SESSION } from "../../gql/mutations";
+import { getCookieStorage } from "../../utills/cookieStorage";
 
 const env = process.env;
 
@@ -25,174 +28,10 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
       const res = await axios.put(signedurl, videoFile, {
         headers: {
           "Content-Type": "application/octet-stream",
-          "Content-Length": videoFile.length,
         },
       });
 
-      if (res.status == 200) {
-        const config = {
-          url: signedurl,
-          processor: "video2anim",
-          params: [
-            "model=video2anim", // Add model as a param string
-            // "config=configDefault",
-            "formats=bvh,fbx,mp4",
-          ],
-        };
-
-        // const config = {
-        //   url: signedurl,
-        //   model: "video2anim",
-        //   params: [
-        //     "config=configDefault",
-        //     "formats=bvh,fbx,mp4"
-        //   ],
-        // };
-
-        const processRes = await axios.post(`${apiURI}/process`, config, {
-          withCredentials: true,
-        });
-
-        if (processRes.data.rid) {
-          return processRes.data.rid;
-        } else {
-          console.log("No rid");
-        }
-      } else {
-        console.log("Video not uploaded");
-      }
-    } catch (error) {
-      console.log("video Upload Error", error);
-    }
-  };
-
-  const uploadModelFromBrowser = async (modelFile) => {
-    try {
-      const fileExtension = modelFile.name.split(".").pop(); // fbx, glb, etc.
-
-      // Step 1: Get upload URL
-      const uploadUrlResponse = await axios.get(
-        `${apiURI}/character/getModelUploadUrl`,
-        {
-          params: {
-            name: modelFile.name.replace(`.${fileExtension}`, ""),
-            modelExt: fileExtension,
-            resumable: 1,
-          },
-
-          withCredentials: true,
-        },
-      );
-
-      const modelUrl = uploadUrlResponse.data.modelUrl;
-
-      // Step 2: Resumable upload
-      const initiateResponse = await axios.post(modelUrl, null, {
-        headers: {
-          "x-goog-resumable": "start",
-        },
-      });
-
-      const resumableUrl = initiateResponse.headers["location"];
-
-      await axios.put(resumableUrl, modelFile, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-        },
-      });
-
-      console.log("Model uploaded");
-
-      // Step 3: Store model
-      const storeResponse = await axios.post(
-        `${apiURI}/character/storeModel`,
-        {
-          modelUrl: modelUrl,
-          modelName: modelFile.name,
-          createThumb: 1,
-        },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      const modelId = storeResponse.data.modelId;
-      console.log("✅ Model ID:", modelId);
-
-      return modelId;
-    } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
-      return null;
-    }
-  };
-
-  // Usage in React component:
-  const handleModelUpload = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const modelId = await uploadModelFromBrowser(file);
-      // Save modelId to state or localStorage for future use
-      localStorage.setItem("defaultModelId", modelId);
-    }
-  };
-
-  const uploadVideo = async (signedurl, videoFile) => {
-    // await uploadModelFromBrowser(videoFile)
-    // return
-    try {
-      // Fetch available models from your account
-      try {
-        const modelsResponse = await axios.get(
-          `${apiURI}/character/listModels`,
-          {
-            params: {
-              stockModel: true, // This returns stock models
-            },
-            withCredentials: true,
-            //   params: [
-            //   "config=configDefault",
-            //   "formats=bvh,fbx,mp4",
-            //   // To use a custom model, add: "model=YOUR_MODEL_ID_HERE"
-            // ],
-          },
-          {
-            withCredentials: true,
-          },
-        );
-        console.log("Available models:", modelsResponse.data);
-
-        const processedVideoResponse = await axios.get(
-          `${apiURI}/list/SUCCESS`,
-          {
-            withCredentials: true,
-          },
-        );
-
-        console.log("processed video response:", processedVideoResponse.data);
-
-        // Log model IDs for easy reference
-        if (modelsResponse.data && modelsResponse.data.length > 0) {
-          console.log("Model IDs:");
-          modelsResponse.data.forEach((model) => {
-            console.log(`- ${model.name}: ${model.Id}`);
-          });
-        }
-      } catch (modelError) {
-        console.log("Could not fetch models:", modelError.message);
-      }
-
-      const res = await axios.put(signedurl, videoFile, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          "Content-Length": videoFile.length,
-        },
-      });
-
-      if (res.status == 200) {
-        // Option 1: Process without a custom model (uses DeepMotion default character)
+      if (res.status === 200) {
         const config = {
           url: signedurl,
           processor: "video2anim",
@@ -207,159 +46,21 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
             "config=configDefault",
             "formats=bvh,fbx,mp4",
             "model=eUCcDzNPrir8zF1y4jSV6v",
-            // To use a custom model, add: "model=YOUR_MODEL_ID_HERE"h2JvXxjGybDFq4pBFd2A9F
-            //{"modelId":"h2JvXxjGybDFq4pBFd2A9F","faceDataType":0,"handDataType":1}
-            //{"modelId":"3ThAMpuy26bc8iBNqsjUmW","faceDataType":0,"handDataType":1}
-            //{"modelId":"eUCcDzNPrir8zF1y4jSV6v","faceDataType":0,"handDataType":1}
           ],
         };
 
-        const processRes = await axios.post(`${apiURI}/process`, config, {
-          withCredentials: true,
+        const res = await axios.post(`${apiURI}/process`, config, {
+          withCredentials: true, // Included cookies in the request
         });
 
-        if (processRes.data.rid) {
-          return processRes.data.rid;
+        if (res.data.rid) {
+          return res.data.rid;
         } else {
-          console.log("No rid");
+          console.log("Error in Conversion", res);
         }
-      } else {
-        console.log("Video not uploaded");
       }
     } catch (error) {
-      console.log("video Upload Error", error);
-    }
-  };
-
-  const uploadVideoss = async (signedurl, videoFile) => {
-    try {
-      try {
-        const modelsResponse = await axios.get(
-          `${apiURI}/character/listModels`,
-          {
-            withCredentials: true,
-          },
-        );
-        console.log("Available models:", modelsResponse.data);
-
-        const processedVideoResponse = await axios.get(
-          `${apiURI}/list/SUCCESS`,
-          {
-            withCredentials: true,
-          },
-        );
-
-        console.log("processed video response:", processedVideoResponse.data);
-
-        // Log model IDs for easy reference
-        if (modelsResponse.data && modelsResponse.data.length > 0) {
-          console.log("Model IDs:");
-          modelsResponse.data.forEach((model) => {
-            console.log(`- ${model.name}: ${model.Id}`);
-          });
-        }
-      } catch (modelError) {
-        console.log("Could not fetch models:", modelError.message);
-      }
-
-      const res = await axios.put(signedurl, videoFile, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          "Content-Length": videoFile.length,
-        },
-      });
-
-      if (res.status == 200) {
-        const config = {
-          url: signedurl,
-          processor: "standard",
-          params: [
-            "modelId=standard", // Add model as a param string
-            "config=configDefault",
-            "formats=bvh,fbx,mp4,mov",
-          ],
-        };
-
-        // const config = {
-        //   url: signedurl,
-        //   model: "video2anim",
-        //   params: [
-        //     "config=configDefault",
-        //     "formats=bvh,fbx,mp4"
-        //   ],
-        // };
-
-        const processRes = await axios.post(`${apiURI}/process`, config, {
-          withCredentials: true,
-        });
-
-        if (processRes.data.rid) {
-          return processRes.data.rid;
-        } else {
-          console.log("No rid");
-        }
-      } else {
-        console.log("Video not uploaded");
-      }
-    } catch (error) {
-      console.log("video Upload Error", error);
-    }
-  };
-
-  const uploadVideosss = async (signedurl, videoFile) => {
-    try {
-      try {
-        const response = await axios.get(`${apiURI}/character/listModels`, {
-          params: {
-            stockModel: true, // This returns stock models
-          },
-          withCredentials: true,
-        });
-        console.log("Available models:", response.data);
-      } catch (error) {}
-      const uploadRes = await axios.put(signedurl, videoFile, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          "Content-Length": videoFile.length,
-        },
-      });
-
-      if (uploadRes.status === 200) {
-        // Step 2: Process the video
-        const config = {
-          url: signedurl, // Use the ORIGINAL signed URL, not the resumable URL
-          processor: "video2anim",
-          params: [
-            "formats=bvh,fbx,mp4",
-            // Optional parameters you can add:
-            // "model=<modelId>", // Only if you have a custom model ID
-            // "config=configDefault",
-            // "trackFace=0",
-            // "trackHand=0",
-            // "footLockingMode=auto",
-            // "sim=0",
-            // "videoSpeedMultiplier=1.0",
-            // "poseFilteringStrength=0.0",
-          ],
-        };
-
-        const processRes = await axios.post(`${apiURI}/process`, config, {
-          withCredentials: true,
-        });
-
-        if (processRes.data.rid) {
-          return processRes.data.rid;
-        } else {
-          console.log("No rid returned from process API");
-          return null;
-        }
-      } else {
-        console.log("Video not uploaded successfully");
-        return null;
-      }
-    } catch (error) {
-      console.log("Video Upload Error:", error.response?.data || error.message);
-      return null;
+      console.log("Video Model Upload Error", error);
     }
   };
 
@@ -368,7 +69,7 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
 
     try {
       const response = await axios.get(uri, {
-        withCredentials: true, // Include cookies in the request
+        withCredentials: true, // Included cookies in the request
       });
 
       if (response.data.status[0].status === "SUCCESS") {
@@ -383,7 +84,32 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
         return await checkProgress(rid);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Check Progress Error", error);
+    }
+  };
+
+  const downloadVideo = async (rid) => {
+    const uri = `${apiURI}/download/${rid}`;
+    try {
+      const response = await axios.get(uri, {
+        withCredentials: true, // Included cookies in the request
+      });
+
+      if (response.data.links) {
+        const bvh = response.data.links[0].urls[0].files[0].bvh;
+        const mp4 = response.data.links[0].urls[0].files[1].mp4;
+        const fbx = response.data.links[0].urls[0].files[2].fbx;
+        const obj = {
+          rid,
+          mp4,
+          bvh,
+          fbx,
+        };
+
+        return obj;
+      }
+    } catch (error) {
+      console.log("Download Error", error);
     }
   };
 
@@ -396,7 +122,7 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
 
       const signedURI = response.data.url;
 
-      const rid = await uploadVideo(signedURI, videofile);
+      const rid = await uploadVideos(signedURI, videofile);
 
       // const rid = "pg3hR5sLcyYraR2L2g94Kp";
       const progress = await checkProgress(rid);
@@ -420,6 +146,7 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
     try {
       // Perform the login and get the session cookie
       await getSession();
+      // await getSessionFromFrontend();
 
       // Use the session cookie in other API calls
       const credit = await checkCredit();
@@ -441,10 +168,71 @@ export const handleDeepMotionUpload = async (videofile, fileName) => {
 };
 
 export const getSession = async () => {
+  try {
+    const token = getCookieStorage("access_token");
+
+    if (!token) {
+      throw new Error("Authentication required. Please log in.");
+    }
+
+    // Create Apollo client with auth
+    const httpLink = createHttpLink({
+      uri: `${env.REACT_APP_BACKEND_BASE_URL}/graphql`,
+    });
+
+    const authLink = setContext((_, { headers }) => {
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    });
+
+    const client = new ApolloClient({
+      link: authLink.concat(httpLink),
+      cache: new InMemoryCache(),
+    });
+
+    // Call GraphQL mutation to get session from backend
+    const { data: result } = await client.mutate({
+      mutation: GET_DEEPMOTION_SESSION,
+    });
+
+    if (result?.getDeepMotionSession?.sessionCookie) {
+      const sessionCookie = result.getDeepMotionSession.sessionCookie;
+      console.log("DeepMotion session cookie:", sessionCookie);
+
+      // Parse the session cookie and set it in the browser
+      // The cookie comes in format: "name=value; Path=/; ..."
+      // We need to extract the name=value part and set it
+      const cookieParts = sessionCookie.split(";")[0]; // Get the "name=value" part
+
+      // Set the cookie in the browser
+      document.cookie = sessionCookie
+        .split(";")
+        .map((part) => part.trim())
+        .join("; ");
+
+      return true;
+    } else {
+      throw new Error("Failed to get DeepMotion session");
+    }
+  } catch (error) {
+    console.error("Error in session API call:", error);
+    throw error;
+  }
+};
+
+export const getSessionFromFrontend = async () => {
   const uri = `${apiURI}/session/auth`;
   try {
     const clientId = env.REACT_APP_DEEPMOTION_CLIENT_ID;
     const clientSecret = env.REACT_APP_DEEPMOTION_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      throw new Error("DeepMotion credentials not configured in frontend");
+    }
 
     // Use browser's built-in btoa() for base64 encoding instead of Buffer
     const base64Credentials = btoa(`${clientId}:${clientSecret}`);
@@ -457,10 +245,12 @@ export const getSession = async () => {
       withCredentials: true, // Include cookies in the request
     });
 
+    console.log("DeepMotion session established from frontend");
+    console.log(document.cookie);
     return true;
   } catch (error) {
-    console.error("Error in session API call:", error);
-    throw error; // Rethrow the error to handle it elsewhere if needed
+    console.error("Error in frontend session API call:", error);
+    throw error;
   }
 };
 
