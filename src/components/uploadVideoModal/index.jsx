@@ -11,7 +11,6 @@ import ErrorMessage from "../error";
 import { useMutation } from "@apollo/client";
 import { CREATE_SIGNED_URL_FOR_NFTS } from "../../gql/mutations";
 import {
-  sendMetaToIPFS,
   sendFileToStorj,
   sendMetaToIPFSPINATA,
 } from "../../config/ipfsService";

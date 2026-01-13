@@ -378,6 +378,16 @@ const UPLOAD_META_TO_IPFS = gql`
   }
 `;
 
+// Get DeepMotion Session Mutation
+const GET_DEEPMOTION_SESSION = gql`
+  mutation GetDeepMotionSession {
+    getDeepMotionSession {
+      sessionCookie
+      apiUrl
+    }
+  }
+`;
+
 // Get Refresh Token Mutation
 const REFRESH_TOKEN_MUTATION = gql`
   mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
@@ -427,4 +437,7 @@ export {
 
   // Refresh Token
   REFRESH_TOKEN_MUTATION,
+
+  // DeepMotion
+  GET_DEEPMOTION_SESSION,
 };
