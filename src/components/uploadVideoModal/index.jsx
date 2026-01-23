@@ -39,6 +39,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const {
     handleSubmit,
@@ -139,24 +141,53 @@ const UploadVideoModal = ({ visible, onClose }) => {
         if (isEmote) {
           setSelectedFileName(fileUploaded.name);
           setImageUpload(true);
+          setUploadProgress(0);
+          setUploadStatus("Starting...");
+
+          // Progress callback for DeepMotion processing
+          const handleProgress = (progressData) => {
+            setUploadProgress(progressData.progress);
+            // Set user-friendly status messages
+            // if (progressData.status === "CHECKING_CREDITS") {
+            //   setUploadStatus("Checking credits...");
+            // } else 
+              if (progressData.status === "UPLOADING") {
+              setUploadStatus("Uploading video...");
+            } else if (progressData.status === "PROGRESS") {
+              setUploadStatus(`Processing`);
+            } else if (progressData.status === "SUCCESS") {
+              setUploadStatus("Processing complete!");
+            } else if (progressData.status === "DOWNLOADING") {
+              setUploadStatus("Finalizing...");
+            } else {
+              setUploadStatus(progressData.status || "Processing...");
+            }
+          };
+
           const response = await handleDeepMotionUpload(
             fileUploaded,
             fileUploaded.name,
+            handleProgress,
           );
           if (response) {
             console.log("DEEP MOTION RESPONSE", response);
+            setUploadStatus("Uploading to storage...");
             const url = await sendFileToStorj(
               { file: response.mp4, name: fileUploaded.name },
               isEmote,
               createSignedUrl,
             );
             setImageUpload(false);
+            setUploadProgress(100);
+            setUploadStatus("Complete!");
 
             console.log(url, "URL FOR VIDEO");
             setFieldValue("video", url);
             setFieldValue("isEmote", true);
             setFieldValue("download", response);
           } else {
+            setUploadProgress(0);
+            setUploadStatus("Error");
             ToastMessage("Conversion Error", "", "error");
           }
         } else {
@@ -207,22 +238,50 @@ const UploadVideoModal = ({ visible, onClose }) => {
           if (isEmote) {
             setSelectedFileName(fileUploaded.name);
             setImageUpload(true);
+            setUploadProgress(0);
+            setUploadStatus("Starting...");
+
+            // Progress callback for DeepMotion processing
+            const handleProgress = (progressData) => {
+              setUploadProgress(progressData.progress);
+              // if (progressData.status === "CHECKING_CREDITS") {
+              //   setUploadStatus("Checking credits...");
+              // } else 
+                if (progressData.status === "UPLOADING") {
+                setUploadStatus("Uploading video...");
+              } else if (progressData.status === "PROGRESS") {
+                setUploadStatus(`Processing...`);
+              } else if (progressData.status === "SUCCESS") {
+                setUploadStatus("Processing complete!");
+              } else if (progressData.status === "DOWNLOADING") {
+                setUploadStatus("Finalizing...");
+              } else {
+                setUploadStatus(progressData.status || "Processing...");
+              }
+            };
+
             const response = await handleDeepMotionUpload(
               fileUploaded,
               fileUploaded.name,
+              handleProgress,
             );
             if (response) {
+              setUploadStatus("Uploading to storage...");
               const url = await sendFileToStorj(
                 { file: response.mp4, name: fileUploaded.name },
                 isEmote,
                 createSignedUrl,
               );
               setImageUpload(false);
+              setUploadProgress(100);
+              setUploadStatus("Complete!");
 
               setFieldValue("video", url);
               setFieldValue("isEmote", true);
               setFieldValue("download", response);
             } else {
+              setUploadProgress(0);
+              setUploadStatus("Error");
               ToastMessage("Conversion Error", "", "error");
             }
           } else {
@@ -368,18 +427,23 @@ const UploadVideoModal = ({ visible, onClose }) => {
                     <img src={upload_file_icon} className="me-2" />
                   </Col>
                   <Col span={20}>
-                    <Progress percent={70} status="exception" />
-                    <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
-                      70% Uploaded
-                    </p>
+                    {isEmote ? (
+                      <>
+                        <Progress percent={uploadProgress} status={uploadProgress < 100 ? "active" : "success"} />
+                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                          {uploadProgress}% - {uploadStatus}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Progress percent={70} status="active" />
+                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                          Uploading...
+                        </p>
+                      </>
+                    )}
                   </Col>
                 </Row>
-
-                {/* <div className="">
-                  <img src={upload_file_icon} className="me-2" />
-                  <Progress percent={70} status="exception" />
-                  <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>70% Uploaded</p>
-                </div> */}
               </>
             ) : (
               selectedFileName && (
