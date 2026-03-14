@@ -59,7 +59,7 @@ const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
       variables: { refresh_token },
     })
     .then(({ data }) => {
-      const newAccessToken = data?.refreshToken?.payload?.access_token;
+      const newAccessToken = data?.createNewAccessTokenFromRefreshToken?.access_token;
       if (newAccessToken) {
         localStorage.setItem("access_token", newAccessToken);
 

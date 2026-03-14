@@ -378,13 +378,12 @@ const UPLOAD_META_TO_IPFS = gql`
   }
 `;
 
+
 // Get Refresh Token Mutation
 const REFRESH_TOKEN_MUTATION = gql`
   mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
     createNewAccessTokenFromRefreshToken(refresh_token: $refresh_token) {
-      payload {
         access_token
-      }
     }
   }
 `;
