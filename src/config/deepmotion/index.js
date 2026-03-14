@@ -1,179 +1,275 @@
 import axios from "axios";
 import { ToastMessage } from "../../components";
-// import videofile from "../../assets/images/video.mp4";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import {
+  CHECK_DEEPMOTION_CREDIT,
+  CHECK_DEEPMOTION_STATUS,
+  GET_DEEPMOTION_DOWNLOAD_LINKS,
+} from "../../gql/mutations";
+import { getCookieStorage } from "../../utills/cookieStorage";
 
 const env = process.env;
 
-const apiURI = env.REACT_APP_DEEPMOTION_API_URL;
+const backendUrl = env.REACT_APP_BACKEND_BASE_URL;
 
-export const handleDeepMotionUpload = async (videofile, fileName) => {
-  // Function to perform other API calls using the session cookie
-  const checkCredit = async () => {
-    try {
-      const response = await axios.get(`${apiURI}/account/creditBalance`, {
-        withCredentials: true, // Include cookies in the request
-      });
+// Create Apollo client with authentication
+const createApolloClient = () => {
+  const token = getCookieStorage("access_token");
 
-      return response.data.credits;
-    } catch (error) {
-      console.log("Error in API call:", error);
+  const httpLink = createHttpLink({
+    uri: `${backendUrl}/graphql`,
+  });
+
+  const authLink = setContext((_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+
+  return new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+};
+
+// Check DeepMotion credit balance via backend
+const checkCredit = async () => {
+  try {
+    const client = createApolloClient();
+    const { data } = await client.mutate({
+      mutation: CHECK_DEEPMOTION_CREDIT,
+    });
+
+    return data?.checkDeepMotionCredit?.credits || 0;
+  } catch (error) {
+    console.error("Error checking DeepMotion credit:", error);
+    throw error;
+  }
+};
+
+// Upload video to backend for DeepMotion processing
+const uploadVideoToBackend = async (videoFile, fileName) => {
+  try {
+    const token = getCookieStorage("access_token");
+
+    if (!token) {
+      throw new Error("Authentication required. Please log in.");
     }
-  };
 
-  const uploadVideo = async (signedurl, videoFile) => {
-    try {
-      const res = await axios.put(signedurl, videoFile, {
+    const formData = new FormData();
+    formData.append("video", videoFile, fileName);
+
+    const response = await axios.post(
+      `${backendUrl}/deepmotion/upload`,
+      formData,
+      {
         headers: {
-          "Content-Type": "application/octet-stream",
-          "Content-Length": videoFile.length,
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
-      });
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
+      },
+    );
 
-      if (res.status == 200) {
-        const config = {
-          url: signedurl,
-          processor: "video2anim",
-          params: ["config=configDefault", "formats = bvh,fbx,mp4"],
-        };
-
-        const processRes = await axios.post(`${apiURI}/process`, config, {
-          withCredentials: true,
-        });
-
-        if (processRes.data.rid) {
-          return processRes.data.rid;
-        } else {
-          console.log("No rid");
-        }
-      } else {
-        console.log("Video not uploaded");
-      }
-    } catch (error) {
-      console.log("video Upload Error", error);
+    if (response.data.success) {
+      return {
+        rid: response.data.rid,
+        credits: response.data.credits,
+      };
+    } else {
+      throw new Error(response.data.message || "Upload failed");
     }
-  };
+  } catch (error) {
+    console.error("Error uploading video to backend:", error);
+    throw error;
+  }
+};
 
-  const checkProgress = async (rid) => {
-    const uri = `${apiURI}/status/${rid}`;
+// Check processing progress via backend
+const checkProgress = async (rid) => {
+  try {
+    const client = createApolloClient();
+    const { data } = await client.mutate({
+      mutation: CHECK_DEEPMOTION_STATUS,
+      variables: { rid },
+    });
 
-    try {
-      const response = await axios.get(uri, {
-        withCredentials: true, // Include cookies in the request
-      });
+    const status = data?.checkDeepMotionStatus;
 
-      if (response.data.status[0].status === "SUCCESS") {
-        return true;
-      } else if (
-        response.data.status[0].status === "FAILURE" ||
-        response.data.status[0].status === "RETRY"
-      ) {
-        return false;
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 30000));
-        return await checkProgress(rid);
-      }
-    } catch (error) {
-      console.log(error);
+    if (status?.isComplete) {
+      return { complete: true, failed: false, progress: 100 };
+    } else if (status?.isFailed) {
+      return { complete: false, failed: true, progress: 0 };
+    } else {
+      return {
+        complete: false,
+        failed: false,
+        status: status?.status,
+        progress: status?.progress || 0,
+        step: status?.step || 0,
+        total: status?.total || 0,
+        positionInQueue: status?.positionInQueue || 0,
+      };
     }
-  };
+  } catch (error) {
+    console.error("Error checking progress:", error);
+    throw error;
+  }
+};
 
-  const handleUpload = async (filename) => {
-    const uploadUri = `${apiURI}/upload?name=${filename}&resumable=0`;
-    try {
-      const response = await axios.get(uploadUri, {
-        withCredentials: true, // Include cookies in the request
-      });
+// Wait for processing to complete with progress callback
+const waitForCompletion = async (rid, onProgress = null) => {
+  const pollInterval = 10000; // 10 seconds
+  const maxAttempts = 180; // 30 minutes max (180 * 10s = 1800s)
+  let attempts = 0;
 
-      const signedURI = response.data.url;
+  while (attempts < maxAttempts) {
+    const result = await checkProgress(rid);
 
-      const rid = await uploadVideo(signedURI, videofile);
-
-      // const rid = "pg3hR5sLcyYraR2L2g94Kp";
-      const progress = await checkProgress(rid);
-
-      if (progress) {
-        const data = await downloadVideo(rid);
-        return data;
-      } else {
-        // ToastMessage("Conversion Error", "", "error");
-        return false;
+    if (result.complete) {
+      // Call progress callback with 100%
+      if (onProgress) {
+        onProgress({ progress: 100, status: "SUCCESS", step: result.total, total: result.total });
       }
-    } catch (error) {
-      console.log("Upload Error", error);
+      return true;
+    } else if (result.failed) {
+      return false;
     }
-  };
 
-  // Example usage
+    // Log detailed progress
+    console.log(
+      `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
+      (result.positionInQueue > 0 ? ` - Queue position: ${result.positionInQueue}` : "")
+    );
+
+    // Call progress callback if provided
+    if (onProgress) {
+      onProgress({
+        progress: result.progress,
+        status: result.status,
+        step: result.step,
+        total: result.total,
+        positionInQueue: result.positionInQueue,
+      });
+    }
+
+    // Wait before next poll
+    await new Promise((resolve) => setTimeout(resolve, pollInterval));
+    attempts++;
+  }
+
+  throw new Error("Processing timed out");
+};
+
+// Get download links from backend
+const getDownloadLinks = async (rid) => {
+  try {
+    const client = createApolloClient();
+    const { data } = await client.mutate({
+      mutation: GET_DEEPMOTION_DOWNLOAD_LINKS,
+      variables: { rid },
+    });
+
+    const links = data?.getDeepMotionDownloadLinks;
+
+    if (links) {
+      return {
+        rid: links.rid,
+        bvh: links.bvh,
+        mp4: links.mp4,
+        fbx: links.fbx,
+      };
+    } else {
+      throw new Error("No download links available");
+    }
+  } catch (error) {
+    console.error("Error getting download links:", error);
+    throw error;
+  }
+};
+
+// Main function to handle DeepMotion upload via backend
+// onProgress callback receives: { progress, status, step, total, positionInQueue }
+export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = null) => {
   const main = async () => {
     try {
-      // Perform the login and get the session cookie
-      await getSession();
-
-      // Use the session cookie in other API calls
+      // Step 1: Check credit balance via backend
+      console.log("Checking DeepMotion credit balance...");
+      if (onProgress) {
+        onProgress({ progress: 0, status: "CHECKING_CREDITS", step: 0, total: 0 });
+      }
       const credit = await checkCredit();
 
-      if (credit > 0) {
-        const data = await handleUpload(fileName);
+      if (credit <= 0) {
+        console.log("No credit available");
+        ToastMessage("Insufficient DeepMotion credits", "", "error");
+        return false;
+      }
+      console.log(`Credits available: ${credit}`);
+
+      // Step 2: Upload video to backend and start processing
+      console.log("Uploading video to backend...");
+      if (onProgress) {
+        onProgress({ progress: 0, status: "UPLOADING", step: 0, total: 0 });
+      }
+      const uploadResult = await uploadVideoToBackend(videoFile, fileName);
+      const rid = uploadResult.rid;
+      console.log(`Upload complete. Processing started with rid: ${rid}`);
+
+      // Step 3: Wait for processing to complete
+      console.log("Waiting for processing to complete...");
+      const success = await waitForCompletion(rid, onProgress);
+
+      if (success) {
+        // Step 4: Get download links
+        console.log("Getting download links...");
+        if (onProgress) {
+          onProgress({ progress: 100, status: "DOWNLOADING", step: 0, total: 0 });
+        }
+        const data = await getDownloadLinks(rid);
+        console.log("Download links obtained:", data);
         return data;
       } else {
-        console.log("No credit");
-        ToastMessage("Error", "", "error");
+        ToastMessage("Video processing failed", "", "error");
+        return false;
       }
     } catch (error) {
-      console.error("Main error:", error);
+      console.error("DeepMotion upload error:", error);
+      ToastMessage(error.message || "Error processing video", "", "error");
+      return false;
     }
   };
 
-  // Call the main function
   return main();
 };
 
+// Export individual functions for more granular control
+export const checkDeepMotionCredit = checkCredit;
+export const uploadDeepMotionVideo = uploadVideoToBackend;
+export const checkDeepMotionProgress = checkProgress;
+export const waitForDeepMotionCompletion = waitForCompletion;
+export const getDeepMotionDownloadLinks = getDownloadLinks;
+
+// Legacy exports for backward compatibility (deprecated - will be removed)
 export const getSession = async () => {
-  const uri = `${apiURI}/session/auth`;
-  try {
-    const clientId = env.REACT_APP_DEEPMOTION_CLIENT_ID;
-    const clientSecret = env.REACT_APP_DEEPMOTION_CLIENT_SECRET;
+  console.warn(
+    "getSession is deprecated. DeepMotion operations are now handled by the backend.",
+  );
+  return true;
+};
 
-    // Combine clientId and clientSecret, and base64 encode them
-    const base64Credentials = Buffer.from(
-      `${clientId}:${clientSecret}`,
-    ).toString("base64");
-    await axios.get(uri, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${base64Credentials}`,
-      },
-      withCredentials: true, // Include cookies in the request
-    });
-
-    return true;
-  } catch (error) {
-    console.error("Error in session API call:", error);
-    throw error; // Rethrow the error to handle it elsewhere if needed
-  }
+export const getSessionFromFrontend = async () => {
+  console.warn(
+    "getSessionFromFrontend is deprecated. DeepMotion operations are now handled by the backend.",
+  );
+  return true;
 };
 
 export const downloadVideo = async (rid) => {
-  const uri = `${apiURI}/download/${rid}`;
-  try {
-    const response = await axios.get(uri, {
-      withCredentials: true, // Included cookies in the request
-    });
-
-    if (response.data.links) {
-      const bvh = response.data.links[0].urls[13].files[0].bvh;
-      const fbx = response.data.links[0].urls[13].files[1].fbx;
-      const mp4 = response.data.links[0].urls[13].files[2].mp4;
-      const obj = {
-        rid,
-        mp4,
-        bvh,
-        fbx,
-      };
-
-      return obj;
-    }
-  } catch (error) {
-    console.log("Download Error", error);
-  }
+  return await getDownloadLinks(rid);
 };

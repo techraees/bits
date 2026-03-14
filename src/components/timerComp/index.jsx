@@ -28,14 +28,21 @@ function MyTimer({ expiryTimestamp }) {
   );
 }
 
-export default function Timercomp({ auctionStartTime, auctionEndTime }) {
-  let time = new Date(auctionStartTime * 1000);
-  let sub = auctionEndTime - auctionStartTime;
+export default function Timercomp({
+  auctionStartTime,
+  auctionEndTime,
+  isUnixSeconds = false
+}) {
+  const multiplier = isUnixSeconds ? 1000 : 1;
+  const expiryTime = new Date(auctionEndTime * multiplier);
 
-  time.setSeconds(time.getSeconds() + sub);
+  // let time = new Date(auctionStartTime * 1);
+  // let sub = auctionEndTime - auctionStartTime;
+
+  // time.setSeconds(time.getSeconds() + sub);
   return (
     <div>
-      <MyTimer expiryTimestamp={time} />
+      <MyTimer expiryTimestamp={expiryTime} />
     </div>
   );
 }

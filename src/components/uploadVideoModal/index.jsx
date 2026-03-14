@@ -11,7 +11,6 @@ import ErrorMessage from "../error";
 import { useMutation } from "@apollo/client";
 import { CREATE_SIGNED_URL_FOR_NFTS } from "../../gql/mutations";
 import {
-  sendMetaToIPFS,
   sendFileToStorj,
   sendMetaToIPFSPINATA,
 } from "../../config/ipfsService";
@@ -40,6 +39,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const {
     handleSubmit,
@@ -140,23 +141,53 @@ const UploadVideoModal = ({ visible, onClose }) => {
         if (isEmote) {
           setSelectedFileName(fileUploaded.name);
           setImageUpload(true);
+          setUploadProgress(0);
+          setUploadStatus("Starting...");
+
+          // Progress callback for DeepMotion processing
+          const handleProgress = (progressData) => {
+            setUploadProgress(progressData.progress);
+            // Set user-friendly status messages
+            // if (progressData.status === "CHECKING_CREDITS") {
+            //   setUploadStatus("Checking credits...");
+            // } else 
+              if (progressData.status === "UPLOADING") {
+              setUploadStatus("Uploading video...");
+            } else if (progressData.status === "PROGRESS") {
+              setUploadStatus(`Processing`);
+            } else if (progressData.status === "SUCCESS") {
+              setUploadStatus("Processing complete!");
+            } else if (progressData.status === "DOWNLOADING") {
+              setUploadStatus("Finalizing...");
+            } else {
+              setUploadStatus(progressData.status || "Processing...");
+            }
+          };
+
           const response = await handleDeepMotionUpload(
             fileUploaded,
             fileUploaded.name,
+            handleProgress,
           );
           if (response) {
+            console.log("DEEP MOTION RESPONSE", response);
+            setUploadStatus("Uploading to storage...");
             const url = await sendFileToStorj(
-              response.mp4,
+              { file: response.mp4, name: fileUploaded.name },
               isEmote,
               createSignedUrl,
             );
             setImageUpload(false);
+            setUploadProgress(100);
+            setUploadStatus("Complete!");
 
             console.log(url, "URL FOR VIDEO");
             setFieldValue("video", url);
             setFieldValue("isEmote", true);
             setFieldValue("download", response);
           } else {
+            setUploadProgress(0);
+            setUploadStatus("Error");
             ToastMessage("Conversion Error", "", "error");
           }
         } else {
@@ -207,22 +238,50 @@ const UploadVideoModal = ({ visible, onClose }) => {
           if (isEmote) {
             setSelectedFileName(fileUploaded.name);
             setImageUpload(true);
+            setUploadProgress(0);
+            setUploadStatus("Starting...");
+
+            // Progress callback for DeepMotion processing
+            const handleProgress = (progressData) => {
+              setUploadProgress(progressData.progress);
+              // if (progressData.status === "CHECKING_CREDITS") {
+              //   setUploadStatus("Checking credits...");
+              // } else 
+                if (progressData.status === "UPLOADING") {
+                setUploadStatus("Uploading video...");
+              } else if (progressData.status === "PROGRESS") {
+                setUploadStatus(`Processing...`);
+              } else if (progressData.status === "SUCCESS") {
+                setUploadStatus("Processing complete!");
+              } else if (progressData.status === "DOWNLOADING") {
+                setUploadStatus("Finalizing...");
+              } else {
+                setUploadStatus(progressData.status || "Processing...");
+              }
+            };
+
             const response = await handleDeepMotionUpload(
               fileUploaded,
               fileUploaded.name,
+              handleProgress,
             );
             if (response) {
+              setUploadStatus("Uploading to storage...");
               const url = await sendFileToStorj(
-                response.mp4,
+                { file: response.mp4, name: fileUploaded.name },
                 isEmote,
                 createSignedUrl,
               );
               setImageUpload(false);
+              setUploadProgress(100);
+              setUploadStatus("Complete!");
 
               setFieldValue("video", url);
               setFieldValue("isEmote", true);
               setFieldValue("download", response);
             } else {
+              setUploadProgress(0);
+              setUploadStatus("Error");
               ToastMessage("Conversion Error", "", "error");
             }
           } else {
@@ -311,7 +370,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         >
           <Col lg={10} md={10} sm={24} xs={24}>
             <form onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
-              <div className=" d-flex flex-column align-items-center">
+              <div className=" d-flex flex-column align-items-start">
                 <div
                   className={
                     "uploadIconView d-flex align-items-center justify-content-center"
@@ -348,7 +407,65 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 )}
               </div>
             </form>
+
           </Col>
+          {isEmote && (
+            <div className="px-3">
+              <div
+                className="mt-3 p-3"
+                style={{
+                  backgroundColor: "rgba(196, 64, 64, 0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(196, 64, 64, 0.2)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#C44040",
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    flexShrink: 0,
+                    marginTop: "2px",
+                  }}
+                >
+                  !
+                </div>
+                <div>
+                  <p
+                    className={`${textColor2} m-0`}
+                    style={{ fontSize: "14px", fontWeight: "600" }}
+                  >
+                    Processing Note
+                  </p>
+                  <p
+                    className={textColor3}
+                    style={{
+                      fontSize: "12.5px",
+                      margin: "4px 0 0 0",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    Creating an Emote involves advanced AI motion extraction.
+                    This process usually takes about{" "}
+                    <span style={{ color: "#C44040", fontWeight: "bold" }}>
+                      5 to 7 minutes
+                    </span>
+                    . Thank you for your patience!
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           {imageUploadLoader && (
             <Row>
               <Col span={24}>
@@ -368,18 +485,23 @@ const UploadVideoModal = ({ visible, onClose }) => {
                     <img src={upload_file_icon} className="me-2" />
                   </Col>
                   <Col span={20}>
-                    <Progress percent={70} status="exception" />
-                    <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
-                      70% Uploaded
-                    </p>
+                    {isEmote ? (
+                      <>
+                        <Progress percent={uploadProgress} status={uploadProgress < 100 ? "active" : "success"} />
+                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                          {uploadProgress}% - {uploadStatus}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Progress percent={70} status="active" />
+                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                          Uploading...
+                        </p>
+                      </>
+                    )}
                   </Col>
                 </Row>
-
-                {/* <div className="">
-                  <img src={upload_file_icon} className="me-2" />
-                  <Progress percent={70} status="exception" />
-                  <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>70% Uploaded</p>
-                </div> */}
               </>
             ) : (
               selectedFileName && (

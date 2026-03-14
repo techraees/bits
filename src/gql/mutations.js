@@ -378,6 +378,52 @@ const UPLOAD_META_TO_IPFS = gql`
   }
 `;
 
+// Get DeepMotion Session Mutation
+const GET_DEEPMOTION_SESSION = gql`
+  mutation GetDeepMotionSession {
+    getDeepMotionSession {
+      sessionCookie
+      apiUrl
+    }
+  }
+`;
+
+// Check DeepMotion Credit Balance
+const CHECK_DEEPMOTION_CREDIT = gql`
+  mutation CheckDeepMotionCredit {
+    checkDeepMotionCredit {
+      credits
+    }
+  }
+`;
+
+// Check DeepMotion Processing Status
+const CHECK_DEEPMOTION_STATUS = gql`
+  mutation CheckDeepMotionStatus($rid: String!) {
+    checkDeepMotionStatus(rid: $rid) {
+      rid
+      status
+      progress
+      step
+      total
+      positionInQueue
+      isComplete
+      isFailed
+    }
+  }
+`;
+
+// Get DeepMotion Download Links
+const GET_DEEPMOTION_DOWNLOAD_LINKS = gql`
+  mutation GetDeepMotionDownloadLinks($rid: String!) {
+    getDeepMotionDownloadLinks(rid: $rid) {
+      rid
+      bvh
+      mp4
+      fbx
+    }
+  }
+`;
 
 // Get Refresh Token Mutation
 const REFRESH_TOKEN_MUTATION = gql`
@@ -426,4 +472,10 @@ export {
 
   // Refresh Token
   REFRESH_TOKEN_MUTATION,
+
+  // DeepMotion
+  GET_DEEPMOTION_SESSION,
+  CHECK_DEEPMOTION_CREDIT,
+  CHECK_DEEPMOTION_STATUS,
+  GET_DEEPMOTION_DOWNLOAD_LINKS,
 };
