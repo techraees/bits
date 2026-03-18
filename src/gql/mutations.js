@@ -429,7 +429,7 @@ const GET_DEEPMOTION_DOWNLOAD_LINKS = gql`
 const REFRESH_TOKEN_MUTATION = gql`
   mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
     createNewAccessTokenFromRefreshToken(refresh_token: $refresh_token) {
-        access_token
+      access_token
     }
   }
 `;

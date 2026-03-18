@@ -36,7 +36,7 @@ const NotificationModal = () => {
   ];
 
   const handleToggleModal = () => {
-    return
+    return;
     setShowModal(!showModal);
   };
 

@@ -103,7 +103,6 @@ export const sendMetaToIPFS = async (data) => {
       const finalData = JSON.stringify(data);
       const result = await ipfs.add(finalData);
 
-
       // console.log("ImgHash", res)
       const metaHash = `${env.REACT_APP_IPFS_PATH}/${result.path}`;
       return metaHash;

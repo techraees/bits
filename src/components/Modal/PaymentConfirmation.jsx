@@ -56,8 +56,8 @@ const PaymentConfirmation = ({
                   <div className="col-md-11">
                     <p className="paymentConfirmationHeading">
                       {paymentConfirm
-                        // ? "Congratulations! Your payment was successful."
-                        ? "Congratulations! Your video is ready for download for free."
+                        ? // ? "Congratulations! Your payment was successful."
+                          "Congratulations! Your video is ready for download for free."
                         : ""}
                       {downloadConfirm
                         ? "Congratulations! You successfully downloaded your FBX file."

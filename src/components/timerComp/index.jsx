@@ -31,7 +31,7 @@ function MyTimer({ expiryTimestamp }) {
 export default function Timercomp({
   auctionStartTime,
   auctionEndTime,
-  isUnixSeconds = false
+  isUnixSeconds = false,
 }) {
   const multiplier = isUnixSeconds ? 1000 : 1;
   const expiryTime = new Date(auctionEndTime * multiplier);

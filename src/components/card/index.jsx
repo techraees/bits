@@ -77,7 +77,6 @@ const CardCompnent = ({
   itemDbId,
   isTopNfts,
 }) => {
-
   const isLight = useSelector((s) => s.app?.theme?.textColor === "black");
 
   const navigate = useNavigate();
@@ -930,7 +929,7 @@ const CardCompnent = ({
                 >
                   Go to Collection
                 </Button>
-                {((isOwner && isEmote)) ? (
+                {isOwner && isEmote ? (
                   <button
                     type="button"
                     className="mt-2 collectionBtn"
@@ -946,7 +945,7 @@ const CardCompnent = ({
           </>
         )}
       </Card>
-      {(isPaid || false) ? (
+      {isPaid || false ? (
         <PaymentConfirmation
           setShow={setShowPayment}
           show={showpayment}
