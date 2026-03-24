@@ -301,13 +301,16 @@ const Marketplace = () => {
                       key={i}
                       image={imgPaths + item?.user_id?.profileImg}
                       status={item?.nft_id?.status}
+                      duration={item?.nft_id?.video_duration}
                       name={item?.nft_id?.name}
                       videoLink={item?.nft_id?.video}
                       marketplacecard
                       collectionBtn
                       userProfile={!!userProfile}
-                      auctionStartTime={dbDateToTime(item?.biddingStartTime)}
-                      auctionEndTime={dbDateToTime(item?.biddingEndTime)}
+                      auctionStartTime={item?.biddingStartTime}
+                      auctionEndTime={item?.biddingEndTime}
+                      // auctionStartTime={dbDateToTime(item?.biddingStartTime)}
+                      // auctionEndTime={dbDateToTime(item?.biddingEndTime)}
                       initialPrice={Number(item?.price)}
                       auctionid={item?.listingID}
                       numberofcopies={item?.numberOfCopies}

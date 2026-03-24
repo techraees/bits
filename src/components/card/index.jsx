@@ -323,7 +323,7 @@ const CardCompnent = ({
     const body = {
       product: {
         name: name,
-        cost: `${duration * 0.1}.00`,
+        cost: `${(duration || 1) * 0.1}.00`,
         userId: userData?.id,
         itemId: id,
       },
@@ -353,6 +353,8 @@ const CardCompnent = ({
       const response = await downloadVideo(rid);
       if (response) {
         window.location.href = response.fbx;
+        setShowDownload(false);
+        setShowPayment(false);
       } else {
         ToastMessage("There is some Error", "", "error");
       }
@@ -411,7 +413,6 @@ const CardCompnent = ({
     }
   }, [searchParams.get("videoLink")]);
 
-  console.log(artistName);
   return (
     <div className="my-4 col-lg-3 col-md-6 col-sm-6 col-12 d-flex justify-content-center">
       <Modal
@@ -997,7 +998,7 @@ const CardCompnent = ({
           </>
         )}
       </Card>
-      {isPaid ? (
+      {isPaid || false ? (
         <PaymentConfirmation
           setShow={setShowPayment}
           show={showpayment}

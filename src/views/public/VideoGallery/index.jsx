@@ -314,6 +314,7 @@ const VideoGallery = () => {
                       status={item?.nft_id?.status}
                       name={item?.nft_id?.name}
                       videoLink={item?.nft_id?.video}
+                      duration={item?.nft_id?.video_duration}
                       topName
                       collectionBtn
                       detailBtn

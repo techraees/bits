@@ -325,9 +325,11 @@ const Collections = () => {
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
+                        id={e?.nft_id?._id}
                         image={`${imgPaths}${e?.nft_id?.user_id?.profileImg}`}
                         status={e?.nft_id?.status}
                         name={e?.nft_id?.name}
+                        duration={e?.nft_id?.video_duration}
                         artistName={e?.nft_id?.artist_name1}
                         videoLink={e?.nft_id?.video}
                         userId={userId}
