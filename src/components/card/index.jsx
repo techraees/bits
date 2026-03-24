@@ -11,8 +11,7 @@ import {
   search,
 } from "../../assets";
 
-import { useMutation } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { UPDATE_NFT_LIKE, UPDATE_NFT_WATCH } from "../../gql/mutations";
 import { GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE } from "../../gql/queries";
 import { Button, Space } from "antd";
@@ -106,41 +105,59 @@ const CardCompnent = ({
 
   console.log("Item Id", itemDbId, id);
 
-  const {
-    data: getOwnersWhoListedTheSameNftWithPricesAuction,
-    isLoading: getOwnersWhoListedTheSameNftWithPricesLoading,
-    isFetching: getOwnersWhoListedTheSameNftWithPricesFetching,
-  } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
-    variables: {
-      filterObj: `{"listingType":"auction","page":${pageAuction}, "limit":${limit} }`,
-      _id: id,
-    },
-  });
+  const [fetchAuctionData] = useLazyQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE);
+  const [fetchFixedData] = useLazyQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE);
+  const [auctionTotalPages, setAuctionTotalPages] = useState(null);
+  const [totalPages, setTotalPages] = useState(null);
 
-  const {
-    data: getOwnersWhoListedTheSameNftWithPricesFixed,
-    isLoading: getOwnersWhoListedTheSameNftWithPricesLoadingFixed,
-    isFetching: getOwnersWhoListedTheSameNftWithPricesFetchingFixed,
-  } = useQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, {
-    variables: {
-      filterObj: `{"listingType":"fixed_price","page":${page}, "limit":${limit} }`,
-      _id: id,
-    },
-  });
-
-  //auction part
+  // Re-fetch fixed page when pagination changes while modal is open
   useEffect(() => {
-    if (getOwnersWhoListedTheSameNftWithPricesAuction) {
-      console.log(
-        "getOwnersWhoListedTheSameNftWithPricesAuction",
-        getOwnersWhoListedTheSameNftWithPricesAuction,
-      );
-      const newData =
-        getOwnersWhoListedTheSameNftWithPricesAuction?.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter((item) => contractData.chain == item?.nft_id?.chainId)
-          .map((item) => {
-            console.log(item, "itemmmmmmmmmmm");
-            return {
+    if (!isTopModalOpen) return;
+    fetchFixedData({
+      variables: {
+        filterObj: `{"listingType":"fixed_price","page":${page}, "limit":${limit} }`,
+        _id: id,
+      },
+    }).then(({ data }) => {
+      if (data) {
+        setFixedData(
+          data.getOwnersWhoListedTheSameNftWithPrices?.data
+            .filter(
+              (item) =>
+                contractData.chain == item?.nft_id?.chainId &&
+                item?.numberOfCopies > 0,
+            )
+            .map((item) => ({
+              owner: item?.seller?.user_address,
+              copies: item?.numberOfCopies,
+              price: item?.price,
+              fixedid: item?.fixedid | item?.auctionId,
+              dbid: item?._id,
+              tokenId: item?.tokenId,
+              nftId: item?.nft_id?._id,
+              chainId: item?.nft_id?.chainId,
+              currentBidAmount: item?.auction_highest_bid,
+            })),
+        );
+        setTotalPages(data.getOwnersWhoListedTheSameNftWithPrices?.totalPages);
+      }
+    });
+  }, [page]);
+
+  // Re-fetch auction page when pagination changes while modal is open
+  useEffect(() => {
+    if (!isTopModalOpen) return;
+    fetchAuctionData({
+      variables: {
+        filterObj: `{"listingType":"auction","page":${pageAuction}, "limit":${limit} }`,
+        _id: id,
+      },
+    }).then(({ data }) => {
+      if (data) {
+        setAuctionData(
+          data.getOwnersWhoListedTheSameNftWithPrices?.data
+            .filter((item) => contractData.chain == item?.nft_id?.chainId)
+            .map((item) => ({
               owner: item?.seller?.user_address,
               copies: item?.numberOfCopies,
               price: item?.price,
@@ -151,36 +168,14 @@ const CardCompnent = ({
               chainId: item?.nft_id?.chainId,
               currentBidAmount: item?.auction_highest_bid,
               auctionbids: item?.auction_bids,
-            };
-          });
-      setAuctionData(newData);
-    }
-  }, [getOwnersWhoListedTheSameNftWithPricesAuction]);
-
-  //fixed price part
-  useEffect(() => {
-    if (getOwnersWhoListedTheSameNftWithPricesFixed) {
-      const newData =
-        getOwnersWhoListedTheSameNftWithPricesFixed?.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter(
-            (item) =>
-              contractData.chain == item?.nft_id?.chainId &&
-              item?.numberOfCopies > 0,
-          )
-          .map((item) => ({
-            owner: item?.seller?.user_address,
-            copies: item?.numberOfCopies,
-            price: item?.price,
-            fixedid: item?.fixedid | item?.auctionId,
-            dbid: item?._id,
-            tokenId: item?.tokenId,
-            nftId: item?.nft_id?._id,
-            chainId: item?.nft_id?.chainId,
-            currentBidAmount: item?.auction_highest_bid,
-          }));
-      setFixedData(newData);
-    }
-  }, [getOwnersWhoListedTheSameNftWithPricesFixed]);
+            })),
+        );
+        setAuctionTotalPages(
+          data.getOwnersWhoListedTheSameNftWithPrices?.totalPages,
+        );
+      }
+    });
+  }, [pageAuction]);
 
   ETHTOUSD(1).then((result) => {
     setEthBal(result);
@@ -200,6 +195,72 @@ const CardCompnent = ({
 
   const showTopNftsModal = () => {
     setIsTopModalOpen(true);
+  };
+
+  const handleBuyBidClick = async () => {
+    const [auctionResult, fixedResult] = await Promise.all([
+      fetchAuctionData({
+        variables: {
+          filterObj: `{"listingType":"auction","page":${pageAuction}, "limit":${limit} }`,
+          _id: id,
+        },
+      }),
+      fetchFixedData({
+        variables: {
+          filterObj: `{"listingType":"fixed_price","page":${page}, "limit":${limit} }`,
+          _id: id,
+        },
+      }),
+    ]);
+
+    if (auctionResult?.data) {
+      setAuctionData(
+        auctionResult.data.getOwnersWhoListedTheSameNftWithPrices?.data
+          .filter((item) => contractData.chain == item?.nft_id?.chainId)
+          .map((item) => ({
+            owner: item?.seller?.user_address,
+            copies: item?.numberOfCopies,
+            price: item?.price,
+            fixedid: item?.fixedid | item?.auctionId,
+            dbid: item?._id,
+            tokenId: item?.tokenId,
+            nftId: item?.nft_id?._id,
+            chainId: item?.nft_id?.chainId,
+            currentBidAmount: item?.auction_highest_bid,
+            auctionbids: item?.auction_bids,
+          })),
+      );
+      setAuctionTotalPages(
+        auctionResult.data.getOwnersWhoListedTheSameNftWithPrices?.totalPages,
+      );
+    }
+
+    if (fixedResult?.data) {
+      setFixedData(
+        fixedResult.data.getOwnersWhoListedTheSameNftWithPrices?.data
+          .filter(
+            (item) =>
+              contractData.chain == item?.nft_id?.chainId &&
+              item?.numberOfCopies > 0,
+          )
+          .map((item) => ({
+            owner: item?.seller?.user_address,
+            copies: item?.numberOfCopies,
+            price: item?.price,
+            fixedid: item?.fixedid | item?.auctionId,
+            dbid: item?._id,
+            tokenId: item?.tokenId,
+            nftId: item?.nft_id?._id,
+            chainId: item?.nft_id?.chainId,
+            currentBidAmount: item?.auction_highest_bid,
+          })),
+      );
+      setTotalPages(
+        fixedResult.data.getOwnersWhoListedTheSameNftWithPrices?.totalPages,
+      );
+    }
+
+    showTopNftsModal();
   };
 
   const showOfferModal = () => {
@@ -427,14 +488,8 @@ const CardCompnent = ({
         page={page}
         setPage={setPage}
         pageAuction={pageAuction}
-        auctionTotalPages={
-          getOwnersWhoListedTheSameNftWithPricesAuction
-            ?.getOwnersWhoListedTheSameNftWithPrices?.totalPages
-        }
-        totalPages={
-          getOwnersWhoListedTheSameNftWithPricesFixed
-            ?.getOwnersWhoListedTheSameNftWithPrices?.totalPages
-        }
+        auctionTotalPages={auctionTotalPages}
+        totalPages={totalPages}
         setPageAuction={setPageAuction}
         marketplacecard={marketplacecard}
       />
@@ -582,7 +637,7 @@ const CardCompnent = ({
                 </Tooltip>
               </>
             ) : (
-              <button className="buybtn" onClick={showTopNftsModal}>
+              <button className="buybtn" onClick={handleBuyBidClick}>
                 {location.pathname === "/marketplace" ? "Bid Now" : "Buy Now"}
               </button>
             )}
@@ -890,21 +945,19 @@ const CardCompnent = ({
                           } else if (
                             location.pathname.includes("/video-gallery")
                           ) {
-                            console.log("handle ok");
-                            showTopNftsModal();
+                            handleBuyBidClick();
                           } else if (
                             location.pathname.includes("/") &&
                             isAuction
                           ) {
-                            showTopNftsModal();
-                            // ToastMessage("Please contact owner", "", "error");
+                            handleBuyBidClick();
                           } else if (isTopNfts) {
-                            showTopNftsModal();
+                            handleBuyBidClick();
                           } else if (
                             location.pathname.includes("/") &&
                             !isAuction
                           ) {
-                            showTopNftsModal();
+                            handleBuyBidClick();
                           }
                         }}
                       />

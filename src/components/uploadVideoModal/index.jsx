@@ -150,8 +150,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
             // Set user-friendly status messages
             // if (progressData.status === "CHECKING_CREDITS") {
             //   setUploadStatus("Checking credits...");
-            // } else 
-              if (progressData.status === "UPLOADING") {
+            // } else
+            if (progressData.status === "UPLOADING") {
               setUploadStatus("Uploading video...");
             } else if (progressData.status === "PROGRESS") {
               setUploadStatus(`Processing`);
@@ -246,8 +246,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
               setUploadProgress(progressData.progress);
               // if (progressData.status === "CHECKING_CREDITS") {
               //   setUploadStatus("Checking credits...");
-              // } else 
-                if (progressData.status === "UPLOADING") {
+              // } else
+              if (progressData.status === "UPLOADING") {
                 setUploadStatus("Uploading video...");
               } else if (progressData.status === "PROGRESS") {
                 setUploadStatus(`Processing...`);
@@ -429,15 +429,22 @@ const UploadVideoModal = ({ visible, onClose }) => {
                   <Col span={20}>
                     {isEmote ? (
                       <>
-                        <Progress percent={uploadProgress} status={uploadProgress < 100 ? "active" : "success"} />
-                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                        <Progress
+                          percent={uploadProgress}
+                          status={uploadProgress < 100 ? "active" : "success"}
+                        />
+                        <p
+                          className={`${textColor3} m-0 mt-2 mb-2 text-center`}
+                        >
                           {uploadProgress}% - {uploadStatus}
                         </p>
                       </>
                     ) : (
                       <>
                         <Progress percent={70} status="active" />
-                        <p className={`${textColor3} m-0 mt-2 mb-2 text-center`}>
+                        <p
+                          className={`${textColor3} m-0 mt-2 mb-2 text-center`}
+                        >
                           Uploading...
                         </p>
                       </>

@@ -134,7 +134,12 @@ const waitForCompletion = async (rid, onProgress = null) => {
     if (result.complete) {
       // Call progress callback with 100%
       if (onProgress) {
-        onProgress({ progress: 100, status: "SUCCESS", step: result.total, total: result.total });
+        onProgress({
+          progress: 100,
+          status: "SUCCESS",
+          step: result.total,
+          total: result.total,
+        });
       }
       return true;
     } else if (result.failed) {
@@ -144,7 +149,9 @@ const waitForCompletion = async (rid, onProgress = null) => {
     // Log detailed progress
     console.log(
       `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
-      (result.positionInQueue > 0 ? ` - Queue position: ${result.positionInQueue}` : "")
+        (result.positionInQueue > 0
+          ? ` - Queue position: ${result.positionInQueue}`
+          : ""),
     );
 
     // Call progress callback if provided
@@ -195,13 +202,22 @@ const getDownloadLinks = async (rid) => {
 
 // Main function to handle DeepMotion upload via backend
 // onProgress callback receives: { progress, status, step, total, positionInQueue }
-export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = null) => {
+export const handleDeepMotionUpload = async (
+  videoFile,
+  fileName,
+  onProgress = null,
+) => {
   const main = async () => {
     try {
       // Step 1: Check credit balance via backend
       console.log("Checking DeepMotion credit balance...");
       if (onProgress) {
-        onProgress({ progress: 0, status: "CHECKING_CREDITS", step: 0, total: 0 });
+        onProgress({
+          progress: 0,
+          status: "CHECKING_CREDITS",
+          step: 0,
+          total: 0,
+        });
       }
       const credit = await checkCredit();
 
@@ -229,7 +245,12 @@ export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = n
         // Step 4: Get download links
         console.log("Getting download links...");
         if (onProgress) {
-          onProgress({ progress: 100, status: "DOWNLOADING", step: 0, total: 0 });
+          onProgress({
+            progress: 100,
+            status: "DOWNLOADING",
+            step: 0,
+            total: 0,
+          });
         }
         const data = await getDownloadLinks(rid);
         console.log("Download links obtained:", data);
