@@ -105,8 +105,12 @@ const CardCompnent = ({
 
   console.log("Item Id", itemDbId, id);
 
-  const [fetchAuctionData] = useLazyQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE);
-  const [fetchFixedData] = useLazyQuery(GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE);
+  const [fetchAuctionData] = useLazyQuery(
+    GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
+  );
+  const [fetchFixedData] = useLazyQuery(
+    GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
+  );
   const [auctionTotalPages, setAuctionTotalPages] = useState(null);
   const [totalPages, setTotalPages] = useState(null);
 

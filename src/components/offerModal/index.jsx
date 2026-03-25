@@ -41,7 +41,6 @@ const OfferModal = ({
   tokenId,
   offers,
 }) => {
-  auctionid = 1; //--- TEMPORARY FOR TESTING ---
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
