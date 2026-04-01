@@ -1,8 +1,10 @@
 const INITIAL_STATE = {
   contractData: {
-    marketContract: {},
-    mintContract: {},
-    chain: 0,
+    contractData: {
+      marketContract: {},
+      mintContract: {},
+      chain: 0,
+    },
   },
 };
 

@@ -94,7 +94,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     dispatch({
       type: "ETH_CHAIN",
       contractData: {
-        marketContract: contracts.ethContractIns,
+        marketContract: contracts.ethMarketContractIns,
         mintContract: contracts.ethMintingContractIns,
         chain: 1,
       },
@@ -110,7 +110,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     dispatch({
       type: "MATIC_CHAIN",
       contractData: {
-        marketContract: contracts.polygonContractIns,
+        marketContract: contracts.polygonMarketContractIns,
         mintContract: contracts.polygonMintingContractIns,
         chain: 137,
       },

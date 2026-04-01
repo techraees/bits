@@ -123,14 +123,29 @@ export const loadContractIns = () => async (dispatch) => {
         polygonMintingContractIns,
       },
     });
-    dispatch({
-      type: "MATIC_CHAIN",
-      contractData: {
-        marketContract: polygonMarketContractIns,
-        mintContract: polygonMintingContractIns,
-        chain: 137,
-      },
-    });
+
+    const chainId = window.ethereum
+      ? await window.ethereum.request({ method: "eth_chainId" })
+      : null;
+    if (chainId === "0x1" || chainId === 1) {
+      dispatch({
+        type: "ETH_CHAIN",
+        contractData: {
+          marketContract: ethMarketContractIns,
+          mintContract: ethMintingContractIns,
+          chain: 1,
+        },
+      });
+    } else {
+      dispatch({
+        type: "MATIC_CHAIN",
+        contractData: {
+          marketContract: polygonMarketContractIns,
+          mintContract: polygonMintingContractIns,
+          chain: 137,
+        },
+      });
+    }
 
     // getEmoteItems(ethMarketContractIns, polygonMarketContractIns).then(
     //   (result) => {
