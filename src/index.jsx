@@ -13,10 +13,15 @@ import {
   ApolloProvider,
   createHttpLink,
   from,
+  Observable, // Fixed Observable import for error link
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
-import { getCookieStorage } from "./utills/cookieStorage";
+import { 
+  getCookieStorage, 
+  setCookieStorage, // Consistent storage utility
+  removeCookieStorage 
+} from "./utills/cookieStorage";
 
 const env = process.env;
 
@@ -47,44 +52,55 @@ const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
   const refresh_token = getCookieStorage("refresh_token");
   if (!refresh_token) return;
 
-  // Apollo client just for token refresh
-  const tempClient = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache(),
-  });
-
-  return tempClient
-    .mutate({
-      mutation: REFRESH_TOKEN_MUTATION,
-      variables: { refresh_token },
-    })
-    .then(({ data }) => {
-      const newAccessToken =
-        data?.createNewAccessTokenFromRefreshToken?.access_token;
-      if (newAccessToken) {
-        localStorage.setItem("access_token", newAccessToken);
-
-        const oldHeaders = operation.getContext().headers;
-        operation.setContext({
-          headers: {
-            ...oldHeaders,
-            authorization: `Bearer ${newAccessToken}`,
-          },
-        });
-
-        // retry the original request
-        return forward(operation);
-      } else {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        window.location.href = "/login";
-      }
-    })
-    .catch(() => {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      window.location.href = "/login";
+  // Returning an Observable instead of a Promise to fix the "retriedResult.subscribe" error
+  return new Observable((observer) => {
+    const tempClient = new ApolloClient({
+      link: httpLink,
+      cache: new InMemoryCache(),
     });
+
+    tempClient
+      .mutate({
+        mutation: REFRESH_TOKEN_MUTATION,
+        variables: { refresh_token },
+      })
+      .then(({ data }) => {
+        const newAccessToken =
+          data?.createNewAccessTokenFromRefreshToken?.access_token;
+        if (newAccessToken) {
+          // UPDATE: Saving to cookies, not localStorage (to keep it consistent)
+          setCookieStorage("access_token", newAccessToken);
+
+          const oldHeaders = operation.getContext().headers;
+          operation.setContext({
+            headers: {
+              ...oldHeaders,
+              authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+
+          // Chain original request (and it must subscribe to fulfill the observable)
+          const subscriber = {
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer),
+          };
+
+          forward(operation).subscribe(subscriber);
+        } else {
+          removeCookieStorage("access_token");
+          removeCookieStorage("refresh_token");
+          window.location.href = "/login";
+          observer.complete();
+        }
+      })
+      .catch((error) => {
+        removeCookieStorage("access_token");
+        removeCookieStorage("refresh_token");
+        window.location.href = "/login";
+        observer.error(error);
+      });
+  });
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

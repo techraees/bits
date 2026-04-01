@@ -124,28 +124,15 @@ export const loadContractIns = () => async (dispatch) => {
       },
     });
 
-    const chainId = window.ethereum
-      ? await window.ethereum.request({ method: "eth_chainId" })
-      : null;
-    if (chainId === "0x1" || chainId === 1) {
-      dispatch({
-        type: "ETH_CHAIN",
-        contractData: {
-          marketContract: ethMarketContractIns,
-          mintContract: ethMintingContractIns,
-          chain: 1,
-        },
-      });
-    } else {
-      dispatch({
-        type: "MATIC_CHAIN",
-        contractData: {
-          marketContract: polygonMarketContractIns,
-          mintContract: polygonMintingContractIns,
-          chain: 137,
-        },
-      });
-    }
+    // Default strictly to Polygon (137) on initial load
+    dispatch({
+      type: "MATIC_CHAIN",
+      contractData: {
+        marketContract: polygonMarketContractIns,
+        mintContract: polygonMintingContractIns,
+        chain: 137,
+      },
+    });
 
     // getEmoteItems(ethMarketContractIns, polygonMarketContractIns).then(
     //   (result) => {

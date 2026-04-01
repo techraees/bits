@@ -1,36 +1,135 @@
 .borderBottom {
-  border-right: 1px solid #b23232;
-  padding-right: 20px;
+	border-right: 1px solid #b23232;
+	padding-right: 20px;
 }
 
 .supplyView {
-  margin-left: 80px;
+	margin-left: 80px;
 }
 
 .cancelBtn {
-  border-radius: 20px !important;
-  height: 40px !important;
-  /* color: white; */
+	border-radius: 20px !important;
+	height: 40px !important;
+	/* color: white; */
 }
 
 .label-input span .ant-input:placeholder-shown {
-  transform: translateY(1rem);
-  text-align: start;
+	transform: translateY(1rem);
+	text-align: start;
 }
 
 .label-input span .ant-input {
-  transform: translateY(1rem);
-  text-align: start;
+	transform: translateY(1rem);
+	text-align: start;
 }
 
 @media only screen and (max-width: 992px) {
-  .borderBottom {
-    border-bottom: 1px solid #b23232;
-    border-right: none;
-    padding-bottom: 20px;
-  }
+	.borderBottom {
+		border-bottom: 1px solid #b23232;
+		border-right: none;
+		padding-bottom: 20px;
+	}
 
-  .supplyView {
-    margin-left: 0px;
-  }
+	.supplyView {
+		margin-left: 0px;
+	}
 }
+
+/* Premium Artist Popover Styling */
+.artist-popover .ant-popover-inner {
+	border-radius: 12px;
+	padding: 0;
+	overflow: hidden;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+	border: 1px solid rgba(178, 50, 50, 0.2);
+}
+
+/* Dark Theme Overrides - High Specificity */
+.bg-black-popover.ant-popover .ant-popover-inner {
+	background-color: #1a1a1a !important;
+	border: 1px solid rgba(178, 50, 50, 0.4) !important;
+	backdrop-filter: blur(12px) !important;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.bg-black-popover.ant-popover .ant-popover-arrow-content {
+	background-color: #1a1a1a !important;
+}
+
+/* Light Theme Overrides - High Specificity */
+.bg-white-popover.ant-popover .ant-popover-inner {
+	background-color: #ffffff !important;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+	border-color: #eeeeee !important;
+}
+
+.bg-white-popover.ant-popover .ant-popover-arrow-content {
+	background-color: #ffffff !important;
+}
+
+.artist-card-header {
+	background: linear-gradient(135deg, #b23232 0%, #6e1c1c 100%);
+	height: 65px;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar-wrapper {
+	position: relative;
+	z-index: 2;
+	margin-top: 25px;
+	display: flex;
+	justify-content: center;
+}
+
+.artist-details-body {
+	padding: 15px 20px 20px 20px;
+	text-align: center;
+	position: relative;
+	z-index: 1;
+}
+
+.artist-bio-box {
+	background: rgba(178, 50, 50, 0.08);
+	border-radius: 8px;
+	padding: 12px;
+	margin-top: 15px;
+	border-left: 4px solid #b23232;
+	box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.view-profile-btn {
+	display: block;
+	width: 100%;
+	margin-top: 15px;
+	padding: 8px 0;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 13px;
+	transition: all 0.3s ease;
+	border: 1px solid #b23232;
+	color: #b23232 !important;
+	background: transparent;
+}
+
+.view-profile-btn:hover {
+	background: #b23232;
+	color: white !important;
+	box-shadow: 0 4px 10px rgba(178, 50, 50, 0.3);
+}
+
+.verified-tag {
+	background: rgba(178, 50, 50, 0.15);
+	color: #b23232;
+	font-size: 10px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	display: inline-block;
+	margin-bottom: 5px;
+}

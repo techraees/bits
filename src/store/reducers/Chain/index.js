@@ -3,7 +3,7 @@ const INITIAL_STATE = {
     contractData: {
       marketContract: {},
       mintContract: {},
-      chain: 0,
+      chain: 137,
     },
   },
 };
