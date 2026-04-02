@@ -203,6 +203,7 @@ const Dashboard = () => {
                   isPaid={e?.nft_id?.isPaid}
                   duration={e?.nft_id?.video_duration}
                   isTopNfts={true}
+                  userObj={e?.nft_id?.user_id}
                 />
               ))
             ) : (

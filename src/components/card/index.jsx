@@ -1,5 +1,6 @@
 import "./css/index.css";
-import { Card, Tooltip } from "antd";
+import { Card, Tooltip, Popover, Avatar } from "antd";
+import { FaCheckCircle } from "react-icons/fa";
 import {
   check,
   cross,
@@ -33,10 +34,12 @@ import { loadStripe } from "@stripe/stripe-js";
 import DownloadModal from "../Modal/DownloadModal";
 import PaymentConfirmation from "../Modal/PaymentConfirmation";
 import ShowTopNFTPopup from "../../ShowTopNFTPopup";
+import { trimWallet } from "../../utills/trimWalletAddr";
 
 const env = process.env;
 
 const CardCompnent = ({
+  description,
   image,
   status,
   name,
@@ -75,10 +78,116 @@ const CardCompnent = ({
   sellerUsername,
   itemDbId,
   isTopNfts,
+  userObj
 }) => {
   const isLight = useSelector((s) => s.app?.theme?.textColor === "black");
 
   const navigate = useNavigate();
+
+  const ArtistPopoverWrapper = ({ displayName, children }) => (
+    <Popover
+      content={
+        <div style={{ width: "240px", position: "relative" }}>
+          <div className="artist-card-header" />
+          <div className="avatar-wrapper">
+            <Avatar
+              size={90}
+              src={
+                userObj?.profileImg
+                  ? `${env.REACT_APP_BACKEND_BASE_URL}/${userObj?.profileImg}`
+                  : null
+              }
+              style={{
+                backgroundColor: "#B23232",
+                border: `5px solid ${!isLight ? "#1a1a1a" : "#ffffff"}`,
+                boxShadow: "0 8px 20px rgba(0,0,0,0.3)"
+              }}
+            >
+              {userObj?.user_name?.charAt(0) || displayName?.charAt(0)}
+            </Avatar>
+          </div>
+
+          <div className="artist-details-body">
+            <div className="verified-tag">
+              <FaCheckCircle size={10} style={{ marginRight: "4px" }} />
+              VERIFIED CREATOR
+            </div>
+
+            <h6
+              className="m-0 fw-bold"
+              style={{
+                fontSize: "18px",
+                letterSpacing: "0.2px",
+                color: !isLight ? "white" : "black" // Absolute contrast
+              }}
+            >
+              {userObj?.full_name || userObj?.user_name || displayName || "Artist"}
+            </h6>
+
+            <p
+              className="m-0 mt-2"
+              style={{
+                fontSize: "11px",
+                opacity: 0.8,
+                letterSpacing: "1px",
+                fontFamily: "monospace",
+                borderRadius: "4px",
+                background: !isLight ? "rgba(255, 255, 255, 0.05)" : "rgba(178, 50, 50, 0.05)",
+                padding: "4px 0",
+                color: !isLight ? "#b0b0b0" : "#666666" // Absolute contrast
+              }}
+            >
+              {userObj?.user_address && trimWallet(userObj?.user_address)}
+            </p>
+
+            {userObj?.bio && (
+              <div className="artist-bio-box" style={{ width: "100%" }}>
+                <p
+                  className="m-0"
+                  style={{
+                    fontSize: "12px",
+                    lineHeight: "1.5",
+                    fontStyle: "italic",
+                    textAlign: "left",
+                    opacity: 0.9,
+                    color: !isLight ? "#e0e0e0" : "#444444", // Absolute contrast
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    overflowWrap: "anywhere"
+                  }}
+                >
+                  "{userObj?.bio}"
+                </p>
+              </div>
+            )}
+
+            <button
+              className="view-profile-btn"
+              style={{
+                color: "#b23232 !important",
+                border: "1px solid #b23232",
+                marginTop: "15px"
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigate(`/collections/${userObj?._id || userId}`);
+              }}
+            >
+              VIEW FULL PROFILE
+            </button>
+          </div>
+        </div>
+      }
+      title={null}
+      trigger="hover"
+      placement="right"
+      color={!isLight ? "#1a1a1a" : "#ffffff"} // ABSOLUTE THEME FORCE
+      overlayClassName={`artist-popover ${!isLight ? "dark-grey-bg-popover" : "bg-white-popover"}`}
+    >
+      {children}
+    </Popover>
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isNftModalOpen, setIsNftModalOpen] = useState(false);
@@ -102,8 +211,6 @@ const CardCompnent = ({
 
   const [updateNftWatch] = useMutation(UPDATE_NFT_WATCH);
   // const [updateNftPayment] = useMutation(UPDATE_NFT_PAYMENT);
-
-  console.log("Item Id", itemDbId, id);
 
   const [fetchAuctionData] = useLazyQuery(
     GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
@@ -654,13 +761,49 @@ const CardCompnent = ({
             >
               Nft Detail
             </button> */}
-            <Link
-              to={`/nft-detail/${id}`}
-              className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
-              style={{}}
+            <Popover
+              content={
+                <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                  <div
+                    className="m-0 fw-bold pb-2 mb-2"
+                    style={{
+                      borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
+                      color: isLight ? "black" : "white"
+                    }}
+                  >
+                    Description
+                  </div>
+                  <div
+                    className="m-0"
+                    style={{
+                      fontSize: "13px",
+                      lineHeight: "1.6",
+                      textAlign: "left",
+                      opacity: 0.85,
+                      color: isLight ? "#444444" : "#e0e0e0",
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
+                      overflowWrap: "anywhere"
+                    }}
+                  >
+                    {description || "No description provided."}
+                  </div>
+                </div>
+              }
+              title={null}
+              trigger="hover"
+              placement="top"
+              color={isLight ? "#ffffff" : "#1a1a1a"}
+              overlayClassName={`artist-popover ${isLight ? "bg-white-popover" : "dark-grey-bg-popover"}`}
             >
-              Nft Detail
-            </Link>
+              <Link
+                to={`/nft-detail/${id}`}
+                className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                style={{}}
+              >
+                Nft Detail
+              </Link>
+            </Popover>
             <div>
               <img src={profile} style={{ width: 15 }} alt="profile" />
               <abbr
@@ -728,17 +871,19 @@ const CardCompnent = ({
                       {/* <span className="light-grey2 mt-2 fs-5">
                         {artistName}
                       </span> */}
-                      <abbr
-                        title={artistName}
-                        className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
-                        style={{
-                          maxWidth: "60px",
-                          textDecoration: "none", // remove dotted underline
-                          cursor: "pointer", // pointer on hover
-                        }}
-                      >
-                        {artistName}
-                      </abbr>
+                      <ArtistPopoverWrapper displayName={userObj?.full_name}>
+                        <abbr
+                          title={userObj?.full_name}
+                          className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                          style={{
+                            maxWidth: "60px",
+                            textDecoration: "none", // remove dotted underline
+                            cursor: "pointer", // pointer on hover
+                          }}
+                        >
+                          {artistName}
+                        </abbr>
+                      </ArtistPopoverWrapper>
                     </div>
                   </div>
 
@@ -753,13 +898,49 @@ const CardCompnent = ({
                       //   Nft Detail
                       // </button>
 
-                      <Link
-                        to={`/nft-detail/${id}`}
-                        className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
-                        style={{}}
+                      <Popover
+                        content={
+                          <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                            <div
+                              className="m-0 fw-bold pb-2 mb-2"
+                              style={{
+                                borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
+                                color: isLight ? "black" : "white"
+                              }}
+                            >
+                              Description
+                            </div>
+                            <div
+                              className="m-0"
+                              style={{
+                                fontSize: "13px",
+                                lineHeight: "1.6",
+                                textAlign: "left",
+                                opacity: 0.85,
+                                color: isLight ? "#444444" : "#e0e0e0",
+                                whiteSpace: "pre-wrap",
+                                wordBreak: "break-word",
+                                overflowWrap: "anywhere"
+                              }}
+                            >
+                              {description || "No description provided."}
+                            </div>
+                          </div>
+                        }
+                        title={null}
+                        trigger="hover"
+                        placement="top"
+                        color={isLight ? "#ffffff" : "#1a1a1a"}
+                        overlayClassName={`artist-popover ${isLight ? "bg-white-popover" : "dark-grey-bg-popover"}`}
                       >
-                        Nft Detail
-                      </Link>
+                        <Link
+                          to={`/nft-detail/${id}`}
+                          className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                          style={{}}
+                        >
+                          Nft Detail
+                        </Link>
+                      </Popover>
                     )}
                   </div>
                 </div>
@@ -792,27 +973,64 @@ const CardCompnent = ({
                       className="rounded-circle"
                       style={{ width: 24, height: 24, objectFit: "cover" }}
                     />
-
-                    <abbr
-                      title={artistName}
-                      className="light-grey2 fs-6 ms-2 text-truncate d-inline-block"
-                      style={{
-                        maxWidth: "80px",
-                        textDecoration: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {artistName}
-                    </abbr>
+                    <ArtistPopoverWrapper displayName={userObj?.full_name}>
+                      <abbr
+                        title={userObj?.full_name}
+                        className="light-grey2 fs-6 ms-2 text-truncate d-inline-block"
+                        style={{
+                          maxWidth: "80px",
+                          textDecoration: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {artistName}
+                      </abbr>
+                    </ArtistPopoverWrapper>
                   </div>
 
-                  <Link
-                    to={`/nft-detail/${id}`}
-                    className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
-                    style={{}}
+                  <Popover
+                    content={
+                      <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                        <div
+                          className="m-0 fw-bold pb-2 mb-2"
+                          style={{
+                            borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
+                            color: isLight ? "black" : "white"
+                          }}
+                        >
+                          Description BBB
+                        </div>
+                        <div
+                          className="m-0"
+                          style={{
+                            fontSize: "13px",
+                            lineHeight: "1.6",
+                            textAlign: "left",
+                            opacity: 0.85,
+                            color: isLight ? "#444444" : "#e0e0e0",
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                            overflowWrap: "anywhere"
+                          }}
+                        >
+                          {description || "No description provided."}
+                        </div>
+                      </div>
+                    }
+                    title={null}
+                    trigger="hover"
+                    placement="top"
+                    color={isLight ? "#ffffff" : "#1a1a1a"}
+                    overlayClassName={`artist-popover ${isLight ? "bg-white-popover" : "dark-grey-bg-popover"}`}
                   >
-                    Nft Detail
-                  </Link>
+                    <Link
+                      to={`/nft-detail/${id}`}
+                      className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                      style={{}}
+                    >
+                      Nft Detail
+                    </Link>
+                  </Popover>
 
                   {/* <span
                     className="ms-2 light-grey2"

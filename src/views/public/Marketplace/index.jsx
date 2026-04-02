@@ -287,7 +287,7 @@ const Marketplace = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data.map(
               (item, i) => {
                 if (
@@ -320,6 +320,7 @@ const Marketplace = () => {
                       tokenId={item.tokenId}
                       id={item?.nft_id?._id}
                       itemDbId={item?._id}
+                      userObj={item?.seller}
                     />
                   );
                 }

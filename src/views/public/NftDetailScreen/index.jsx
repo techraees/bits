@@ -40,7 +40,7 @@ const NftDetailsScreen = () => {
 
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
-
+  console.log(bgColor, "SDFSDFSDFSFS")
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const { userData } = useSelector((state) => state.address.userData || {});
@@ -335,79 +335,82 @@ const NftDetailsScreen = () => {
                             <Avatar
                               size={90}
                               src={
-                                data?.DetailsOfANft?.user?.profileImg
+                                data?.DetailsOfANft?.user_id?.profileImg
                                   ? `${process.env.REACT_APP_BACKEND_BASE_URL}/${data?.DetailsOfANft?.user?.profileImg}`
                                   : null
                               }
-                              style={{ 
-                                backgroundColor: "#B23232", 
-                                border: `5px solid ${bgColor === "bg-black" ? "#1a1a1a" : "#ffffff"}`,
+                              style={{
+                                backgroundColor: "#B23232",
+                                border: `5px solid ${bgColor === "dark-grey-bg" ? "#1a1a1a" : "#ffffff"}`,
                                 boxShadow: "0 8px 20px rgba(0,0,0,0.3)"
                               }}
                             >
-                              {data?.DetailsOfANft?.artist_name1?.charAt(0)}
+                              {data?.DetailsOfANft?.user_id?.user_name?.charAt(0)}
                             </Avatar>
                           </div>
-                          
+
                           <div className="artist-details-body">
                             <div className="verified-tag">
                               <FaCheckCircle size={10} style={{ marginRight: "4px" }} />
                               VERIFIED CREATOR
                             </div>
-                            
-                            <h6 
-                              className="m-0 fw-bold" 
-                              style={{ 
-                                fontSize: "18px", 
+
+                            <h6
+                              className="m-0 fw-bold"
+                              style={{
+                                fontSize: "18px",
                                 letterSpacing: "0.2px",
-                                color: bgColor === "bg-black" ? "white" : "black" // Absolute contrast
+                                color: bgColor === "dark-grey-bg" ? "white" : "black" // Absolute contrast
                               }}
                             >
-                              {data?.DetailsOfANft?.user?.full_name || data?.DetailsOfANft?.artist_name1 || "Artist"}
+                              {data?.DetailsOfANft?.user_id?.user_name || data?.DetailsOfANft?.artist_name1 || "Artist"}
                             </h6>
-                            
-                            <p 
-                              className="m-0 mt-2" 
-                              style={{ 
-                                fontSize: "11px", 
-                                opacity: 0.8, 
-                                letterSpacing: "1px", 
-                                fontFamily: "monospace", 
-                                borderRadius: "4px", 
-                                background: bgColor === "bg-black" ? "rgba(255, 255, 255, 0.05)" : "rgba(178, 50, 50, 0.05)",
+
+                            <p
+                              className="m-0 mt-2"
+                              style={{
+                                fontSize: "11px",
+                                opacity: 0.8,
+                                letterSpacing: "1px",
+                                fontFamily: "monospace",
+                                borderRadius: "4px",
+                                background: bgColor === "dark-grey-bg" ? "rgba(255, 255, 255, 0.05)" : "rgba(178, 50, 50, 0.05)",
                                 padding: "4px 0",
-                                color: bgColor === "bg-black" ? "#b0b0b0" : "#666666" // Absolute contrast
+                                color: bgColor === "dark-grey-bg" ? "#b0b0b0" : "#666666" // Absolute contrast
                               }}
                             >
-                              {data?.DetailsOfANft?.user?.user_address && trimWallet(data?.DetailsOfANft?.user?.user_address)}
+                              {data?.DetailsOfANft?.user_id?.user_address && trimWallet(data?.DetailsOfANft?.user_id?.user_address)}
                             </p>
 
-                            {data?.DetailsOfANft?.user?.bio && (
-                              <div className="artist-bio-box">
-                                <p 
-                                  className="m-0" 
-                                  style={{ 
-                                    fontSize: "12px", 
-                                    lineHeight: "1.5", 
-                                    fontStyle: "italic", 
-                                    textAlign: "left", 
+                            {data?.DetailsOfANft?.user_id?.bio && (
+                              <div className="artist-bio-box" style={{ width: "100%" }}>
+                                <p
+                                  className="m-0"
+                                  style={{
+                                    fontSize: "12px",
+                                    lineHeight: "1.5",
+                                    fontStyle: "italic",
+                                    textAlign: "left",
                                     opacity: 0.9,
-                                    color: bgColor === "bg-black" ? "#e0e0e0" : "#444444" // Absolute contrast
+                                    color: bgColor === "dark-grey-bg" ? "#e0e0e0" : "#444444", // Absolute contrast
+                                    whiteSpace: "pre-wrap",
+                                    wordBreak: "break-word",
+                                    overflowWrap: "anywhere"
                                   }}
                                 >
-                                  "{data?.DetailsOfANft?.user?.bio}"
+                                  "{data?.DetailsOfANft?.user_id?.bio}"
                                 </p>
                               </div>
                             )}
 
-                            <button 
+                            <button
                               className="view-profile-btn"
                               style={{
                                 color: "#b23232 !important",
                                 border: "1px solid #b23232",
                                 marginTop: "15px"
                               }}
-                              onClick={() => navigate(`/profile/${data?.DetailsOfANft?.user?._id || data?.DetailsOfANft?.user_id}`)}
+                              onClick={() => navigate(`/collections/${data?.DetailsOfANft?.user_id?.id}`)}
                             >
                               VIEW FULL PROFILE
                             </button>
@@ -417,8 +420,8 @@ const NftDetailsScreen = () => {
                       title={null}
                       trigger="hover"
                       placement="right"
-                      color={bgColor === "bg-black" ? "#1a1a1a" : "#ffffff"} // ABSOLUTE THEME FORCE
-                      overlayClassName={`artist-popover ${bgColor === "bg-black" ? "bg-black-popover" : "bg-white-popover"}`}
+                      color={bgColor === "dark-grey-bg" ? "#1a1a1a" : "#ffffff"} // ABSOLUTE THEME FORCE
+                      overlayClassName={`artist-popover ${bgColor === "dark-grey-bg" ? "dark-grey-bg-popover" : "bg-white-popover"}`}
                     >
                       <p className={`${textColor2} m-0 fs-6 cursor-pointer`} style={{ borderBottom: "1px dotted #B23232", display: "inline-block", fontWeight: "600" }}>
                         {data?.DetailsOfANft?.artist_name1}

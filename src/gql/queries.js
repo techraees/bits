@@ -124,6 +124,9 @@ const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
         full_name
         user_address
         profileImg
+        _id
+        user_name
+        bio
       }
       status
       name
@@ -180,8 +183,9 @@ const GET_NFT_DETAIL_QUERY = gql`
       likeCount
       watchCount
       user_id {
-        id
+        _id
         user_name
+        full_name
         user_address
         profileImg
       }
@@ -202,6 +206,14 @@ const DETAILS_OF_A_NFT = gql`
       availableSupply
       royalty
       name
+      user_id {
+        _id
+        user_address
+        user_name
+        full_name
+        profileImg
+        bio
+      }
     }
   }
 `;
@@ -231,6 +243,7 @@ const GET_TOP_VIEW_NFTS = gql`
       user_id {
         id
         user_name
+        full_name
         user_address
         profileImg
       }
@@ -291,6 +304,14 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
           royalty
           token_id
           user_id {
+            profileImg
+          }
+          user {
+            _id
+            user_address
+            full_name
+            user_name
+            bio
             profileImg
           }
         }
@@ -359,6 +380,9 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
           user_address
           _id
           user_name
+          full_name
+          bio
+          profileImg
         }
       }
     }

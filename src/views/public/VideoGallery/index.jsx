@@ -303,7 +303,7 @@ const VideoGallery = () => {
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
           ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
+            ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
             getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data?.map(
               (item, i) => {
                 if (!item?.nft_id?.is_blocked && item.isSold == false) {
@@ -330,6 +330,7 @@ const VideoGallery = () => {
                       id={item?.nft_id?._id}
                       likeCount={item?.nft_id?.likeCount}
                       watchCount={item?.nft_id?.watchCount}
+                      userObj={item?.seller}
                     />
                   );
                 }

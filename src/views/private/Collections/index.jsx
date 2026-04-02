@@ -89,7 +89,7 @@ const Collections = () => {
 
   const imgPath =
     environment.REACT_APP_BACKEND_BASE_URL + "/" + userData?.id ==
-    profileData?.GetGeneralUserInfo?._id
+      profileData?.GetGeneralUserInfo?._id
       ? userData?.profileImg
       : profileData?.GetGeneralUserInfo?.profileImg;
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
@@ -128,7 +128,7 @@ const Collections = () => {
                 }}
               >
                 {profileData?.GetGeneralUserInfo?.profileImg ||
-                userData?.profileImg ? (
+                  userData?.profileImg ? (
                   <img
                     alt="dp"
                     src={imgPath}
@@ -179,19 +179,19 @@ const Collections = () => {
                 </h3>
                 {(profileData?.GetGeneralUserInfo?.country ||
                   userData?.country) && (
-                  <div className="d-flex mb-1 ms-5">
-                    <h5 className={`m-0 ${textColor}`}>
-                      {userData?.id != profileData?.GetGeneralUserInfo?._id
-                        ? profileData?.GetGeneralUserInfo?.country
-                        : userData?.country}
-                    </h5>
-                    <img
-                      className="ms-2"
-                      alt="location"
-                      src={textColor === "white" ? location : location_dark}
-                    />
-                  </div>
-                )}
+                    <div className="d-flex mb-1 ms-5">
+                      <h5 className={`m-0 ${textColor}`}>
+                        {userData?.id != profileData?.GetGeneralUserInfo?._id
+                          ? profileData?.GetGeneralUserInfo?.country
+                          : userData?.country}
+                      </h5>
+                      <img
+                        className="ms-2"
+                        alt="location"
+                        src={textColor === "white" ? location : location_dark}
+                      />
+                    </div>
+                  )}
 
                 <span className={`ms-5 ${textColor2}`}>
                   {userData?.id != profileData?.GetGeneralUserInfo?._id
@@ -243,7 +243,7 @@ const Collections = () => {
           <div
             className={`d-flex ms-3 p-2 ${bgColor}`}
             style={{ borderRadius: 20 }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={AZ} className="me-2" style={{ width: 20, height: 20 }} />
 
@@ -265,49 +265,53 @@ const Collections = () => {
                   ) : getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
                     0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map(
-                      (e, i) => (
-                        <CardCompnent
-                          key={i}
-                          image={imgPaths + e?.nft_id?.user_id?.profileImg}
-                          status={e?.nft_id?.status}
-                          name={e?.nft_id?.name}
-                          artistName={e?.nft_id?.artist_name1}
-                          videoLink={e?.nft_id?.video}
-                          isEmote={e?.nft_id?.isEmote}
-                          userId={userId}
-                          rid={e?.nft_id?.rid}
-                          bvh={e?.nft_id?.bvh}
-                          fbx={e?.nft_id?.fbx}
-                          detailBtn={true}
-                          topName
-                          userProfile={
-                            profileData?.GetGeneralUserInfo?.full_name
-                              ? true
-                              : false
-                          }
-                          likeCount={e?.nft_id?.likeCount}
-                          watchCount={e?.nft_id?.watchCount}
-                          isPaid={e?.nft_id?.isPaid}
-                          duration={e?.nft_id?.video_duration}
-                          id={e?.nft_id?._id}
-                          navigateTo={() =>
-                            navigate(`/list-nft/${e?.nft_id?._id}`, {
-                              state: {
-                                name: e?.nft_id?.name,
-                                royalty: e?.nft_id?.royalty,
-                                artistName: e?.nft_id?.artist_name1,
-                                tokenId: e?.nft_id?.token_id,
-                                videoLink: e?.nft_id?.video,
-                                nftId: e?.nft_id?._id,
-                              },
-                            })
-                          }
-                          isOwner={
-                            profileData?.GetGeneralUserInfo?._id ===
-                            userData?.id
-                          }
-                        />
-                      ),
+                      (e, i) => {
+                        console.log(e.nft_id, "ASDASDASDASDADS")
+                        return (
+                          <CardCompnent
+                            key={i}
+                            image={imgPaths + e?.nft_id?.user_id?.profileImg}
+                            status={e?.nft_id?.status}
+                            name={e?.nft_id?.name}
+                            artistName={e?.nft_id?.artist_name1}
+                            videoLink={e?.nft_id?.video}
+                            isEmote={e?.nft_id?.isEmote}
+                            userId={userId}
+                            rid={e?.nft_id?.rid}
+                            bvh={e?.nft_id?.bvh}
+                            fbx={e?.nft_id?.fbx}
+                            userObj={e?.nft_id?.user}
+                            detailBtn={true}
+                            topName
+                            userProfile={
+                              profileData?.GetGeneralUserInfo?.full_name
+                                ? true
+                                : false
+                            }
+                            likeCount={e?.nft_id?.likeCount}
+                            watchCount={e?.nft_id?.watchCount}
+                            isPaid={e?.nft_id?.isPaid}
+                            duration={e?.nft_id?.video_duration}
+                            id={e?.nft_id?._id}
+                            navigateTo={() =>
+                              navigate(`/list-nft/${e?.nft_id?._id}`, {
+                                state: {
+                                  name: e?.nft_id?.name,
+                                  royalty: e?.nft_id?.royalty,
+                                  artistName: e?.nft_id?.artist_name1,
+                                  tokenId: e?.nft_id?.token_id,
+                                  videoLink: e?.nft_id?.video,
+                                  nftId: e?.nft_id?._id,
+                                },
+                              })
+                            }
+                            isOwner={
+                              profileData?.GetGeneralUserInfo?._id ===
+                              userData?.id
+                            }
+                          />
+                        )
+                      }
                     )
                   ) : (
                     <p className="text-white">No results found</p>
@@ -321,7 +325,7 @@ const Collections = () => {
               >
                 <div className="row">
                   {getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.length >
-                  0 ? (
+                    0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map((e) => (
                       <CardCompnent
                         key={e?.nft_id?._id} // Use unique ID instead of index
@@ -332,6 +336,7 @@ const Collections = () => {
                         duration={e?.nft_id?.video_duration}
                         artistName={e?.nft_id?.artist_name1}
                         videoLink={e?.nft_id?.video}
+                        userObj={e?.nft_id?.user}
                         userId={userId}
                         topName
                         userProfile={
