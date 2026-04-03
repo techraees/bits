@@ -245,11 +245,10 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${
-          dashboardNav
-            ? headerTheme || "dashboardNavBgColor"
-            : headerTheme || "navbarBgColor"
-        }`}
+        className={`dashboardNavBgColor ${dashboardNav
+          ? headerTheme || "dashboardNavBgColor"
+          : headerTheme || "navbarBgColor"
+          }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}
@@ -319,7 +318,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                   </div>
                   <div className="connectIcon d-flex align-items-center">
                     <Nav.Link className="white" onClick={handleLogin}>
-                      Login
+                      Sign up/Login
                     </Nav.Link>
                     <Nav.Link
                       className="white mx-2 walletBtn d-flex justify-content-center align-items-center"
@@ -438,7 +437,7 @@ const NavbarComponent = ({ dashboardNav }) => {
               {!full_name ? (
                 <div className="d-flex align-items-center justify-content-center navbar-menu1">
                   <Nav.Link className="white mx-2" onClick={handleLogin}>
-                    Login
+                    Sign up/Login
                   </Nav.Link>
                   <Nav.Link
                     className="white mx-2 walletBtn d-flex justify-content-center align-items-center"

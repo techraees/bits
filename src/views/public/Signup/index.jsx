@@ -22,6 +22,9 @@ import { CREATE_USER } from "../../../gql/mutations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
 import "./css/index.css";
+import PhoneInputRPI2 from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 const env = process.env;
 
@@ -44,6 +47,7 @@ function Login() {
   const [monthsOptions, setMonthsOptions] = useState([]);
   const [daysOptions, setDaysOptions] = useState([]);
   const [yearsOptions, setYearsOptions] = useState([]);
+  const [phoneCountry, setPhoneCountry] = useState("us");
 
   let navigate = useNavigate();
 
@@ -239,6 +243,7 @@ function Login() {
   }, [signUpData, singUpError]);
 
   async function signUpHandle(data) {
+    console.log(data, "ASDASDASDASDADS")
     if (
       validatePassword(data.password) &&
       validateEmail(data.email) &&
@@ -254,9 +259,9 @@ function Login() {
         userAddress: address,
         dob: data.dob,
       };
-      createUser({
-        variables: variables,
-      });
+      // createUser({
+      //   variables: variables,
+      // });
     } else {
       ToastMessage("Error", "Incorrect input format", "error");
     }
@@ -378,12 +383,7 @@ function Login() {
   };
 
   const validatePhoneNumber = (phoneNumber) => {
-    var regex = /^\d{1,3}\d{5,}$/;
-    if (regex.test(phoneNumber)) {
-      return true;
-    } else {
-      return false;
-    }
+    return phoneNumber ? isValidPhoneNumber(phoneNumber) : false;
   };
 
   return (
@@ -468,14 +468,103 @@ function Login() {
                     {signUpFormError.password.message}
                   </span>
                 )}
-                <InputComponent
-                  placeholder={"Phone number"}
-                  ref={signUpRegister}
-                  name="phone_number"
-                  value={watch("phone_number")}
-                  onChange={handleChangeSignUp}
-                  autocomplete="off"
-                />
+                <div className="bits-phone-container" style={{ marginBottom: "15px" }}>
+                  <PhoneInputRPI2
+                    country={phoneCountry}
+                    enableSearch={true}
+                    disableSearchIcon={true}
+                    searchPlaceholder="Search country..."
+                    value={watch("phone_number")}
+                    onChange={(val, data) => {
+                      if (phoneCountry !== data.countryCode) {
+                        setPhoneCountry(data.countryCode);
+                        signUpSetValue("phone_number", "+" + data.dialCode, { shouldValidate: true });
+                      } else {
+                        const finalVal = val.startsWith("+") ? val : "+" + val;
+                        signUpSetValue("phone_number", finalVal, { shouldValidate: true });
+                      }
+                    }}
+                    containerStyle={{
+                      borderBottom: "2px solid #DCDCDC",
+                      transition: "all 0.3s ease"
+                    }}
+                    inputStyle={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#b0b0b0",
+                      fontSize: "15px",
+                      width: "100%",
+                      height: "50px"
+                    }}
+                    buttonStyle={{
+                      background: "transparent",
+                      border: "none",
+                    }}
+                    searchStyle={{
+                      width: "100%",
+                      margin: "0px auto",
+                      padding: "8px 9px",
+                      fontSize: "11px",
+                      border: "1px solid #E0E0E0",
+                      borderRadius: "4px",
+                      background: "#F9F9F9",
+                      color: "#333",
+                    }}
+                  />
+                  <style>
+                    {`
+                      .bits-phone-container:focus-within .react-tel-input {
+                        border-bottom: 2px solid #A62828 !important;
+                      }
+                      /* Specific styling only for the Main Input field */
+                      .bits-phone-container .react-tel-input > input.form-control {
+                        text-align: center !important;
+                        font-weight: 400 !important;
+                        color: #B0B0B0 !important;
+                        opacity: 1 !important;
+                        padding-right: 48px !important; /* visual balance for correct centering */
+                      }
+                      .bits-phone-container:focus-within .react-tel-input > input.form-control {
+                        color: #A62828 !important;
+                        font-weight: 600 !important;
+                        opacity: 1 !important;
+                        box-shadow: none !important;
+                      }
+                      .bits-phone-container .react-tel-input > input.form-control::placeholder {
+                        color: #000000 !important;
+                        opacity: 1 !important;
+                      }
+                      .bits-phone-container:focus-within .react-tel-input > input.form-control::placeholder {
+                        color: #A62828 !important;
+                        opacity: 1 !important;
+                      }
+                      /* General Tweaks */
+                      .bits-phone-container .react-tel-input .selected-flag:hover {
+                         background: transparent;
+                      }
+                      /* Remove all padding strictly from country list search container */
+                      .bits-phone-container .react-tel-input .search {
+                         padding: 0px !important;
+                      }
+                      /* Hide the magnifying glass icon completely */
+                      .bits-phone-container .react-tel-input .search-icon {
+                        display: none !important;
+                      }
+                      .bits-phone-container .react-tel-input .search-box {
+                         padding-top: 6.5px !important;
+                         padding-bottom: 6.5px !important;
+                      }
+                      /* Hide scrollbars */
+                      .bits-phone-container .react-tel-input .country-list::-webkit-scrollbar {
+                        display: none;
+                      }
+                      .bits-phone-container .react-tel-input .country-list {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                      }
+                    `}
+                  </style>
+                </div>
                 {signUpFormError.phone_number && (
                   <span className="text-danger" style={{ fontSize: "12px" }}>
                     {signUpFormError.phone_number.message}
