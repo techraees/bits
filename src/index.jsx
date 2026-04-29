@@ -40,11 +40,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
-  const hasAuthError = graphQLErrors?.some(
-    (err) =>
-      err.extensions?.code === "UNAUTHENTICATED" ||
-      err.message?.includes("expired") ||
-      err.message?.includes("invalid token"),
+   const hasAuthError = graphQLErrors?.some(
+    (err) => err.extensions?.error_code === "TOKEN_EXPIRED"
   );
 
   if (!hasAuthError) return;
