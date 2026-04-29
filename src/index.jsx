@@ -17,10 +17,10 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
-import { 
-  getCookieStorage, 
+import {
+  getCookieStorage,
   setCookieStorage, // Consistent storage utility
-  removeCookieStorage 
+  removeCookieStorage
 } from "./utills/cookieStorage";
 
 const env = process.env;
