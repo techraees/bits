@@ -243,7 +243,7 @@ function Login() {
   }, [signUpData, singUpError]);
 
   async function signUpHandle(data) {
-    console.log(data, "ASDASDASDASDADS")
+    console.log(data, "ASDASDASDASDADS");
     if (
       validatePassword(data.password) &&
       validateEmail(data.email) &&
@@ -468,7 +468,10 @@ function Login() {
                     {signUpFormError.password.message}
                   </span>
                 )}
-                <div className="bits-phone-container" style={{ marginBottom: "15px" }}>
+                <div
+                  className="bits-phone-container"
+                  style={{ marginBottom: "15px" }}
+                >
                   <PhoneInputRPI2
                     country={phoneCountry}
                     enableSearch={true}
@@ -478,15 +481,19 @@ function Login() {
                     onChange={(val, data) => {
                       if (phoneCountry !== data.countryCode) {
                         setPhoneCountry(data.countryCode);
-                        signUpSetValue("phone_number", "+" + data.dialCode, { shouldValidate: true });
+                        signUpSetValue("phone_number", "+" + data.dialCode, {
+                          shouldValidate: true,
+                        });
                       } else {
                         const finalVal = val.startsWith("+") ? val : "+" + val;
-                        signUpSetValue("phone_number", finalVal, { shouldValidate: true });
+                        signUpSetValue("phone_number", finalVal, {
+                          shouldValidate: true,
+                        });
                       }
                     }}
                     containerStyle={{
                       borderBottom: "2px solid #DCDCDC",
-                      transition: "all 0.3s ease"
+                      transition: "all 0.3s ease",
                     }}
                     inputStyle={{
                       background: "transparent",
@@ -494,7 +501,7 @@ function Login() {
                       color: "#b0b0b0",
                       fontSize: "15px",
                       width: "100%",
-                      height: "50px"
+                      height: "50px",
                     }}
                     buttonStyle={{
                       background: "transparent",

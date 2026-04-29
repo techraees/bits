@@ -6,7 +6,10 @@ import { Row, Col, Tooltip, Popover, Avatar } from "antd";
 import { FaCheckCircle } from "react-icons/fa";
 import "./css/index.css";
 import ReactPlayer from "react-player";
-import { DETAILS_OF_A_NFT, GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE } from "../../../gql/queries";
+import {
+  DETAILS_OF_A_NFT,
+  GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
+} from "../../../gql/queries";
 import { trimWallet } from "../../../utills/trimWalletAddr";
 import ButtonComponent from "../../../components/button";
 import ShowTopNFTPopup from "../../../ShowTopNFTPopup";
@@ -40,7 +43,7 @@ const NftDetailsScreen = () => {
 
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
-  console.log(bgColor, "SDFSDFSDFSFS")
+  console.log(bgColor, "SDFSDFSDFSFS");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const { userData } = useSelector((state) => state.address.userData || {});
@@ -60,7 +63,11 @@ const NftDetailsScreen = () => {
     GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
   );
 
-  const isOwner = userData?.wallet_address && data?.DetailsOfANft?.wallet_address && userData?.wallet_address?.toLowerCase() === data?.DetailsOfANft?.wallet_address?.toLowerCase();
+  const isOwner =
+    userData?.wallet_address &&
+    data?.DetailsOfANft?.wallet_address &&
+    userData?.wallet_address?.toLowerCase() ===
+      data?.DetailsOfANft?.wallet_address?.toLowerCase();
 
   // Re-fetch fixed page when pagination changes while modal is open
   useEffect(() => {
@@ -201,7 +208,7 @@ const NftDetailsScreen = () => {
   // 	data?.DetailsOfANft?.token_id
   // }`;
 
-  console.log(data?.DetailsOfANft, "SDFSDFSDFSFS")
+  console.log(data?.DetailsOfANft, "SDFSDFSDFSFS");
   return (
     <div
       className={`${backgroundTheme} pb-2`}
@@ -262,11 +269,7 @@ const NftDetailsScreen = () => {
                   ) : (
                     <ButtonComponent
                       height={40}
-                      text={
-                        isOwner
-                          ? "Sell NFT"
-                          : "Buy NFT"
-                      }
+                      text={isOwner ? "Sell NFT" : "Buy NFT"}
                       onClick={() => {
                         if (isOwner) {
                           navigate(`/list-nft/${id}`, {
@@ -278,7 +281,7 @@ const NftDetailsScreen = () => {
                               videoLink: data?.DetailsOfANft?.video,
                               nftId: id,
                             },
-                          })
+                          });
                         } else {
                           handleBuyBidClick();
                         }
@@ -287,9 +290,11 @@ const NftDetailsScreen = () => {
                   )}
                 </div>
                 <a
-                  href={`https://${contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
-                    }/token/${contractData.mintContract.address}?a=${data?.DetailsOfANft?.token_id
-                    }`}
+                  href={`https://${
+                    contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
+                  }/token/${contractData.mintContract.address}?a=${
+                    data?.DetailsOfANft?.token_id
+                  }`}
                   target="_blank"
                   className={`${textColor2}`}
                   rel="noreferrer"
@@ -342,16 +347,21 @@ const NftDetailsScreen = () => {
                               style={{
                                 backgroundColor: "#B23232",
                                 border: `5px solid ${bgColor === "dark-grey-bg" ? "#1a1a1a" : "#ffffff"}`,
-                                boxShadow: "0 8px 20px rgba(0,0,0,0.3)"
+                                boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
                               }}
                             >
-                              {data?.DetailsOfANft?.user_id?.user_name?.charAt(0)}
+                              {data?.DetailsOfANft?.user_id?.user_name?.charAt(
+                                0,
+                              )}
                             </Avatar>
                           </div>
 
                           <div className="artist-details-body">
                             <div className="verified-tag">
-                              <FaCheckCircle size={10} style={{ marginRight: "4px" }} />
+                              <FaCheckCircle
+                                size={10}
+                                style={{ marginRight: "4px" }}
+                              />
                               VERIFIED CREATOR
                             </div>
 
@@ -360,10 +370,15 @@ const NftDetailsScreen = () => {
                               style={{
                                 fontSize: "18px",
                                 letterSpacing: "0.2px",
-                                color: bgColor === "dark-grey-bg" ? "white" : "black" // Absolute contrast
+                                color:
+                                  bgColor === "dark-grey-bg"
+                                    ? "white"
+                                    : "black", // Absolute contrast
                               }}
                             >
-                              {data?.DetailsOfANft?.user_id?.user_name || data?.DetailsOfANft?.artist_name1 || "Artist"}
+                              {data?.DetailsOfANft?.user_id?.user_name ||
+                                data?.DetailsOfANft?.artist_name1 ||
+                                "Artist"}
                             </h6>
 
                             <p
@@ -374,16 +389,28 @@ const NftDetailsScreen = () => {
                                 letterSpacing: "1px",
                                 fontFamily: "monospace",
                                 borderRadius: "4px",
-                                background: bgColor === "dark-grey-bg" ? "rgba(255, 255, 255, 0.05)" : "rgba(178, 50, 50, 0.05)",
+                                background:
+                                  bgColor === "dark-grey-bg"
+                                    ? "rgba(255, 255, 255, 0.05)"
+                                    : "rgba(178, 50, 50, 0.05)",
                                 padding: "4px 0",
-                                color: bgColor === "dark-grey-bg" ? "#b0b0b0" : "#666666" // Absolute contrast
+                                color:
+                                  bgColor === "dark-grey-bg"
+                                    ? "#b0b0b0"
+                                    : "#666666", // Absolute contrast
                               }}
                             >
-                              {data?.DetailsOfANft?.user_id?.user_address && trimWallet(data?.DetailsOfANft?.user_id?.user_address)}
+                              {data?.DetailsOfANft?.user_id?.user_address &&
+                                trimWallet(
+                                  data?.DetailsOfANft?.user_id?.user_address,
+                                )}
                             </p>
 
                             {data?.DetailsOfANft?.user_id?.bio && (
-                              <div className="artist-bio-box" style={{ width: "100%" }}>
+                              <div
+                                className="artist-bio-box"
+                                style={{ width: "100%" }}
+                              >
                                 <p
                                   className="m-0"
                                   style={{
@@ -392,10 +419,13 @@ const NftDetailsScreen = () => {
                                     fontStyle: "italic",
                                     textAlign: "left",
                                     opacity: 0.9,
-                                    color: bgColor === "dark-grey-bg" ? "#e0e0e0" : "#444444", // Absolute contrast
+                                    color:
+                                      bgColor === "dark-grey-bg"
+                                        ? "#e0e0e0"
+                                        : "#444444", // Absolute contrast
                                     whiteSpace: "pre-wrap",
                                     wordBreak: "break-word",
-                                    overflowWrap: "anywhere"
+                                    overflowWrap: "anywhere",
                                   }}
                                 >
                                   "{data?.DetailsOfANft?.user_id?.bio}"
@@ -408,9 +438,13 @@ const NftDetailsScreen = () => {
                               style={{
                                 color: "#b23232 !important",
                                 border: "1px solid #b23232",
-                                marginTop: "15px"
+                                marginTop: "15px",
                               }}
-                              onClick={() => navigate(`/collections/${data?.DetailsOfANft?.user_id?.id}`)}
+                              onClick={() =>
+                                navigate(
+                                  `/collections/${data?.DetailsOfANft?.user_id?.id}`,
+                                )
+                              }
                             >
                               VIEW FULL PROFILE
                             </button>
@@ -423,7 +457,14 @@ const NftDetailsScreen = () => {
                       color={bgColor === "dark-grey-bg" ? "#1a1a1a" : "#ffffff"} // ABSOLUTE THEME FORCE
                       overlayClassName={`artist-popover ${bgColor === "dark-grey-bg" ? "dark-grey-bg-popover" : "bg-white-popover"}`}
                     >
-                      <p className={`${textColor2} m-0 fs-6 cursor-pointer`} style={{ borderBottom: "1px dotted #B23232", display: "inline-block", fontWeight: "600" }}>
+                      <p
+                        className={`${textColor2} m-0 fs-6 cursor-pointer`}
+                        style={{
+                          borderBottom: "1px dotted #B23232",
+                          display: "inline-block",
+                          fontWeight: "600",
+                        }}
+                      >
                         {data?.DetailsOfANft?.artist_name1}
                       </p>
                     </Popover>
@@ -470,10 +511,13 @@ const NftDetailsScreen = () => {
                 border: "1px solid rgba(178, 50, 50, 0.2)",
                 borderLeft: "4px solid #B23232",
                 backgroundColor: "rgba(178, 50, 50, 0.03)",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)"
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               }}
             >
-              <p className={`${textColor} mb-2 fs-5 fw-bold`} style={{ letterSpacing: "0.5px" }}>
+              <p
+                className={`${textColor} mb-2 fs-5 fw-bold`}
+                style={{ letterSpacing: "0.5px" }}
+              >
                 Description
               </p>
               <div
@@ -482,7 +526,7 @@ const NftDetailsScreen = () => {
                   fontSize: "15px",
                   lineHeight: "1.8",
                   whiteSpace: "pre-wrap",
-                  opacity: "0.9"
+                  opacity: "0.9",
                 }}
               >
                 {data?.DetailsOfANft?.description || "No description provided."}

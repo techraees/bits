@@ -1,4 +1,3 @@
-import React from "react";
 import { logo } from "../../../assets";
 import { Container } from "react-bootstrap";
 import { Button, Col, Input, Row } from "antd";

@@ -79,8 +79,10 @@ const signUpSchema = yup.object().shape({
     .required("Password is required"),
   phone_number: yup
     .string()
-    .test("is-valid-phone", "Phone number is invalid for the selected country", (value) => 
-      value ? isValidPhoneNumber(value) : false
+    .test(
+      "is-valid-phone",
+      "Phone number is invalid for the selected country",
+      (value) => (value ? isValidPhoneNumber(value) : false),
     )
     .required("Phone number is required"),
 });

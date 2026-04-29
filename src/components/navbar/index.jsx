@@ -245,10 +245,11 @@ const NavbarComponent = ({ dashboardNav }) => {
   return (
     <>
       <Navbar
-        className={`dashboardNavBgColor ${dashboardNav
-          ? headerTheme || "dashboardNavBgColor"
-          : headerTheme || "navbarBgColor"
-          }`}
+        className={`dashboardNavBgColor ${
+          dashboardNav
+            ? headerTheme || "dashboardNavBgColor"
+            : headerTheme || "navbarBgColor"
+        }`}
         expand="lg"
         sticky="top"
         style={{ zIndex: 100000000 }}

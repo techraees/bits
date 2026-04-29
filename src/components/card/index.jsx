@@ -78,7 +78,7 @@ const CardCompnent = ({
   sellerUsername,
   itemDbId,
   isTopNfts,
-  userObj
+  userObj,
 }) => {
   const isLight = useSelector((s) => s.app?.theme?.textColor === "black");
 
@@ -100,7 +100,7 @@ const CardCompnent = ({
               style={{
                 backgroundColor: "#B23232",
                 border: `5px solid ${!isLight ? "#1a1a1a" : "#ffffff"}`,
-                boxShadow: "0 8px 20px rgba(0,0,0,0.3)"
+                boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
               }}
             >
               {userObj?.user_name?.charAt(0) || displayName?.charAt(0)}
@@ -118,10 +118,13 @@ const CardCompnent = ({
               style={{
                 fontSize: "18px",
                 letterSpacing: "0.2px",
-                color: !isLight ? "white" : "black" // Absolute contrast
+                color: !isLight ? "white" : "black", // Absolute contrast
               }}
             >
-              {userObj?.full_name || userObj?.user_name || displayName || "Artist"}
+              {userObj?.full_name ||
+                userObj?.user_name ||
+                displayName ||
+                "Artist"}
             </h6>
 
             <p
@@ -132,9 +135,11 @@ const CardCompnent = ({
                 letterSpacing: "1px",
                 fontFamily: "monospace",
                 borderRadius: "4px",
-                background: !isLight ? "rgba(255, 255, 255, 0.05)" : "rgba(178, 50, 50, 0.05)",
+                background: !isLight
+                  ? "rgba(255, 255, 255, 0.05)"
+                  : "rgba(178, 50, 50, 0.05)",
                 padding: "4px 0",
-                color: !isLight ? "#b0b0b0" : "#666666" // Absolute contrast
+                color: !isLight ? "#b0b0b0" : "#666666", // Absolute contrast
               }}
             >
               {userObj?.user_address && trimWallet(userObj?.user_address)}
@@ -153,7 +158,7 @@ const CardCompnent = ({
                     color: !isLight ? "#e0e0e0" : "#444444", // Absolute contrast
                     whiteSpace: "pre-wrap",
                     wordBreak: "break-word",
-                    overflowWrap: "anywhere"
+                    overflowWrap: "anywhere",
                   }}
                 >
                   "{userObj?.bio}"
@@ -166,7 +171,7 @@ const CardCompnent = ({
               style={{
                 color: "#b23232 !important",
                 border: "1px solid #b23232",
-                marginTop: "15px"
+                marginTop: "15px",
               }}
               onClick={(e) => {
                 e.preventDefault();
@@ -763,12 +768,19 @@ const CardCompnent = ({
             </button> */}
             <Popover
               content={
-                <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                <div
+                  style={{
+                    width: "240px",
+                    position: "relative",
+                    padding: "8px",
+                    borderLeft: "3px solid #d54343",
+                  }}
+                >
                   <div
                     className="m-0 fw-bold pb-2 mb-2"
                     style={{
                       borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
-                      color: isLight ? "black" : "white"
+                      color: isLight ? "black" : "white",
                     }}
                   >
                     Description
@@ -783,7 +795,7 @@ const CardCompnent = ({
                       color: isLight ? "#444444" : "#e0e0e0",
                       whiteSpace: "pre-wrap",
                       wordBreak: "break-word",
-                      overflowWrap: "anywhere"
+                      overflowWrap: "anywhere",
                     }}
                   >
                     {description || "No description provided."}
@@ -900,12 +912,19 @@ const CardCompnent = ({
 
                       <Popover
                         content={
-                          <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                          <div
+                            style={{
+                              width: "240px",
+                              position: "relative",
+                              padding: "8px",
+                              borderLeft: "3px solid #d54343",
+                            }}
+                          >
                             <div
                               className="m-0 fw-bold pb-2 mb-2"
                               style={{
                                 borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
-                                color: isLight ? "black" : "white"
+                                color: isLight ? "black" : "white",
                               }}
                             >
                               Description
@@ -920,7 +939,7 @@ const CardCompnent = ({
                                 color: isLight ? "#444444" : "#e0e0e0",
                                 whiteSpace: "pre-wrap",
                                 wordBreak: "break-word",
-                                overflowWrap: "anywhere"
+                                overflowWrap: "anywhere",
                               }}
                             >
                               {description || "No description provided."}
@@ -990,15 +1009,22 @@ const CardCompnent = ({
 
                   <Popover
                     content={
-                      <div style={{ width: "240px", position: "relative", padding: "8px", borderLeft: "3px solid #d54343" }}>
+                      <div
+                        style={{
+                          width: "240px",
+                          position: "relative",
+                          padding: "8px",
+                          borderLeft: "3px solid #d54343",
+                        }}
+                      >
                         <div
                           className="m-0 fw-bold pb-2 mb-2"
                           style={{
                             borderBottom: `1px solid ${isLight ? "#e0e0e0" : "#333333"}`,
-                            color: isLight ? "black" : "white"
+                            color: isLight ? "black" : "white",
                           }}
                         >
-                          Description BBB
+                          Description
                         </div>
                         <div
                           className="m-0"
@@ -1010,7 +1036,7 @@ const CardCompnent = ({
                             color: isLight ? "#444444" : "#e0e0e0",
                             whiteSpace: "pre-wrap",
                             wordBreak: "break-word",
-                            overflowWrap: "anywhere"
+                            overflowWrap: "anywhere",
                           }}
                         >
                           {description || "No description provided."}

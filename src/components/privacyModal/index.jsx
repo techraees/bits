@@ -1,5 +1,4 @@
 import { Col, Modal, Row } from "antd";
-import React from "react";
 import "./index.css";
 
 const PrivacyModal = ({ privacyModal, setPrivacyModal }) => {
