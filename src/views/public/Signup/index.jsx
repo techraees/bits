@@ -259,9 +259,9 @@ function Login() {
         userAddress: address,
         dob: data.dob,
       };
-      // createUser({
-      //   variables: variables,
-      // });
+      createUser({
+        variables: variables,
+      });
     } else {
       ToastMessage("Error", "Incorrect input format", "error");
     }

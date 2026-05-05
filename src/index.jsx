@@ -20,7 +20,7 @@ import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
 import {
   getCookieStorage,
   setCookieStorage, // Consistent storage utility
-  removeCookieStorage
+  removeCookieStorage,
 } from "./utills/cookieStorage";
 
 const env = process.env;
@@ -41,7 +41,7 @@ const authLink = setContext((_, { headers }) => {
 
 const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
   const hasAuthError = graphQLErrors?.some(
-    (err) => err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED"
+    (err) => err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED",
   );
   if (!hasAuthError) return;
 
