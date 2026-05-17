@@ -758,15 +758,15 @@ const CardCompnent = ({
                 {location.pathname === "/marketplace" ? "Bid Now" : "Buy Now"}
               </button>
             )}
-            {/* <button
+            <button
               className="buybtn nft_details_button"
               onClick={() => {
                 navigate(`/nft-detail/${id}`);
               }}
             >
               Nft Detail
-            </button> */}
-            <Popover
+            </button>
+            {/* <Popover
               content={
                 <div
                   style={{
@@ -815,7 +815,14 @@ const CardCompnent = ({
               >
                 Nft Detail
               </Link>
-            </Popover>
+            </Popover> */}
+            <Link
+              to={`/nft-detail/${id}`}
+              className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+              style={{}}
+            >
+              Nft Detail
+            </Link>
             <div>
               <img src={profile} style={{ width: 15 }} alt="profile" />
               <abbr
@@ -883,32 +890,42 @@ const CardCompnent = ({
                       {/* <span className="light-grey2 mt-2 fs-5">
                         {artistName}
                       </span> */}
-                      <ArtistPopoverWrapper displayName={userObj?.full_name}>
-                        <abbr
-                          title={userObj?.full_name}
-                          className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
-                          style={{
-                            maxWidth: "60px",
-                            textDecoration: "none", // remove dotted underline
-                            cursor: "pointer", // pointer on hover
-                          }}
-                        >
-                          {artistName}
-                        </abbr>
-                      </ArtistPopoverWrapper>
+                      {/* <ArtistPopoverWrapper displayName={userObj?.full_name}> */}
+                      <abbr
+                        title={userObj?.full_name}
+                        className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
+                        style={{
+                          maxWidth: "60px",
+                          textDecoration: "none", // remove dotted underline
+                          cursor: "pointer", // pointer on hover
+                        }}
+                      >
+                        {artistName}
+                      </abbr>
+                      {/* </ArtistPopoverWrapper> */}
                     </div>
                   </div>
 
                   <div>
                     {detailBtn && (
-                      // <button
-                      //   className="detail-btn"
-                      //   onClick={() => {
-                      //     navigate("/nft-detail/" + id);
-                      //   }}
-                      // >
-                      //   Nft Detail
-                      // </button>
+                      <button
+                        className="detail-btn"
+                        onClick={() => {
+                          navigate("/nft-detail/" + id);
+                        }}
+                      >
+                        Nft Detail
+                      </button>
+                    )}
+                    {/* {detailBtn && (
+                      <button
+                        className="detail-btn"
+                        onClick={() => {
+                          navigate("/nft-detail/" + id);
+                        }}
+                      >
+                        Nft Detail
+                      </button>
 
                       <Popover
                         content={
@@ -960,7 +977,7 @@ const CardCompnent = ({
                           Nft Detail
                         </Link>
                       </Popover>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div>
@@ -992,22 +1009,22 @@ const CardCompnent = ({
                       className="rounded-circle"
                       style={{ width: 24, height: 24, objectFit: "cover" }}
                     />
-                    <ArtistPopoverWrapper displayName={userObj?.full_name}>
-                      <abbr
-                        title={userObj?.full_name}
-                        className="light-grey2 fs-6 ms-2 text-truncate d-inline-block"
-                        style={{
-                          maxWidth: "80px",
-                          textDecoration: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {artistName}
-                      </abbr>
-                    </ArtistPopoverWrapper>
+                    {/* <ArtistPopoverWrapper displayName={userObj?.full_name}> */}
+                    <abbr
+                      title={userObj?.full_name}
+                      className="light-grey2 fs-6 ms-2 text-truncate d-inline-block"
+                      style={{
+                        maxWidth: "80px",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {artistName}
+                    </abbr>
+                    {/* </ArtistPopoverWrapper> */}
                   </div>
 
-                  <Popover
+                  {/* <Popover
                     content={
                       <div
                         style={{
@@ -1056,7 +1073,7 @@ const CardCompnent = ({
                     >
                       Nft Detail
                     </Link>
-                  </Popover>
+                  </Popover> */}
 
                   {/* <span
                     className="ms-2 light-grey2"
@@ -1064,6 +1081,13 @@ const CardCompnent = ({
                   >
                     {status}
                   </span> */}
+                  <Link
+                    to={`/nft-detail/${id}`}
+                    className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
+                    style={{}}
+                  >
+                    Nft Detail
+                  </Link>
                 </div>
 
                 <abbr

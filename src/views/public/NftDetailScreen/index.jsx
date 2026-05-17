@@ -253,7 +253,7 @@ const NftDetailsScreen = () => {
                     url={data?.DetailsOfANft?.video}
                   />
                 </div>
-                <div className="mt-4 mb-2 d-flex justify-content-center w-100">
+                {/* <div className="mt-4 mb-2 d-flex justify-content-center w-100">
                   {!userData || !userData.address ? (
                     <Tooltip title="To Purchase NFT's Please Login">
                       <span>
@@ -288,7 +288,7 @@ const NftDetailsScreen = () => {
                       }}
                     />
                   )}
-                </div>
+                </div> */}
                 <a
                   href={`https://${
                     contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
@@ -504,7 +504,7 @@ const NftDetailsScreen = () => {
               </div>
             </div>
           </Col>
-          <Col span={24} className="mt-4 pt-3">
+          {/* <Col span={24} className="mt-4 pt-3">
             <div
               className="p-4 rounded-3 w-100"
               style={{
@@ -532,7 +532,7 @@ const NftDetailsScreen = () => {
                 {data?.DetailsOfANft?.description || "No description provided."}
               </div>
             </div>
-          </Col>
+          </Col> */}
         </Row>
       </div>
     </div>
