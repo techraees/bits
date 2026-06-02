@@ -65,18 +65,28 @@ const signUpSchema = yup.object().shape({
   user_name: yup
     .string()
     .trim()
-    .matches(/^\S+$/, "Username cannot contain spaces")
+    .matches(
+      /^[a-zA-Z0-9_]+$/,
+      "Username must be alphanumeric and can only contain letters, numbers, and underscores (no spaces)",
+    )
     .required("Username is required"),
   email: yup
     .string()
-    .email("Invalid email")
     .trim()
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format")
     .required("Email is required"),
   password: yup
     .string()
-    .min(6, "Password must be at least 6 characters")
-    .matches(/^(\S|\S[\S ]*\S)$/, "Password cannot contain consecutive spaces")
-    .required("Password is required"),
+    .required("Password is required")
+    .matches(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/,
+      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    )
+    .test(
+      "no-consecutive-spaces",
+      "Password cannot contain consecutive spaces",
+      (value) => !/\s\s+/.test(value),
+    ),
   phone_number: yup
     .string()
     .test(

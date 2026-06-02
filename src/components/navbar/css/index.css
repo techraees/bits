@@ -173,7 +173,11 @@
   letter-spacing: 0.2px;
   color: #adadad;
   padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .ethIcon {
   height: 15px;
@@ -247,7 +251,7 @@
   display: none;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 991.98px) {
   .mobile_navlink {
     padding: 8px 0;
     border-bottom: 1px solid #3f3f3fa6 !important;
@@ -362,4 +366,26 @@
 .chainIcon {
   font-size: 18px;
   line-height: 0;
+}
+
+/* ---- Full Name Truncation for Small Screens ---- */
+.nav-fullname-truncate {
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: 575px) {
+  .nav-fullname-truncate {
+    max-width: 80px;
+  }
+}
+
+.nav-fullname-abbr {
+  text-decoration: none !important;
+  cursor: pointer;
+  color: inherit;
 }

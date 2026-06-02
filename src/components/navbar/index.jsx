@@ -341,7 +341,11 @@ const NavbarComponent = ({ dashboardNav }) => {
                     className="white mx-1 d-flex"
                     onClick={() => showModal()}
                   >
-                    <span className="me-2 mt-1">{full_name}</span>
+                    <span className="me-2 mt-1 nav-fullname-truncate">
+                      <abbr title={full_name} className="nav-fullname-abbr">
+                        {full_name}
+                      </abbr>
+                    </span>
                     <img
                       src={
                         validImage

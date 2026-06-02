@@ -153,10 +153,15 @@ function Login() {
     reset: signUpResetValue,
   } = useForm({
     resolver: yupResolver(signUpSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
     defaultValues: {
       user_name: "",
       full_name: "",
       email: "",
+      password: "",
+      phone_number: "",
+      dob: "",
     },
   });
 
@@ -198,7 +203,7 @@ function Login() {
     if (day && month && year) {
       const combined = `${month}/${day}/${year}`;
       const dateFormat = new Date(combined);
-      signUpSetValue("dob", dateFormat.toString());
+      signUpSetValue("dob", dateFormat.toString(), { shouldValidate: true });
     }
   }, [day, month, year]);
 
@@ -268,7 +273,7 @@ function Login() {
   }
 
   const handleChangeSignUp = (e) => {
-    signUpSetValue(e.target.name, e.target.value);
+    signUpSetValue(e.target.name, e.target.value, { shouldValidate: true });
   };
 
   // get Player
