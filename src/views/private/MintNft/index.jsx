@@ -121,17 +121,28 @@ const MintNft = () => {
       );
 
       try {
-        if (!recaptchaToken) {
-          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+        const toEmail = profileData?.GetProfileDetails?.email;
+        const fromEmail = environment.REACT_APP_EMAIL_OWNER;
+        const subject = msgData.subject;
+        const text = msgData.message;
+
+        if (!toEmail || !fromEmail || !subject || !text || !recaptchaToken) {
+          console.log("Skipping email: missing required fields", {
+            toEmail,
+            fromEmail,
+            subject,
+            text,
+            recaptchaToken,
+          });
           return;
         }
 
         const res = await sendEmail({
           variables: {
-            to: profileData?.GetProfileDetails?.email,
-            from: environment.REACT_APP_EMAIL_OWNER,
-            subject: msgData.subject,
-            text: msgData.message,
+            to: toEmail,
+            from: fromEmail,
+            subject: subject,
+            text: text,
             recaptchaToken: recaptchaToken,
           },
         });
@@ -279,7 +290,7 @@ const MintNft = () => {
       );
 
       if (Number(newTkId)) {
-        CreateNft({
+        const nftResponse = await CreateNft({
           variables: {
             name: createNft && createNft.name,
             artistName1: createNft && createNft.artist_name1,
@@ -305,11 +316,13 @@ const MintNft = () => {
           },
         });
 
+        const createdNftId = nftResponse?.data?.CreateNft?._id || "";
+
         //create transaction
         await createNewTransation({
           variables: {
             first_person_wallet_address: values.walletAddress.toString(),
-            nft_id: "",
+            nft_id: createdNftId,
             amount: 0,
             currency:
               contractData.chain === process.env.REACT_ETH_CHAINID
