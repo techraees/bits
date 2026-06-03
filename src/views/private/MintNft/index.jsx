@@ -127,13 +127,6 @@ const MintNft = () => {
         const text = msgData.message;
 
         if (!toEmail || !fromEmail || !subject || !text || !recaptchaToken) {
-          console.log("Skipping email: missing required fields", {
-            toEmail,
-            fromEmail,
-            subject,
-            text,
-            recaptchaToken,
-          });
           return;
         }
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import ReactPlayer from "react-player";
 import { useSelector, useDispatch } from "react-redux";
+import { ClipLoader } from "react-spinners";
 import { ToastMessage, Loader } from "../../../components";
 import { IoLogoUsd } from "react-icons/io";
 import { BiTimeFive } from "react-icons/bi";
@@ -11,7 +12,7 @@ import { Input } from "antd";
 import { DatePicker } from "antd";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import "./css/index.css";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ConnectModal from "../../../components/connectModal";
 import { ETHToWei } from "../../../utills/convertWeiAndBnb";
 import { Form } from "react-bootstrap";
@@ -75,6 +76,7 @@ const ListNft = () => {
   // });
 
   const { state } = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isConnected, address } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
@@ -265,6 +267,11 @@ const ListNft = () => {
           setLoadingMessage("");
           ToastMessage("Listing Successful", "", "success");
           dispatch(loadContractIns());
+          if (isAuction) {
+            navigate("/marketplace");
+          } else {
+            navigate("/video-gallery");
+          }
         } catch (error) {
           setLoadingStatus(false);
           setLoadingMessage("");
@@ -410,6 +417,7 @@ const ListNft = () => {
                 placeholder="Amount"
                 // defaultValue="Amount"
                 type="number"
+                onWheel={(e) => e.target.blur()}
               />
             </div>
 
@@ -431,6 +439,7 @@ const ListNft = () => {
                 placeholder="0000"
                 min="0"
                 onChange={handleCopyChange}
+                onWheel={(e) => e.target.blur()}
               />
             </div>
 
@@ -508,8 +517,32 @@ const ListNft = () => {
                 {potentialEarning} {contractData.chain === 1 ? "ETH" : "MATIC"}
               </p>
             </div>
-            <div className="btn-wrapper red-gradient">
-              <button onClick={handleListing}>COMPLETE LISTING</button>
+            <div
+              className="btn-wrapper red-gradient"
+              style={
+                loadingStatus
+                  ? {
+                      opacity: 0.6,
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            >
+              <button
+                onClick={handleListing}
+                disabled={loadingStatus}
+                style={loadingStatus ? { cursor: "not-allowed" } : {}}
+              >
+                {loadingStatus ? (
+                  <div className="d-flex align-items-center justify-content-center gap-2">
+                    <ClipLoader size={20} color="#fff" />
+                    <span>LISTING...</span>
+                  </div>
+                ) : (
+                  "COMPLETE LISTING"
+                )}
+              </button>
             </div>
           </>
         )}
@@ -559,6 +592,7 @@ const ListNft = () => {
                 placeholder="Amount"
                 type="number"
                 onChange={handlePriceChange}
+                onWheel={(e) => e.target.blur()}
               />
             </div>
 
@@ -613,6 +647,7 @@ const ListNft = () => {
                 placeholder="0000"
                 min="0"
                 onChange={handleCopyChange}
+                onWheel={(e) => e.target.blur()}
               />
             </div>
 
@@ -691,8 +726,32 @@ const ListNft = () => {
                 {potentialEarning} {contractData.chain === 1 ? "ETH" : "MATIC"}
               </p>
             </div>
-            <div className="btn-wrapper red-gradient">
-              <button onClick={handleListing}>COMPLETE LISTING</button>
+            <div
+              className="btn-wrapper red-gradient"
+              style={
+                loadingStatus
+                  ? {
+                      opacity: 0.6,
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            >
+              <button
+                onClick={handleListing}
+                disabled={loadingStatus}
+                style={loadingStatus ? { cursor: "not-allowed" } : {}}
+              >
+                {loadingStatus ? (
+                  <div className="d-flex align-items-center justify-content-center gap-2">
+                    <ClipLoader size={20} color="#fff" />
+                    <span>LISTING...</span>
+                  </div>
+                ) : (
+                  "COMPLETE LISTING"
+                )}
+              </button>
             </div>
           </>
         )}
