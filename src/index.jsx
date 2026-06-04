@@ -41,7 +41,10 @@ const authLink = setContext((_, { headers }) => {
 
 const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
   const hasAuthError = graphQLErrors?.some(
-    (err) => err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED",
+    (err) =>
+      err.error_code === "ACCESS_TOKEN_EXPIRED" ||
+      err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED" ||
+      err.message === "Access token expired",
   );
   if (!hasAuthError) return;
 
@@ -100,6 +103,14 @@ const refreshLink = onError(({ graphQLErrors, operation, forward }) => {
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
+  const hasAuthError = graphQLErrors?.some(
+    (err) =>
+      err.error_code === "ACCESS_TOKEN_EXPIRED" ||
+      err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED" ||
+      err.message === "Access token expired",
+  );
+  if (hasAuthError) return;
+
   let message;
 
   // GraphQL errors (status 200)
