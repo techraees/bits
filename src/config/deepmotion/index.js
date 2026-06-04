@@ -148,10 +148,10 @@ const waitForCompletion = async (rid, onProgress = null) => {
 
     // Log detailed progress
     // console.log(
-      // `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
-        // (result.positionInQueue > 0
-          // ? ` - Queue position: ${result.positionInQueue}`
-          // : ""),
+    // `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
+    // (result.positionInQueue > 0
+    // ? ` - Queue position: ${result.positionInQueue}`
+    // : ""),
     // );
 
     // Call progress callback if provided

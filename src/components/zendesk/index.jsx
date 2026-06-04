@@ -6,7 +6,9 @@ import help from "../../assets/images/help.png";
 const environment = process.env;
 
 const ZendeskComp = () => {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(
+    typeof window !== "undefined" && !!window.zE,
+  );
   const [open, setOpen] = useState(false);
 
   const handleLoaded = () => {
@@ -14,6 +16,13 @@ const ZendeskComp = () => {
     ZendeskAPI("webWidget", "hide");
     setReady(true);
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.zE) {
+      setReady(true);
+      ZendeskAPI("webWidget", "hide");
+    }
+  }, []);
 
   useEffect(() => {
     // console.log("Zendesk open state changed:", open, "ready:", ready);
@@ -33,11 +42,7 @@ const ZendeskComp = () => {
     <>
       <Zendesk
         defer
-        zendeskKey={
-          environment.REACT_APP_ZENDESK_KEY ||
-          process.env.REACT_APP_ZENDESK_KEY ||
-          "7666164b-b463-442f-9179-b7ec57bd3c1b"
-        }
+        zendeskKey={"7666164b-b463-442f-9179-b7ec57bd3c1b"}
         onLoaded={handleLoaded}
       />
 
