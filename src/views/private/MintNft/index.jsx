@@ -71,7 +71,7 @@ const MintNft = () => {
   let navigate = useNavigate();
 
   const { createNft } = useSelector((state) => state.nft.createNft);
-  console.log(createNft, "Creating the New NFT");
+  // console.log(createNft, "Creating the New NFT");
   const [CreateNft, { data, loading, error }] = useMutation(CREATE_NFT);
   const [
     createNewTransation,
@@ -141,10 +141,10 @@ const MintNft = () => {
         });
 
         if (res) {
-          console.log("res");
+          // console.log("res");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
@@ -175,7 +175,7 @@ const MintNft = () => {
   };
 
   const mintCall = async (supply, royalty) => {
-    console.log("Minting Call");
+    // console.log("Minting Call");
 
     if (!isConnected) {
       ToastMessage(
@@ -196,7 +196,7 @@ const MintNft = () => {
       );
     }
 
-    console.log(chainId);
+    // console.log(chainId);
 
     if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
       if (contractData.chain == chainId) {
@@ -235,7 +235,7 @@ const MintNft = () => {
         } catch (error) {
           setLoadingStatus(false);
           setLoadingMessage("");
-          console.log(error);
+          // console.log(error);
           const parsedEthersError = getParsedEthersError(error);
           if (parsedEthersError.context == -32603) {
             ToastMessage("Error", "Insufficient Balance", "error");
@@ -329,7 +329,7 @@ const MintNft = () => {
           },
         });
       } else {
-        console.log("Minting is not gone through");
+        // console.log("Minting is not gone through");
       }
     },
   });

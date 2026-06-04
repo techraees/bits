@@ -129,11 +129,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 
   if (message) {
-    console.log("GLOBAL ERROR:", message);
+    // console.log("GLOBAL ERROR:", message);
     ToastMessage(message, "", "error");
   }
 
-  console.log(message);
+  // console.log(message);
 });
 
 const client = new ApolloClient({

@@ -54,7 +54,7 @@ const Dashboard = () => {
     }
   };
 
-  console.log(contractData.chain, "SDFSDFSDFSFS");
+  // console.log(contractData.chain, "SDFSDFSDFSFS");
   // getOwnersOfTokenId(0, 80001, contractData.mintContract.address);
 
   const { loading, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);

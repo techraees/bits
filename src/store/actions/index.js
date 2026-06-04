@@ -36,7 +36,7 @@ export const loadBlockchainAction =
         ToastMessage("Error", "Please connect correct wallet", "error");
       }
     } catch (err) {
-      console.log("errr", err);
+      // console.log("errr", err);
     }
   };
 
@@ -54,7 +54,7 @@ export const logoutWallet = () => async (dispatch) => {
 
     dispatch({ type: ActionTypes.WEB3DISCONNECT, payload: data });
   } catch (err) {
-    console.log("errr", err);
+    // console.log("errr", err);
   }
 };
 
@@ -159,7 +159,7 @@ export const loadContractIns = () => async (dispatch) => {
     //   },
     // );
   } catch (err) {
-    console.log("errr", err);
+    // console.log("errr", err);
   }
 };
 

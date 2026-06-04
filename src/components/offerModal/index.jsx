@@ -144,7 +144,7 @@ const OfferModal = ({
   }, [contractData, ethBal, maticBal]); // Add balances as dependencies
 
   const getPrice = (val) => {
-    console.log("val", ethBal, maticBal);
+    // console.log("val", ethBal, maticBal);
     if (contractData.chain == 1) {
       return Number(val * ethBal).toFixed(4);
     } else {
@@ -210,7 +210,7 @@ const OfferModal = ({
             signer &&
             (contractData.chain == 1 || contractData.chain == 137)
           ) {
-            console.log("contractData", contractData);
+            // console.log("contractData", contractData);
             if (!contractData.marketContract) {
               ToastMessage("Error", "Market contract not initialized", "error");
               return;
@@ -227,7 +227,7 @@ const OfferModal = ({
               // }
               const res = await tx.wait();
 
-              console.log("bid res", res);
+              // console.log("bid res", res);
 
               if (res) {
                 //saving to bids to DB
@@ -246,7 +246,7 @@ const OfferModal = ({
                     },
                   });
 
-                  console.log("addd", address, tokenId, itemDbId, auctionid);
+                  // console.log("addd", address, tokenId, itemDbId, auctionid);
 
                   await createNewTransation({
                     variables: {
@@ -269,19 +269,19 @@ const OfferModal = ({
                   ToastMessage("Bid Successful", "", "success");
                   dispatch(loadContractIns());
                 } catch (error) {
-                  console.log(error);
+                  // console.log(error);
                 }
               }
             } catch (error) {
               // console.clear()
-              console.log("amount: ", amount.toString());
+              // console.log("amount: ", amount.toString());
               // console.log("auctionid: ", auctionid);
-              console.log("bid error", error);
+              // console.log("bid error", error);
               const parsedEthersError = getParsedEthersError(error);
               if (parsedEthersError.context == -32603) {
                 ToastMessage("Error", "Insufficient Balance", "error");
               } else {
-                console.log(error);
+                // console.log(error);
                 ToastMessage("Error", `${parsedEthersError.context}`, "error");
               }
             }

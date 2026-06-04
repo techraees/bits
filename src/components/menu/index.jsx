@@ -19,7 +19,7 @@ const MenuComponent = ({ menuHandle, className }) => {
   let location = useLocation();
 
   const [width, setWidth] = useState(window.innerWidth);
-  console.log({ width });
+  // console.log({ width });
   const handleCreateNFT = () => {
     if (isLogged) {
       setUploadVideoModal(true);

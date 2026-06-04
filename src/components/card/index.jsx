@@ -427,10 +427,10 @@ const CardCompnent = ({
     });
 
     if (result.error) {
-      console.log(result.error);
+      // console.log(result.error);
     } else if (result.paymentIntent) {
       // Handle successful payment here (e.g., update UI or make further API calls).
-      console.log("Payment succeeded:");
+      // console.log("Payment succeeded:");
     }
   };
 

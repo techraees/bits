@@ -79,7 +79,7 @@ function Login() {
         password: values.password,
       },
     }).catch((err) => {
-      console.log("errr", err);
+      // console.log("errr", err);
     });
   };
 
@@ -248,7 +248,7 @@ function Login() {
   }, [signUpData, singUpError]);
 
   async function signUpHandle(data) {
-    console.log(data, "ASDASDASDASDADS");
+    // console.log(data, "ASDASDASDASDADS");
     if (
       validatePassword(data.password) &&
       validateEmail(data.email) &&

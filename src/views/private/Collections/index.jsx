@@ -266,7 +266,7 @@ const Collections = () => {
                     0 ? (
                     getAllNftIOwnedData?.getMyNftsThatIOwned?.data?.map(
                       (e, i) => {
-                        console.log(e.nft_id, "ASDASDASDASDADS");
+                        // console.log(e.nft_id, "ASDASDASDASDADS");
                         return (
                           <CardCompnent
                             key={i}

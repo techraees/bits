@@ -8,9 +8,12 @@ const canUseDOM = () =>
 
 export const ZendeskAPI = (...args) => {
   if (canUseDOM() && window.zE) {
-    window.zE.apply(null, args);
+    try {
+      window.zE(...args);
+    } catch (e) {
+      console.warn("Zendesk API error:", e);
+    }
   } else {
-    console.warn("Zendesk is not initialized yet");
   }
 };
 
@@ -27,7 +30,7 @@ class Zendesk extends Component {
 
   componentDidMount() {
     if (canUseDOM() && !window.zE) {
-      const { defer, zendeskKey, ...other } = this.props;
+      const { defer, zendeskKey, onLoaded, ...other } = this.props;
       window.zESettings = other;
       this.insertScript(zendeskKey, defer);
     }

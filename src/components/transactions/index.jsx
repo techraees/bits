@@ -24,7 +24,7 @@ const Transactions = ({ data, checkIcon }) => {
     setMaticBal(result);
   });
 
-  console.log("history data", data);
+  // console.log("history data", data);
 
   return (
     <div className="py-2">

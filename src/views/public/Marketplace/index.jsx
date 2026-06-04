@@ -63,7 +63,7 @@ const Marketplace = () => {
       }),
     );
 
-    console.log(convertedPrice);
+    // console.log(convertedPrice);
     let filterObjCopy = JSON.parse(filterObj);
     filterObjCopy.price =
       convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
@@ -78,7 +78,7 @@ const Marketplace = () => {
   };
 
   const handleRankingChange = (value) => {
-    console.log("selected value", value);
+    // console.log("selected value", value);
   };
 
   const handlePageChange = (page) => {

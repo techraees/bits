@@ -11,7 +11,7 @@ const env = process.env;
 
 // uploading to storj
 export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
-  console.log("file", file);
+  // console.log("file", file);
   let finalFile;
   if (isEmote) {
     try {
@@ -53,7 +53,7 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
         const videiLink = `${env.REACT_APP_STORJ_URL}/${file.name}`;
         return videiLink;
       } else {
-        console.log("Storj Upload Error");
+        // console.log("Storj Upload Error");
       }
     } catch (err) {
       console.error(err);
@@ -81,8 +81,8 @@ export const sendFileToIPFS = async (file, isEmote) => {
       )}`;
       return ImgHash;
     } catch (error) {
-      console.log("Error sending File to IPFS: ");
-      console.log(error);
+      // console.log("Error sending File to IPFS: ");
+      // console.log(error);
     }
   }
 };
@@ -107,14 +107,14 @@ export const sendMetaToIPFS = async (data) => {
       const metaHash = `${env.REACT_APP_IPFS_PATH}/${result.path}`;
       return metaHash;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 };
 
 export const sendMetaToIPFSPINATA = async (data) => {
-  console.log("sendMetaToIPFSPINATA data: ");
-  console.log(data);
+  // console.log("sendMetaToIPFSPINATA data: ");
+  // console.log(data);
   if (data) {
     try {
       const token = getCookieStorage("access_token");
@@ -157,8 +157,8 @@ export const sendMetaToIPFSPINATA = async (data) => {
         throw new Error("IPFS upload failed");
       }
     } catch (error) {
-      console.log("Error sending File to IPFS: ");
-      console.log(error);
+      // console.log("Error sending File to IPFS: ");
+      // console.log(error);
       throw error;
     }
   }

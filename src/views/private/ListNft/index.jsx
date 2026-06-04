@@ -135,7 +135,7 @@ const ListNft = () => {
   const textColor = useSelector((state) => state.app.theme.textColor);
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
   };
 
   useEffect(() => {
@@ -214,7 +214,7 @@ const ListNft = () => {
           // Extract newItemId from events
           const event = res.events.find((e) => e.event === eventName);
 
-          console.log("The event", event, Number(event.args[0]));
+          // console.log("The event", event, Number(event.args[0]));
           if (event) {
             newItemId = Number(event.args[0]);
           } else {

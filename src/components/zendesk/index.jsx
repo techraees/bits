@@ -1,48 +1,60 @@
 import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import Zendesk, { ZendeskAPI } from "../../zendeskConfig";
 import help from "../../assets/images/help.png";
 
 const environment = process.env;
 
 const ZendeskComp = () => {
-  console.log(environment.REACT_APP_ZENDESK_KEY);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
 
   const handleLoaded = () => {
-    ZendeskAPI("messenger", "hide");
-    ZendeskAPI("messenger", "close");
+    // console.log("Zendesk script loaded, hiding webWidget");
+    ZendeskAPI("webWidget", "hide");
     setReady(true);
   };
 
   useEffect(() => {
+    // console.log("Zendesk open state changed:", open, "ready:", ready);
     if (!ready) return;
     if (open) {
-      ZendeskAPI("messenger", "show");
-      ZendeskAPI("messenger", "open");
+      // console.log("Opening webWidget...");
+      ZendeskAPI("webWidget", "show");
+      setTimeout(() => ZendeskAPI("webWidget", "open"), 150);
     } else {
-      ZendeskAPI("messenger", "close");
-      ZendeskAPI("messenger", "hide");
+      // console.log("Closing webWidget...");
+      ZendeskAPI("webWidget", "close");
+      setTimeout(() => ZendeskAPI("webWidget", "hide"), 150);
     }
   }, [open, ready]);
 
   return (
-    <div>
+    <>
       <Zendesk
         defer
-        zendeskKey={environment.REACT_APP_ZENDESK_KEY}
+        zendeskKey={
+          environment.REACT_APP_ZENDESK_KEY ||
+          process.env.REACT_APP_ZENDESK_KEY ||
+          "7666164b-b463-442f-9179-b7ec57bd3c1b"
+        }
         onLoaded={handleLoaded}
       />
 
-      <div
-        className="img-wrapper"
-        onClick={() => {
-          setOpen((v) => !v);
-        }}
-      >
-        <img src={help} alt="help_icon" />
-      </div>
-    </div>
+      {typeof document !== "undefined" &&
+        ReactDOM.createPortal(
+          <div
+            className="img-wrapper"
+            onClick={() => {
+              setOpen((v) => !v);
+            }}
+            style={{ zIndex: 9999999 }}
+          >
+            <img src={help} alt="help_icon" />
+          </div>,
+          document.body,
+        )}
+    </>
   );
 };
 

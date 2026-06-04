@@ -84,7 +84,7 @@ function Login() {
         recaptchaToken: recaptchaToken,
       },
     }).catch((err) => {
-      console.log("errr", err);
+      // console.log("errr", err);
     });
   };
 
@@ -221,7 +221,7 @@ function Login() {
     }
   }, []);
 
-  console.log(process.env.REACT_APP_RECAPTCH_SITE_KEY, "keyasdasdadad");
+  // console.log(process.env.REACT_APP_RECAPTCH_SITE_KEY, "keyasdasdadad");
 
   return (
     <div style={{ background: "black" }}>

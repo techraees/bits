@@ -84,7 +84,7 @@ const VideoGallery = () => {
   };
 
   const handleRankingChange = (value) => {
-    console.log("selected value", value);
+    // console.log("selected value", value);
   };
 
   const handlePageChange = (page) => {

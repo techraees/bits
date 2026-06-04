@@ -46,7 +46,7 @@ const SellsNft = () => {
 
   const [isSorting, setIsSorting] = useState(false);
   useEffect(() => {
-    console.log({ nftsAll, isSearch });
+    // console.log({ nftsAll, isSearch });
 
     if (allNfts) {
       setNfts(allNfts.getAllNfts);

@@ -73,8 +73,8 @@ const ListingModal = ({
     };
   }, [isOpen]);
 
-  console.log("all data", fixedData, auctionData);
-  console.log("all data", fixedData, auctionData);
+  // console.log("all data", fixedData, auctionData);
+  // console.log("all data", fixedData, auctionData);
   return (
     <Modal
       isOpen={isOpen}

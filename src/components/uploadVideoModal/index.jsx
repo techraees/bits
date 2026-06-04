@@ -62,7 +62,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     validate: uploadValidation,
     onSubmit: async (values) => {
       // console.clear()
-      console.log("FORM VALUES", values);
+      // console.log("FORM VALUES", values);
       const data = {
         name: values.name,
         description: values.description,
@@ -73,7 +73,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
       };
       const metaUri = await sendMetaToIPFSPINATA(data);
 
-      console.log("META URI", metaUri);
+      // console.log("META URI", metaUri);
       dispatch({
         type: "CREATE_NFT",
         createNft: {
@@ -170,7 +170,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             handleProgress,
           );
           if (response) {
-            console.log("DEEP MOTION RESPONSE", response);
+            // console.log("DEEP MOTION RESPONSE", response);
             setUploadStatus("Uploading to storage...");
             const url = await sendFileToStorj(
               { file: response.mp4, name: fileUploaded.name },
@@ -181,7 +181,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setUploadProgress(100);
             setUploadStatus("Complete!");
 
-            console.log(url, "URL FOR VIDEO");
+            // console.log(url, "URL FOR VIDEO");
             setFieldValue("video", url);
             setFieldValue("isEmote", true);
             setFieldValue("download", response);
@@ -200,7 +200,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           );
           setImageUpload(false);
 
-          console.log(url, "URL FOR VIDEO");
+          // console.log(url, "URL FOR VIDEO");
           setFieldValue("video", url);
           setFieldValue("isEmote", false);
           setFieldValue("download", {});

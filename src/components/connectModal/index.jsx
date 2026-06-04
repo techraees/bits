@@ -50,7 +50,7 @@ const ConnectModal = ({ visible, onClose }) => {
       const signer = provider.getSigner();
       const { chainId } = await provider.getNetwork();
 
-      console.log("Provider", chainId);
+      // console.log("Provider", chainId);
       if (userData) {
         // Existing user: Check address
         const userAddress = userData.address;
@@ -61,7 +61,7 @@ const ConnectModal = ({ visible, onClose }) => {
         }
       } else {
         // New user: No userData, no need to compare addresses
-        console.log("New user signing up, skipping address check.");
+        // console.log("New user signing up, skipping address check.");
       }
 
       // Proceed only if chainId matches

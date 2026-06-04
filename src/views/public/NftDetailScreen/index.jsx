@@ -31,7 +31,7 @@ const NftDetailsScreen = () => {
           },
         });
       } catch (error) {
-        console.log("The err", error);
+        // console.log("The err", error);
       }
     }
   }, [id]);
@@ -43,7 +43,7 @@ const NftDetailsScreen = () => {
 
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const bgColor = useSelector((state) => state.app.theme.bgColor);
-  console.log(bgColor, "SDFSDFSDFSFS");
+  // console.log(bgColor, "SDFSDFSDFSFS");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
   const { userData } = useSelector((state) => state.address.userData || {});
@@ -208,7 +208,7 @@ const NftDetailsScreen = () => {
   // 	data?.DetailsOfANft?.token_id
   // }`;
 
-  console.log(data?.DetailsOfANft, "SDFSDFSDFSFS");
+  // console.log(data?.DetailsOfANft, "SDFSDFSDFSFS");
   return (
     <div
       className={`${backgroundTheme} pb-2`}

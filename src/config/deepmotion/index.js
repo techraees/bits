@@ -147,12 +147,12 @@ const waitForCompletion = async (rid, onProgress = null) => {
     }
 
     // Log detailed progress
-    console.log(
-      `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
-        (result.positionInQueue > 0
-          ? ` - Queue position: ${result.positionInQueue}`
-          : ""),
-    );
+    // console.log(
+      // `Processing progress: ${result.status} - ${result.progress}% (Step ${result.step}/${result.total})` +
+        // (result.positionInQueue > 0
+          // ? ` - Queue position: ${result.positionInQueue}`
+          // : ""),
+    // );
 
     // Call progress callback if provided
     if (onProgress) {
@@ -210,7 +210,7 @@ export const handleDeepMotionUpload = async (
   const main = async () => {
     try {
       // Step 1: Check credit balance via backend
-      console.log("Checking DeepMotion credit balance...");
+      // console.log("Checking DeepMotion credit balance...");
       if (onProgress) {
         onProgress({
           progress: 0,
@@ -222,28 +222,28 @@ export const handleDeepMotionUpload = async (
       const credit = await checkCredit();
 
       if (credit <= 0) {
-        console.log("No credit available");
+        // console.log("No credit available");
         ToastMessage("Insufficient DeepMotion credits", "", "error");
         return false;
       }
-      console.log(`Credits available: ${credit}`);
+      // console.log(`Credits available: ${credit}`);
 
       // Step 2: Upload video to backend and start processing
-      console.log("Uploading video to backend...");
+      // console.log("Uploading video to backend...");
       if (onProgress) {
         onProgress({ progress: 0, status: "UPLOADING", step: 0, total: 0 });
       }
       const uploadResult = await uploadVideoToBackend(videoFile, fileName);
       const rid = uploadResult.rid;
-      console.log(`Upload complete. Processing started with rid: ${rid}`);
+      // console.log(`Upload complete. Processing started with rid: ${rid}`);
 
       // Step 3: Wait for processing to complete
-      console.log("Waiting for processing to complete...");
+      // console.log("Waiting for processing to complete...");
       const success = await waitForCompletion(rid, onProgress);
 
       if (success) {
         // Step 4: Get download links
-        console.log("Getting download links...");
+        // console.log("Getting download links...");
         if (onProgress) {
           onProgress({
             progress: 100,
@@ -253,7 +253,7 @@ export const handleDeepMotionUpload = async (
           });
         }
         const data = await getDownloadLinks(rid);
-        console.log("Download links obtained:", data);
+        // console.log("Download links obtained:", data);
         return data;
       } else {
         ToastMessage("Video processing failed", "", "error");

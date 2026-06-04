@@ -6,7 +6,7 @@ import { DownOutlined } from "@ant-design/icons";
 
 const DatePickerComponent = () => {
   function onChange(date, dateString) {
-    console.log(date, dateString);
+    // console.log(date, dateString);
   }
   return (
     <div

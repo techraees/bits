@@ -87,7 +87,7 @@ function PurchaseStep({
     connectWalletHandle();
   };
 
-  console.log("id data", fixedId);
+  // console.log("id data", fixedId);
 
   useEffect(() => {
     if (userData?.id) {
