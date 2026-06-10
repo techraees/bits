@@ -1,48 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactDOM from "react-dom";
 import Zendesk, { ZendeskAPI } from "../../zendeskConfig";
 import help from "../../assets/images/help.png";
 
-const environment = process.env;
+const ZENDESK_KEY = process.env.REACT_APP_ZENDESK_KEY;
 
 const ZendeskComp = () => {
-  const [ready, setReady] = useState(
-    typeof window !== "undefined" && !!window.zE,
-  );
+  const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const handleLoaded = () => {
-    // console.log("Zendesk script loaded, hiding webWidget");
+  const handleLoaded = useCallback(() => {
     ZendeskAPI("webWidget", "hide");
-    setReady(true);
-  };
+    setIsLoaded(true); // set AFTER hide, so effect doesn't fire prematurely
+  }, []);
 
+  // On mount: if zE already exists (e.g. HMR / re-mount), hide it
   useEffect(() => {
     if (typeof window !== "undefined" && window.zE) {
-      setReady(true);
       ZendeskAPI("webWidget", "hide");
+      setIsLoaded(true);
     }
   }, []);
 
+  // React to open/close only when widget is actually loaded
   useEffect(() => {
-    // console.log("Zendesk open state changed:", open, "ready:", ready);
-    if (!ready) return;
+    if (!isLoaded) return;
+
     if (open) {
-      // console.log("Opening webWidget...");
       ZendeskAPI("webWidget", "show");
-      setTimeout(() => ZendeskAPI("webWidget", "open"), 150);
+      ZendeskAPI("webWidget", "open");
     } else {
-      // console.log("Closing webWidget...");
+      // Listen for widget close event instead of arbitrary timeout
+      ZendeskAPI("webWidget:on", "close", () => {
+        ZendeskAPI("webWidget", "hide");
+      });
       ZendeskAPI("webWidget", "close");
-      setTimeout(() => ZendeskAPI("webWidget", "hide"), 150);
     }
-  }, [open, ready]);
+  }, [open, isLoaded]);
+
+  const handleToggle = useCallback(() => {
+    setOpen((prev) => !prev);
+  }, []);
+
+  if (!ZENDESK_KEY) {
+    console.error("REACT_APP_ZENDESK_KEY is not set");
+    return null;
+  }
 
   return (
     <>
       <Zendesk
         defer
-        zendeskKey={"7666164b-b463-442f-9179-b7ec57bd3c1b"}
+        zendeskKey={ZENDESK_KEY}
         onLoaded={handleLoaded}
       />
 
@@ -50,14 +59,12 @@ const ZendeskComp = () => {
         ReactDOM.createPortal(
           <div
             className="img-wrapper"
-            onClick={() => {
-              setOpen((v) => !v);
-            }}
+            onClick={handleToggle}
             style={{ zIndex: 9999999 }}
           >
             <img src={help} alt="help_icon" />
           </div>,
-          document.body,
+          document.body
         )}
     </>
   );
