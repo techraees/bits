@@ -10,7 +10,62 @@
 .cancelBtn {
   border-radius: 20px !important;
   height: 40px !important;
-  /* color: white; */
+}
+
+.mint-nft-card {
+  padding: 2.5rem;
+  border-radius: 20px;
+}
+
+.mint-nft-description {
+  padding-top: 1rem;
+}
+
+.mintCardContainer.mint-nft-player {
+  min-height: 220px;
+}
+
+.mintCardContainer.mint-nft-player > div,
+.mintCardContainer.mint-nft-player iframe {
+  min-height: 220px;
+}
+
+.royalty-row {
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.royalty-label {
+  flex-shrink: 0;
+}
+
+.royalty-input-wrap {
+  flex: 1;
+  min-width: 120px;
+}
+
+.royalty-input-wrap .royaltyInputField {
+  width: 100%;
+}
+
+.mint-nft-supply-input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.mint-nft-actions {
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.mint-nft-action-btn {
+  flex-shrink: 0;
+}
+
+.mint-nft-recaptcha {
+  display: flex;
+  justify-content: center;
 }
 
 .label-input span .ant-input:placeholder-shown {
@@ -23,9 +78,13 @@
   text-align: start;
 }
 
+.royalty-row .royalty-input-wrap .ant-input:placeholder-shown,
+.royalty-row .royalty-input-wrap .ant-input {
+  transform: none;
+}
+
 .royaltyInputField {
   border: none !important;
-
   border-bottom: 1px solid #d54343 !important;
   padding-bottom: 15px !important;
   padding-top: 15px !important;
@@ -39,17 +98,124 @@
   -webkit-appearance: none;
   margin: 0;
 }
+
 .royaltyInputField:focus {
   box-shadow: none !important;
 }
+
 @media only screen and (max-width: 992px) {
   .borderBottom {
     border-bottom: 1px solid #b23232;
     border-right: none;
-    padding-bottom: 20px;
+    padding-bottom: 0;
+    padding-right: 0;
+    margin-bottom: 1rem;
   }
 
   .supplyView {
-    margin-left: 0px;
+    margin-left: 0;
+  }
+
+  .mint-nft-card {
+    padding: 1.25rem;
+  }
+
+  .mint-nft-card .mint-nft-main-row,
+  .mint-nft-card .mint-nft-inner-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .mint-nft-card .mint-nft-main-row > .ant-col,
+  .mint-nft-card .mint-nft-inner-row > .ant-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .mint-nft-page.container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .mint-nft-page .my-4 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .mint-nft-card {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .mint-nft-page .fs-5 {
+    font-size: 1rem !important;
+  }
+
+  .mint-nft-page .py-3 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .mintCardContainer {
+    margin-bottom: 0.5rem;
+  }
+
+  .mintCardContainer.mint-nft-player,
+  .mintCardContainer.mint-nft-player > div,
+  .mintCardContainer.mint-nft-player iframe {
+    min-height: 180px;
+  }
+
+  .royalty-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .royalty-input-wrap {
+    width: 100%;
+  }
+
+  .mint-nft-actions {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .mint-nft-action-btn {
+    width: 100%;
+    margin: 0 !important;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mint-nft-action-btn .cancelBtn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .mint-nft-recaptcha {
+    width: 100%;
+    margin-top: 0.5rem;
+    transform: scale(0.92);
+    transform-origin: center top;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .mint-nft-page.container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .mint-nft-card {
+    padding: 0.75rem;
+  }
+
+  .mint-nft-recaptcha {
+    transform: scale(0.85);
   }
 }

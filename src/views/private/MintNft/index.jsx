@@ -361,29 +361,29 @@ const MintNft = () => {
         <Loader content={loading ? "Uploading..." : loadingMessage} />
       )}
 
-      <div className="container py-3">
+      <div className="container mint-nft-page py-3">
         <div className="d-flex justify-content-between">
           <div className="d-flex align-items-center">
             <img src={right_arrow} />
             <span className={`${textColor2} fs-5 py-3 ms-2`}>NFT Details</span>
           </div>
         </div>
-        <div className={`searchStyle ${bgColor} my-4 p-5`}>
-          <Row
-            style={{ width: "100%" }}
-            className={`d-flex searchStyle ${bgColor} my-4 p-5`}
-          >
+        <div className={`searchStyle mint-nft-card ${bgColor} my-4`}>
+          <Row style={{ width: "100%" }} className="d-flex mint-nft-main-row">
             <Col lg={14} sm={24} xs={24} className="borderBottom">
-              <Row gutter={{ xs: 8, sm: 16, md: 30, lg: 50 }}>
+              <Row
+                className="mint-nft-inner-row"
+                gutter={{ xs: 0, sm: 16, md: 30, lg: 50 }}
+              >
                 <Col lg={12} sm={24} md={12} xs={24}>
                   <div
-                    className="cardContainer mintCardContainer"
+                    className="cardContainer mintCardContainer mint-nft-player"
                     style={{ width: "100%" }}
                   >
                     <ReactPlayer
                       controls={true}
                       width="100%"
-                      height={220}
+                      height="100%"
                       url={createNft && createNft.video}
                     />
                   </div>
@@ -414,18 +414,14 @@ const MintNft = () => {
                       <p className={`${textColor2} m-0 fs-6`}>#89832823289</p>
                     </div>
                     <div className="my-3">
-                      <div className="d-flex label-input">
-                        <p className={`${textColor} m-0 fs-5`}>Royalty%: </p>
-                        <span
-                          style={{
-                            marginTop: "-2.3rem",
-                            marginLeft: "1rem",
-                          }}
-                        >
-                          <div>
-                            <Input
+                      <div className="d-flex align-items-center label-input royalty-row">
+                        <p className={`${textColor} m-0 fs-5 royalty-label`}>
+                          Royalty%:
+                        </p>
+                        <div className="royalty-input-wrap">
+                          <Input
                               name="royalty"
-                              className={"royaltyInputField  me-5"}
+                              className={"royaltyInputField"}
                               placeholder={"royalty"}
                               onChange={(e) => {
                                 if (e.target.value < 101) {
@@ -454,8 +450,7 @@ const MintNft = () => {
                               value={values.royalty}
                               autoComplete="off"
                             />
-                          </div>
-                        </span>
+                        </div>
                       </div>
                       <ErrorMessage
                         message={
@@ -480,7 +475,6 @@ const MintNft = () => {
                       </span>
                     </div>
                   </div>
-                  <div style={{ borderRight: "1px solid #B23232" }} />
                 </Col>
               </Row>
             </Col>
@@ -514,10 +508,7 @@ const MintNft = () => {
               </div>
             </Col>
           </Row>
-          <Row
-            style={{ width: "100%" }}
-            className={`d-grid searchStyle ${bgColor} `}
-          >
+          <Row style={{ width: "100%" }} className="d-grid mint-nft-description">
             <hr />
             <div>
               <p className={`${textColor} m-0 fs-5`}>Description</p>
@@ -532,7 +523,10 @@ const MintNft = () => {
           <img src={right_arrow} />
           <span className={`${textColor2} fs-5 py-3 ms-2`}>Mint Details</span>
         </div>
-        <div style={{ width: "100%" }} className={` ${bgColor} my-4 p-5`}>
+        <div
+          style={{ width: "100%" }}
+          className={`mint-nft-card ${bgColor} my-4`}
+        >
           <span className={`${textColor} fs-6 mb-3`}>
             How many NFTs would you like to mint?
           </span>
@@ -566,7 +560,7 @@ const MintNft = () => {
             <Col lg={20} md={14} sm={12} xs={24}>
               <Input
                 name="supply"
-                className={"royaltyInputField  me-5"}
+                className={"royaltyInputField mint-nft-supply-input"}
                 placeholder={"Enter Quantity To Mint"}
                 onChange={(e) => {
                   setFieldValue("supply", e.target.value);
@@ -621,8 +615,8 @@ const MintNft = () => {
             </div>
           </div>
         </div>
-        <div className="d-flex align-items-center justify-content-center">
-          <div className="me-3">
+        <div className="d-flex align-items-center justify-content-center mint-nft-actions">
+          <div className="mint-nft-action-btn">
             <Button
               className="px-5 cancelBtn"
               style={{
@@ -633,7 +627,7 @@ const MintNft = () => {
               Cancel
             </Button>
           </div>
-          <div className="ms-3">
+          <div className="mint-nft-action-btn">
             <ButtonComponent
               onClick={handleSubmit}
               text={"Mint NFT"}
@@ -642,15 +636,12 @@ const MintNft = () => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mint-nft-recaptcha">
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
               onChange={(t) => setRecaptchaToken(t)}
               onExpired={() => setRecaptchaToken(null)}
-              // Optional:
-              // theme="dark"
-              // size="compact"
             />
           </div>
         </div>
