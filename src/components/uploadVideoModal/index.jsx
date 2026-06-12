@@ -13,10 +13,11 @@ import { CREATE_SIGNED_URL_FOR_NFTS } from "../../gql/mutations";
 import {
   sendFileToStorj,
   sendMetaToIPFSPINATA,
+  uploadPosterImage,
+  validatePosterUrl,
 } from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
-import { createThumbnailFile } from "../../utills/generateVideoThumbnail";
 import { buildNftMetadata } from "../../utills/buildNftMetadata";
 
 const UploadVideoModal = ({ visible, onClose }) => {
@@ -43,11 +44,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("");
-
-  const uploadPosterImage = async (videoSource, fileName) => {
-    const thumbFile = await createThumbnailFile(videoSource, fileName);
-    return sendFileToStorj(thumbFile, false, createSignedUrl);
-  };
 
   const {
     handleSubmit,
@@ -76,6 +72,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           posterUrl = await uploadPosterImage(
             values.video,
             values.name || "nft-video",
+            createSignedUrl,
           );
         } catch (error) {
           console.error("Thumbnail generation failed:", error);
@@ -86,6 +83,17 @@ const UploadVideoModal = ({ visible, onClose }) => {
         ToastMessage(
           "Error",
           "NFT poster image is required for wallet display",
+          "error",
+        );
+        return;
+      }
+
+      const isPosterAccessible = await validatePosterUrl(posterUrl);
+
+      if (!isPosterAccessible) {
+        ToastMessage(
+          "Error",
+          "NFT poster image is not accessible. Please re-upload the video.",
           "error",
         );
         return;
@@ -129,7 +137,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
     setFieldValue("video", videoUrl);
 
     try {
-      const thumbUrl = await uploadPosterImage(videoSource, fileName);
+      const thumbUrl = await uploadPosterImage(
+        videoSource,
+        fileName,
+        createSignedUrl,
+      );
       if (thumbUrl) {
         setFieldValue("thumbnail", thumbUrl);
       }
@@ -235,7 +247,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setUploadProgress(100);
             setUploadStatus("Complete!");
 
-            await saveVideoUpload(url, response.mp4, fileUploaded.name, {
+            await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
               isEmote: true,
               download: response,
             });
@@ -330,7 +342,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
               setUploadProgress(100);
               setUploadStatus("Complete!");
 
-              await saveVideoUpload(url, response.mp4, fileUploaded.name, {
+              await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
                 isEmote: true,
                 download: response,
               });

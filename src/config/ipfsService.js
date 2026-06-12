@@ -6,84 +6,136 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { UPLOAD_META_TO_IPFS } from "../gql/mutations";
 import { getCookieStorage } from "../utills/cookieStorage";
+import { createThumbnailFile } from "../utills/generateVideoThumbnail";
 
 const env = process.env;
 
 // uploading to storj
 export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
-  // console.log("file", file);
   let finalFile;
+
   if (isEmote) {
-    try {
-      const response = await fetch(file.file);
+    const response = await fetch(file.file);
 
-      if (!response.ok) {
-        ToastMessage(`HTTP error! Status: ${response.status}`, "", "error");
-      }
-
-      const blob = await response.blob();
-
-      finalFile = new File([blob], file.name);
-    } catch (error) {
-      console.error("Error fetching file:", error);
+    if (!response.ok) {
+      ToastMessage(`HTTP error! Status: ${response.status}`, "", "error");
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
+    const blob = await response.blob();
+    finalFile = new File([blob], file.name);
   } else {
     finalFile = file;
   }
 
-  if (finalFile) {
-    try {
-      // const url = `${env.REACT_APP_BACKEND_BASE_URL}/presign`;
-
-      // Step 1: Get the pre-signed URL
-      const { data } = await createSignedUrl({
-        variables: { key: finalFile.name },
-      });
-
-      const presignUrl = data.CreateSignedUrlForNfts.url;
-
-      // Step 2: Upload the file using the pre-signed URL
-      const uploadResp = await axios.put(presignUrl, finalFile, {
-        headers: {
-          "Content-Type": finalFile.type,
-        },
-      });
-
-      if (uploadResp.status == 200) {
-        const videiLink = `${env.REACT_APP_STORJ_URL}/${file.name}`;
-        return videiLink;
-      } else {
-        // console.log("Storj Upload Error");
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  if (!finalFile) {
+    throw new Error("No file available for Storj upload");
   }
+
+  const { data } = await createSignedUrl({
+    variables: { key: finalFile.name },
+  });
+
+  const presignUrl = data.CreateSignedUrlForNfts.url;
+
+  const uploadResp = await axios.put(presignUrl, finalFile, {
+    headers: {
+      "Content-Type": finalFile.type || "application/octet-stream",
+    },
+  });
+
+  if (uploadResp.status === 200) {
+    return `${env.REACT_APP_STORJ_URL}/${finalFile.name}`;
+  }
+
+  throw new Error(`Storj upload failed with status ${uploadResp.status}`);
 };
 
 export const sendFileToIPFS = async (file, isEmote) => {
-  if (file) {
-    try {
-      const authorization =
-        "Basic " +
-        btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
-      const ipfs = ipfsHttpClient({
-        url: env.REACT_APP_INFURA,
-        headers: {
-          authorization,
-        },
-      });
-      const result = await ipfs.add(isEmote ? urlSource(`${file}`) : file);
+  if (!file) {
+    throw new Error("No file available for IPFS upload");
+  }
 
-      // console.log("ImgHash", res)
-      const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
-        "z",
-      )}`;
-      return ImgHash;
-    } catch (error) {
-      // console.log("Error sending File to IPFS: ");
-      // console.log(error);
+  const authorization =
+    "Basic " +
+    btoa(env.REACT_APP_PROJECT_ID + ":" + env.REACT_APP_PROJECT_SECRET);
+  const ipfs = ipfsHttpClient({
+    url: env.REACT_APP_INFURA,
+    headers: {
+      authorization,
+    },
+  });
+  const result = await ipfs.add(isEmote ? urlSource(`${file}`) : file);
+
+  const ImgHash = `${env.REACT_APP_IPFS_PATH}/${result.cid._baseCache.get(
+    "z",
+  )}`;
+
+  if (!ImgHash) {
+    throw new Error("Failed to resolve IPFS hash for uploaded file");
+  }
+
+  return ImgHash;
+};
+
+export const uploadPosterToIPFS = async (thumbFile) => {
+  if (!thumbFile) {
+    throw new Error("Thumbnail file is required");
+  }
+
+  return sendFileToIPFS(thumbFile, false);
+};
+
+export const uploadPosterImage = async (
+  videoSource,
+  fileName,
+  createSignedUrl,
+) => {
+  const thumbFile = await createThumbnailFile(videoSource, fileName);
+
+  try {
+    return await uploadPosterToIPFS(thumbFile);
+  } catch (ipfsError) {
+    console.error(
+      "IPFS poster upload failed, falling back to Storj:",
+      ipfsError,
+    );
+    return sendFileToStorj(thumbFile, false, createSignedUrl);
+  }
+};
+
+export const validatePosterUrl = async (posterUrl) => {
+  if (!posterUrl) {
+    return false;
+  }
+
+  const isIpfsGateway =
+    posterUrl.includes("/ipfs/") || posterUrl.startsWith("ipfs://");
+
+  try {
+    const headResponse = await fetch(posterUrl, {
+      method: "HEAD",
+      mode: "cors",
+    });
+
+    if (headResponse.ok) {
+      const contentType = headResponse.headers.get("content-type") || "";
+      if (contentType.includes("image")) {
+        return true;
+      }
     }
+
+    const getResponse = await fetch(posterUrl, { method: "GET", mode: "cors" });
+
+    if (!getResponse.ok) {
+      return isIpfsGateway;
+    }
+
+    const contentType = getResponse.headers.get("content-type") || "";
+    return contentType.includes("image") || isIpfsGateway;
+  } catch (error) {
+    console.error("Poster URL validation failed:", error);
+    return isIpfsGateway;
   }
 };
 
