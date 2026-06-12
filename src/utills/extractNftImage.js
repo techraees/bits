@@ -12,7 +12,7 @@ export const extractNFTImage = (contract, tokenId) => {
     const response = await fetch(request);
     const metadata = await response.json();
 
-    const image = addIPFSProxy(metadata.image);
+    const image = addIPFSProxy(metadata.image || metadata.animation_url);
 
     return image;
   };

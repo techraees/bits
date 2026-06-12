@@ -16,6 +16,8 @@ import {
 } from "../../config/ipfsService";
 import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
+import { createThumbnailFile } from "../../utills/generateVideoThumbnail";
+import { buildNftMetadata } from "../../utills/buildNftMetadata";
 
 const UploadVideoModal = ({ visible, onClose }) => {
   const navigate = useNavigate();
@@ -42,6 +44,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("");
 
+  const uploadPosterImage = async (videoSource, fileName) => {
+    const thumbFile = await createThumbnailFile(videoSource, fileName);
+    return sendFileToStorj(thumbFile, false, createSignedUrl);
+  };
+
   const {
     handleSubmit,
     handleChange,
@@ -57,20 +64,40 @@ const UploadVideoModal = ({ visible, onClose }) => {
       artist_name1: userData?.full_name || "",
       description: "",
       video: "",
+      thumbnail: "",
       meta: "",
     },
     validate: uploadValidation,
     onSubmit: async (values) => {
-      // console.clear()
-      // console.log("FORM VALUES", values);
-      const data = {
+      let posterUrl = values.thumbnail;
+
+      if (!posterUrl && values.video) {
+        try {
+          posterUrl = await uploadPosterImage(
+            values.video,
+            values.name || "nft-video",
+          );
+        } catch (error) {
+          console.error("Thumbnail generation failed:", error);
+        }
+      }
+
+      if (!posterUrl) {
+        ToastMessage(
+          "Error",
+          "NFT poster image is required for wallet display",
+          "error",
+        );
+        return;
+      }
+
+      const data = buildNftMetadata({
         name: values.name,
         description: values.description,
-        image: values.video,
-        properties: {
-          video: values.video,
-        },
-      };
+        video: values.video,
+        image: posterUrl,
+        category: selectedCategory,
+      });
       const metaUri = await sendMetaToIPFSPINATA(data);
 
       // console.log("META URI", metaUri);
@@ -92,6 +119,33 @@ const UploadVideoModal = ({ visible, onClose }) => {
       navigate("/mint-nft");
     },
   });
+
+  const saveVideoUpload = async (
+    videoUrl,
+    videoSource,
+    fileName,
+    extraFields = {},
+  ) => {
+    setFieldValue("video", videoUrl);
+
+    try {
+      const thumbUrl = await uploadPosterImage(videoSource, fileName);
+      if (thumbUrl) {
+        setFieldValue("thumbnail", thumbUrl);
+      }
+    } catch (error) {
+      console.error("Thumbnail generation failed:", error);
+      ToastMessage(
+        "Thumbnail warning",
+        "Video uploaded but poster image could not be generated",
+        "error",
+      );
+    }
+
+    Object.entries(extraFields).forEach(([key, value]) => {
+      setFieldValue(key, value);
+    });
+  };
 
   // const { createNft } = useSelector((state) => state.nft.createNft);
 
@@ -181,10 +235,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
             setUploadProgress(100);
             setUploadStatus("Complete!");
 
-            // console.log(url, "URL FOR VIDEO");
-            setFieldValue("video", url);
-            setFieldValue("isEmote", true);
-            setFieldValue("download", response);
+            await saveVideoUpload(url, response.mp4, fileUploaded.name, {
+              isEmote: true,
+              download: response,
+            });
           } else {
             setUploadProgress(0);
             setUploadStatus("Error");
@@ -200,10 +254,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
           );
           setImageUpload(false);
 
-          // console.log(url, "URL FOR VIDEO");
-          setFieldValue("video", url);
-          setFieldValue("isEmote", false);
-          setFieldValue("download", {});
+          await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
+            isEmote: false,
+            download: {},
+          });
         }
       }
     } else {
@@ -276,9 +330,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
               setUploadProgress(100);
               setUploadStatus("Complete!");
 
-              setFieldValue("video", url);
-              setFieldValue("isEmote", true);
-              setFieldValue("download", response);
+              await saveVideoUpload(url, response.mp4, fileUploaded.name, {
+                isEmote: true,
+                download: response,
+              });
             } else {
               setUploadProgress(0);
               setUploadStatus("Error");
@@ -294,9 +349,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
             );
             setImageUpload(false);
 
-            setFieldValue("video", url);
-            setFieldValue("isEmote", false);
-            setFieldValue("download", {});
+            await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
+              isEmote: false,
+              download: {},
+            });
           }
         }
       }
