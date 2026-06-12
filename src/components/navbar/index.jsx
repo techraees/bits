@@ -177,6 +177,14 @@ const NavbarComponent = ({ dashboardNav }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      collapsed ? "80px" : "256px",
+    );
+  }, [collapsed]);
+
   useEffect(() => {
     if (error?.message === "jwt expired") {
       // navigate("/login");
@@ -271,7 +279,7 @@ const NavbarComponent = ({ dashboardNav }) => {
           </Modal>
         )}
 
-        <Navbar.Brand>
+        <Navbar.Brand className="web-nav-brand">
           <img
             onClick={toggleCollapsed}
             src={menu_icon}

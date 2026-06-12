@@ -7,9 +7,85 @@
   color: white !important;
 }
 
-@media only screen and (max-width: 992px) {
+@media (max-width: 991.98px) {
+  .navbar-expand-lg {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .navbar-expand-lg > .container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.75rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .navbar-expand-lg > .navbar-brand {
+    flex-shrink: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .navbar-expand-lg .topmenu {
+    display: flex !important;
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    order: 1;
+  }
+
+  .navbar-expand-lg .topmenu .loginbtn {
+    width: 100%;
+    justify-content: center !important;
+    margin-left: 0 !important;
+  }
+
+  .navbar-expand-lg .navbar-toggler {
+    flex-shrink: 0;
+    order: 2;
+    margin-left: 0.5rem;
+  }
+
+  .navbar-expand-lg .navbar-collapse {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  .navbar-expand-lg .navbar-collapse:not(.show) {
+    display: none !important;
+  }
+
   .first-nav {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 991.98px) {
+  .navbar-expand-lg .mob-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-expand-lg > .navbar-brand.web-nav-brand {
+    display: none !important;
+  }
+
+  .navbar-expand-lg .mob-nav {
+    order: 0;
+    flex-shrink: 0;
+    margin-left: 0 !important;
+    margin-right: 0.5rem;
   }
 }
 

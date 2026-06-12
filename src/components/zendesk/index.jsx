@@ -49,11 +49,7 @@ const ZendeskComp = () => {
 
   return (
     <>
-      <Zendesk
-        defer
-        zendeskKey={ZENDESK_KEY}
-        onLoaded={handleLoaded}
-      />
+      <Zendesk defer zendeskKey={ZENDESK_KEY} onLoaded={handleLoaded} />
 
       {typeof document !== "undefined" &&
         ReactDOM.createPortal(
@@ -64,7 +60,7 @@ const ZendeskComp = () => {
           >
             <img src={help} alt="help_icon" />
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );

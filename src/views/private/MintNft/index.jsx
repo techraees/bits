@@ -361,19 +361,19 @@ const MintNft = () => {
         <Loader content={loading ? "Uploading..." : loadingMessage} />
       )}
 
-      <div className="container mint-nft-page py-3">
+      <div className="container py-3 mint-nft-page">
         <div className="d-flex justify-content-between">
           <div className="d-flex align-items-center">
             <img src={right_arrow} />
             <span className={`${textColor2} fs-5 py-3 ms-2`}>NFT Details</span>
           </div>
         </div>
-        <div className={`searchStyle mint-nft-card ${bgColor} my-4`}>
-          <Row style={{ width: "100%" }} className="d-flex mint-nft-main-row">
+        <div className={`searchStyle mint-nft-card ${bgColor} my-4 p-5`}>
+          <Row style={{ width: "100%" }} className="mint-nft-main-row">
             <Col lg={14} sm={24} xs={24} className="borderBottom">
               <Row
                 className="mint-nft-inner-row"
-                gutter={{ xs: 0, sm: 16, md: 30, lg: 50 }}
+                gutter={{ xs: 0, sm: 0, md: 30, lg: 50 }}
               >
                 <Col lg={12} sm={24} md={12} xs={24}>
                   <div
@@ -383,7 +383,7 @@ const MintNft = () => {
                     <ReactPlayer
                       controls={true}
                       width="100%"
-                      height="100%"
+                      height={220}
                       url={createNft && createNft.video}
                     />
                   </div>
@@ -420,36 +420,36 @@ const MintNft = () => {
                         </p>
                         <div className="royalty-input-wrap">
                           <Input
-                              name="royalty"
-                              className={"royaltyInputField"}
-                              placeholder={"royalty"}
-                              onChange={(e) => {
-                                if (e.target.value < 101) {
-                                  setFieldValue("royalty", e.target.value);
-                                } else {
-                                  ToastMessage(
-                                    "Error",
-                                    "Royalty should be less than 100",
-                                    "error",
-                                  );
-                                }
-                              }}
-                              onKeyDown={(e) => {
-                                if (
-                                  e.key === "-" ||
-                                  e.key === "+" ||
-                                  e.key === "*" ||
-                                  e.key === "/" ||
-                                  e.key === "e"
-                                ) {
-                                  e.preventDefault();
-                                }
-                              }}
-                              onWheel={(event) => event.currentTarget.blur()}
-                              type="number"
-                              value={values.royalty}
-                              autoComplete="off"
-                            />
+                            name="royalty"
+                            className={"royaltyInputField"}
+                            placeholder={"royalty"}
+                            onChange={(e) => {
+                              if (e.target.value < 101) {
+                                setFieldValue("royalty", e.target.value);
+                              } else {
+                                ToastMessage(
+                                  "Error",
+                                  "Royalty should be less than 100",
+                                  "error",
+                                );
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (
+                                e.key === "-" ||
+                                e.key === "+" ||
+                                e.key === "*" ||
+                                e.key === "/" ||
+                                e.key === "e"
+                              ) {
+                                e.preventDefault();
+                              }
+                            }}
+                            onWheel={(event) => event.currentTarget.blur()}
+                            type="number"
+                            value={values.royalty}
+                            autoComplete="off"
+                          />
                         </div>
                       </div>
                       <ErrorMessage
@@ -486,7 +486,7 @@ const MintNft = () => {
                 </div>
                 <div className="my-3">
                   <p className={`${textColor} mb-1 fs-5`}>
-                    Maximum Total Supply Supply
+                    Maximum Total Supply
                   </p>
                   <p className={`${textColor2} m-0 fs-6`}>{values.supply}</p>
                 </div>
@@ -494,21 +494,24 @@ const MintNft = () => {
                   <p className={`${textColor} mb-1 fs-5`}>Supply Type</p>
                   <p className={`${textColor2} m-0 fs-6`}>Non Fungible Token</p>
                 </div>
-              </div>
-              <div
-                style={{ border: "1px solid  #B23232" }}
-                className="p-1 mt-4 text-center rounded-3"
-              >
-                <span
-                  className={`${textColor2}`}
-                  onClick={() => navigate(`/collections/${userData?.id}`)}
+                <div
+                  style={{ border: "1px solid  #B23232" }}
+                  className="p-1 mt-4 text-center rounded-3"
                 >
-                  Go to Collection
-                </span>
+                  <span
+                    className={`${textColor2}`}
+                    onClick={() => navigate(`/collections/${userData?.id}`)}
+                  >
+                    Go to Collection
+                  </span>
+                </div>
               </div>
             </Col>
           </Row>
-          <Row style={{ width: "100%" }} className="d-grid mint-nft-description">
+          <Row
+            style={{ width: "100%" }}
+            className="d-grid mint-nft-description"
+          >
             <hr />
             <div>
               <p className={`${textColor} m-0 fs-5`}>Description</p>
@@ -525,7 +528,7 @@ const MintNft = () => {
         </div>
         <div
           style={{ width: "100%" }}
-          className={`mint-nft-card ${bgColor} my-4`}
+          className={`searchStyle mint-nft-card ${bgColor} my-4 p-5`}
         >
           <span className={`${textColor} fs-6 mb-3`}>
             How many NFTs would you like to mint?
