@@ -3,7 +3,6 @@ export const buildNftMetadata = ({
   description,
   video,
   image,
-  category,
 }) => ({
   name,
   description,
@@ -11,7 +10,5 @@ export const buildNftMetadata = ({
   animation_url: video,
   properties: {
     video,
-    poster: image,
-    ...(category ? { category } : {}),
   },
 });

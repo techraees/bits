@@ -104,7 +104,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
         description: values.description,
         video: values.video,
         image: posterUrl,
-        category: selectedCategory,
       });
       const metaUri = await sendMetaToIPFSPINATA(data);
 
