@@ -1,9 +1,4 @@
-export const buildNftMetadata = ({
-  name,
-  description,
-  video,
-  image,
-}) => ({
+export const buildNftMetadata = ({ name, description, video, image }) => ({
   name,
   description,
   image,

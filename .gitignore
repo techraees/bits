@@ -25,3 +25,10 @@ yarn-error.log*
 garbage/
 garbage
 /build
+
+# local scripts and docs (never commit)
+scripts/
+
+docs/
+/docs/
+docs/**

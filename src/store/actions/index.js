@@ -110,8 +110,6 @@ export const loadContractIns = () => async (dispatch) => {
       polygonProvider,
     );
 
-    // const imguri = extractNFTImage(ethMintingContract, 0)
-    // console.log(imguri);
     // const auctions = await contract.methods.auctions(0).call();
 
     dispatch({
