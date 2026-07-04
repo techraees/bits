@@ -431,6 +431,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 >
                   <img src={textColor === "white" ? upload : upload_red} />
                 </div>
+                <p
+                  className={`${textColor2} m-0 mt-1 mb-0 text-center`}
+                  style={{ fontSize: "12px" }}
+                >
+                  Upload Video <span className="red">*</span>
+                </p>
                 <p className={`${textColor2} m-0 mt-3 mb-2 text-center`}>
                   Drag and drop here <br /> or
                 </p>
@@ -606,7 +612,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           <form>
             <div className="my-4">
               <p style={{ color: "#C44040" }} className="mb-2">
-                NFT Name
+                NFT Name <span className="red">*</span>
               </p>
               <Input
                 placeholder="NFT Name"
@@ -672,7 +678,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             </div>
             <div className="my-4">
               <p style={{ color: "#C44040" }} className="mb-2">
-                Description
+                Description <span className="red">*</span>
               </p>
               <Input.TextArea
                 rows={4}

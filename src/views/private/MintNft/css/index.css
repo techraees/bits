@@ -37,6 +37,43 @@
   width: 100% !important;
 }
 
+.mint-checklist__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mint-checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #b0b0b0;
+  margin-bottom: 6px;
+}
+
+.mint-checklist__item:last-child {
+  margin-bottom: 0;
+}
+
+.mint-checklist__icon {
+  flex-shrink: 0;
+  color: #b0b0b0;
+}
+
+.mint-checklist__item--done {
+  color: #1aae17;
+}
+
+.mint-checklist__item--done .mint-checklist__icon {
+  color: #1aae17;
+}
+
+.mint-btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .mint-nft-description {
   padding-top: 1rem;
 }

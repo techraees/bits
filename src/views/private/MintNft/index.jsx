@@ -8,7 +8,9 @@ import {
   ToastMessage,
 } from "../../../components";
 import "./css/index.css";
-import { Row, Col, Button, Input } from "antd";
+import { Row, Col, Button, Input, Tooltip } from "antd";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
@@ -432,6 +434,18 @@ const MintNft = () => {
     }
   }, [isConnected]);
 
+  // Pre-mint completion checklist - lets the user see at a glance what's
+  // still missing instead of only finding out after clicking Mint and
+  // reading inline field errors one at a time.
+  const isSupplyReady = Number(values.supply) > 0;
+  const isRoyaltyReady =
+    values.royalty !== "" &&
+    !Number.isNaN(Number(values.royalty)) &&
+    Number(values.royalty) >= 0 &&
+    Number(values.royalty) <= 100;
+  const isWalletReady = isConnected;
+  const isMintReady = isSupplyReady && isRoyaltyReady && isWalletReady;
+
   return (
     <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
@@ -501,7 +515,16 @@ const MintNft = () => {
                     <div className="my-3">
                       <div className="d-flex align-items-center label-input royalty-row">
                         <p className={`${textColor} m-0 fs-5 royalty-label`}>
-                          Royalty%:
+                          Royalty% <span className="red">*</span>
+                          <Tooltip title="The percentage you'll earn every time this NFT is resold on the marketplace. Enter a value between 0 and 100.">
+                            <span>
+                              {" "}
+                              <AiOutlineInfoCircle
+                                style={{ cursor: "help" }}
+                              />
+                            </span>
+                          </Tooltip>
+                          :
                         </p>
                         <div className="royalty-input-wrap">
                           <Input
@@ -616,7 +639,7 @@ const MintNft = () => {
           className={`searchStyle mint-nft-card ${bgColor} my-4 p-5`}
         >
           <span className={`${textColor} fs-6 mb-3`}>
-            How many NFTs would you like to mint?
+            How many NFTs would you like to mint? <span className="red">*</span>
           </span>
           <Row>
             {/* <Col
@@ -703,6 +726,35 @@ const MintNft = () => {
             </div>
           </div>
         </div>
+        <div className="mint-checklist mb-3">
+          <p className={`${textColor} fs-6 mb-2`}>Before you mint:</p>
+          <ul className="mint-checklist__list">
+            <li
+              className={`mint-checklist__item ${
+                isSupplyReady ? "mint-checklist__item--done" : ""
+              }`}
+            >
+              <FaCheckCircle className="mint-checklist__icon" size={14} />
+              <span>Circulating supply entered</span>
+            </li>
+            <li
+              className={`mint-checklist__item ${
+                isRoyaltyReady ? "mint-checklist__item--done" : ""
+              }`}
+            >
+              <FaCheckCircle className="mint-checklist__icon" size={14} />
+              <span>Royalty percentage set (0-100%)</span>
+            </li>
+            <li
+              className={`mint-checklist__item ${
+                isWalletReady ? "mint-checklist__item--done" : ""
+              }`}
+            >
+              <FaCheckCircle className="mint-checklist__icon" size={14} />
+              <span>Wallet connected</span>
+            </li>
+          </ul>
+        </div>
         <div className="d-flex align-items-center justify-content-center mint-nft-actions">
           <div className="mint-nft-action-btn">
             <Button
@@ -716,12 +768,21 @@ const MintNft = () => {
             </Button>
           </div>
           <div className="mint-nft-action-btn">
-            <ButtonComponent
-              onClick={handleSubmit}
-              text={"Mint NFT"}
-              width={150}
-              height={40}
-            />
+            <div
+              className={!isMintReady ? "mint-btn-disabled" : ""}
+              title={
+                !isMintReady
+                  ? "Complete the checklist above before minting"
+                  : undefined
+              }
+            >
+              <ButtonComponent
+                onClick={handleSubmit}
+                text={"Mint NFT"}
+                width={150}
+                height={40}
+              />
+            </div>
           </div>
 
           <div className="mint-nft-recaptcha">
