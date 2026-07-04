@@ -3,6 +3,7 @@ import { Col, Input, Pagination, Row, Tabs } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppKitAccount } from "@reown/appkit/react";
 import {
   AZ,
   ellipse,
@@ -70,7 +71,16 @@ const Collections = () => {
     });
 
   const { userData } = useSelector((state) => state.address.userData);
+  const { isConnected, address: metamaskAddress } = useAppKitAccount();
   const [tokenIdsByOwner, setTokenIdsByOwner] = useState([]);
+
+  const isOwnProfile = profileData?.GetGeneralUserInfo?._id === userData?.id;
+  const isWalletMismatched =
+    isOwnProfile &&
+    isConnected &&
+    metamaskAddress &&
+    userData?.address &&
+    metamaskAddress.toLowerCase() !== userData.address.toLowerCase();
 
   //get all tokenIds by an address
   useEffect(() => {
@@ -227,6 +237,15 @@ const Collections = () => {
             </div>
           </Col>
         </Row>
+
+        {isWalletMismatched && (
+          <div className="wallet-mismatch-banner mb-3">
+            Your connected wallet ({metamaskAddress.slice(0, 6)}...
+            {metamaskAddress.slice(-4)}) doesn't match this account's
+            registered wallet. Switch to the correct wallet in MetaMask to
+            mint, list, or manage these NFTs.
+          </div>
+        )}
 
         <div style={{ border: "1px solid #B23232" }}></div>
         <div className="my-4 d-flex justify-content-between">
