@@ -46,6 +46,15 @@ const ConnectModal = ({ visible, onClose }) => {
 
   const fetchData = async () => {
     try {
+      if (!walletProvider) {
+        ToastMessage(
+          "Error",
+          "Wallet provider not ready. Please try again.",
+          "error",
+        );
+        return;
+      }
+
       const provider = new ethers.providers.Web3Provider(walletProvider);
       const signer = provider.getSigner();
       const { chainId } = await provider.getNetwork();

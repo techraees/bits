@@ -37,6 +37,35 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 const environment = process.env;
 
+// Reads the minted token id straight from the transaction receipt instead of
+// issuing an extra `mintedTokenId()` RPC call after `tx.wait()`. That second
+// call went through the WalletConnect-backed signer provider, which iOS
+// Safari can suspend/kill when the user switches back from the MetaMask app,
+// causing the mint to succeed on-chain while the backend registration step
+// never runs.
+const getMintedTokenIdFromReceipt = (receipt, contract) => {
+  const contractAddress = contract.address?.toLowerCase();
+  const logsForContract = receipt.logs.filter(
+    (log) => log.address?.toLowerCase() === contractAddress,
+  );
+
+  for (const eventName of ["Mint", "TransferSingle"]) {
+    for (const log of logsForContract) {
+      try {
+        const parsedLog = contract.interface.parseLog(log);
+        if (parsedLog.name === eventName) {
+          return eventName === "Mint" ? parsedLog.args.tokenId : parsedLog.args.id;
+        }
+      } catch (err) {
+        // Log does not match this contract's ABI (e.g. an approval event
+        // from another contract in the same tx) - safe to ignore.
+      }
+    }
+  }
+
+  return null;
+};
+
 const MintNft = () => {
   const recaptchaRef = useRef(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -154,7 +183,7 @@ const MintNft = () => {
       sendMsg();
     }
     if (error) {
-      ToastMessage(error, "", "error");
+      ToastMessage("Error", error.message || "Failed to save NFT", "error");
     }
   }, [data, error]);
 
@@ -175,8 +204,6 @@ const MintNft = () => {
   };
 
   const mintCall = async (supply, royalty) => {
-    // console.log("Minting Call");
-
     if (!isConnected) {
       ToastMessage(
         "Error",
@@ -189,71 +216,102 @@ const MintNft = () => {
     if (!metamaskAddress) {
       ToastMessage(
         "Error",
-        `AppKitAccount Wallet Address Not Found` + metamaskAddress
-          ? metamaskAddress
-          : ".",
+        `AppKitAccount Wallet Address Not Found` + (metamaskAddress || "."),
         "error",
       );
+      return;
     }
 
-    // console.log(chainId);
-
-    if (metamaskAddress?.toLowerCase() === userData?.address?.toLowerCase()) {
-      if (contractData.chain == chainId) {
-        const provider = new ethers.providers.Web3Provider(walletProvider);
-        const signer = provider.getSigner();
-        const contractWithsigner = contractData.mintContract.connect(signer);
-        const prevTokenId = await contractWithsigner.mintedTokenId();
-        try {
-          const tx = await contractWithsigner.mint(
-            address,
-            supply,
-            createNft.meta,
-            royalty,
-            splitOwners,
-            splitOwnersPercentage,
-            [],
-          );
-
-          setLoadingStatus(true);
-          setLoadingMessage("Minting...");
-
-          const res = await tx.wait();
-          const transactionHash = res.transactionHash;
-          let newTkId;
-          if (res) {
-            newTkId = await contractWithsigner.mintedTokenId();
-            setLoadingStatus(false);
-            setLoadingMessage("");
-            if (Number(prevTokenId) < Number(newTkId)) {
-              return { newTkId, transactionHash };
-            } else {
-              newTkId = await contractWithsigner.mintedTokenId();
-              return { newTkId, transactionHash };
-            }
-          }
-        } catch (error) {
-          setLoadingStatus(false);
-          setLoadingMessage("");
-          // console.log(error);
-          const parsedEthersError = getParsedEthersError(error);
-          if (parsedEthersError.context == -32603) {
-            ToastMessage("Error", "Insufficient Balance", "error");
-          } else {
-            ToastMessage("Error", `${parsedEthersError.context}`, "error");
-          }
-        }
-      } else {
-        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-        ToastMessage(`Please select ${network} network`, "", "error");
-      }
-    } else {
+    if (metamaskAddress?.toLowerCase() !== userData?.address?.toLowerCase()) {
       ToastMessage(
         "Error",
         `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${metamaskAddress})`,
         "error",
       );
       return;
+    }
+
+    if (contractData.chain != chainId) {
+      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+      ToastMessage(`Please select ${network} network`, "", "error");
+      return;
+    }
+
+    const walletSignerProvider = new ethers.providers.Web3Provider(
+      walletProvider,
+    );
+    const signer = walletSignerProvider.getSigner();
+    const contractWithsigner = contractData.mintContract.connect(signer);
+
+    // Stable, Infura-backed provider (created in loadContractIns) used only
+    // to wait for and read the transaction receipt. Signing still happens
+    // through WalletConnect, but confirmation no longer depends on that
+    // session staying alive after the user returns from the MetaMask app.
+    const readOnlyProvider = contractData.mintContract.provider;
+
+    let tx;
+    try {
+      tx = await contractWithsigner.mint(
+        address,
+        supply,
+        createNft.meta,
+        royalty,
+        splitOwners,
+        splitOwnersPercentage,
+        [],
+      );
+    } catch (error) {
+      const parsedEthersError = getParsedEthersError(error);
+      ToastMessage(
+        "Error",
+        parsedEthersError.context == -32603
+          ? "Insufficient Balance"
+          : `${parsedEthersError.errorCode || parsedEthersError.context || "Transaction was not signed"}`,
+        "error",
+      );
+      throw error;
+    }
+
+    setLoadingStatus(true);
+    setLoadingMessage("Minting...");
+
+    try {
+      // 5 minute timeout so the UI never hangs indefinitely if something
+      // goes wrong on the RPC side - the user still gets the tx hash in the
+      // error message and can check it on the explorer.
+      const receipt = await readOnlyProvider.waitForTransaction(
+        tx.hash,
+        1,
+        5 * 60 * 1000,
+      );
+
+      if (receipt.status === 0) {
+        throw new Error(`Transaction ${receipt.transactionHash} was reverted`);
+      }
+
+      const transactionHash = receipt.transactionHash;
+      const newTkId = getMintedTokenIdFromReceipt(receipt, contractWithsigner);
+
+      if (!newTkId) {
+        throw new Error(
+          `Mint transaction confirmed (${transactionHash}) but token id could not be read from the receipt`,
+        );
+      }
+
+      return { newTkId, transactionHash };
+    } catch (error) {
+      const parsedEthersError = getParsedEthersError(error);
+      ToastMessage(
+        "Error",
+        parsedEthersError.context == -32603
+          ? "Insufficient Balance"
+          : `${parsedEthersError.errorCode || parsedEthersError.context || error.message}`,
+        "error",
+      );
+      throw error;
+    } finally {
+      setLoadingStatus(false);
+      setLoadingMessage("");
     }
   };
 
@@ -277,12 +335,31 @@ const MintNft = () => {
     validate: mintValidation,
     onSubmit: async (values) => {
       connectWalletHandle();
-      const { newTkId, transactionHash } = await mintCall(
-        Number(values.supply),
-        Number(values.royalty * 100),
-      );
 
-      if (Number(newTkId)) {
+      if (!isConnected) {
+        return;
+      }
+
+      let mintResult;
+      try {
+        mintResult = await mintCall(
+          Number(values.supply),
+          Number(values.royalty * 100),
+        );
+      } catch (error) {
+        // Toast already shown inside mintCall - stop here so a failed or
+        // unconfirmed transaction never silently falls through to the
+        // backend registration step below.
+        return;
+      }
+
+      const { newTkId, transactionHash } = mintResult || {};
+
+      if (!Number(newTkId)) {
+        return;
+      }
+
+      try {
         const nftResponse = await CreateNft({
           variables: {
             name: createNft && createNft.name,
@@ -328,8 +405,16 @@ const MintNft = () => {
             hash_field: transactionHash,
           },
         });
-      } else {
-        // console.log("Minting is not gone through");
+      } catch (error) {
+        // The NFT was minted on-chain successfully, but saving it to the
+        // backend failed. Surface the transaction hash so the user (or
+        // support) can reconcile it instead of the mint appearing to
+        // silently disappear.
+        ToastMessage(
+          "Error",
+          `Your NFT was minted on-chain, but we couldn't save it to your account. Please contact support with this transaction hash: ${transactionHash}`,
+          "error",
+        );
       }
     },
   });

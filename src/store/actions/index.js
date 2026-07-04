@@ -71,13 +71,15 @@ export const updateAccount = (account) => async (dispatch) => {
 };
 
 export const loadContractIns = () => async (dispatch) => {
-  const ethInfuraIns =
-    "https://mainnet.infura.io/v3/e556d22112e34e3baab9760f1864493a";
-  const polygonInfuraIns =
-    "https://polygon-mainnet.infura.io/v3/e556d22112e34e3baab9760f1864493a";
+  const apiKey = process.env.REACT_APP_INFURA_API_KEY;
+  const ethInfuraIns = `https://mainnet.infura.io/v3/${apiKey}`;
+  const polygonInfuraIns = `https://polygon-mainnet.infura.io/v3/${apiKey}`;
   try {
     //ethereum
-    const ethProvider = new ethers.providers.JsonRpcProvider(ethInfuraIns);
+    const ethProvider = new ethers.providers.StaticJsonRpcProvider(
+      ethInfuraIns,
+      1,
+    );
     const ethMarketPlaceContract = "0x3E12F9b507F51DccDc448B38d67eBfE2194b6e72";
     const ethMintingConract = "0x00Ee6dA7De5635cA6c2742682168621351e6b5B1";
     const ethMarketContractIns = new ethers.Contract(
@@ -93,8 +95,9 @@ export const loadContractIns = () => async (dispatch) => {
     );
 
     //polygon
-    const polygonProvider = new ethers.providers.JsonRpcProvider(
+    const polygonProvider = new ethers.providers.StaticJsonRpcProvider(
       polygonInfuraIns,
+      137,
     );
     const polygonMarketPlaceContract =
       "0x381c730F1646f00e4Ae9Dfe9589b1E0BDE107a1e";
@@ -157,7 +160,7 @@ export const loadContractIns = () => async (dispatch) => {
     //   },
     // );
   } catch (err) {
-    // console.log("errr", err);
+    console.error("Failed to load contract instances", err);
   }
 };
 
