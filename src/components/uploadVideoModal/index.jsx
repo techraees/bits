@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { upload, upload_file_icon, upload_red, loader } from "../../assets";
 import { ButtonComponent } from "../index";
-import { Modal, Row, Col, Progress, Input, Select } from "antd";
+import { Modal, Row, Col, Progress, Input, Select, Tooltip } from "antd";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import "./css/index.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -384,7 +385,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
     >
       <div>
         <p className={`${textColor} fs-5 text-center m-0`}>
-          Upload Emote/Video
+          Upload Emote/Video{" "}
+          <Tooltip title="Emote: your video is processed with AI motion extraction so it can be used as an in-game emote (takes 5-7 minutes). Video: uploads as-is, no processing.">
+            <span>
+              <AiOutlineInfoCircle style={{ cursor: "help" }} />
+            </span>
+          </Tooltip>
         </p>
         <Select
           className="text-center mt-3"

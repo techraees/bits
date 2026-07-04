@@ -18,11 +18,19 @@ import {
   GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
 } from "../../../gql/queries";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
-import { CardCompnent, Loader, UploadVideoModal } from "../../../components";
+import {
+  CardCompnent,
+  Loader,
+  UploadVideoModal,
+  OnboardingModal,
+} from "../../../components";
+import { getStorage } from "../../../utills/localStorage";
+import { ONBOARDING_SEEN_KEY } from "../../../components/onboardingModal";
 import CardSkeletal from "./Skeletal/CardSkeletal";
 
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
+  const [onboardingVisible, setOnboardingVisible] = useState(false);
   const [topNfts, setTopNfts] = useState([]);
   let navigate = useNavigate();
 
@@ -78,9 +86,21 @@ const Dashboard = () => {
     }
   }, [getAllTopNftsForOneChainForWebsite]);
 
+  // Shows a one-time creator/buyer flow walkthrough on the first visit,
+  // tracked in localStorage so returning users never see it again.
+  useEffect(() => {
+    if (!getStorage(ONBOARDING_SEEN_KEY)) {
+      setOnboardingVisible(true);
+    }
+  }, []);
+
   return (
     <div className={backgroundTheme}>
       {/* {loading && <Loader />} */}
+      <OnboardingModal
+        visible={onboardingVisible}
+        onClose={() => setOnboardingVisible(false)}
+      />
       <UploadVideoModal
         visible={uploadVideoModal}
         onClose={() => setUploadVideoModal(false)}

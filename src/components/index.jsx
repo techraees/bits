@@ -17,6 +17,7 @@ import OfferModal from "./offerModal";
 import Loader from "./loaders/loading";
 import ToastMessage from "./toastMessage";
 import TopNftsPopup from "./topNftsPopup/";
+import OnboardingModal from "./onboardingModal";
 
 export {
   InputComponent,
@@ -38,4 +39,5 @@ export {
   NftDetailsModal,
   OfferModal,
   TopNftsPopup,
+  OnboardingModal,
 };

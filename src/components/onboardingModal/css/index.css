@@ -1,0 +1,61 @@
+.onboarding-modal {
+  padding: 8px 4px;
+}
+
+.onboarding-modal__title {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.onboarding-modal__subtitle {
+  color: #b0b0b0;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.onboarding-modal__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.onboarding-modal__step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.onboarding-modal__step:last-child {
+  margin-bottom: 0;
+}
+
+.onboarding-modal__step-number {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #d44141 0%, #942626 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.onboarding-modal__step-title {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.onboarding-modal__step-description {
+  color: #b0b0b0;
+  font-size: 12.5px;
+  margin: 2px 0 0 0;
+  line-height: 1.5;
+}
