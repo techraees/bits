@@ -50,6 +50,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [selectedFileName, setSelectedFileName] = useState(null);
   const [isEmote, setIsEmote] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  const [styleError, setStyleError] = useState(false);
   const [imageUploadLoader, setImageUploadLoader] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -276,11 +277,21 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
   const hiddenFileInput = useRef(null);
 
+  // The Browse button stays visually disabled (see wrapper below) while no
+  // style is selected, but clicks still reach this handler so the user gets
+  // an inline error + toast telling them what to do, instead of the click
+  // silently doing nothing.
   const handleClick = () => {
+    if (!isSelected) {
+      setStyleError(true);
+      ToastMessage("Please select a style (Emote or Video) first", "", "error");
+      return;
+    }
     hiddenFileInput.current.click();
   };
 
   const handleSelect = (value) => {
+    setStyleError(false);
     if (value === "Emote") {
       setIsEmote(true);
       setIsSelected(true);
@@ -295,7 +306,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
   const uploadHandle = async (event) => {
     if (!isSelected) {
-      ToastMessage("Please Select a style", "", "error");
+      setStyleError(true);
+      ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
 
@@ -345,7 +357,8 @@ const UploadVideoModal = ({ visible, onClose }) => {
     setDragActive(false);
 
     if (!isSelected) {
-      ToastMessage("Please Select a style", "", "error");
+      setStyleError(true);
+      ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
 
@@ -379,6 +392,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           style={{
             width: "100%",
           }}
+          status={styleError ? "error" : undefined}
           onChange={handleSelect}
           options={[
             {
@@ -390,6 +404,13 @@ const UploadVideoModal = ({ visible, onClose }) => {
               label: "Video",
             },
           ]}
+        />
+        <ErrorMessage
+          message={
+            styleError
+              ? "Please select a style (Emote or Video) before uploading"
+              : null
+          }
         />
         <Row
           className="dragVideoView py-4 mt-4 mx-2 flex-column"
@@ -413,11 +434,20 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 <p className={`${textColor2} m-0 mt-3 mb-2 text-center`}>
                   Drag and drop here <br /> or
                 </p>
-                <ButtonComponent
-                  onClick={handleClick}
-                  text={"Browse"}
-                  height={40}
-                />
+                <div
+                  className={!isSelected ? "browse-btn-disabled" : ""}
+                  title={
+                    !isSelected
+                      ? "Select Emote or Video style above first"
+                      : undefined
+                  }
+                >
+                  <ButtonComponent
+                    onClick={handleClick}
+                    text={"Browse"}
+                    height={40}
+                  />
+                </div>
                 <input
                   type="file"
                   ref={hiddenFileInput}
@@ -434,13 +464,20 @@ const UploadVideoModal = ({ visible, onClose }) => {
           {dragActive && (
             // Covers the whole dashed drop zone (not just the inner form),
             // so dropping anywhere in it works, not only over the button.
+            // Shows visible feedback (not just an invisible hit-target) so
+            // the user can see the entire box is a valid drop target.
             <div
               id="drag-file-element"
+              className="upload-drop-overlay"
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-            ></div>
+            >
+              <p className="upload-drop-overlay__text">
+                Drop your video here
+              </p>
+            </div>
           )}
           {isEmote && (
             <div className="px-3">
