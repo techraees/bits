@@ -63,6 +63,10 @@ const Marketplace = () => {
       filterObj: filterObj,
       chainId: contractData.chain.toString(),
     },
+    // Default cache-first served a stale list when navigating here right
+    // after listing an NFT. cache-and-network shows the cached list
+    // immediately, then updates it with a fresh network response.
+    fetchPolicy: "cache-and-network",
   });
 
   const isAuctionTab = activeTab === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION;

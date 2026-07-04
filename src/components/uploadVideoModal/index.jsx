@@ -20,6 +20,16 @@ import ToastMessage from "../toastMessage";
 import { handleDeepMotionUpload } from "../../config/deepmotion";
 import { buildNftMetadata } from "../../utills/buildNftMetadata";
 
+// Many .avi files report as "video/x-msvideo" rather than "video/avi", so
+// the MIME type alone isn't enough to reliably catch them.
+const isAviFile = (file) => {
+  const type = (file?.type || "").toLowerCase();
+  const name = (file?.name || "").toLowerCase();
+  return (
+    type === "video/avi" || type === "video/x-msvideo" || name.endsWith(".avi")
+  );
+};
+
 const UploadVideoModal = ({ visible, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -158,6 +168,110 @@ const UploadVideoModal = ({ visible, onClose }) => {
     });
   };
 
+  // Shared by both the "Browse" file input and drag-and-drop. Previously
+  // this ~90 line block was duplicated in two places (uploadHandle and a
+  // window-level "drop" listener) and had drifted out of sync - e.g. only
+  // one path guarded against an undefined file and set the loader state.
+  const processVideoFile = async (fileUploaded) => {
+    if (!fileUploaded) return;
+
+    setImageUploadLoader(true);
+
+    try {
+      const videoElement = document.createElement("video");
+      videoElement.onloadedmetadata = () => {
+        setFieldValue("video_duration", Math.round(videoElement.duration));
+      };
+      videoElement.src = URL.createObjectURL(fileUploaded);
+      await videoElement.load();
+
+      if (isAviFile(fileUploaded)) {
+        ToastMessage(
+          "Uploading .avi files is not allowed. Please select another file.",
+          "",
+          "error",
+        );
+        return;
+      }
+
+      if (isEmote) {
+        setSelectedFileName(fileUploaded.name);
+        setImageUpload(true);
+        setUploadProgress(0);
+        setUploadStatus("Starting...");
+
+        // Progress callback for DeepMotion processing
+        const handleProgress = (progressData) => {
+          setUploadProgress(progressData.progress);
+          if (progressData.status === "UPLOADING") {
+            setUploadStatus("Uploading video...");
+          } else if (progressData.status === "PROGRESS") {
+            setUploadStatus("Processing...");
+          } else if (progressData.status === "SUCCESS") {
+            setUploadStatus("Processing complete!");
+          } else if (progressData.status === "DOWNLOADING") {
+            setUploadStatus("Finalizing...");
+          } else {
+            setUploadStatus(progressData.status || "Processing...");
+          }
+        };
+
+        const response = await handleDeepMotionUpload(
+          fileUploaded,
+          fileUploaded.name,
+          handleProgress,
+        );
+
+        if (response) {
+          setUploadStatus("Uploading to storage...");
+          const url = await sendFileToStorj(
+            { file: response.mp4, name: fileUploaded.name },
+            isEmote,
+            createSignedUrl,
+          );
+          setImageUpload(false);
+          setUploadProgress(100);
+          setUploadStatus("Complete!");
+
+          await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
+            isEmote: true,
+            download: response,
+          });
+        } else {
+          setUploadProgress(0);
+          setUploadStatus("Error");
+          ToastMessage("Conversion Error", "", "error");
+        }
+      } else {
+        setSelectedFileName(fileUploaded.name);
+        setImageUpload(true);
+        const url = await sendFileToStorj(
+          fileUploaded,
+          isEmote,
+          createSignedUrl,
+        );
+        setImageUpload(false);
+
+        await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
+          isEmote: false,
+          download: {},
+        });
+      }
+    } catch (error) {
+      console.error("Video upload failed:", error);
+      setImageUpload(false);
+      setUploadProgress(0);
+      setUploadStatus("Error");
+      ToastMessage(
+        "Upload Error",
+        "Something went wrong while uploading your video. Please try again.",
+        "error",
+      );
+    } finally {
+      setImageUploadLoader(false);
+    }
+  };
+
   // const { createNft } = useSelector((state) => state.nft.createNft);
 
   const hiddenFileInput = useRef(null);
@@ -180,197 +294,38 @@ const UploadVideoModal = ({ visible, onClose }) => {
   };
 
   const uploadHandle = async (event) => {
-    if (isSelected) {
-      setImageUploadLoader(true);
-      const fileUploaded = event.target.files[0];
-
-      if (fileUploaded) {
-        const videoElement = document.createElement("video");
-
-        videoElement.onloadedmetadata = () => {
-          setFieldValue("video_duration", Math.round(videoElement.duration));
-        };
-
-        videoElement.src = URL.createObjectURL(fileUploaded);
-        await videoElement.load();
-      }
-
-      // Check if file type is .avi
-      if (fileUploaded.type === "video/avi") {
-        ToastMessage(
-          "Uploading .avi files is not allowed. Please select another file.",
-          "",
-          "error",
-        );
-      } else {
-        if (isEmote) {
-          setSelectedFileName(fileUploaded.name);
-          setImageUpload(true);
-          setUploadProgress(0);
-          setUploadStatus("Starting...");
-
-          // Progress callback for DeepMotion processing
-          const handleProgress = (progressData) => {
-            setUploadProgress(progressData.progress);
-            // Set user-friendly status messages
-            // if (progressData.status === "CHECKING_CREDITS") {
-            //   setUploadStatus("Checking credits...");
-            // } else
-            if (progressData.status === "UPLOADING") {
-              setUploadStatus("Uploading video...");
-            } else if (progressData.status === "PROGRESS") {
-              setUploadStatus(`Processing`);
-            } else if (progressData.status === "SUCCESS") {
-              setUploadStatus("Processing complete!");
-            } else if (progressData.status === "DOWNLOADING") {
-              setUploadStatus("Finalizing...");
-            } else {
-              setUploadStatus(progressData.status || "Processing...");
-            }
-          };
-
-          const response = await handleDeepMotionUpload(
-            fileUploaded,
-            fileUploaded.name,
-            handleProgress,
-          );
-          if (response) {
-            // console.log("DEEP MOTION RESPONSE", response);
-            setUploadStatus("Uploading to storage...");
-            const url = await sendFileToStorj(
-              { file: response.mp4, name: fileUploaded.name },
-              isEmote,
-              createSignedUrl,
-            );
-            setImageUpload(false);
-            setUploadProgress(100);
-            setUploadStatus("Complete!");
-
-            await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
-              isEmote: true,
-              download: response,
-            });
-          } else {
-            setUploadProgress(0);
-            setUploadStatus("Error");
-            ToastMessage("Conversion Error", "", "error");
-          }
-        } else {
-          setSelectedFileName(fileUploaded.name);
-          setImageUpload(true);
-          const url = await sendFileToStorj(
-            fileUploaded,
-            isEmote,
-            createSignedUrl,
-          );
-          setImageUpload(false);
-
-          await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
-            isEmote: false,
-            download: {},
-          });
-        }
-      }
-    } else {
+    if (!isSelected) {
       ToastMessage("Please Select a style", "", "error");
+      return;
     }
-    setImageUploadLoader(false);
+
+    const fileUploaded = event.target.files?.[0];
+    await processVideoFile(fileUploaded);
+    // Reset so selecting the same file again still fires onChange
+    event.target.value = "";
   };
 
   const [dragActive, setDragActive] = React.useState(false);
 
-  window.addEventListener(
-    "dragover",
-    function (e) {
-      e.preventDefault();
-    },
-    false,
-  );
-  window.addEventListener("drop", async (e) => {
-    if (isSelected) {
-      e.preventDefault();
+  // Only exists to stop the browser from navigating away / opening the
+  // dropped file if it lands outside the drop zone while this modal is
+  // open. Actual file handling always goes through handleDrop below - it
+  // used to be duplicated here too, without cleanup, so a new pair of
+  // listeners was added on every render.
+  useEffect(() => {
+    if (!visible) return undefined;
 
-      if (e.dataTransfer.files[0]) {
-        const fileUploaded = e.dataTransfer.files[0];
+    const preventWindowDragover = (e) => e.preventDefault();
+    const preventWindowDrop = (e) => e.preventDefault();
 
-        if (fileUploaded.type === "video/avi") {
-          ToastMessage(
-            "Uploading .avi files is not allowed. Please select another file.",
-            "",
-            "error",
-          );
-        } else {
-          if (isEmote) {
-            setSelectedFileName(fileUploaded.name);
-            setImageUpload(true);
-            setUploadProgress(0);
-            setUploadStatus("Starting...");
+    window.addEventListener("dragover", preventWindowDragover);
+    window.addEventListener("drop", preventWindowDrop);
 
-            // Progress callback for DeepMotion processing
-            const handleProgress = (progressData) => {
-              setUploadProgress(progressData.progress);
-              // if (progressData.status === "CHECKING_CREDITS") {
-              //   setUploadStatus("Checking credits...");
-              // } else
-              if (progressData.status === "UPLOADING") {
-                setUploadStatus("Uploading video...");
-              } else if (progressData.status === "PROGRESS") {
-                setUploadStatus(`Processing...`);
-              } else if (progressData.status === "SUCCESS") {
-                setUploadStatus("Processing complete!");
-              } else if (progressData.status === "DOWNLOADING") {
-                setUploadStatus("Finalizing...");
-              } else {
-                setUploadStatus(progressData.status || "Processing...");
-              }
-            };
-
-            const response = await handleDeepMotionUpload(
-              fileUploaded,
-              fileUploaded.name,
-              handleProgress,
-            );
-            if (response) {
-              setUploadStatus("Uploading to storage...");
-              const url = await sendFileToStorj(
-                { file: response.mp4, name: fileUploaded.name },
-                isEmote,
-                createSignedUrl,
-              );
-              setImageUpload(false);
-              setUploadProgress(100);
-              setUploadStatus("Complete!");
-
-              await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
-                isEmote: true,
-                download: response,
-              });
-            } else {
-              setUploadProgress(0);
-              setUploadStatus("Error");
-              ToastMessage("Conversion Error", "", "error");
-            }
-          } else {
-            setSelectedFileName(fileUploaded.name);
-            setImageUpload(true);
-            const url = await sendFileToStorj(
-              fileUploaded,
-              isEmote,
-              createSignedUrl,
-            );
-            setImageUpload(false);
-
-            await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
-              isEmote: false,
-              download: {},
-            });
-          }
-        }
-      }
-    } else {
-      ToastMessage("Please Select a style", "", "error");
-    }
-  });
+    return () => {
+      window.removeEventListener("dragover", preventWindowDragover);
+      window.removeEventListener("drop", preventWindowDrop);
+    };
+  }, [visible]);
 
   // handle drag events
   const handleDrag = function (e) {
@@ -384,13 +339,18 @@ const UploadVideoModal = ({ visible, onClose }) => {
   };
 
   // triggers when file is dropped
-  const handleDrop = function (e) {
+  const handleDrop = async function (e) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // handleFiles(e.dataTransfer.files);
+
+    if (!isSelected) {
+      ToastMessage("Please Select a style", "", "error");
+      return;
     }
+
+    const fileUploaded = e.dataTransfer?.files?.[0];
+    await processVideoFile(fileUploaded);
   };
 
   useEffect(() => {
@@ -434,9 +394,14 @@ const UploadVideoModal = ({ visible, onClose }) => {
         <Row
           className="dragVideoView py-4 mt-4 mx-2 flex-column"
           gutter={{ xs: 8, sm: 16, md: 20, lg: 32 }}
+          onDragEnter={handleDrag}
+          onDragOver={handleDrag}
+          onDragLeave={handleDrag}
+          onDrop={handleDrop}
+          style={{ position: "relative" }}
         >
           <Col lg={10} md={10} sm={24} xs={24}>
-            <form onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className=" d-flex flex-column align-items-start">
                 <div
                   className={
@@ -463,18 +428,20 @@ const UploadVideoModal = ({ visible, onClose }) => {
                 <ErrorMessage
                   message={touched.video && errors.video ? errors.video : null}
                 />
-                {dragActive && (
-                  <div
-                    id="drag-file-element"
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  ></div>
-                )}
               </div>
             </form>
           </Col>
+          {dragActive && (
+            // Covers the whole dashed drop zone (not just the inner form),
+            // so dropping anywhere in it works, not only over the button.
+            <div
+              id="drag-file-element"
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            ></div>
+          )}
           {isEmote && (
             <div className="px-3">
               <div
