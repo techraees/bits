@@ -1,6 +1,10 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
-import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
+import {
+  useAppKitAccount,
+  useAppKitProvider,
+  useAppKitNetwork,
+} from "@reown/appkit/react";
 import { Modal } from "antd";
 import { ethers } from "ethers";
 import { useEffect, useRef, useState } from "react";
@@ -41,6 +45,7 @@ function PurchaseStep({
   const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
+  const { chainId } = useAppKitNetwork();
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const recaptchaRef = useRef(null);
@@ -97,6 +102,15 @@ function PurchaseStep({
 
   const handlePurchase = async () => {
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
+      // Previously missing here (unlike Mint/List/Offer) - a wallet left on
+      // the wrong chain would only fail deep inside MetaMask with a cryptic
+      // error instead of a clear upfront message.
+      if (Number(chainId) !== Number(contractData.chain)) {
+        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
+        ToastMessage("Error", `Please select ${network} network`, "error");
+        return;
+      }
+
       const provider = new ethers.providers.Web3Provider(walletProvider);
       const signer = provider.getSigner();
       const amount = ETHToWei(totalPrice.toString()).toString();
