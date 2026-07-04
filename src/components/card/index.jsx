@@ -755,7 +755,7 @@ const CardCompnent = ({
               </>
             ) : (
               <button className="buybtn" onClick={handleBuyBidClick}>
-                {location.pathname === "/marketplace" ? "Bid Now" : "Buy Now"}
+                Bid Now
               </button>
             )}
             <button
@@ -1205,31 +1205,14 @@ const CardCompnent = ({
                             : "Buy NFT"
                         }
                         onClick={() => {
-                          if (
-                            location.pathname.includes("/collections") &&
-                            isOwner
-                          ) {
+                          const inCollections =
+                            location.pathname.includes("/collections");
+
+                          if (inCollections && isOwner) {
                             navigateTo();
-                          } else if (
-                            location.pathname.includes("/collections") &&
-                            !isOwner
-                          ) {
+                          } else if (inCollections && !isOwner) {
                             ToastMessage("Please contact owner", "", "error");
-                          } else if (
-                            location.pathname.includes("/video-gallery")
-                          ) {
-                            handleBuyBidClick();
-                          } else if (
-                            location.pathname.includes("/") &&
-                            isAuction
-                          ) {
-                            handleBuyBidClick();
-                          } else if (isTopNfts) {
-                            handleBuyBidClick();
-                          } else if (
-                            location.pathname.includes("/") &&
-                            !isAuction
-                          ) {
+                          } else {
                             handleBuyBidClick();
                           }
                         }}

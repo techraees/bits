@@ -3,15 +3,32 @@ import { Input, Pagination, Select } from "antd";
 import { useState } from "react";
 import { BsFilterLeft } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { AZ, grid, search } from "../../../assets";
+import { useSearchParams } from "react-router-dom";
+import { AZ, grid, profile2, search } from "../../../assets";
 import { CardCompnent } from "../../../components";
+import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../../data/enums";
 import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import { USDTOMATIC } from "../../../utills/currencyConverter";
-import { dbDateToTime } from "../../../utills/timeToTimestamp";
 import "./css/index.css";
 import CardSkeletal from "./Skeletal/CardSkeletal";
 
 const environment = process.env;
+
+// Fixed-price and auction listings previously lived on two separate pages
+// (Marketplace and Emote-Video Gallery) that called the same backend query
+// with a different `listingType`. They are consolidated here into tabs so
+// there is a single, unambiguous "Marketplace" entry point in navigation.
+const PAGE_SIZE_BY_TYPE = {
+  [ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE]: 12,
+  [ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION]: 4,
+};
+
+const buildFilterObj = (listingType, page) => ({
+  listingType,
+  page,
+  limit: PAGE_SIZE_BY_TYPE[listingType],
+  available: true,
+});
 
 const Marketplace = () => {
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
@@ -20,16 +37,22 @@ const Marketplace = () => {
   const bgColor = useSelector((state) => state.app.theme.bgColor);
   const { userData } = useSelector((state) => state.address.userData);
   const { contractData } = useSelector((state) => state.chain.contractData);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
+  const userProfile = userData?.full_name;
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get("tab");
+  const initialTab =
+    requestedTab === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION
+      ? ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION
+      : ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE;
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filterObj, setFilterObj] = useState(
-    JSON.stringify({
-      listingType: "auction",
-      page: currentPage,
-      limit: pageSize,
-      available: true,
-    }),
+    JSON.stringify(buildFilterObj(initialTab, 1)),
   );
 
   const {
@@ -42,10 +65,16 @@ const Marketplace = () => {
     },
   });
 
-  const userProfile = userData?.full_name;
-  const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
-  );
+  const isAuctionTab = activeTab === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION;
+  const pageSize = PAGE_SIZE_BY_TYPE[activeTab];
+
+  const handleTabChange = (tab) => {
+    if (tab === activeTab) return;
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setFilterObj(JSON.stringify(buildFilterObj(tab, 1)));
+    setSearchParams({ tab });
+  };
 
   const handleCategoryChange = (value) => {
     let filterObjCopy = JSON.parse(filterObj);
@@ -63,7 +92,6 @@ const Marketplace = () => {
       }),
     );
 
-    // console.log(convertedPrice);
     let filterObjCopy = JSON.parse(filterObj);
     filterObjCopy.price =
       convertedPrice?.length === 1 ? [0, convertedPrice[0]] : convertedPrice;
@@ -98,6 +126,10 @@ const Marketplace = () => {
     return originalElement;
   };
 
+  const listings =
+    getAllNftsInMarketPlaceAndSupportFilter
+      ?.getAllNftsInMarketPlaceAndSupportFilter?.data || [];
+
   return (
     <div
       className={`${backgroundTheme} main`}
@@ -130,7 +162,39 @@ const Marketplace = () => {
             marginTop: "2.5rem",
           }}
         ></div>
-        <div className="d-flex flex-column flex-sm-row justify-content-between gap-5 mt-5">
+
+        <div className="d-flex justify-content-center marketplace-tabs">
+          <div
+            className={`marketplace-tabs__group ${
+              textColor == "black" ? "marketplace-tabs__group--light" : ""
+            }`}
+          >
+            <button
+              type="button"
+              className={`marketplace-tabs__btn ${
+                !isAuctionTab ? "marketplace-tabs__btn--active" : ""
+              }`}
+              onClick={() =>
+                handleTabChange(ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE)
+              }
+            >
+              Fixed-Price
+            </button>
+            <button
+              type="button"
+              className={`marketplace-tabs__btn ${
+                isAuctionTab ? "marketplace-tabs__btn--active" : ""
+              }`}
+              onClick={() =>
+                handleTabChange(ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION)
+              }
+            >
+              Auction
+            </button>
+          </div>
+        </div>
+
+        <div className="d-flex flex-column flex-sm-row justify-content-between gap-5 mt-4">
           <div className="d-flex gap-5 flex-column flex-sm-row  ">
             <div
               className={`filter-wrapper ${bgColor}`}
@@ -178,7 +242,7 @@ const Marketplace = () => {
                   onChange={handlePriceChange}
                   options={[
                     {
-                      value: "010",
+                      value: "0-10",
                       label: "$0-$10",
                     },
                     {
@@ -194,7 +258,7 @@ const Marketplace = () => {
                       label: "$1000-$10000",
                     },
                     {
-                      value: "10000 - 100000",
+                      value: "10000-100000",
                       label: "$10000+",
                     },
                   ]}
@@ -227,7 +291,7 @@ const Marketplace = () => {
                       label: "1000-10000",
                     },
                     {
-                      value: "10000 - 100000",
+                      value: "10000-100000",
                       label: "10000+",
                     },
                   ]}
@@ -286,46 +350,67 @@ const Marketplace = () => {
         <div className="row my-3 p-4 p-md-0">
           {getAllNftsInMarketPlaceAndSupportFilterLoading ? (
             <CardSkeletal />
-          ) : getAllNftsInMarketPlaceAndSupportFilter
-              ?.getAllNftsInMarketPlaceAndSupportFilter?.data?.length > 0 ? (
-            getAllNftsInMarketPlaceAndSupportFilter?.getAllNftsInMarketPlaceAndSupportFilter?.data.map(
-              (item, i) => {
-                if (
-                  true
-                  // !item?.nft_id?.is_blocked &&
-                  // compareTime(item?.biddingEndTime) &&
-                  // item.isSold === false
-                ) {
-                  return (
-                    <CardCompnent
-                      key={i}
-                      image={imgPaths + item?.user_id?.profileImg}
-                      status={item?.nft_id?.status}
-                      duration={item?.nft_id?.video_duration}
-                      name={item?.nft_id?.name}
-                      videoLink={item?.nft_id?.video}
-                      marketplacecard
-                      collectionBtn
-                      userProfile={!!userProfile}
-                      auctionStartTime={item?.biddingStartTime}
-                      auctionEndTime={item?.biddingEndTime}
-                      // auctionStartTime={dbDateToTime(item?.biddingStartTime)}
-                      // auctionEndTime={dbDateToTime(item?.biddingEndTime)}
-                      initialPrice={Number(item?.price)}
-                      auctionid={item?.listingID}
-                      numberofcopies={item?.numberOfCopies}
-                      currentBidAmount={item?.auction_highest_bid}
-                      nftOwner={item?.seller?.user_address}
-                      royalty={item?.nft_id?.royalty}
-                      tokenId={item.tokenId}
-                      id={item?.nft_id?._id}
-                      itemDbId={item?._id}
-                      userObj={item?.seller}
-                    />
-                  );
-                }
-              },
-            )
+          ) : listings.length > 0 ? (
+            listings.map((item, i) => {
+              if (isAuctionTab) {
+                return (
+                  <CardCompnent
+                    key={i}
+                    image={imgPaths + item?.user_id?.profileImg}
+                    status={item?.nft_id?.status}
+                    duration={item?.nft_id?.video_duration}
+                    name={item?.nft_id?.name}
+                    videoLink={item?.nft_id?.video}
+                    marketplacecard
+                    collectionBtn
+                    userProfile={!!userProfile}
+                    auctionStartTime={item?.biddingStartTime}
+                    auctionEndTime={item?.biddingEndTime}
+                    initialPrice={Number(item?.price)}
+                    auctionid={item?.listingID}
+                    numberofcopies={item?.numberOfCopies}
+                    currentBidAmount={item?.auction_highest_bid}
+                    nftOwner={item?.seller?.user_address}
+                    royalty={item?.nft_id?.royalty}
+                    tokenId={item.tokenId}
+                    id={item?.nft_id?._id}
+                    itemDbId={item?._id}
+                    userObj={item?.seller}
+                  />
+                );
+              }
+
+              if (item?.nft_id?.is_blocked || item?.isSold) {
+                return null;
+              }
+
+              return (
+                <CardCompnent
+                  key={i}
+                  image={profile2}
+                  status={item?.nft_id?.status}
+                  name={item?.nft_id?.name}
+                  videoLink={item?.nft_id?.video}
+                  duration={item?.nft_id?.video_duration}
+                  topName
+                  collectionBtn
+                  detailBtn
+                  userProfile={userProfile ? true : false}
+                  userId={item?.seller?._id}
+                  sellerUsername={item?.seller?.user_name}
+                  owners={item?.owners}
+                  fixtokenId={item?.tokenid}
+                  fixOwner={item?.seller?.user_address}
+                  fixRoyalty={item?.nft_id?.royalty}
+                  artistName={item?.nft_id?.artist_name1}
+                  fixCopies={item?.nft_id?.supply}
+                  id={item?.nft_id?._id}
+                  likeCount={item?.nft_id?.likeCount}
+                  watchCount={item?.nft_id?.watchCount}
+                  userObj={item?.seller}
+                />
+              );
+            })
           ) : (
             <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
               There is no data found

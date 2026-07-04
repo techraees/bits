@@ -268,9 +268,9 @@ const ListNft = () => {
           ToastMessage("Listing Successful", "", "success");
           dispatch(loadContractIns());
           if (isAuction) {
-            navigate("/marketplace");
+            navigate("/marketplace?tab=auction");
           } else {
-            navigate("/video-gallery");
+            navigate("/marketplace?tab=fixed_price");
           }
         } catch (error) {
           setLoadingStatus(false);

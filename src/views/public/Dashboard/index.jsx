@@ -104,7 +104,7 @@ const Dashboard = () => {
                 sell it or give it to your most valued supporters.
               </span>
               <div className="mt-3 ">
-                <Link to="video-gallery">
+                <Link to="/marketplace?tab=fixed_price">
                   <Button
                     className="red dashboardBtns px-5"
                     style={{

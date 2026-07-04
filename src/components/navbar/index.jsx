@@ -398,15 +398,9 @@ const NavbarComponent = ({ dashboardNav }) => {
               </NavLink>
               <Nav.Link
                 className="white mobile_navlink text-nowrap"
-                onClick={() => navigate("/video-gallery")}
-              >
-                Emote/Video gallery
-              </Nav.Link>
-              <Nav.Link
-                className="white mobile_navlink text-nowrap"
                 onClick={() => navigate("/marketplace")}
               >
-                Auctioned NFTs
+                Marketplace
               </Nav.Link>
               <Nav.Link
                 className="white mobile_navlink"

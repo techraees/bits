@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import {
   collection,
   gallery,
@@ -24,7 +24,6 @@ import Signup from "./views/public/Signup";
 import NftDetailsScreen from "./views/public/NftDetailScreen";
 import HelpCenter from "./views/public/HelpCenter";
 import PrivacySecurity from "./views/public/PrivacySecurity";
-import VideoGallery from "./views/public/VideoGallery";
 import AboutUs from "./views/public/AboutUs";
 import Marketplace from "./views/public/Marketplace";
 import Contact from "./views/public/Contact";
@@ -43,6 +42,7 @@ import ListNft from "./views/private/ListNft";
 import AssetsDetails from "./views/private/AssetsDetails";
 import CreateEmote from "./views/private/CreateEmote";
 import NotFound from "./views/public/NotFound";
+import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "./data/enums";
 
 const routes = [
   {
@@ -76,13 +76,23 @@ const routes = [
     isNav: true,
   },
   {
+    // "Emote-Video Gallery" and "Marketplace" used to be two separate nav
+    // entries that pointed to near-identical pages (same query, different
+    // listingType). They are now one "Marketplace" page with Fixed-Price /
+    // Auction tabs. This route is kept alive as a redirect so old links,
+    // bookmarks, and post-listing navigation to /video-gallery still work.
     name: "Emote-Video Gallery",
     layout: "public",
     path: "/video-gallery",
     icon: gallery,
-    component: <VideoGallery />,
+    component: (
+      <Navigate
+        to={`/marketplace?tab=${ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE}`}
+        replace
+      />
+    ),
     visible: true,
-    isNav: true,
+    isNav: false,
     key: 6,
   },
   {
