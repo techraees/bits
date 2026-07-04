@@ -763,6 +763,7 @@ const MintNft = () => {
                 backgroundColor: "transparent",
                 color: textColor,
               }}
+              onClick={() => navigate(-1)}
             >
               Cancel
             </Button>
