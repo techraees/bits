@@ -1,0 +1,11 @@
+.network-switch-modal {
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.network-switch-modal__text {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 0;
+}

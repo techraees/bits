@@ -214,7 +214,12 @@
 
 @media only screen and (min-width: 1024px) and (max-width: 1200px) {
   .chainDiv {
-    display: none;
+    /* Previously hidden in this width range, which meant the network
+       status indicator disappeared entirely on common tablet/laptop
+       widths. Keep it visible everywhere so the current network is
+       always shown. */
+    display: flex;
+    margin-left: 1rem;
   }
 }
 
@@ -236,6 +241,20 @@
   color: #adadad;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.chain-mismatch-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #f5a623;
+  box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.25);
+  cursor: help;
 }
 
 .rightChainDiv {

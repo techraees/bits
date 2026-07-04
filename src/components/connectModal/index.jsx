@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { ButtonComponent } from "../index";
 import { Modal } from "antd";
@@ -16,33 +16,13 @@ const ConnectModal = ({ visible, onClose }) => {
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
 
-  const { account } = useSelector((state) => state.web3.walletData);
   const { userData } = useSelector((state) => state.address.userData);
   const { contractData } = useSelector((state) => state.chain.contractData);
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
 
-  const [buttonVisible, setButtonVisible] = useState(visible);
-
-  const handleWalletConnect = async () => {
-    try {
-      setButtonVisible(false);
-      onClose();
-      if (isConnected) {
-        await fetchData();
-        return;
-      } else {
-        await open();
-      }
-    } catch (error) {
-      console.error("Connection failed:", error);
-    }
-  };
-
-  useEffect(() => {
-    setButtonVisible(visible);
-  }, [visible]);
+  const [connecting, setConnecting] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -59,7 +39,6 @@ const ConnectModal = ({ visible, onClose }) => {
       const signer = provider.getSigner();
       const { chainId } = await provider.getNetwork();
 
-      // console.log("Provider", chainId);
       if (userData) {
         // Existing user: Check address
         const userAddress = userData.address;
@@ -68,9 +47,6 @@ const ConnectModal = ({ visible, onClose }) => {
           ToastMessage("Error", "Please connect correct wallet", "error");
           return;
         }
-      } else {
-        // New user: No userData, no need to compare addresses
-        // console.log("New user signing up, skipping address check.");
       }
 
       // Proceed only if chainId matches
@@ -88,9 +64,51 @@ const ConnectModal = ({ visible, onClose }) => {
     }
   };
 
+  // Previously fetchData() (which populates Redux web3 state) only ran when
+  // the modal was opened while a wallet was already connected. A brand-new
+  // connection never completed this step, so the user had to trigger their
+  // action (mint/list/bid) a second time. This effect completes the flow
+  // automatically the moment AppKit reports a connected wallet with a ready
+  // provider, so connecting is a genuine single click.
+  useEffect(() => {
+    if (!visible || !isConnected || !walletProvider) return;
+
+    let cancelled = false;
+    setConnecting(true);
+
+    fetchData().finally(() => {
+      if (cancelled) return;
+      setConnecting(false);
+      onClose();
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible, isConnected, walletProvider]);
+
+  const handleWalletConnect = async () => {
+    try {
+      if (isConnected) {
+        setConnecting(true);
+        await fetchData();
+        setConnecting(false);
+        onClose();
+        return;
+      }
+
+      await open();
+      // Completion (fetchData + close) is handled by the effect above once
+      // AppKit reports isConnected + walletProvider ready.
+    } catch (error) {
+      console.error("Connection failed:", error);
+      setConnecting(false);
+    }
+  };
+
   return (
     <Modal
-      // wrapClassName={backgroundTheme}
       style={{
         marginTop: "6rem",
         zIndex: 999999999,
@@ -98,7 +116,7 @@ const ConnectModal = ({ visible, onClose }) => {
       footer={null}
       className={backgroundTheme}
       bodyStyle={{ backgroundColor: "#222222" }}
-      open={buttonVisible}
+      open={visible}
       onOk={onClose}
       onCancel={onClose}
       zIndex={99999}
@@ -107,16 +125,12 @@ const ConnectModal = ({ visible, onClose }) => {
         <div className="d-flex mt-3 gap-4   flex-column justify-content-center align-items-center">
           <ButtonComponent
             onClick={handleWalletConnect}
-            text={"Link Wallet"}
+            text={connecting ? "Connecting..." : "Link Wallet"}
             height={40}
             width={170}
+            disabled={connecting}
+            loading={connecting}
           />
-          {/* <ButtonComponent
-            onClick={handleWalletConnect}
-            text={"Link Mobile Wallet"}
-            height={40}
-            width={170}
-          /> */}
         </div>
       </div>
     </Modal>

@@ -17,8 +17,9 @@ import { FaEthereum } from "react-icons/fa";
 import { useLazyQuery } from "@apollo/client";
 import { GET_PROFILE } from "../../gql/queries";
 import profileimg from "../../assets/images/profile1.svg";
-import { Col, Modal } from "antd";
+import { Col, Modal, Tooltip } from "antd";
 import LogoutModal from "../logoutModal";
+import NetworkSwitchModal from "../networkSwitchModal";
 import CookieConsent from "react-cookie-consent";
 // import NotificationModal from "../notificationModal";
 import PrivacyModal from "../privacyModal";
@@ -26,6 +27,7 @@ import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
 import { getCookieStorage } from "../../utills/cookieStorage";
+import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 
 const environment = process.env;
 
@@ -81,6 +83,9 @@ const NavbarComponent = ({ dashboardNav }) => {
   const { contractData } = useSelector((state) => state.chain.contractData);
   const contracts = useSelector((state) => state.contract);
   const fixedItems = useSelector((state) => state.fixedItems);
+
+  const { isConnected } = useAppKitAccount();
+  const { chainId: walletChainId } = useAppKitNetwork();
 
   const isLight = textColor === "black";
 
@@ -192,33 +197,56 @@ const NavbarComponent = ({ dashboardNav }) => {
   }, [error]);
   const [showRedImage, setShowRedImage] = useState(false);
   const [iconClicked, setIconClicked] = useState(false);
+  const [networkSwitchModal, setNetworkSwitchModal] = useState({
+    visible: false,
+    targetChain: null,
+  });
 
+  // Was `[]` before, so the icons only ever reflected contractData.chain at
+  // mount time and never updated if the chain changed elsewhere (e.g. after
+  // a guided network switch completes).
   useEffect(() => {
-    if (contractData?.chain) {
-      if (contractData.chain === 1) {
-        setIconClicked(true);
-        setShowRedImage(true);
-      } else if (contractData.chain === 137) {
-        setShowRedImage(false);
-        setIconClicked(false);
-      } else {
-        setShowRedImage(false);
-        setIconClicked(false);
-      }
+    if (!contractData?.chain) return;
+
+    if (contractData.chain === 1) {
+      setIconClicked(true);
+      setShowRedImage(true);
+    } else {
+      setShowRedImage(false);
+      setIconClicked(false);
     }
-  }, []);
+  }, [contractData?.chain]);
 
-  const toggleIconColor = () => {
-    handleEthChain();
-    setIconClicked(true);
-    setShowRedImage(true);
+  const applyChainSelection = (targetChain) => {
+    if (targetChain === 1) {
+      handleEthChain();
+    } else {
+      handleMaticChain();
+    }
   };
 
-  const toggleImage = () => {
-    handleMaticChain();
-    setShowRedImage(false);
-    setIconClicked(false);
+  // If the wallet is connected on a different chain than the one the user
+  // just picked, guide them through switching it instead of only letting
+  // them find out via a toast at mint/list/bid/purchase time.
+  const handleChainSelect = (targetChain) => {
+    const isMismatched =
+      isConnected && walletChainId && Number(walletChainId) !== targetChain;
+
+    if (isMismatched) {
+      setNetworkSwitchModal({ visible: true, targetChain });
+    } else {
+      applyChainSelection(targetChain);
+    }
   };
+
+  const closeNetworkSwitchModal = () => {
+    setNetworkSwitchModal({ visible: false, targetChain: null });
+  };
+
+  const isChainMismatched =
+    isConnected &&
+    walletChainId &&
+    Number(walletChainId) !== Number(contractData?.chain);
 
   const openPrivacyModal = () => {
     setPrivacyModal(true);
@@ -415,18 +443,29 @@ const NavbarComponent = ({ dashboardNav }) => {
             <div
               className={`chainDiv ${isLight ? "chain-light" : "chain-dark"}`}
             >
-              <div className="leftChainDiv">Chains</div>
+              <div className="leftChainDiv">
+                <span>{contractData?.chain === 1 ? "Ethereum" : "Polygon"}</span>
+                {isChainMismatched && (
+                  <Tooltip
+                    title={`Your wallet is on a different network. Click ${
+                      contractData?.chain === 1 ? "ETH" : "Polygon"
+                    } to switch it.`}
+                  >
+                    <span className="chain-mismatch-dot" />
+                  </Tooltip>
+                )}
+              </div>
               <div className="rightChainDiv">
                 <FaEthereum
                   cursor="pointer"
-                  onClick={toggleIconColor}
+                  onClick={() => handleChainSelect(1)}
                   className={`chainIcon ${iconClicked ? "red" : ""}`}
                 />
                 <img
                   className={`ethIcon ${showRedImage ? "" : "hidden"}`}
                   src={polygon}
                   alt="Polygon"
-                  onClick={toggleImage}
+                  onClick={() => handleChainSelect(137)}
                   width={15}
                   height={15}
                 />
@@ -434,12 +473,18 @@ const NavbarComponent = ({ dashboardNav }) => {
                   className={`ethIcon red ${showRedImage ? "hidden" : ""}`}
                   src={redPolygon}
                   alt="Red Polygon"
-                  onClick={toggleImage}
+                  onClick={() => handleChainSelect(137)}
                   width={15}
                   height={15}
                 />
               </div>
             </div>
+            <NetworkSwitchModal
+              visible={networkSwitchModal.visible}
+              targetChain={networkSwitchModal.targetChain}
+              onClose={closeNetworkSwitchModal}
+              onSwitched={() => applyChainSelection(networkSwitchModal.targetChain)}
+            />
             <Nav className="ms-auto bottom-nav">
               {!full_name ? (
                 <div className="d-flex align-items-center justify-content-center navbar-menu1">
