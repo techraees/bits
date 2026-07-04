@@ -16,8 +16,9 @@ import {
 } from "../../../components";
 import ConnectModal from "../../../components/connectModal";
 import ForgotPassModal from "../../../components/ForgotPassModal";
+import PasswordRequirements from "../../../components/PasswordRequirements";
 import Loading from "../../../components/loaders/loading";
-import { signInSchema, signUpSchema } from "../../../components/validations";
+import { signInSchema, signUpSchema, isPasswordValid, PASSWORD_FORMAT_ERROR_MESSAGE } from "../../../components/validations";
 import { CREATE_USER } from "../../../gql/mutations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
@@ -250,7 +251,7 @@ function Login() {
   async function signUpHandle(data) {
     // console.log(data, "ASDASDASDASDADS");
     if (
-      validatePassword(data.password) &&
+      isPasswordValid(data.password) &&
       validateEmail(data.email) &&
       validateUsername(data.user_name) &&
       validatePhoneNumber(data.phone_number)
@@ -367,12 +368,6 @@ function Login() {
     return data;
   };
 
-  const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-    return passwordRegex.test(password);
-  };
-
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -459,24 +454,26 @@ function Login() {
                     {signUpFormError.email.message}
                   </span>
                 )}
-                <InputComponent
-                  password
-                  placeholder={"Password"}
-                  ref={signUpRegister}
-                  name="password"
-                  value={watch("password")}
-                  onChange={handleChangeSignUp}
-                  autocomplete="off"
-                />
-                {signUpFormError.password && (
-                  <span className="text-danger" style={{ fontSize: "12px" }}>
-                    {signUpFormError.password.message}
-                  </span>
-                )}
-                <div
-                  className="bits-phone-container"
-                  style={{ marginBottom: "15px" }}
-                >
+                <div className="signup-password-section">
+                  <InputComponent
+                    password
+                    placeholder={"Password"}
+                    ref={signUpRegister}
+                    name="password"
+                    value={watch("password")}
+                    onChange={handleChangeSignUp}
+                    autocomplete="off"
+                  />
+                  {signUpFormError.password &&
+                    signUpFormError.password.message !==
+                      PASSWORD_FORMAT_ERROR_MESSAGE && (
+                      <span className="signup-field-error">
+                        {signUpFormError.password.message}
+                      </span>
+                    )}
+                  <PasswordRequirements password={watch("password") || ""} />
+                </div>
+                <div className="bits-phone-container">
                   <PhoneInputRPI2
                     country={phoneCountry}
                     enableSearch={true}
@@ -496,134 +493,50 @@ function Login() {
                         });
                       }
                     }}
-                    containerStyle={{
-                      borderBottom: "2px solid #DCDCDC",
-                      transition: "all 0.3s ease",
-                    }}
-                    inputStyle={{
-                      background: "transparent",
-                      border: "none",
-                      color: "#b0b0b0",
-                      fontSize: "15px",
-                      width: "100%",
-                      height: "50px",
-                    }}
-                    buttonStyle={{
-                      background: "transparent",
-                      border: "none",
-                    }}
-                    searchStyle={{
-                      width: "100%",
-                      margin: "0px auto",
-                      padding: "8px 9px",
-                      fontSize: "11px",
-                      border: "1px solid #E0E0E0",
-                      borderRadius: "4px",
-                      background: "#F9F9F9",
-                      color: "#333",
-                    }}
+                    containerClass="signup-phone-input"
+                    inputClass="signup-phone-input__field"
+                    buttonClass="signup-phone-input__flag-btn"
+                    dropdownClass="signup-phone-input__dropdown"
+                    searchClass="signup-phone-input__search"
                   />
-                  <style>
-                    {`
-                      .bits-phone-container:focus-within .react-tel-input {
-                        border-bottom: 2px solid #A62828 !important;
-                      }
-                      /* Specific styling only for the Main Input field */
-                      .bits-phone-container .react-tel-input > input.form-control {
-                        text-align: center !important;
-                        font-weight: 400 !important;
-                        color: #B0B0B0 !important;
-                        opacity: 1 !important;
-                        padding-right: 48px !important; /* visual balance for correct centering */
-                      }
-                      .bits-phone-container:focus-within .react-tel-input > input.form-control {
-                        color: #A62828 !important;
-                        font-weight: 600 !important;
-                        opacity: 1 !important;
-                        box-shadow: none !important;
-                      }
-                      .bits-phone-container .react-tel-input > input.form-control::placeholder {
-                        color: #000000 !important;
-                        opacity: 1 !important;
-                      }
-                      .bits-phone-container:focus-within .react-tel-input > input.form-control::placeholder {
-                        color: #A62828 !important;
-                        opacity: 1 !important;
-                      }
-                      /* General Tweaks */
-                      .bits-phone-container .react-tel-input .selected-flag:hover {
-                         background: transparent;
-                      }
-                      /* Remove all padding strictly from country list search container */
-                      .bits-phone-container .react-tel-input .search {
-                         padding: 0px !important;
-                      }
-                      /* Hide the magnifying glass icon completely */
-                      .bits-phone-container .react-tel-input .search-icon {
-                        display: none !important;
-                      }
-                      .bits-phone-container .react-tel-input .search-box {
-                         padding-top: 6.5px !important;
-                         padding-bottom: 6.5px !important;
-                      }
-                      /* Hide scrollbars */
-                      .bits-phone-container .react-tel-input .country-list::-webkit-scrollbar {
-                        display: none;
-                      }
-                      .bits-phone-container .react-tel-input .country-list {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;
-                      }
-                    `}
-                  </style>
                 </div>
                 {signUpFormError.phone_number && (
-                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                  <span className="signup-field-error">
                     {signUpFormError.phone_number.message}
                   </span>
                 )}
 
-                <div className="mt-3">
-                  <label> Date of Birth</label>
+                <div className="signup-dob-section">
+                  <label className="signup-dob-label">Date of Birth</label>
                   <Row gutter={16}>
-                    <Col span={8} className="my-3 mb-2">
+                    <Col span={8}>
                       <Select
-                        defaultValue="MM"
-                        style={{
-                          width: "100%",
-                        }}
-                        dropdownStyle={{
-                          color: "#dcdcdc",
-                        }}
+                        placeholder="MM"
+                        style={{ width: "100%" }}
                         name="month"
-                        className={"black"}
+                        className="signup-dob-select"
                         onChange={handleMonth}
                         options={monthsOptions}
                       />
                     </Col>
 
-                    <Col span={8} className="my-3 mb-2">
+                    <Col span={8}>
                       <Select
-                        defaultValue="DD"
-                        style={{
-                          width: "100%",
-                        }}
+                        placeholder="DD"
+                        style={{ width: "100%" }}
                         name="day"
-                        className={"black"}
+                        className="signup-dob-select"
                         onChange={handleDay}
                         options={daysOptions}
                       />
                     </Col>
 
-                    <Col span={8} className="my-3 mb-2">
+                    <Col span={8}>
                       <Select
-                        defaultValue="YYYY"
-                        style={{
-                          width: "100%",
-                          color: "black",
-                        }}
+                        placeholder="YYYY"
+                        style={{ width: "100%" }}
                         name="year"
-                        className={"black"}
+                        className="signup-dob-select"
                         onChange={handleYear}
                         options={yearsOptions}
                       />

@@ -47,18 +47,29 @@ const mintValidation = (values) => {
   return errors;
 };
 
-// const signUpSchema = yup.object().shape({
-//   full_name: yup.string().required("Full name is required"),
-//   user_name: yup.string().required("Username is required"),
-//   email: yup.string().email("Invalid email").required("Email is required"),
-//   password: yup
-//     .string()
-//     .min(6, "Password must be at least 6 characters")
-//     .required("Password is required"),
-//   phone_number: yup
-//     .string()
-//     .matches(/^\d{10}$/, "Phone number must be 10 digits"),
-// });
+// Allowed: ! @ # $ % ^ & * ( ) _ + , . ? ~ / -
+// Blocked (security): < > { } [ ] ; " '
+const PASSWORD_SPECIAL_CHARS_REGEX = /[!@#$%^&*()_+.,?~\/-]/;
+const PASSWORD_MALICIOUS_CHARS_REGEX = /[<>{}\[\];"']/;
+
+const PASSWORD_FULL_REGEX =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.,?~\/-]).{8,}$/;
+
+const PASSWORD_FORMAT_ERROR_MESSAGE =
+  "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character";
+
+const getPasswordRequirementStatus = (password = "") => ({
+  minLength: password.length >= 8,
+  uppercase: /[A-Z]/.test(password),
+  lowercase: /[a-z]/.test(password),
+  hasNumber: /\d/.test(password),
+  hasSpecial: PASSWORD_SPECIAL_CHARS_REGEX.test(password),
+});
+
+const isPasswordValid = (password = "") =>
+  PASSWORD_FULL_REGEX.test(password) &&
+  !/\s\s+/.test(password) &&
+  !PASSWORD_MALICIOUS_CHARS_REGEX.test(password);
 
 const signUpSchema = yup.object().shape({
   full_name: yup.string().trim().required("Full name is required"),
@@ -78,9 +89,11 @@ const signUpSchema = yup.object().shape({
   password: yup
     .string()
     .required("Password is required")
-    .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/,
-      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    .matches(PASSWORD_FULL_REGEX, PASSWORD_FORMAT_ERROR_MESSAGE)
+    .test(
+      "no-malicious-chars",
+      "Password contains invalid characters (e.g., < > { } [ ] ; \" ')",
+      (value) => !value || !PASSWORD_MALICIOUS_CHARS_REGEX.test(value),
     )
     .test(
       "no-consecutive-spaces",
@@ -204,6 +217,11 @@ const editProfileValidate = (values) => {
 export {
   uploadValidation,
   mintValidation,
+  PASSWORD_FORMAT_ERROR_MESSAGE,
+  PASSWORD_SPECIAL_CHARS_REGEX,
+  PASSWORD_FULL_REGEX,
+  getPasswordRequirementStatus,
+  isPasswordValid,
   signUpSchema,
   signInSchema,
   userEditSchema,

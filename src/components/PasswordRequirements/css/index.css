@@ -1,0 +1,42 @@
+.password-requirements {
+  list-style: none;
+  width: 100%;
+  margin: 12px 0 15px;
+  padding: 0;
+  text-align: left;
+}
+
+.password-requirements__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #b0b0b0;
+  margin-bottom: 6px;
+}
+
+.password-requirements__item:last-child {
+  margin-bottom: 0;
+}
+
+.password-requirements__item span {
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.password-requirements__icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #b0b0b0;
+}
+
+.password-requirements__item--met {
+  color: #1aae17;
+}
+
+.password-requirements__item--met .password-requirements__icon {
+  color: #1aae17;
+}

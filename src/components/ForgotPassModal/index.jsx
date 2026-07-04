@@ -2,6 +2,8 @@
 import { Modal } from "antd";
 import React, { useState } from "react";
 import { ButtonComponent, InputComponent, ToastMessage } from "..";
+import PasswordRequirements from "../PasswordRequirements";
+import { isPasswordValid } from "../validations";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { RESET_PASSWORD_MUTATION } from "../../gql/mutations";
@@ -60,7 +62,7 @@ const ForgotPassModal = ({
 
   const handleSubmitConfirm = async () => {
     if (formValue?.password === formValue?.confirm_password) {
-      if (validatePassword(formValue?.confirm_password)) {
+      if (isPasswordValid(formValue?.confirm_password)) {
         try {
           const { data } = await resetPassword({
             variables: {
@@ -86,12 +88,6 @@ const ForgotPassModal = ({
     } else {
       ToastMessage("Error", "Password mismatch", "error");
     }
-  };
-
-  const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-    return passwordRegex.test(password);
   };
 
   const validateEmail = (email) => {
@@ -168,7 +164,6 @@ const ForgotPassModal = ({
                 <InputComponent
                   placeholder={"Password"}
                   name="password"
-                  // ref={register}
                   onChange={handleChange}
                   value={formValue?.password}
                   autoComplete="off"
@@ -176,15 +171,20 @@ const ForgotPassModal = ({
                 />
               </div>
 
-              <InputComponent
-                placeholder={"Confirm Password"}
-                name="confirm_password"
-                // ref={register}
-                onChange={handleChange}
-                value={formValue?.confirm_password}
-                autoComplete="off"
-                password
-              />
+              <PasswordRequirements password={formValue?.password || ""} />
+
+              <div className="my-3">
+                <InputComponent
+                  placeholder={"Confirm Password"}
+                  name="confirm_password"
+                  onChange={handleChange}
+                  value={formValue?.confirm_password}
+                  autoComplete="off"
+                  password
+                />
+              </div>
+
+              <PasswordRequirements password={formValue?.confirm_password || ""} />
 
               <div className="my-3">
                 <ButtonComponent

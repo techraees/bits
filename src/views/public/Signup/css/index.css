@@ -53,3 +53,201 @@
 .light-grey {
   display: block;
 }
+
+.signup-password-section {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.signup-password-section .ant-input-password {
+  width: 100%;
+}
+
+.signup-field-error {
+  display: block;
+  font-size: 12px;
+  color: #d54343;
+  margin-top: 10px;
+  margin-bottom: 0;
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Phone number country + input */
+.bits-phone-container {
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.bits-phone-container .signup-phone-input {
+  width: 100%;
+  border-bottom: 2px solid #dcdcdc;
+  transition: border-color 0.3s ease;
+}
+
+.bits-phone-container:focus-within .signup-phone-input {
+  border-bottom-color: #a62828;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 100%;
+  padding: 0 6px 0 10px;
+  background: transparent !important;
+  border-radius: 0;
+  outline: none;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:hover,
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:focus {
+  background: transparent !important;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .arrow {
+  left: 22px;
+  border-top: 4px solid #b0b0b0;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .arrow.up {
+  border-bottom: 4px solid #b0b0b0;
+  border-top: none;
+}
+
+.bits-phone-container .signup-phone-input__field {
+  width: 100% !important;
+  height: 50px !important;
+  padding: 15px 48px 15px 58px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 400;
+  color: #b0b0b0 !important;
+}
+
+.bits-phone-container:focus-within .signup-phone-input__field {
+  color: #a62828 !important;
+  font-weight: 600;
+}
+
+.bits-phone-container .signup-phone-input__field::placeholder {
+  color: #b0b0b0 !important;
+  opacity: 1;
+}
+
+.bits-phone-container:focus-within .signup-phone-input__field::placeholder {
+  color: #a62828 !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .search {
+  padding: 0 !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .search-icon {
+  display: none !important;
+}
+
+.bits-phone-container .signup-phone-input__search {
+  width: 100%;
+  margin: 0 auto;
+  padding: 8px 9px;
+  font-size: 11px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #f9f9f9;
+  color: #333;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list::-webkit-scrollbar {
+  display: none;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Date of birth selects */
+.signup-dob-section {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.signup-dob-label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #2b2b2b;
+}
+
+.signup-dob-select {
+  width: 100%;
+}
+
+.signup-dob-select .ant-select-selector {
+  height: 48px !important;
+  padding: 8px 11px !important;
+  border: none !important;
+  border-bottom: 2px solid #dcdcdc !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-dob-select .ant-select-selection-item,
+.signup-dob-select .ant-select-selection-placeholder {
+  text-align: center;
+  width: 100%;
+  color: #b0b0b0 !important;
+  font-weight: 400;
+  line-height: 30px !important;
+}
+
+.signup-dob-select .ant-select-selection-item {
+  color: #2b2b2b !important;
+  font-weight: 500;
+}
+
+.signup-dob-select .ant-select-arrow {
+  color: #b0b0b0;
+  right: 8px;
+}
+
+.signup-dob-select.ant-select-focused .ant-select-selector,
+.signup-dob-select.ant-select-open .ant-select-selector {
+  border-bottom-color: #a62828 !important;
+  box-shadow: none !important;
+}
+
+.signup-dob-select.ant-select-focused .ant-select-selection-item,
+.signup-dob-select.ant-select-open .ant-select-selection-item,
+.signup-dob-select.ant-select-focused .ant-select-selection-placeholder,
+.signup-dob-select.ant-select-open .ant-select-selection-placeholder {
+  color: #a62828 !important;
+  font-weight: 600;
+}
+
+.signup-dob-select.ant-select-focused .ant-select-arrow,
+.signup-dob-select.ant-select-open .ant-select-arrow {
+  color: #a62828;
+}
