@@ -1,9 +1,11 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { BrowserRouter, useLocation } from "react-router-dom";
+import { ethers } from "ethers";
 import logo from "../assets/images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import "./elements.css";
 import { updateAccount } from "../store/actions";
+import ActionTypes from "../store/contants/ActionTypes";
 import PublicLayout from "../views/public";
 import PrivateLayout from "../views/private";
 import { NavbarComponent } from "../components";
@@ -26,11 +28,36 @@ const Layout = () => {
   const { web3, account } = useSelector((state) => state.web3.walletData);
 
   useEffect(() => {
-    web3 &&
-      window.ethereum.on("accountsChanged", async (data) => {
-        dispatch(updateAccount(data[0]));
-      });
-  }, [web3, account]);
+    if (!web3 || !window.ethereum) return;
+
+    const handleAccountsChanged = (accounts) => {
+      dispatch(updateAccount(accounts[0]));
+    };
+
+    const handleChainChanged = async (chainIdHex) => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const chainId = parseInt(chainIdHex, 16);
+
+        dispatch({
+          type: ActionTypes.WEB3CONNECT,
+          payload: { address, web3: provider, chainId, signer },
+        });
+      } catch (error) {
+        console.error("Failed to refresh wallet after chain change:", error);
+      }
+    };
+
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+    window.ethereum.on("chainChanged", handleChainChanged);
+
+    return () => {
+      window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+      window.ethereum.removeListener("chainChanged", handleChainChanged);
+    };
+  }, [web3, account, dispatch]);
 
   return (
     <BrowserRouter>

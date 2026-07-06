@@ -27,6 +27,11 @@ import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
 import { getCookieStorage } from "../../utills/cookieStorage";
+import {
+  getWalletChainId,
+  isWalletActive,
+  subscribeWalletChain,
+} from "../../utills/walletChain";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 
 const environment = process.env;
@@ -86,6 +91,36 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   const { isConnected } = useAppKitAccount();
   const { chainId: walletChainId } = useAppKitNetwork();
+  const [liveWalletChainId, setLiveWalletChainId] = useState(null);
+
+  const walletActive = isWalletActive(isConnected);
+  const effectiveWalletChainId =
+    liveWalletChainId ??
+    (walletChainId != null ? Number(walletChainId) : null);
+
+  useEffect(() => {
+    if (!walletActive) {
+      setLiveWalletChainId(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    getWalletChainId().then((chainId) => {
+      if (!cancelled && chainId != null) {
+        setLiveWalletChainId(chainId);
+      }
+    });
+
+    const unsubscribe = subscribeWalletChain((chainId) => {
+      setLiveWalletChainId(chainId);
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [walletActive, isConnected]);
 
   const isLight = textColor === "black";
 
@@ -230,13 +265,16 @@ const NavbarComponent = ({ dashboardNav }) => {
   // them find out via a toast at mint/list/bid/purchase time.
   const handleChainSelect = (targetChain) => {
     const isMismatched =
-      isConnected && walletChainId && Number(walletChainId) !== targetChain;
+      walletActive &&
+      effectiveWalletChainId != null &&
+      effectiveWalletChainId !== targetChain;
 
     if (isMismatched) {
       setNetworkSwitchModal({ visible: true, targetChain });
-    } else {
-      applyChainSelection(targetChain);
+      return;
     }
+
+    applyChainSelection(targetChain);
   };
 
   const closeNetworkSwitchModal = () => {
@@ -244,9 +282,9 @@ const NavbarComponent = ({ dashboardNav }) => {
   };
 
   const isChainMismatched =
-    isConnected &&
-    walletChainId &&
-    Number(walletChainId) !== Number(contractData?.chain);
+    walletActive &&
+    effectiveWalletChainId != null &&
+    effectiveWalletChainId !== Number(contractData?.chain);
 
   const openPrivacyModal = () => {
     setPrivacyModal(true);
@@ -444,7 +482,9 @@ const NavbarComponent = ({ dashboardNav }) => {
               className={`chainDiv ${isLight ? "chain-light" : "chain-dark"}`}
             >
               <div className="leftChainDiv">
-                <span>{contractData?.chain === 1 ? "Ethereum" : "Polygon"}</span>
+                <span>
+                  {contractData?.chain === 1 ? "Ethereum" : "Polygon"}
+                </span>
                 {isChainMismatched && (
                   <Tooltip
                     title={`Your wallet is on a different network. Click ${
@@ -483,7 +523,9 @@ const NavbarComponent = ({ dashboardNav }) => {
               visible={networkSwitchModal.visible}
               targetChain={networkSwitchModal.targetChain}
               onClose={closeNetworkSwitchModal}
-              onSwitched={() => applyChainSelection(networkSwitchModal.targetChain)}
+              onSwitched={() =>
+                applyChainSelection(networkSwitchModal.targetChain)
+              }
             />
             <Nav className="ms-auto bottom-nav">
               {!full_name ? (

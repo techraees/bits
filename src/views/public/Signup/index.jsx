@@ -18,7 +18,12 @@ import ConnectModal from "../../../components/connectModal";
 import ForgotPassModal from "../../../components/ForgotPassModal";
 import PasswordRequirements from "../../../components/PasswordRequirements";
 import Loading from "../../../components/loaders/loading";
-import { signInSchema, signUpSchema, isPasswordValid, PASSWORD_FORMAT_ERROR_MESSAGE } from "../../../components/validations";
+import {
+  signInSchema,
+  signUpSchema,
+  isPasswordValid,
+  PASSWORD_FORMAT_ERROR_MESSAGE,
+} from "../../../components/validations";
 import { CREATE_USER } from "../../../gql/mutations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";

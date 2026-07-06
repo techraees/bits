@@ -241,9 +241,9 @@ const Collections = () => {
         {isWalletMismatched && (
           <div className="wallet-mismatch-banner mb-3">
             Your connected wallet ({metamaskAddress.slice(0, 6)}...
-            {metamaskAddress.slice(-4)}) doesn't match this account's
-            registered wallet. Switch to the correct wallet in MetaMask to
-            mint, list, or manage these NFTs.
+            {metamaskAddress.slice(-4)}) doesn't match this account's registered
+            wallet. Switch to the correct wallet in MetaMask to mint, list, or
+            manage these NFTs.
           </div>
         )}
 

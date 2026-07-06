@@ -486,9 +486,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
               onDragOver={handleDrag}
               onDrop={handleDrop}
             >
-              <p className="upload-drop-overlay__text">
-                Drop your video here
-              </p>
+              <p className="upload-drop-overlay__text">Drop your video here</p>
             </div>
           )}
           {isEmote && (

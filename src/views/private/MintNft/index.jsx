@@ -56,7 +56,9 @@ const getMintedTokenIdFromReceipt = (receipt, contract) => {
       try {
         const parsedLog = contract.interface.parseLog(log);
         if (parsedLog.name === eventName) {
-          return eventName === "Mint" ? parsedLog.args.tokenId : parsedLog.args.id;
+          return eventName === "Mint"
+            ? parsedLog.args.tokenId
+            : parsedLog.args.id;
         }
       } catch (err) {
         // Log does not match this contract's ABI (e.g. an approval event
@@ -519,9 +521,7 @@ const MintNft = () => {
                           <Tooltip title="The percentage you'll earn every time this NFT is resold on the marketplace. Enter a value between 0 and 100.">
                             <span>
                               {" "}
-                              <AiOutlineInfoCircle
-                                style={{ cursor: "help" }}
-                              />
+                              <AiOutlineInfoCircle style={{ cursor: "help" }} />
                             </span>
                           </Tooltip>
                           :

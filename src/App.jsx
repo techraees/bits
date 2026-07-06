@@ -16,6 +16,18 @@ import { mainnet, polygon } from "@reown/appkit/networks";
 import { createAppKit } from "@reown/appkit/react";
 
 const projectId = process.env.REACT_APP_REOWN_ID;
+const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY;
+
+const customRpcUrls = infuraApiKey
+  ? {
+      "eip155:1": [
+        { url: `https://mainnet.infura.io/v3/${infuraApiKey}` },
+      ],
+      "eip155:137": [
+        { url: `https://polygon-mainnet.infura.io/v3/${infuraApiKey}` },
+      ],
+    }
+  : undefined;
 
 const metadata = {
   name: "BITS",
@@ -29,6 +41,7 @@ createAppKit({
   metadata: metadata,
   networks: [mainnet, polygon],
   projectId,
+  ...(customRpcUrls ? { customRpcUrls } : {}),
   features: {
     analytics: false,
     email: false,

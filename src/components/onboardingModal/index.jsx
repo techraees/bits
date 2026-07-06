@@ -63,9 +63,7 @@ const OnboardingModal = ({ visible, onClose }) => {
         <ol className="onboarding-modal__steps">
           {STEPS.map((step, index) => (
             <li key={step.title} className="onboarding-modal__step">
-              <span className="onboarding-modal__step-number">
-                {index + 1}
-              </span>
+              <span className="onboarding-modal__step-number">{index + 1}</span>
               <div>
                 <p className="onboarding-modal__step-title">{step.title}</p>
                 <p className="onboarding-modal__step-description">

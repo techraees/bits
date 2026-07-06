@@ -184,7 +184,9 @@ const ForgotPassModal = ({
                 />
               </div>
 
-              <PasswordRequirements password={formValue?.confirm_password || ""} />
+              <PasswordRequirements
+                password={formValue?.confirm_password || ""}
+              />
 
               <div className="my-3">
                 <ButtonComponent
