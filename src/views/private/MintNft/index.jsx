@@ -195,7 +195,12 @@ const MintNft = () => {
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!isConnected) {
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
+
+    if (!isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };
@@ -236,8 +241,7 @@ const MintNft = () => {
     }
 
     if (contractData.chain != chainId) {
-      const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-      ToastMessage(`Please select ${network} network`, "", "error");
+      connectWalletHandle();
       return;
     }
 

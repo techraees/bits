@@ -106,8 +106,7 @@ function PurchaseStep({
       // the wrong chain would only fail deep inside MetaMask with a cryptic
       // error instead of a clear upfront message.
       if (Number(chainId) !== Number(contractData.chain)) {
-        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-        ToastMessage("Error", `Please select ${network} network`, "error");
+        connectWalletHandle();
         return;
       }
 
@@ -238,7 +237,12 @@ function PurchaseStep({
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!isConnected) {
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
+
+    if (!isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };

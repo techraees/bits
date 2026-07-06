@@ -20,9 +20,7 @@ const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY;
 
 const customRpcUrls = infuraApiKey
   ? {
-      "eip155:1": [
-        { url: `https://mainnet.infura.io/v3/${infuraApiKey}` },
-      ],
+      "eip155:1": [{ url: `https://mainnet.infura.io/v3/${infuraApiKey}` }],
       "eip155:137": [
         { url: `https://polygon-mainnet.infura.io/v3/${infuraApiKey}` },
       ],

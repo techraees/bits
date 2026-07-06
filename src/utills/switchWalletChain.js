@@ -1,7 +1,4 @@
-import {
-  getWalletChainId,
-  resolveWalletProvider,
-} from "./walletChain";
+import { getWalletChainId, resolveWalletProvider } from "./walletChain";
 
 const CHAIN_CONFIG = {
   1: {

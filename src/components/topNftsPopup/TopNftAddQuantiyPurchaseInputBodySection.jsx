@@ -100,7 +100,12 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   };
 
   const connectWalletHandle = () => {
-    if (!isConnected) {
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
+
+    if (!isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };
@@ -112,10 +117,14 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
   }, [userData?.id]);
 
   useEffect(() => {
-    if (isConnected) {
+    if (
+      isConnected &&
+      chainId != null &&
+      Number(chainId) === Number(contractData?.chain)
+    ) {
       setConnectModal(false);
     }
-  }, [isConnected]);
+  }, [isConnected, chainId, contractData?.chain]);
 
   const handlePurchase = async () => {
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
@@ -236,8 +245,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
           ToastMessage("Error", errorMessage, "error");
         }
       } else {
-        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-        ToastMessage(`Please select ${network} network`, "", "error");
+        connectWalletHandle();
       }
     } else {
       ToastMessage(

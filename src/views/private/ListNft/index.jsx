@@ -284,8 +284,7 @@ const ListNft = () => {
           console.error("Error:", error);
         }
       } else {
-        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-        ToastMessage(`Please select ${network} network`, "", "error");
+        connectWalletHandle();
       }
     } else {
       ToastMessage(
@@ -317,7 +316,12 @@ const ListNft = () => {
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!isConnected) {
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
+
+    if (!isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };

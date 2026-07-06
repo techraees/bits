@@ -95,8 +95,7 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   const walletActive = isWalletActive(isConnected);
   const effectiveWalletChainId =
-    liveWalletChainId ??
-    (walletChainId != null ? Number(walletChainId) : null);
+    liveWalletChainId ?? (walletChainId != null ? Number(walletChainId) : null);
 
   useEffect(() => {
     if (!walletActive) {

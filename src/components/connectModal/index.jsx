@@ -7,13 +7,24 @@ import { useSelector, useDispatch } from "react-redux";
 import ActionTypes from "../../store/contants/ActionTypes";
 import ToastMessage from "../toastMessage/index.jsx";
 import { useAppKit } from "@reown/appkit/react";
-import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import {
+  useAppKitProvider,
+  useAppKitAccount,
+  useAppKitNetwork,
+} from "@reown/appkit/react";
+import NetworkSwitchBody from "../networkSwitchModal/NetworkSwitchBody";
+import {
+  getWalletChainId,
+  isWalletActive,
+  subscribeWalletChain,
+} from "../../utills/walletChain";
 
 const ConnectModal = ({ visible, onClose }) => {
   const dispatch = useDispatch();
 
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
+  const { chainId } = useAppKitNetwork();
   const { walletProvider } = useAppKitProvider("eip155");
 
   const { userData } = useSelector((state) => state.address.userData);
@@ -23,6 +34,40 @@ const ConnectModal = ({ visible, onClose }) => {
   );
 
   const [connecting, setConnecting] = useState(false);
+  const [liveWalletChainId, setLiveWalletChainId] = useState(null);
+
+  const walletActive = isWalletActive(isConnected);
+  const effectiveChainId =
+    liveWalletChainId ?? (chainId != null ? Number(chainId) : null);
+  const needsSwitch =
+    walletActive &&
+    effectiveChainId != null &&
+    contractData?.chain != null &&
+    effectiveChainId !== Number(contractData.chain);
+
+  useEffect(() => {
+    if (!visible || !walletActive) {
+      setLiveWalletChainId(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    getWalletChainId().then((id) => {
+      if (!cancelled && id != null) {
+        setLiveWalletChainId(id);
+      }
+    });
+
+    const unsubscribe = subscribeWalletChain((id) => {
+      setLiveWalletChainId(id);
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [visible, walletActive, isConnected]);
 
   const fetchData = async () => {
     try {
@@ -32,46 +77,55 @@ const ConnectModal = ({ visible, onClose }) => {
           "Wallet provider not ready. Please try again.",
           "error",
         );
-        return;
+        return false;
       }
 
       const provider = new ethers.providers.Web3Provider(walletProvider);
       const signer = provider.getSigner();
-      const { chainId } = await provider.getNetwork();
+      const { chainId: providerChainId } = await provider.getNetwork();
 
       if (userData) {
-        // Existing user: Check address
         const userAddress = userData.address;
 
         if (userAddress.toLowerCase() !== address.toLowerCase()) {
           ToastMessage("Error", "Please connect correct wallet", "error");
-          return;
+          return false;
         }
       }
 
-      // Proceed only if chainId matches
-      if (contractData.chain === chainId) {
-        const web3 = provider;
+      if (contractData.chain === providerChainId) {
         dispatch({
           type: ActionTypes.WEB3CONNECT,
-          payload: { address, web3, chainId, signer },
+          payload: {
+            address,
+            web3: provider,
+            chainId: providerChainId,
+            signer,
+          },
         });
-      } else {
-        ToastMessage("Error", "Please connect correct chain", "error");
+        return true;
       }
+
+      return false;
     } catch (error) {
       console.error("fetchData error:", error);
+      return false;
     }
   };
 
-  // Previously fetchData() (which populates Redux web3 state) only ran when
-  // the modal was opened while a wallet was already connected. A brand-new
-  // connection never completed this step, so the user had to trigger their
-  // action (mint/list/bid) a second time. This effect completes the flow
-  // automatically the moment AppKit reports a connected wallet with a ready
-  // provider, so connecting is a genuine single click.
+  const handleSwitchSuccess = async () => {
+    setConnecting(true);
+    const ok = await fetchData();
+    setConnecting(false);
+    if (ok) {
+      onClose();
+    }
+  };
+
+  // Auto-complete when connected on the correct chain. Skip when the modal
+  // should show the network switch UI instead.
   useEffect(() => {
-    if (!visible || !isConnected || !walletProvider) return;
+    if (!visible || !isConnected || !walletProvider || needsSwitch) return;
 
     let cancelled = false;
     setConnecting(true);
@@ -86,7 +140,7 @@ const ConnectModal = ({ visible, onClose }) => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, isConnected, walletProvider]);
+  }, [visible, isConnected, walletProvider, needsSwitch]);
 
   const handleWalletConnect = async () => {
     try {
@@ -99,8 +153,6 @@ const ConnectModal = ({ visible, onClose }) => {
       }
 
       await open();
-      // Completion (fetchData + close) is handled by the effect above once
-      // AppKit reports isConnected + walletProvider ready.
     } catch (error) {
       console.error("Connection failed:", error);
       setConnecting(false);
@@ -121,18 +173,25 @@ const ConnectModal = ({ visible, onClose }) => {
       onCancel={onClose}
       zIndex={99999}
     >
-      <div>
-        <div className="d-flex mt-3 gap-4   flex-column justify-content-center align-items-center">
-          <ButtonComponent
-            onClick={handleWalletConnect}
-            text={connecting ? "Connecting..." : "Link Wallet"}
-            height={40}
-            width={170}
-            disabled={connecting}
-            loading={connecting}
-          />
+      {needsSwitch ? (
+        <NetworkSwitchBody
+          targetChain={contractData.chain}
+          onSuccess={handleSwitchSuccess}
+        />
+      ) : (
+        <div>
+          <div className="d-flex mt-3 gap-4 flex-column justify-content-center align-items-center">
+            <ButtonComponent
+              onClick={handleWalletConnect}
+              text={connecting ? "Connecting..." : "Link Wallet"}
+              height={40}
+              width={170}
+              disabled={connecting}
+              loading={connecting}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </Modal>
   );
 };

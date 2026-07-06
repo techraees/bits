@@ -2,7 +2,7 @@ import { useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Row, Col, Tooltip, Popover, Avatar } from "antd";
+import { Row, Col, Popover, Avatar } from "antd";
 import { FaCheckCircle } from "react-icons/fa";
 import "./css/index.css";
 import ReactPlayer from "react-player";
@@ -11,7 +11,6 @@ import {
   GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
 } from "../../../gql/queries";
 import { trimWallet } from "../../../utills/trimWalletAddr";
-import ButtonComponent from "../../../components/button";
 import ShowTopNFTPopup from "../../../ShowTopNFTPopup";
 
 const NftDetailsScreen = () => {
@@ -34,7 +33,7 @@ const NftDetailsScreen = () => {
         // console.log("The err", error);
       }
     }
-  }, [id]);
+  }, [id, detailsOfANft]);
 
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
@@ -46,13 +45,12 @@ const NftDetailsScreen = () => {
   // console.log(bgColor, "SDFSDFSDFSFS");
   const { contractData } = useSelector((state) => state.chain.contractData);
 
-  const { userData } = useSelector((state) => state.address.userData || {});
   const [isTopModalOpen, setIsTopModalOpen] = useState(false);
   const [fixedData, setFixedData] = useState([]);
   const [auctionData, setAuctionData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageAuction, setPageAuction] = useState(1);
-  const [limit, setLimit] = useState(1);
+  const limit = 1;
   const [auctionTotalPages, setAuctionTotalPages] = useState(null);
   const [totalPages, setTotalPages] = useState(null);
 
@@ -62,12 +60,6 @@ const NftDetailsScreen = () => {
   const [fetchFixedData] = useLazyQuery(
     GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
   );
-
-  const isOwner =
-    userData?.wallet_address &&
-    data?.DetailsOfANft?.wallet_address &&
-    userData?.wallet_address?.toLowerCase() ===
-      data?.DetailsOfANft?.wallet_address?.toLowerCase();
 
   // Re-fetch fixed page when pagination changes while modal is open
   useEffect(() => {
@@ -83,7 +75,7 @@ const NftDetailsScreen = () => {
           data.getOwnersWhoListedTheSameNftWithPrices?.data
             .filter(
               (item) =>
-                contractData?.chain == item?.nft_id?.chainId &&
+                contractData?.chain === item?.nft_id?.chainId &&
                 item?.numberOfCopies > 0,
             )
             .map((item) => ({
@@ -101,7 +93,7 @@ const NftDetailsScreen = () => {
         setTotalPages(data.getOwnersWhoListedTheSameNftWithPrices?.totalPages);
       }
     });
-  }, [page]);
+  }, [page, isTopModalOpen, fetchFixedData, id, limit, contractData?.chain]);
 
   // Re-fetch auction page when pagination changes while modal is open
   useEffect(() => {
@@ -115,7 +107,7 @@ const NftDetailsScreen = () => {
       if (data) {
         setAuctionData(
           data.getOwnersWhoListedTheSameNftWithPrices?.data
-            .filter((item) => contractData?.chain == item?.nft_id?.chainId)
+            .filter((item) => contractData?.chain === item?.nft_id?.chainId)
             .map((item) => ({
               owner: item?.seller?.user_address,
               copies: item?.numberOfCopies,
@@ -134,73 +126,14 @@ const NftDetailsScreen = () => {
         );
       }
     });
-  }, [pageAuction]);
-
-  const handleBuyBidClick = async () => {
-    const [auctionResult, fixedResult] = await Promise.all([
-      fetchAuctionData({
-        variables: {
-          filterObj: `{"listingType":"auction","page":${pageAuction}, "limit":${limit} }`,
-          _id: id,
-        },
-      }),
-      fetchFixedData({
-        variables: {
-          filterObj: `{"listingType":"fixed_price","page":${page}, "limit":${limit} }`,
-          _id: id,
-        },
-      }),
-    ]);
-
-    if (auctionResult?.data) {
-      setAuctionData(
-        auctionResult.data.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter((item) => contractData?.chain == item?.nft_id?.chainId)
-          .map((item) => ({
-            owner: item?.seller?.user_address,
-            copies: item?.numberOfCopies,
-            price: item?.price,
-            fixedid: item?.fixedid | item?.auctionId,
-            dbid: item?._id,
-            tokenId: item?.tokenId,
-            nftId: item?.nft_id?._id,
-            chainId: item?.nft_id?.chainId,
-            currentBidAmount: item?.auction_highest_bid,
-            auctionbids: item?.auction_bids,
-          })),
-      );
-      setAuctionTotalPages(
-        auctionResult.data.getOwnersWhoListedTheSameNftWithPrices?.totalPages,
-      );
-    }
-
-    if (fixedResult?.data) {
-      setFixedData(
-        fixedResult.data.getOwnersWhoListedTheSameNftWithPrices?.data
-          .filter(
-            (item) =>
-              contractData?.chain == item?.nft_id?.chainId &&
-              item?.numberOfCopies > 0,
-          )
-          .map((item) => ({
-            owner: item?.seller?.user_address,
-            copies: item?.numberOfCopies,
-            price: item?.price,
-            fixedid: item?.fixedid | item?.auctionId,
-            dbid: item?._id,
-            tokenId: item?.tokenId,
-            nftId: item?.nft_id?._id,
-            chainId: item?.nft_id?.chainId,
-            currentBidAmount: item?.auction_highest_bid,
-          })),
-      );
-      setTotalPages(
-        fixedResult.data.getOwnersWhoListedTheSameNftWithPrices?.totalPages,
-      );
-    }
-
-    setIsTopModalOpen(true);
-  };
+  }, [
+    pageAuction,
+    isTopModalOpen,
+    fetchAuctionData,
+    id,
+    limit,
+    contractData?.chain,
+  ]);
 
   // const link = `https://${
   // 	contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
@@ -291,7 +224,7 @@ const NftDetailsScreen = () => {
                 </div> */}
                 <a
                   href={`https://${
-                    contractData.chain == 1 ? "etherscan.io" : "polygonscan.com"
+                    contractData.chain === 1 ? "etherscan.io" : "polygonscan.com"
                   }/token/${contractData.mintContract.address}?a=${
                     data?.DetailsOfANft?.token_id
                   }`}
@@ -304,7 +237,7 @@ const NftDetailsScreen = () => {
                     className="p-1 mt-1 text-center rounded-3"
                   >
                     View on{" "}
-                    {contractData.chain == 1 ? "Etherscan" : "Polygonscan"}
+                    {contractData.chain === 1 ? "Etherscan" : "Polygonscan"}
                     {/* <span className={`${textColor2}`} href="google.com" >View on Etherscan</span> */}
                   </div>
                 </a>

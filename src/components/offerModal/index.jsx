@@ -194,7 +194,12 @@ const OfferModal = ({
     setConnectModal(false);
   };
   const connectWalletHandle = () => {
-    if (!isConnected) {
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
+
+    if (!isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };
@@ -292,8 +297,7 @@ const OfferModal = ({
           ToastMessage("Error", `Please provide amount`, "error");
         }
       } else {
-        const network = contractData?.chain == 137 ? "polygon" : "ethereum";
-        ToastMessage(`Please select ${network} network`, "", "error");
+        connectWalletHandle();
       }
     } else {
       ToastMessage(
@@ -305,10 +309,14 @@ const OfferModal = ({
   };
 
   useEffect(() => {
-    if (isConnected) {
+    if (
+      isConnected &&
+      chainId != null &&
+      Number(chainId) === Number(contractData?.chain)
+    ) {
       setConnectModal(false);
     }
-  }, [isConnected]);
+  }, [isConnected, chainId, contractData?.chain]);
 
   return (
     <div className="z-12" style={{ zIndex: 1, position: "fixedss" }}>

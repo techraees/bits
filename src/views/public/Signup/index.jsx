@@ -5,9 +5,8 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { Col, Divider, Row, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { logo, metamaskwithmascot } from "../../../assets";
+import { Link, useLocation } from "react-router-dom";
+import { logo, metamaskwithmascot, account } from "../../../assets";
 import {
   ButtonComponent,
   CustomCheckbox,
@@ -35,10 +34,7 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 const env = process.env;
 
 function Login() {
-  const dispatch = useDispatch();
   const { address, isConnected } = useAppKitAccount();
-
-  const { web3, account } = useSelector((state) => state.web3.walletData);
   const [connectModal, setConnectModal] = useState(false);
   const [forgotPassModal, setForgotPassModal] = useState(false);
   const [step, setStep] = useState(1);
@@ -55,47 +51,18 @@ function Login() {
   const [yearsOptions, setYearsOptions] = useState([]);
   const [phoneCountry, setPhoneCountry] = useState("us");
 
-  let navigate = useNavigate();
-
-  //login
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch: signWatch,
-    formState: { errors },
-    reset: signInResetValue,
-  } = useForm({
+  const { reset: signInResetValue } = useForm({
     resolver: yupResolver(signInSchema),
     mode: "onSubmit",
     reValidateMode: "onChange",
   });
 
-  const [login, { loading, error: loginError, data: loginData }] = useLazyQuery(
+  const [{ loading, error: loginError, data: loginData }] = useLazyQuery(
     LOGIN_USER,
     {
       fetchPolicy: "network-only",
     },
   );
-
-  const loginUser = (values) => {
-    login({
-      variables: {
-        email: values.email,
-        password: values.password,
-      },
-    }).catch((err) => {
-      // console.log("errr", err);
-    });
-  };
-
-  function onSubmit(data) {
-    loginUser(data);
-  }
-
-  const handleChange = (e) => {
-    setValue(e.target.name, e.target.value);
-  };
 
   const [day, setDay] = useState();
   const [month, setMonth] = useState();
@@ -143,7 +110,7 @@ function Login() {
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");
     }
-  }, [loginData, loginError]);
+  }, [loginData, loginError, signInResetValue]);
 
   // login
 
@@ -211,7 +178,7 @@ function Login() {
       const dateFormat = new Date(combined);
       signUpSetValue("dob", dateFormat.toString(), { shouldValidate: true });
     }
-  }, [day, month, year]);
+  }, [day, month, year, signUpSetValue]);
 
   // signUp useEffect to check if any error
 
@@ -251,7 +218,7 @@ function Login() {
     if (singUpError) {
       ToastMessage("error", singUpError?.message, "error");
     }
-  }, [signUpData, singUpError]);
+  }, [signUpData, singUpError, signUpResetValue, signUpSetValue]);
 
   async function signUpHandle(data) {
     // console.log(data, "ASDASDASDASDADS");
@@ -303,11 +270,6 @@ function Login() {
     setConnectModal(true);
   };
 
-  const connectWalletHandle = () => {
-    if (!isConnected) {
-      setConnectModal(true);
-    }
-  };
   const openMetaMaskLink = () => {
     window.open("https://metamask.io/", "_blank");
   };
@@ -320,15 +282,15 @@ function Login() {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const resetToken = searchParams.get("token");
+  const resetId = searchParams.get("id");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (searchParams.get("id") && searchParams.get("token")) {
-        const id = searchParams.get("id");
-        const token = searchParams.get("token");
-        setId(id);
-        setToken(token);
-        const res = await sendToken(id, token);
+      if (resetId && resetToken) {
+        setId(resetId);
+        setToken(resetToken);
+        const res = await sendToken(resetId, resetToken);
         if (res.success) {
           setStep(3);
           setForgotPassModal(true);
@@ -338,11 +300,7 @@ function Login() {
       }
     };
     fetchData();
-  }, [searchParams.get("token")]);
-
-  const handleOpenForgotPass = () => {
-    setForgotPassModal(true);
-  };
+  }, [resetToken, resetId]);
 
   const handleCloseForgotPass = () => {
     setForgotPassModal(false);
