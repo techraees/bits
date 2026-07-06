@@ -32,6 +32,7 @@ import {
 } from "../../../gql/mutations";
 
 import { getCookieStorage } from "../../../utills/cookieStorage";
+import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
 
 const ListNft = () => {
   // const { Option } = Select;
@@ -80,6 +81,7 @@ const ListNft = () => {
   const dispatch = useDispatch();
   const { isConnected, address } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
+  const { isTargetChainMismatched } = useWalletGateFlow();
 
   const { userData } = useSelector((state) => state.address.userData);
   const { web3, account, signer } = useSelector(
@@ -150,141 +152,147 @@ const ListNft = () => {
   }, []);
 
   const handleListing = async () => {
-    connectWalletHandle();
     let newItemId;
 
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
-      if (contractData.chain == chainId) {
-        try {
-          const provider = new ethers.providers.Web3Provider(walletProvider);
-          const signer = provider.getSigner();
-          const { chainId } = await provider.getNetwork();
-          const { marketContract, mintContract } = contractData;
+      // Gate on the wallet's actual, live chain (read straight from
+      // window.ethereum) rather than AppKit's reactive chainId alone - that
+      // state can lag a tick behind a switch performed outside AppKit and
+      // would otherwise let a listing attempt slip through on the wrong
+      // network.
+      const liveMismatch = await isTargetChainMismatched(contractData.chain);
+      if (liveMismatch) {
+        connectWalletHandle(true);
+        return;
+      }
 
-          const market = marketContract.connect(signer);
-          const mint = mintContract.connect(signer);
+      try {
+        const provider = new ethers.providers.Web3Provider(walletProvider);
+        const signer = provider.getSigner();
+        const { chainId } = await provider.getNetwork();
+        const { marketContract, mintContract } = contractData;
 
-          // // Common approval check
-          const isApproved = await mint.isApprovedForAll(
-            address,
+        const market = marketContract.connect(signer);
+        const mint = mintContract.connect(signer);
+
+        // // Common approval check
+        const isApproved = await mint.isApprovedForAll(
+          address,
+          market.address,
+        );
+        if (!isApproved) {
+          const approveTx = await mint.setApprovalForAll(
             market.address,
+            true,
           );
-          if (!isApproved) {
-            const approveTx = await mint.setApprovalForAll(
-              market.address,
-              true,
-            );
-            await approveTx.wait();
-          }
-
-          // Common listing parameters
-          const isAuction = selectedOption === "auction price";
-          const price = ETHToWei(isAuction ? auctionStartPrice : fixedPrice);
-          const copies = isAuction ? auctionCopies : fixedPriceCopies;
-          const eventName = isAuction ? "AuctionStart" : "OfferSale"; // Update event name
-
-          // Additional auction parameters
-          const startTimeStamp = isAuction
-            ? Math.floor(Date.now() / 1000) + 150
-            : 0;
-          const endTimeStampParam = isAuction ? endTimeStamp : 0;
-
-          // Execute listing
-          setLoadingStatus(true);
-          setLoadingMessage("Listing...");
-
-          const tx = isAuction
-            ? await market.listItemForAuction(
-                price,
-                startTimeStamp,
-                endTimeStampParam,
-                tokenId,
-                copies,
-                mintContract.address,
-              )
-            : await market.listItemForFixedPrice(
-                tokenId,
-                copies,
-                price,
-                mintContract.address,
-              );
-
-          const res = await tx.wait();
-          const transactionHash = res.transactionHash;
-          // Extract newItemId from events
-          const event = res.events.find((e) => e.event === eventName);
-
-          // console.log("The event", event, Number(event.args[0]));
-          if (event) {
-            newItemId = Number(event.args[0]);
-          } else {
-            ToastMessage(`Event not found`, "", "error");
-            return;
-          }
-
-          // Update database
-          if (newItemId) {
-            const listingType = isAuction ? "auction" : "fixed_price";
-            const start = isAuction ? new Date(startTimeStamp * 1000) : null;
-            const end = isAuction ? new Date(endTimeStamp * 1000) : null;
-
-            //save data to DB
-            const response = await addNftToMarketPlace({
-              variables: {
-                tokenId,
-                numberOfCopies: Number(copies),
-                price: Number(isAuction ? auctionStartPrice : fixedPrice),
-                nftAddress: mintContract.address,
-                listingID: newItemId.toString(),
-                listingType,
-                currency:
-                  chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
-                [isAuction ? "auctionid" : "fixedid"]: newItemId.toString(),
-                biddingStartTime: start || 0,
-                biddingEndTime: end || 0,
-              },
-            });
-
-            await createNewTransation({
-              variables: {
-                first_person_wallet_address: address.toString(),
-                nft_id: nftId.toString(),
-                amount: Number(isAuction ? auctionStartPrice : fixedPrice),
-                currency:
-                  chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
-                copies_transferred: Number(copies),
-                transaction_type: "listing_nft",
-                token_id: tokenId.toString(),
-                chain_id: chainId.toString(),
-                blockchain_listingID: newItemId.toString(),
-                listingID: response?.data?.addNftToNftMarketPlace?._id,
-                hash_field: transactionHash,
-              },
-            });
-          }
-
-          setLoadingStatus(false);
-          setLoadingMessage("");
-          ToastMessage("Listing Successful", "", "success");
-          dispatch(loadContractIns());
-          if (isAuction) {
-            navigate("/marketplace?tab=auction");
-          } else {
-            navigate("/marketplace?tab=fixed_price");
-          }
-        } catch (error) {
-          setLoadingStatus(false);
-          setLoadingMessage("");
-          const parsedError = getParsedEthersError(error);
-          ToastMessage(
-            "Error",
-            parsedError.context || "Unknown error",
-            "error",
-          );
-          console.error("Error:", error);
+          await approveTx.wait();
         }
-      } else {
-        connectWalletHandle();
+
+        // Common listing parameters
+        const isAuction = selectedOption === "auction price";
+        const price = ETHToWei(isAuction ? auctionStartPrice : fixedPrice);
+        const copies = isAuction ? auctionCopies : fixedPriceCopies;
+        const eventName = isAuction ? "AuctionStart" : "OfferSale"; // Update event name
+
+        // Additional auction parameters
+        const startTimeStamp = isAuction
+          ? Math.floor(Date.now() / 1000) + 150
+          : 0;
+        const endTimeStampParam = isAuction ? endTimeStamp : 0;
+
+        // Execute listing
+        setLoadingStatus(true);
+        setLoadingMessage("Listing...");
+
+        const tx = isAuction
+          ? await market.listItemForAuction(
+              price,
+              startTimeStamp,
+              endTimeStampParam,
+              tokenId,
+              copies,
+              mintContract.address,
+            )
+          : await market.listItemForFixedPrice(
+              tokenId,
+              copies,
+              price,
+              mintContract.address,
+            );
+
+        const res = await tx.wait();
+        const transactionHash = res.transactionHash;
+        // Extract newItemId from events
+        const event = res.events.find((e) => e.event === eventName);
+
+        // console.log("The event", event, Number(event.args[0]));
+        if (event) {
+          newItemId = Number(event.args[0]);
+        } else {
+          ToastMessage(`Event not found`, "", "error");
+          return;
+        }
+
+        // Update database
+        if (newItemId) {
+          const listingType = isAuction ? "auction" : "fixed_price";
+          const start = isAuction ? new Date(startTimeStamp * 1000) : null;
+          const end = isAuction ? new Date(endTimeStamp * 1000) : null;
+
+          //save data to DB
+          const response = await addNftToMarketPlace({
+            variables: {
+              tokenId,
+              numberOfCopies: Number(copies),
+              price: Number(isAuction ? auctionStartPrice : fixedPrice),
+              nftAddress: mintContract.address,
+              listingID: newItemId.toString(),
+              listingType,
+              currency:
+                chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+              [isAuction ? "auctionid" : "fixedid"]: newItemId.toString(),
+              biddingStartTime: start || 0,
+              biddingEndTime: end || 0,
+            },
+          });
+
+          await createNewTransation({
+            variables: {
+              first_person_wallet_address: address.toString(),
+              nft_id: nftId.toString(),
+              amount: Number(isAuction ? auctionStartPrice : fixedPrice),
+              currency:
+                chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+              copies_transferred: Number(copies),
+              transaction_type: "listing_nft",
+              token_id: tokenId.toString(),
+              chain_id: chainId.toString(),
+              blockchain_listingID: newItemId.toString(),
+              listingID: response?.data?.addNftToNftMarketPlace?._id,
+              hash_field: transactionHash,
+            },
+          });
+        }
+
+        setLoadingStatus(false);
+        setLoadingMessage("");
+        ToastMessage("Listing Successful", "", "success");
+        dispatch(loadContractIns());
+        if (isAuction) {
+          navigate("/marketplace?tab=auction");
+        } else {
+          navigate("/marketplace?tab=fixed_price");
+        }
+      } catch (error) {
+        setLoadingStatus(false);
+        setLoadingMessage("");
+        const parsedError = getParsedEthersError(error);
+        ToastMessage(
+          "Error",
+          parsedError.context || "Unknown error",
+          "error",
+        );
+        console.error("Error:", error);
       }
     } else {
       ToastMessage(
@@ -315,13 +323,16 @@ const ListNft = () => {
   const closeConnectModel = () => {
     setConnectModal(false);
   };
-  const connectWalletHandle = () => {
+  // `forceOpen` lets a caller that has already confirmed a mismatch via the
+  // live wallet-chain read (`isTargetChainMismatched`) open the modal even
+  // if AppKit's own reactive chainId hasn't caught up yet.
+  const connectWalletHandle = (forceOpen = false) => {
     const chainMismatch =
       isConnected &&
       chainId != null &&
       Number(chainId) !== Number(contractData?.chain);
 
-    if (!isConnected || chainMismatch) {
+    if (forceOpen || !isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };

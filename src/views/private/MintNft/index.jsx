@@ -36,6 +36,7 @@ import {
 } from "@reown/appkit/react";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
 
 const environment = process.env;
 
@@ -82,6 +83,7 @@ const MintNft = () => {
   const { isConnected, address: metamaskAddress } = useAppKitAccount();
 
   const { walletProvider } = useAppKitProvider("eip155");
+  const { isTargetChainMismatched } = useWalletGateFlow();
 
   const [connectModal, setConnectModal] = useState(false);
 
@@ -194,13 +196,16 @@ const MintNft = () => {
   const closeConnectModel = () => {
     setConnectModal(false);
   };
-  const connectWalletHandle = () => {
+  // `forceOpen` lets a caller that has already confirmed a mismatch via the
+  // live wallet-chain read (`isTargetChainMismatched`) open the modal even
+  // if AppKit's own reactive chainId hasn't caught up yet.
+  const connectWalletHandle = (forceOpen = false) => {
     const chainMismatch =
       isConnected &&
       chainId != null &&
       Number(chainId) !== Number(contractData?.chain);
 
-    if (!isConnected || chainMismatch) {
+    if (forceOpen || !isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };
@@ -240,8 +245,13 @@ const MintNft = () => {
       return;
     }
 
-    if (contractData.chain != chainId) {
-      connectWalletHandle();
+    // Gate on the wallet's actual, live chain (read straight from
+    // window.ethereum) rather than AppKit's reactive chainId alone - that
+    // state can lag a tick behind a switch performed outside AppKit and
+    // would otherwise let a mint attempt slip through on the wrong network.
+    const liveMismatch = await isTargetChainMismatched(contractData.chain);
+    if (liveMismatch) {
+      connectWalletHandle(true);
       return;
     }
 

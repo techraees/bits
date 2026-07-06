@@ -27,6 +27,7 @@ import { ETHTOUSD, MATICTOUSD } from "../../utills/currencyConverter";
 import { trimWallet } from "../../utills/trimWalletAddr";
 import BidModal from "../bidModal";
 import ConnectModal from "../connectModal";
+import { useWalletGateFlow } from "../../hooks/useWalletGateFlow";
 import "./css/index.css";
 
 const OfferModal = ({
@@ -45,6 +46,7 @@ const OfferModal = ({
   const { address, isConnected } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
   const { walletProvider } = useAppKitProvider("eip155");
+  const { isTargetChainMismatched } = useWalletGateFlow();
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
 
@@ -193,20 +195,28 @@ const OfferModal = ({
   const closeConnectModel = () => {
     setConnectModal(false);
   };
-  const connectWalletHandle = () => {
+  // `forceOpen` lets a caller that has already confirmed a mismatch via the
+  // live wallet-chain read (`isTargetChainMismatched`) open the modal even
+  // if AppKit's own reactive chainId hasn't caught up yet.
+  const connectWalletHandle = (forceOpen = false) => {
     const chainMismatch =
       isConnected &&
       chainId != null &&
       Number(chainId) !== Number(contractData?.chain);
 
-    if (!isConnected || chainMismatch) {
+    if (forceOpen || !isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };
 
   const handleBid = async () => {
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
-      if (contractData.chain == chainId) {
+      // Gate on the wallet's actual, live chain (read straight from
+      // window.ethereum) rather than AppKit's reactive chainId alone - that
+      // state can lag a tick behind a switch performed outside AppKit and
+      // would otherwise let a bid slip through on the wrong network.
+      const liveMismatch = await isTargetChainMismatched(contractData.chain);
+      if (!liveMismatch) {
         const provider = new ethers.providers.Web3Provider(walletProvider);
         const signer = provider.getSigner();
         if (offerAmount > 0) {
@@ -297,7 +307,7 @@ const OfferModal = ({
           ToastMessage("Error", `Please provide amount`, "error");
         }
       } else {
-        connectWalletHandle();
+        connectWalletHandle(true);
       }
     } else {
       ToastMessage(

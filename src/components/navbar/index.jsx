@@ -19,7 +19,6 @@ import { GET_PROFILE } from "../../gql/queries";
 import profileimg from "../../assets/images/profile1.svg";
 import { Col, Modal, Tooltip } from "antd";
 import LogoutModal from "../logoutModal";
-import NetworkSwitchModal from "../networkSwitchModal";
 import CookieConsent from "react-cookie-consent";
 // import NotificationModal from "../notificationModal";
 import PrivacyModal from "../privacyModal";
@@ -29,10 +28,10 @@ import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
 import { getCookieStorage } from "../../utills/cookieStorage";
 import {
   getWalletChainId,
-  isWalletActive,
   subscribeWalletChain,
 } from "../../utills/walletChain";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
+import { useWalletGateFlow } from "../../hooks/useWalletGateFlow";
 
 const environment = process.env;
 
@@ -92,13 +91,18 @@ const NavbarComponent = ({ dashboardNav }) => {
   const { isConnected } = useAppKitAccount();
   const { chainId: walletChainId } = useAppKitNetwork();
   const [liveWalletChainId, setLiveWalletChainId] = useState(null);
+  const {
+    openAppKitConnect,
+    ensureWalletOnChain,
+    pendingTargetChain,
+    setPendingTargetChain,
+  } = useWalletGateFlow();
 
-  const walletActive = isWalletActive(isConnected);
   const effectiveWalletChainId =
     liveWalletChainId ?? (walletChainId != null ? Number(walletChainId) : null);
 
   useEffect(() => {
-    if (!walletActive) {
+    if (!isConnected) {
       setLiveWalletChainId(null);
       return;
     }
@@ -119,7 +123,7 @@ const NavbarComponent = ({ dashboardNav }) => {
       cancelled = true;
       unsubscribe();
     };
-  }, [walletActive, isConnected]);
+  }, [isConnected]);
 
   const isLight = textColor === "black";
 
@@ -231,10 +235,6 @@ const NavbarComponent = ({ dashboardNav }) => {
   }, [error]);
   const [showRedImage, setShowRedImage] = useState(false);
   const [iconClicked, setIconClicked] = useState(false);
-  const [networkSwitchModal, setNetworkSwitchModal] = useState({
-    visible: false,
-    targetChain: null,
-  });
 
   // Was `[]` before, so the icons only ever reflected contractData.chain at
   // mount time and never updated if the chain changed elsewhere (e.g. after
@@ -259,29 +259,58 @@ const NavbarComponent = ({ dashboardNav }) => {
     }
   };
 
+  useEffect(() => {
+    if (!pendingTargetChain || !isConnected) {
+      return;
+    }
+
+    let cancelled = false;
+
+    ensureWalletOnChain(pendingTargetChain).then((ok) => {
+      if (cancelled) {
+        return;
+      }
+
+      if (ok) {
+        applyChainSelection(pendingTargetChain);
+      }
+
+      setPendingTargetChain(null);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingTargetChain, isConnected]);
+
   // If the wallet is connected on a different chain than the one the user
   // just picked, guide them through switching it instead of only letting
   // them find out via a toast at mint/list/bid/purchase time.
-  const handleChainSelect = (targetChain) => {
+  const handleChainSelect = async (targetChain) => {
+    if (!isConnected) {
+      setPendingTargetChain(targetChain);
+      await openAppKitConnect();
+      return;
+    }
+
     const isMismatched =
-      walletActive &&
       effectiveWalletChainId != null &&
       effectiveWalletChainId !== targetChain;
 
     if (isMismatched) {
-      setNetworkSwitchModal({ visible: true, targetChain });
+      const ok = await ensureWalletOnChain(targetChain);
+      if (ok) {
+        applyChainSelection(targetChain);
+      }
       return;
     }
 
     applyChainSelection(targetChain);
   };
 
-  const closeNetworkSwitchModal = () => {
-    setNetworkSwitchModal({ visible: false, targetChain: null });
-  };
-
   const isChainMismatched =
-    walletActive &&
+    isConnected &&
     effectiveWalletChainId != null &&
     effectiveWalletChainId !== Number(contractData?.chain);
 
@@ -518,14 +547,6 @@ const NavbarComponent = ({ dashboardNav }) => {
                 />
               </div>
             </div>
-            <NetworkSwitchModal
-              visible={networkSwitchModal.visible}
-              targetChain={networkSwitchModal.targetChain}
-              onClose={closeNetworkSwitchModal}
-              onSwitched={() =>
-                applyChainSelection(networkSwitchModal.targetChain)
-              }
-            />
             <Nav className="ms-auto bottom-nav">
               {!full_name ? (
                 <div className="d-flex align-items-center justify-content-center navbar-menu1">

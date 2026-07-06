@@ -25,6 +25,7 @@ import { boughtMessage } from "../../../utills/emailMessages";
 import { trimWallet } from "../../../utills/trimWalletAddr";
 import ConnectModal from "../../connectModal";
 import { SuccessModal } from "../../index";
+import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
 import "./css/index.css";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -46,6 +47,7 @@ function PurchaseStep({
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
   const { chainId } = useAppKitNetwork();
+  const { isTargetChainMismatched } = useWalletGateFlow();
   const { contractData } = useSelector((state) => state.chain.contractData);
   const { web3, signer } = useSelector((state) => state.web3.walletData);
   const recaptchaRef = useRef(null);
@@ -102,11 +104,13 @@ function PurchaseStep({
 
   const handlePurchase = async () => {
     if (address?.toLowerCase() === userData?.address?.toLowerCase()) {
-      // Previously missing here (unlike Mint/List/Offer) - a wallet left on
-      // the wrong chain would only fail deep inside MetaMask with a cryptic
-      // error instead of a clear upfront message.
-      if (Number(chainId) !== Number(contractData.chain)) {
-        connectWalletHandle();
+      // Gate on the wallet's actual, live chain (read straight from
+      // window.ethereum) rather than AppKit's reactive chainId alone - that
+      // state can lag a tick behind a switch performed outside AppKit and
+      // would otherwise let a purchase slip through on the wrong network.
+      const liveMismatch = await isTargetChainMismatched(contractData.chain);
+      if (liveMismatch) {
+        connectWalletHandle(true);
         return;
       }
 
@@ -236,13 +240,16 @@ function PurchaseStep({
   const closeConnectModel = () => {
     setConnectModal(false);
   };
-  const connectWalletHandle = () => {
+  // `forceOpen` lets a caller that has already confirmed a mismatch via the
+  // live wallet-chain read (`isTargetChainMismatched`) open the modal even
+  // if AppKit's own reactive chainId hasn't caught up yet.
+  const connectWalletHandle = (forceOpen = false) => {
     const chainMismatch =
       isConnected &&
       chainId != null &&
       Number(chainId) !== Number(contractData?.chain);
 
-    if (!isConnected || chainMismatch) {
+    if (forceOpen || !isConnected || chainMismatch) {
       setConnectModal(true);
     }
   };

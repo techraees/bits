@@ -13,10 +13,10 @@ import {
   InputComponent,
   ToastMessage,
 } from "../../../components";
-import ConnectModal from "../../../components/connectModal";
 import ForgotPassModal from "../../../components/ForgotPassModal";
 import PasswordRequirements from "../../../components/PasswordRequirements";
 import Loading from "../../../components/loaders/loading";
+import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
 import {
   signInSchema,
   signUpSchema,
@@ -35,7 +35,7 @@ const env = process.env;
 
 function Login() {
   const { address, isConnected } = useAppKitAccount();
-  const [connectModal, setConnectModal] = useState(false);
+  const { openAppKitConnect } = useWalletGateFlow();
   const [forgotPassModal, setForgotPassModal] = useState(false);
   const [step, setStep] = useState(1);
   const [id, setId] = useState(null);
@@ -254,31 +254,19 @@ function Login() {
     fetchPolicy: "network-only",
   });
 
-  const closeConnectModel = () => {
-    setConnectModal(false);
-  };
-
   const forceValidateAndConnect = async () => {
-    const isValid = await trigger(); // 🔥 force validate all fields
+    const isValid = await trigger();
 
     if (!isValid) {
-      // ToastMessage("Error", "Please fix form errors", "error");
       return;
     }
 
-    // form valid hai
-    setConnectModal(true);
+    await openAppKitConnect();
   };
 
   const openMetaMaskLink = () => {
     window.open("https://metamask.io/", "_blank");
   };
-
-  useEffect(() => {
-    if (isConnected) {
-      setConnectModal(false);
-    }
-  }, [isConnected]);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -351,7 +339,6 @@ function Login() {
 
   return (
     <div style={{ background: "black" }}>
-      <ConnectModal visible={connectModal} onClose={closeConnectModel} />
       {playerLoading ||
         signUpLoading ||
         (loading && <Loading content="Loading" />)}
