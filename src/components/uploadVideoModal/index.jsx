@@ -33,33 +33,28 @@ const STAGE_LABELS = {
   error: "Upload failed",
 };
 
-const getUploadStep = (uploadProgress, uploadStatus, hasVideo) => {
-  if (hasVideo) return "complete";
-  if (uploadStatus === STAGE_LABELS.error) return "error";
+const getDisplayProgress = (phase, rawProgress, isComplete) => {
+  if (isComplete || phase === "complete") return 100;
+  if (phase === "error") return rawProgress;
 
-  const status = uploadStatus.toLowerCase();
-  if (
-    uploadProgress >= 85 ||
-    status.includes("processing") ||
-    status.includes("finalizing")
-  ) {
-    return "processing";
+  if (phase === "processing") {
+    return Math.min(95, Math.max(66, rawProgress));
   }
 
-  return "uploading";
+  if (phase === "uploading") {
+    if (rawProgress <= 0) return 5;
+    if (rawProgress >= 85) return 65;
+    return Math.max(5, Math.round((rawProgress / 85) * 65));
+  }
+
+  return rawProgress;
 };
 
-const getStepItemClass = (step, uploadStep) => {
-  const order = { uploading: 0, processing: 1, complete: 2 };
-  const current = order[uploadStep] ?? -1;
+const getStepItemClass = (step, activePhase) => {
   const classes = ["upload-video-steps__item"];
 
-  if (uploadStep === step) {
+  if (activePhase === step) {
     classes.push("upload-video-steps__item--active");
-  }
-
-  if (current > order[step]) {
-    classes.push("upload-video-steps__item--done");
   }
 
   return classes.join(" ");
@@ -102,6 +97,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("");
+  const [uploadPhase, setUploadPhase] = useState("idle");
   const [selectedStyle, setSelectedStyle] = useState(undefined);
   const [styleChangeConfirmOpen, setStyleChangeConfirmOpen] = useState(false);
   const [pendingStyle, setPendingStyle] = useState(null);
@@ -194,10 +190,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
   const isUploading = imageUploadLoader || Boolean(imageUpload);
   const isFileUploadComplete = Boolean(values.video);
-  const fileUploadPercent = isFileUploadComplete ? 100 : uploadProgress;
-  const uploadStep = getUploadStep(
+  const activeUploadPhase = isFileUploadComplete ? "complete" : uploadPhase;
+  const fileUploadPercent = getDisplayProgress(
+    activeUploadPhase,
     uploadProgress,
-    uploadStatus,
     isFileUploadComplete,
   );
   const showUploadActivity = isUploading || Boolean(selectedFileName);
@@ -263,6 +259,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         setSelectedFileName(fileUploaded.name);
         setImageUpload(true);
         setUploadProgress(0);
+        setUploadPhase("uploading");
         setUploadStatus("Starting...");
 
         const handleProgress = (progressData) => {
@@ -270,14 +267,19 @@ const UploadVideoModal = ({ visible, onClose }) => {
           setUploadProgress(scaledProgress);
 
           if (progressData.status === "UPLOADING") {
+            setUploadPhase("uploading");
             setUploadStatus(STAGE_LABELS.uploading);
           } else if (progressData.status === "PROGRESS") {
+            setUploadPhase("processing");
             setUploadStatus(STAGE_LABELS.processing);
           } else if (progressData.status === "SUCCESS") {
+            setUploadPhase("processing");
             setUploadStatus("Processing complete!");
           } else if (progressData.status === "DOWNLOADING") {
+            setUploadPhase("processing");
             setUploadStatus("Finalizing...");
           } else {
+            setUploadPhase("processing");
             setUploadStatus(progressData.status || STAGE_LABELS.processing);
           }
         };
@@ -296,6 +298,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
             const scaled = 80 + Math.round(storjRatio * storjRange);
 
             setUploadProgress(Math.min(95, Math.max(80, scaled)));
+            setUploadPhase("uploading");
             setUploadStatus(
               stage === "preparing"
                 ? STAGE_LABELS.preparing
@@ -310,8 +313,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
             handleStorjProgress,
           );
 
+          setUploadPhase("processing");
           setUploadStatus(STAGE_LABELS.processing);
-          setUploadProgress(96);
+          setUploadProgress(90);
 
           await saveVideoUpload(url, fileUploaded, fileUploaded.name, {
             isEmote: true,
@@ -319,21 +323,25 @@ const UploadVideoModal = ({ visible, onClose }) => {
           });
 
           setImageUpload(false);
+          setUploadPhase("complete");
           setUploadProgress(100);
           setUploadStatus(STAGE_LABELS.complete);
         } else {
           setUploadProgress(0);
+          setUploadPhase("error");
           setUploadStatus(STAGE_LABELS.error);
           ToastMessage("Conversion Error", "", "error");
         }
       } else {
         setSelectedFileName(fileUploaded.name);
         setImageUpload(true);
+        setUploadPhase("uploading");
         setUploadProgress(5);
         setUploadStatus(STAGE_LABELS.preparing);
 
         const handleStorjProgress = ({ stage, percent }) => {
           setUploadProgress(percent);
+          setUploadPhase("uploading");
           setUploadStatus(STAGE_LABELS[stage] || STAGE_LABELS.uploading);
         };
 
@@ -344,6 +352,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
           handleStorjProgress,
         );
 
+        setUploadPhase("processing");
         setUploadStatus(STAGE_LABELS.processing);
         setUploadProgress(90);
 
@@ -353,6 +362,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
         });
 
         setImageUpload(false);
+        setUploadPhase("complete");
         setUploadProgress(100);
         setUploadStatus(STAGE_LABELS.complete);
       }
@@ -360,6 +370,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
       console.error("Video upload failed:", error);
       setImageUpload(false);
       setUploadProgress(0);
+      setUploadPhase("error");
       setUploadStatus(STAGE_LABELS.error);
       ToastMessage(
         "Upload Error",
@@ -381,6 +392,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     setImageUploadLoader(false);
     setUploadProgress(0);
     setUploadStatus("");
+    setUploadPhase("idle");
     setFieldValue("video", "");
     setFieldValue("thumbnail", "");
     setFieldValue("video_duration", "");
@@ -424,7 +436,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
     if (!isSelected) {
       setStyleError(true);
       triggerStyleAttention();
-      ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
     hiddenFileInput.current.click();
@@ -465,7 +476,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
     if (!isSelected) {
       setStyleError(true);
       triggerStyleAttention();
-      ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
 
@@ -550,11 +560,6 @@ const UploadVideoModal = ({ visible, onClose }) => {
       if (!isSelectedRef.current) {
         setStyleError(true);
         triggerStyleAttentionRef.current?.();
-        ToastMessage(
-          "Please select a style (Emote or Video) first",
-          "",
-          "error",
-        );
         return;
       }
 
@@ -632,20 +637,13 @@ const UploadVideoModal = ({ visible, onClose }) => {
           </div>
           {!isSelected && !isUploading && (
             <p
-              className={`upload-video-style-hint ${textColor2}${hintAttention ? " upload-video-style-hint--attention" : ""
-                }`}
+              className={`upload-video-style-hint ${textColor2}${
+                hintAttention ? " upload-video-style-hint--attention" : ""
+              }`}
             >
               Select Emote or Video above to enable upload
             </p>
           )}
-          <ErrorMessage
-            className="upload-video-style-error"
-            message={
-              styleError
-                ? "Please select a style (Emote or Video) before uploading"
-                : null
-            }
-          />
           <Row
             className="dragVideoView py-4 mt-4 mx-2 flex-column"
             style={{ position: "relative" }}
@@ -667,9 +665,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                       title={
                         isUploading
                           ? "Please wait until upload finishes"
-                          : !isSelected
-                            ? "Select Emote or Video style above first"
-                            : undefined
+                          : undefined
                       }
                     >
                       <ButtonComponent
@@ -718,7 +714,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                               status={
                                 isFileUploadComplete
                                   ? "success"
-                                  : uploadStep === "error"
+                                  : activeUploadPhase === "error"
                                     ? "exception"
                                     : "active"
                               }
@@ -738,7 +734,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                                 alt="Complete"
                                 className="upload-video-file-row__check"
                               />
-                            ) : uploadStep === "error" ? (
+                            ) : activeUploadPhase === "error" ? (
                               <img
                                 src={cross}
                                 alt="Failed"
@@ -759,7 +755,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                             (step) => (
                               <span
                                 key={step}
-                                className={getStepItemClass(step, uploadStep)}
+                                className={getStepItemClass(step, activeUploadPhase)}
                               >
                                 {step === "uploading"
                                   ? "Uploading"
