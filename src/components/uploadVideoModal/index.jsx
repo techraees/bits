@@ -105,6 +105,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const [selectedStyle, setSelectedStyle] = useState(undefined);
   const [styleChangeConfirmOpen, setStyleChangeConfirmOpen] = useState(false);
   const [pendingStyle, setPendingStyle] = useState(null);
+  const [hintAttention, setHintAttention] = useState(false);
+  const [selectAttention, setSelectAttention] = useState(false);
+  const styleAttentionTimeoutRef = useRef(null);
+  const styleSelectWrapRef = useRef(null);
 
   const {
     handleSubmit,
@@ -389,15 +393,37 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
   const applyStyleSelection = useCallback((value) => {
     setStyleError(false);
+    setHintAttention(false);
+    setSelectAttention(false);
     setIsEmote(value === "Emote");
     setIsSelected(true);
     setSelectedStyle(value);
+  }, []);
+
+  const triggerStyleAttention = useCallback(() => {
+    setHintAttention(true);
+    setSelectAttention(true);
+    styleSelectWrapRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+
+    if (styleAttentionTimeoutRef.current) {
+      clearTimeout(styleAttentionTimeoutRef.current);
+    }
+
+    styleAttentionTimeoutRef.current = setTimeout(() => {
+      setHintAttention(false);
+      setSelectAttention(false);
+      styleAttentionTimeoutRef.current = null;
+    }, 1000);
   }, []);
 
   const handleClick = () => {
     if (isUploading) return;
     if (!isSelected) {
       setStyleError(true);
+      triggerStyleAttention();
       ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
@@ -438,6 +464,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
     if (isUploading) return;
     if (!isSelected) {
       setStyleError(true);
+      triggerStyleAttention();
       ToastMessage("Please select a style (Emote or Video) first", "", "error");
       return;
     }
@@ -454,10 +481,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const isSelectedRef = useRef(isSelected);
   const processVideoFileRef = useRef(null);
   const isUploadingRef = useRef(isUploading);
+  const triggerStyleAttentionRef = useRef(triggerStyleAttention);
 
   isSelectedRef.current = isSelected;
   processVideoFileRef.current = processVideoFile;
   isUploadingRef.current = isUploading;
+  triggerStyleAttentionRef.current = triggerStyleAttention;
 
   const setDragActiveSafe = useCallback((nextValue) => {
     if (dragActiveRef.current === nextValue) return;
@@ -475,6 +504,12 @@ const UploadVideoModal = ({ visible, onClose }) => {
   // - no setState on every dragover (prevents re-render storm)
   useEffect(() => {
     if (!visible) {
+      setHintAttention(false);
+      setSelectAttention(false);
+      if (styleAttentionTimeoutRef.current) {
+        clearTimeout(styleAttentionTimeoutRef.current);
+        styleAttentionTimeoutRef.current = null;
+      }
       resetDragState();
       return undefined;
     }
@@ -514,6 +549,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
       if (!isSelectedRef.current) {
         setStyleError(true);
+        triggerStyleAttentionRef.current?.();
         ToastMessage(
           "Please select a style (Emote or Video) first",
           "",
@@ -566,28 +602,42 @@ const UploadVideoModal = ({ visible, onClose }) => {
             </span>
           </Tooltip> */}
           </p>
-          <Select
-            className="text-center mt-3 upload-video-style-select upload-video-field"
-            dropdownClassName={selectDropdownClass}
-            value={selectedStyle}
-            placeholder="Select style"
-            style={{
-              width: "100%",
-            }}
-            status={styleError ? "error" : undefined}
-            disabled={isUploading}
-            onChange={handleSelect}
-            options={[
-              {
-                value: "Emote",
-                label: "Emote",
-              },
-              {
-                value: "Video",
-                label: "Video",
-              },
-            ]}
-          />
+          <div
+            ref={styleSelectWrapRef}
+            className={`upload-video-style-select-wrap${selectAttention ? " upload-video-style-select-wrap--attention" : ""
+              }`}
+          >
+            <Select
+              className="text-center mt-3 upload-video-style-select upload-video-field"
+              dropdownClassName={selectDropdownClass}
+              value={selectedStyle}
+              placeholder="Select style"
+              style={{
+                width: "100%",
+              }}
+              status={styleError ? "error" : undefined}
+              disabled={isUploading}
+              onChange={handleSelect}
+              options={[
+                {
+                  value: "Emote",
+                  label: "Emote",
+                },
+                {
+                  value: "Video",
+                  label: "Video",
+                },
+              ]}
+            />
+          </div>
+          {!isSelected && !isUploading && (
+            <p
+              className={`upload-video-style-hint ${textColor2}${hintAttention ? " upload-video-style-hint--attention" : ""
+                }`}
+            >
+              Select Emote or Video above to enable upload
+            </p>
+          )}
           <ErrorMessage
             className="upload-video-style-error"
             message={
@@ -611,7 +661,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
                       Drag and drop here <br /> or
                     </p>
                     <div
-                      className="upload-video-browse-wrap"
+                      className={`upload-video-browse-wrap${
+                        !isSelected || isUploading ? " browse-btn-disabled" : ""
+                      }`}
                       title={
                         isUploading
                           ? "Please wait until upload finishes"
@@ -625,7 +677,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
                         text={"Browse"}
                         height={28}
                         radius={6}
-                        disabled={!isSelected || isUploading}
+                        disabled={isUploading}
                         className="upload-video-action-btn upload-video-browse-btn"
                       />
                     </div>
@@ -723,7 +775,7 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
                     {!showUploadActivity && (
                       <div className="upload-video-requirements">
-                        <p className={`upload-video-requirements__title ${textColor2}`}>
+                        <p className={`upload-video-requirements__title mb-3 ${textColor2}`}>
                           Upload Video <span className="red">*</span>
                         </p>
                         <ul className="upload-video-requirements__list">
