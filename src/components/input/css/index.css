@@ -1,41 +1,67 @@
+.inputComponentRoot {
+  width: 100%;
+}
+
 .inputStyle {
-    border: none !important;
-    border-bottom: 2px solid #DCDCDC !important;
-    padding-bottom: 15px !important;
-    padding-top: 15px !important;
-    text-align: center;
-    color: #b0b0b0 !important;
-    font-weight: 400 !important;
-    background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid #dcdcdc !important;
+  padding-bottom: 15px !important;
+  padding-top: 15px !important;
+  text-align: center;
+  color: #b0b0b0 !important;
+  font-weight: 400 !important;
+  background: transparent !important;
+  /* 16px prevents iOS Safari auto-zoom on focus */
+  font-size: 16px !important;
 }
 
 .inputStyle:focus {
-    border-bottom: 2px solid #A62828 !important;
-    box-shadow: none !important;
-    color: #A62828 !important;
-    font-weight: 600 !important;
+  border-bottom: 2px solid #a62828 !important;
+  box-shadow: none !important;
+  color: #a62828 !important;
+  font-weight: 600 !important;
 }
 
 .inputStyle:focus::placeholder {
-    color: #A62828 !important;
+  color: #a62828 !important;
 }
 
 /* Error state - visible whenever error is present */
 .inputStyleError,
 .inputStyleError:focus {
-    border-bottom: 2px solid #A62828 !important;
-    box-shadow: none !important;
+  border-bottom: 2px solid #a62828 !important;
+  box-shadow: none !important;
 }
 
 .inputStyleError::placeholder {
-    color: #A62828 !important;
+  color: #a62828 !important;
 }
 
 .errorText {
-    color: #A62828 !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    display: block;
-    margin-top: 4px;
-    text-align: left;
+  color: #a62828 !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  display: block;
+  margin-top: 4px;
+  text-align: left;
+}
+
+/*
+ * iOS Safari: keep 16px on the input (no focus zoom) but scale the wrapper
+ * so text looks ~14px. Pinch zoom stays enabled (no viewport change).
+ */
+@supports (-webkit-touch-callout: none) {
+  @media screen and (max-width: 768px) {
+    .inputIosNoZoom {
+      transform: scale(0.875);
+      transform-origin: top center;
+      width: 114.285714%;
+      margin-left: -7.142857%;
+      margin-bottom: -4px;
+    }
+
+    .inputIosNoZoom .ant-input-affix-wrapper {
+      width: 100%;
+    }
+  }
 }

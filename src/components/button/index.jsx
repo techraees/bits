@@ -14,6 +14,7 @@ const ButtonComponent = ({
   width,
   disabled,
   loading = false,
+  className = "",
 }) => {
   // console.log("disa", disabled);
   return (
@@ -45,7 +46,7 @@ const ButtonComponent = ({
             borderRadius: radius ? radius : 20,
             width: width && width,
           }}
-          className={`btnDesign ${green ? "green-gradient" : "red-gradient"}`}
+          className={`btnDesign ${green ? "green-gradient" : "red-gradient"} ${className}`.trim()}
           disabled={disabled && true}
         >
           {text}

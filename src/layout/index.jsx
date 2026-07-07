@@ -8,7 +8,7 @@ import { updateAccount } from "../store/actions";
 import ActionTypes from "../store/contants/ActionTypes";
 import PublicLayout from "../views/public";
 import PrivateLayout from "../views/private";
-import { NavbarComponent } from "../components";
+import { NavbarComponent, Footer } from "../components";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -69,6 +69,7 @@ const Layout = () => {
         <NavbarComponent dashboardNav />
         <PublicLayout />
         <PrivateLayout />
+        <Footer />
       </div>
     </BrowserRouter>
   );

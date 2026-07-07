@@ -1,14 +1,21 @@
 import React from "react";
 
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = ({ message, className }) => {
+  if (!message) return null;
+
   return (
-    <div>
+    <div className={className}>
       <p
-        style={{
-          textAalign: "start",
-          color: "red",
-          marginBottom: "0px",
-        }}
+        style={
+          className
+            ? undefined
+            : {
+                textAlign: "start",
+                color: "#d54343",
+                marginBottom: 0,
+                fontSize: 12,
+              }
+        }
       >
         {message}
       </p>

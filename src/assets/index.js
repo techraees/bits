@@ -92,6 +92,11 @@ import deleteIcon from "./images/delete.png";
 import likedIcon from "./icons/like_icon.svg";
 import watchedIcon from "./icons/watch_icon.svg";
 import loader from "./images/loader.svg";
+import metamaskFooter from "./images/metamask.svg";
+import helplinecustomer from "./images/helplinecustomer.svg";
+import telegramsocialicon from "./images/telegramsocialicon.svg";
+import xsocialicon from "./images/xsocialicon.svg";
+import metamasksocialicon from "./images/metamasksocialicon.svg";
 
 export {
   logo,
@@ -188,4 +193,9 @@ export {
   likedIcon,
   watchedIcon,
   loader,
+  metamaskFooter,
+  helplinecustomer,
+  telegramsocialicon,
+  xsocialicon,
+  metamasksocialicon,
 };

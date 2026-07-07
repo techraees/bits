@@ -12,32 +12,36 @@ const InputComponent = ({
   inputRef,
   ...rest
 }) => {
+  const className = `inputStyle regular ${error ? "inputStyleError" : ""}`;
+
   return (
-    <div>
-      {password ? (
-        <Input.Password
-          {...rest}
-          ref={inputRef}
-          placeholder={placeholder}
-          className={`inputStyle regular ${error ? "inputStyleError" : ""}`}
-          visibilityToggle={false}
-          onChange={onChange}
-          name={name}
-          value={value}
-          autoComplete="new-password"
-        />
-      ) : (
-        <Input
-          {...rest}
-          ref={inputRef}
-          placeholder={placeholder}
-          className={`inputStyle regular ${error ? "inputStyleError" : ""}`}
-          name={name}
-          onChange={onChange}
-          value={value}
-          autoComplete="new-password"
-        />
-      )}
+    <div className="inputComponentRoot">
+      <div className="inputIosNoZoom">
+        {password ? (
+          <Input.Password
+            {...rest}
+            ref={inputRef}
+            placeholder={placeholder}
+            className={className}
+            visibilityToggle={false}
+            onChange={onChange}
+            name={name}
+            value={value}
+            autoComplete="new-password"
+          />
+        ) : (
+          <Input
+            {...rest}
+            ref={inputRef}
+            placeholder={placeholder}
+            className={className}
+            name={name}
+            onChange={onChange}
+            value={value}
+            autoComplete="new-password"
+          />
+        )}
+      </div>
     </div>
   );
 };

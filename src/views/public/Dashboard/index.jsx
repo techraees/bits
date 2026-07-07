@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./css/index.css";
 import { Button, Row, Col } from "antd";
 import {
-  discord_grey,
   left_arrow_red,
-  meta,
-  telegram_grey,
-  twitter_grey,
 } from "../../../assets";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
@@ -34,7 +30,6 @@ const Dashboard = () => {
   const [topNfts, setTopNfts] = useState([]);
   let navigate = useNavigate();
 
-  const [showChat, setShowChat] = useState(false);
   const { userData } = useSelector((state) => state.address.userData);
 
   const { fixedItemData } = useSelector(
@@ -49,8 +44,6 @@ const Dashboard = () => {
     (state) => state.app.theme.backgroundTheme,
   );
   const textColor = useSelector((state) => state.app.theme.textColor);
-  const isLight = textColor === "black";
-  const bgColor = useSelector((state) => state.app.theme.bgColor);
   const isLogged = userData?.isLogged;
   const userProfile = userData?.full_name;
 
@@ -271,31 +264,6 @@ const Dashboard = () => {
               );
             })} */}
           </div>
-        </div>
-      </div>
-      {/* <div className="dark-grey-bg d-flex justify-content-center"> */}
-      <div
-        className={`${bgColor} d-flex justify-content-center ${isLight ? "socialBar-light" : "socialBar-dark"}`}
-      >
-        <div className="py-2" style={{ border: "1px" }}>
-          <img src={discord_grey} className="mx-2" alt="discord" />
-          <img src={telegram_grey} className="mx-2" alt="telegram" />
-          <img src={twitter_grey} className="mx-2" alt="twitter" />
-        </div>
-      </div>
-      <div className="red-background">
-        <div className="container d-flex justify-content-between py-2 align-items-center">
-          <p className="m-0 white">
-            BITS NFT {new Date().getFullYear()} All Rights reserved{" "}
-          </p>
-          <img
-            src={meta}
-            className="mx-2"
-            onClick={() => {
-              setShowChat(!showChat);
-            }}
-            alt="meta"
-          />
         </div>
       </div>
     </div>

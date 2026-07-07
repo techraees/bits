@@ -10,8 +10,19 @@ import { createThumbnailFile } from "../utills/generateVideoThumbnail";
 
 const env = process.env;
 
+const STORJ_PROGRESS = {
+  preparing: 8,
+  uploadStart: 12,
+  uploadEnd: 85,
+};
+
 // uploading to storj
-export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
+export const sendFileToStorj = async (
+  file,
+  isEmote,
+  createSignedUrl,
+  onProgress,
+) => {
   let finalFile;
 
   if (isEmote) {
@@ -32,19 +43,34 @@ export const sendFileToStorj = async (file, isEmote, createSignedUrl) => {
     throw new Error("No file available for Storj upload");
   }
 
+  onProgress?.({ stage: "preparing", percent: STORJ_PROGRESS.preparing });
+
   const { data } = await createSignedUrl({
     variables: { key: finalFile.name },
   });
 
   const presignUrl = data.CreateSignedUrlForNfts.url;
 
+  onProgress?.({ stage: "uploading", percent: STORJ_PROGRESS.uploadStart });
+
   const uploadResp = await axios.put(presignUrl, finalFile, {
     headers: {
       "Content-Type": finalFile.type || "application/octet-stream",
     },
+    onUploadProgress: (event) => {
+      if (!event.total) return;
+
+      const uploadRange = STORJ_PROGRESS.uploadEnd - STORJ_PROGRESS.uploadStart;
+      const percent =
+        STORJ_PROGRESS.uploadStart +
+        Math.round((event.loaded / event.total) * uploadRange);
+
+      onProgress?.({ stage: "uploading", percent });
+    },
   });
 
   if (uploadResp.status === 200) {
+    onProgress?.({ stage: "uploading", percent: STORJ_PROGRESS.uploadEnd });
     return `${env.REACT_APP_STORJ_URL}/${finalFile.name}`;
   }
 
