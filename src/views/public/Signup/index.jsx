@@ -107,9 +107,9 @@ function Login() {
       // navigate("/");
       window.location.href = "/";
     }
-    if (loginError) {
-      ToastMessage("Sign in Error", loginError?.message, "error");
-    }
+    // Apollo's global errorLink (src/index.jsx) already surfaces the real
+    // GraphQL error message in its own toast - showing one here too just
+    // duplicates it with Apollo's generic wrapper text instead.
   }, [loginData, loginError, signInResetValue]);
 
   // login
@@ -117,7 +117,6 @@ function Login() {
   // signUp
 
   const {
-    register: signUpRegister,
     handleSubmit: signUpSubmit,
     setValue: signUpSetValue,
     trigger,
@@ -215,9 +214,11 @@ function Login() {
       signUpSetValue("dob", "");
       ToastMessage("success", "Account Created Successfully", "success");
     }
-    if (singUpError) {
-      ToastMessage("error", singUpError?.message, "error");
-    }
+    // Apollo's global errorLink (src/index.jsx) already shows a toast with
+    // the real GraphQL error message (e.g. "This Wallet Address Already
+    // exists") - showing another one here duplicated it with Apollo's
+    // generic wrapper text ("Response not successful: Received status code
+    // 400") instead of anything useful.
   }, [signUpData, singUpError, signUpResetValue, signUpSetValue]);
 
   async function signUpHandle(data) {
@@ -368,7 +369,6 @@ function Login() {
                 <InputComponent
                   placeholder={"Full Name"}
                   name="full_name"
-                  ref={signUpRegister}
                   value={watch("full_name")}
                   onChange={handleChangeSignUp}
                   autocomplete="off"
@@ -380,7 +380,6 @@ function Login() {
                 )}
                 <InputComponent
                   placeholder={"User Name"}
-                  ref={signUpRegister}
                   name="user_name"
                   value={watch("user_name")}
                   onChange={handleChangeSignUp}
@@ -393,7 +392,6 @@ function Login() {
                 )}
                 <InputComponent
                   placeholder={"E-mail"}
-                  ref={signUpRegister}
                   name="email"
                   value={watch("email")}
                   onChange={handleChangeSignUp}
@@ -408,7 +406,6 @@ function Login() {
                   <InputComponent
                     password
                     placeholder={"Password"}
-                    ref={signUpRegister}
                     name="password"
                     value={watch("password")}
                     onChange={handleChangeSignUp}

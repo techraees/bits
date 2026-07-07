@@ -120,9 +120,7 @@ export function useWalletGateFlow() {
         const { chainId: providerChainId } = await web3Provider.getNetwork();
 
         if (userData?.address) {
-          if (
-            userData.address.toLowerCase() !== walletAddress.toLowerCase()
-          ) {
+          if (userData.address.toLowerCase() !== walletAddress.toLowerCase()) {
             ToastMessage("Error", "Please connect correct wallet", "error");
             return false;
           }
@@ -164,7 +162,10 @@ export function useWalletGateFlow() {
       try {
         switchNetwork(getTargetNetwork(targetChainId));
       } catch (error) {
-        console.warn("AppKit switchNetwork failed, trying direct switch:", error);
+        console.warn(
+          "AppKit switchNetwork failed, trying direct switch:",
+          error,
+        );
       }
 
       const switchedViaAppKit = await waitForTargetChain(targetChainId);
@@ -238,12 +239,7 @@ export function useWalletGateFlow() {
 
       return syncWalletToRedux(targetChainId);
     },
-    [
-      openAppKitConnect,
-      waitUntilConnected,
-      switchToChain,
-      syncWalletToRedux,
-    ],
+    [openAppKitConnect, waitUntilConnected, switchToChain, syncWalletToRedux],
   );
 
   return {

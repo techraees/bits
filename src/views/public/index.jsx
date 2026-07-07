@@ -17,8 +17,8 @@ const PublicLayout = () => {
       <Routes>
         {routes
           ?.filter((r) => r?.layout === "public")
-          ?.map((route) => (
-            <>
+          ?.map((route, idx) => (
+            <React.Fragment key={route?.key || idx}>
               {route?.nested ? (
                 <Route
                   key={route.key}
@@ -48,6 +48,7 @@ const PublicLayout = () => {
                 </Route>
               ) : (
                 <Route
+                  key={route?.key || `route-${idx}`}
                   path={route?.path}
                   element={
                     publicRoutes?.includes(location?.pathname) ? (
@@ -58,7 +59,7 @@ const PublicLayout = () => {
                   }
                 />
               )}
-            </>
+            </React.Fragment>
           ))}
       </Routes>
     </>

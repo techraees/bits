@@ -3,7 +3,7 @@ import { useLazyQuery } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logo, metamaskwithmascot } from "../../../assets";
@@ -46,14 +46,15 @@ function Login() {
 
   //login
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
-    watch: signWatch,
     formState: { errors },
     reset: signInResetValue,
   } = useForm({
     resolver: yupResolver(signInSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const [login, { loading, error: loginError, data: loginData }] = useLazyQuery(
@@ -83,18 +84,12 @@ function Login() {
         password: values.password,
         recaptchaToken: recaptchaToken,
       },
-    }).catch((err) => {
-      // console.log("errr", err);
-    });
+    }).catch(() => { });
   };
 
   function onSubmit(data) {
     loginUser(data);
   }
-
-  const handleChange = (e) => {
-    setValue(e.target.name, e.target.value);
-  };
 
   useEffect(() => {
     if (loginData) {
@@ -105,22 +100,9 @@ function Login() {
       setCookieStorage("access_token", access_token);
       setCookieStorage("refresh_token", refresh_token);
 
-      // dispatch({
-      //   type: "NFT_ADDRESS",
-      //   userData: {
-      //     address: user_address,
-      //     full_name: full_name,
-      //     country: country,
-      //     bio: bio,
-      //     profileImg: profileImg,
-      //     id,
-      //     token,
-      //     isLogged: true,
-      //   },
-      // });
+      window.dispatchEvent(new Event("storageChange"));
 
-      // navigate("/");
-      window.location.href = "/";
+      navigate("/");
     }
     if (loginError) {
       ToastMessage("Sign in Error", loginError?.message, "error");
@@ -221,8 +203,6 @@ function Login() {
     }
   }, []);
 
-  // console.log(process.env.REACT_APP_RECAPTCH_SITE_KEY, "keyasdasdadad");
-
   return (
     <div style={{ background: "black" }}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
@@ -250,32 +230,45 @@ function Login() {
                 <span className="ms-4 semi-bold fs-5">Sign in</span>
               </div>
               <div className="mb-5">
-                <InputComponent
-                  placeholder={"E-mail"}
+                <Controller
                   name="email"
-                  ref={register}
-                  autoComplete="username"
-                  onChange={handleChange}
-                  value={signWatch("email")}
+                  control={control}
+                  render={({ field: { ref, ...field } }) => (
+                    <InputComponent
+                      {...field}
+                      inputRef={ref}
+                      placeholder={"E-mail"}
+                      autoComplete="username"
+                      error={!!errors.email}
+                    />
+                  )}
                 />
-                {errors.email && <span>{errors.email.message}</span>}
+                {errors.email && (
+                  <span className="errorText">{errors.email.message}</span>
+                )}
 
-                <input
-                  placeholder={"Password"}
-                  type="password"
+                <Controller
                   name="password"
-                  ref={register}
-                  onChange={handleChange}
-                  value={signWatch("password")}
-                  autoComplete="current-password"
-                  {...register("password")}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleSubmit(onSubmit)();
-                    }
-                  }}
+                  control={control}
+                  render={({ field: { ref, ...field } }) => (
+                    <InputComponent
+                      {...field}
+                      inputRef={ref}
+                      placeholder={"Password"}
+                      password
+                      autoComplete="current-password"
+                      error={!!errors.password}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          handleSubmit(onSubmit)();
+                        }
+                      }}
+                    />
+                  )}
                 />
-                {errors.password && <span>{errors.password.message}</span>}
+                {errors.password && (
+                  <span className="errorText">{errors.password.message}</span>
+                )}
               </div>
               <div className="my-2 d-flex" style={{ alignItems: "center" }}>
                 <CustomCheckbox
@@ -290,9 +283,9 @@ function Login() {
                   sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
                   onChange={(t) => setRecaptchaToken(t)}
                   onExpired={() => setRecaptchaToken(null)}
-                  // Optional:
-                  // theme="dark"
-                  // size="compact"
+                // Optional:
+                // theme="dark"
+                // size="compact"
                 />
               </div>
 

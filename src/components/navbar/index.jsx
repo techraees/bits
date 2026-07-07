@@ -25,13 +25,15 @@ import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
-import { getCookieStorage } from "../../utills/cookieStorage";
+import { getCookieStorage, removeCookieStorage } from "../../utills/cookieStorage";
 import {
   getWalletChainId,
   subscribeWalletChain,
 } from "../../utills/walletChain";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { useWalletGateFlow } from "../../hooks/useWalletGateFlow";
+import { logoutWallet } from "../../store/actions";
+import { profileToUserData, emptyUserData } from "../../utills/hydrateUserProfile";
 
 const environment = process.env;
 
@@ -88,6 +90,11 @@ const NavbarComponent = ({ dashboardNav }) => {
   const contracts = useSelector((state) => state.contract);
   const fixedItems = useSelector((state) => state.fixedItems);
 
+  // Gates all wallet connect/switch prompts AND passive wallet reads below -
+  // logged-out visitors are just browsing by chain, so the site shouldn't
+  // talk to the wallet (or show wallet-derived UI) until they're logged in.
+  const isLoggedIn = Boolean(userData?.isLogged);
+
   const { isConnected } = useAppKitAccount();
   const { chainId: walletChainId } = useAppKitNetwork();
   const [liveWalletChainId, setLiveWalletChainId] = useState(null);
@@ -102,7 +109,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     liveWalletChainId ?? (walletChainId != null ? Number(walletChainId) : null);
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected || !isLoggedIn) {
       setLiveWalletChainId(null);
       return;
     }
@@ -123,7 +130,7 @@ const NavbarComponent = ({ dashboardNav }) => {
       cancelled = true;
       unsubscribe();
     };
-  }, [isConnected]);
+  }, [isConnected, isLoggedIn]);
 
   const isLight = textColor === "black";
 
@@ -165,32 +172,13 @@ const NavbarComponent = ({ dashboardNav }) => {
   };
 
   useEffect(() => {
-    if (data) {
-      const GetProfile = data?.GetProfile;
-
-      const id = GetProfile?.id;
-      const user_address = GetProfile?.user_address;
-      const full_name = GetProfile?.full_name;
-      const country = GetProfile?.country;
-      const bio = GetProfile?.bio;
-      const profileImg = GetProfile?.profileImg;
-      const token = GetProfile?.token;
-
+    if (data?.GetProfile) {
       dispatch({
         type: "NFT_ADDRESS",
-        userData: {
-          address: user_address,
-          full_name: full_name,
-          country: country,
-          bio: bio,
-          profileImg: profileImg,
-          id,
-          token,
-          isLogged: true,
-        },
+        userData: profileToUserData(data.GetProfile),
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   // console.log(menuBar, "menu");
 
@@ -230,9 +218,16 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   useEffect(() => {
     if (error?.message === "jwt expired") {
-      // navigate("/login");
+      dispatch({
+        type: "USER_AUTH_RESET",
+        userData: emptyUserData,
+      });
+      removeCookieStorage("access_token");
+      removeCookieStorage("refresh_token");
+      dispatch(logoutWallet());
+      navigate("/login");
     }
-  }, [error]);
+  }, [error, dispatch, navigate]);
   const [showRedImage, setShowRedImage] = useState(false);
   const [iconClicked, setIconClicked] = useState(false);
 
@@ -288,6 +283,13 @@ const NavbarComponent = ({ dashboardNav }) => {
   // just picked, guide them through switching it instead of only letting
   // them find out via a toast at mint/list/bid/purchase time.
   const handleChainSelect = async (targetChain) => {
+    if (!isLoggedIn) {
+      // Logged-out users are just browsing by chain (e.g. the Marketplace
+      // filter) - don't force a wallet connect/switch prompt for that.
+      applyChainSelection(targetChain);
+      return;
+    }
+
     if (!isConnected) {
       setPendingTargetChain(targetChain);
       await openAppKitConnect();
@@ -295,8 +297,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     }
 
     const isMismatched =
-      effectiveWalletChainId != null &&
-      effectiveWalletChainId !== targetChain;
+      effectiveWalletChainId != null && effectiveWalletChainId !== targetChain;
 
     if (isMismatched) {
       const ok = await ensureWalletOnChain(targetChain);
@@ -310,6 +311,7 @@ const NavbarComponent = ({ dashboardNav }) => {
   };
 
   const isChainMismatched =
+    isLoggedIn &&
     isConnected &&
     effectiveWalletChainId != null &&
     effectiveWalletChainId !== Number(contractData?.chain);

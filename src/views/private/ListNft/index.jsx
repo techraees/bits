@@ -176,15 +176,9 @@ const ListNft = () => {
         const mint = mintContract.connect(signer);
 
         // // Common approval check
-        const isApproved = await mint.isApprovedForAll(
-          address,
-          market.address,
-        );
+        const isApproved = await mint.isApprovedForAll(address, market.address);
         if (!isApproved) {
-          const approveTx = await mint.setApprovalForAll(
-            market.address,
-            true,
-          );
+          const approveTx = await mint.setApprovalForAll(market.address, true);
           await approveTx.wait();
         }
 
@@ -287,11 +281,7 @@ const ListNft = () => {
         setLoadingStatus(false);
         setLoadingMessage("");
         const parsedError = getParsedEthersError(error);
-        ToastMessage(
-          "Error",
-          parsedError.context || "Unknown error",
-          "error",
-        );
+        ToastMessage("Error", parsedError.context || "Unknown error", "error");
         console.error("Error:", error);
       }
     } else {

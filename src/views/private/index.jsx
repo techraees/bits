@@ -10,8 +10,8 @@ const PrivateLayout = () => {
       <Routes>
         {routes
           ?.filter((r) => r?.layout === "private")
-          ?.map((route) => (
-            <>
+          ?.map((route, idx) => (
+            <React.Fragment key={route?.key || idx}>
               {route?.nested ? (
                 <Route
                   key={route.key}
@@ -33,7 +33,7 @@ const PrivateLayout = () => {
                   element={<Protected>{route?.component}</Protected>}
                 />
               )}
-            </>
+            </React.Fragment>
           ))}
       </Routes>
     </>

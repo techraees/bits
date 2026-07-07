@@ -224,7 +224,9 @@ const NftDetailsScreen = () => {
                 </div> */}
                 <a
                   href={`https://${
-                    contractData.chain === 1 ? "etherscan.io" : "polygonscan.com"
+                    contractData.chain === 1
+                      ? "etherscan.io"
+                      : "polygonscan.com"
                   }/token/${contractData.mintContract.address}?a=${
                     data?.DetailsOfANft?.token_id
                   }`}
