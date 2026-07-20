@@ -172,7 +172,7 @@ const TopNftAddQuantiyPurchaseInputBodySection = ({
             nft_id: itemData?.nftId?.toString(),
             amount: Number(totalcost),
             currency:
-              contractData.chain === process.env.REACT_ETH_CHAINID
+              contractData.chain === process.env.REACT_APP_ETH_CHAINID
                 ? "ETH"
                 : "MATIC",
             token_id: itemData?.tokenId?.toString(),

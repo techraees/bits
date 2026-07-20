@@ -269,7 +269,7 @@ const OfferModal = ({
                       nft_id: nftId.toString(),
                       amount: Number(offerAmount),
                       currency:
-                        contractData.chain === process.env.REACT_ETH_CHAINID
+                        contractData.chain === process.env.REACT_APP_ETH_CHAINID
                           ? "ETH"
                           : "MATIC",
                       transaction_type: "bidding_transaction",

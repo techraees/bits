@@ -7,54 +7,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
 import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
 import { dbDateToReadableDate } from "../../../utills/timeToTimestamp";
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import faker from "faker";
 import { getCookieStorage } from "../../../utills/cookieStorage";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top",
-    },
-  },
-};
-
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Metamask",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 30 })),
-      backgroundColor: "#74F086",
-    },
-    {
-      label: "Paypal",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 30 })),
-      backgroundColor: "#20ACD8",
-    },
-  ],
-};
 
 const TransactionHistory = () => {
   let token = getCookieStorage("access_token");

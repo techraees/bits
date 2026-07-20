@@ -147,7 +147,7 @@ function PurchaseStep({
           nft_id: NFTId.toString(),
           amount: Number(totalPrice),
           currency:
-            contractData.chain === process.env.REACT_ETH_CHAINID
+            contractData.chain === process.env.REACT_APP_ETH_CHAINID
               ? "ETH"
               : "MATIC",
           token_id: tokenId.toString(),

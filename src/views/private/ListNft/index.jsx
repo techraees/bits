@@ -243,7 +243,7 @@ const ListNft = () => {
               listingID: newItemId.toString(),
               listingType,
               currency:
-                chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+                chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
               [isAuction ? "auctionid" : "fixedid"]: newItemId.toString(),
               biddingStartTime: start || 0,
               biddingEndTime: end || 0,
@@ -256,7 +256,7 @@ const ListNft = () => {
               nft_id: nftId.toString(),
               amount: Number(isAuction ? auctionStartPrice : fixedPrice),
               currency:
-                chainId === process.env.REACT_ETH_CHAINID ? "ETH" : "MATIC",
+                chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
               copies_transferred: Number(copies),
               transaction_type: "listing_nft",
               token_id: tokenId.toString(),

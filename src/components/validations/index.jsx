@@ -1,7 +1,6 @@
 import * as yup from "yup";
 import { isValidPhoneNumber } from "react-phone-number-input";
-// var WAValidator = require("multicoin-address-validator");
-// import WAValidator from "multicoin-address-validator";
+
 let valid_token_address = /^0x[0-9a-fA-F]{40}$/;
 const uploadValidation = (values) => {
   const errors = {};

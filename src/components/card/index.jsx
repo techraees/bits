@@ -394,9 +394,7 @@ const CardCompnent = ({
 
   // stripe payment
   const handleStripePayment = async () => {
-    const stripe = await loadStripe(
-      "pk_test_51ONY76DTnIk5XZdbssy5CY3IEHcocHc20X9xWh6rvoKGzjHVw3lBM7barlliBtOKgzQEU7XB61IWHsY0eLJBp18Q00e2dbR0gQ",
-    );
+    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
     const body = {
       product: {

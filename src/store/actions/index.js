@@ -7,8 +7,6 @@ import polygonMintingContractAbi from "../../abis/polygonMintingContractAbi.json
 import { numToHex } from "../../utills/numberToHex";
 import { WeiToETH } from "../../utills/convertWeiAndBnb";
 import { ToastMessage } from "../../components";
-import UniversalProvider from "@walletconnect/universal-provider";
-import { Web3Modal } from "@web3modal/standalone";
 
 export const loadBlockchainAction =
   (chain, address, connectedAccount, provider) => async (dispatch) => {

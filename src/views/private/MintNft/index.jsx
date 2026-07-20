@@ -413,7 +413,7 @@ const MintNft = () => {
             nft_id: createdNftId,
             amount: 0,
             currency:
-              contractData.chain === process.env.REACT_ETH_CHAINID
+              contractData.chain === process.env.REACT_APP_ETH_CHAINID
                 ? "ETH"
                 : "MATIC",
             copies_transferred: Number(values.supply),
