@@ -190,7 +190,16 @@
   stroke: #ffffff !important;
 }
 
-.login-input-field-error {
+.login-input-field-error,
+.login-page-wrapper .login-input-field.login-input-field-error,
+.login-page-wrapper .login-input-field.login-input-field-error:hover,
+.login-page-wrapper .login-input-field.login-input-field-error:focus-within,
+.light-background .login-page-wrapper .login-input-field.login-input-field-error,
+.light-background .login-page-wrapper .login-input-field.login-input-field-error:hover,
+.light-background .login-page-wrapper .login-input-field.login-input-field-error:focus-within,
+.login-page-wrapper.light-background .login-input-field.login-input-field-error,
+.login-page-wrapper.light-background .login-input-field.login-input-field-error:hover,
+.login-page-wrapper.light-background .login-input-field.login-input-field-error:focus-within {
   border-color: #a62828 !important;
 }
 
@@ -270,3 +279,114 @@
     width: 140px;
   }
 }
+
+/* ========== Light theme (layout ancestor OR class on auth wrapper) ========== */
+.light-background .login-page-wrapper,
+.login-page-wrapper.light-background {
+  background-color: #f0f0f0 !important;
+}
+
+.light-background .login-page-wrapper .text-white,
+.login-page-wrapper.light-background .text-white {
+  color: #000000 !important;
+}
+
+.light-background .login-page-wrapper .metamask-banner,
+.login-page-wrapper.light-background .metamask-banner {
+  background-color: #ffffff !important;
+  border-color: #dddddd !important;
+}
+
+.light-background .login-page-wrapper .metamask-banner > span,
+.login-page-wrapper.light-background .metamask-banner > span {
+  color: #555555 !important;
+}
+
+.light-background .login-page-wrapper .login-input-label,
+.login-page-wrapper.light-background .login-input-label {
+  color: #000000 !important;
+}
+
+.light-background .login-page-wrapper .login-input-field,
+.login-page-wrapper.light-background .login-input-field {
+  background-color: #ffffff !important;
+  border-color: #dddddd !important;
+  color: #000000 !important;
+}
+
+.light-background .login-page-wrapper .login-input-field:hover,
+.light-background .login-page-wrapper .login-input-field-focused,
+.light-background .login-page-wrapper .login-input-field:focus-within,
+.login-page-wrapper.light-background .login-input-field:hover,
+.login-page-wrapper.light-background .login-input-field-focused,
+.login-page-wrapper.light-background .login-input-field:focus-within {
+  border-color: #a62828 !important;
+}
+
+.light-background .login-page-wrapper .login-input-field input,
+.light-background .login-page-wrapper .login-input-field .ant-input,
+.login-page-wrapper.light-background .login-input-field input,
+.login-page-wrapper.light-background .login-input-field .ant-input {
+  background-color: transparent !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.light-background .login-page-wrapper .login-input-field input::placeholder,
+.light-background .login-page-wrapper .login-input-field .ant-input::placeholder,
+.login-page-wrapper.light-background .login-input-field input::placeholder,
+.login-page-wrapper.light-background .login-input-field .ant-input::placeholder {
+  color: #888888 !important;
+  -webkit-text-fill-color: #888888 !important;
+}
+
+.light-background .login-page-wrapper .login-input-icon,
+.light-background .login-page-wrapper .login-input-field .ant-input-prefix svg,
+.light-background .login-page-wrapper .login-input-field .ant-input-prefix svg path,
+.light-background .login-page-wrapper .login-input-field .ant-input-prefix .login-input-icon,
+.login-page-wrapper.light-background .login-input-icon,
+.login-page-wrapper.light-background .login-input-field .ant-input-prefix svg,
+.login-page-wrapper.light-background .login-input-field .ant-input-prefix svg path,
+.login-page-wrapper.light-background .login-input-field .ant-input-prefix .login-input-icon {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+.light-background .login-page-wrapper .login-input-field .ant-input-suffix svg,
+.login-page-wrapper.light-background .login-input-field .ant-input-suffix svg {
+  color: #a62828 !important;
+}
+
+.light-background .login-page-wrapper .login-error-text,
+.login-page-wrapper.light-background .login-error-text {
+  color: #a62828 !important;
+}
+
+.light-background .login-page-wrapper .remember-me-text,
+.login-page-wrapper.light-background .remember-me-text {
+  color: #555555 !important;
+}
+
+.light-background .login-page-wrapper .footer-text,
+.login-page-wrapper.light-background .footer-text {
+  color: #000000 !important;
+}
+
+.light-background .login-page-wrapper .footer-link,
+.login-page-wrapper.light-background .footer-link {
+  color: #a62828 !important;
+}
+
+.light-background .login-page-wrapper .footer-link:hover,
+.login-page-wrapper.light-background .footer-link:hover {
+  color: #d54343 !important;
+}
+
+.light-background .login-page-wrapper .metamask-banner .login-metamask-link,
+.login-page-wrapper.light-background .metamask-banner .login-metamask-link,
+.light-background .login-page-wrapper .login-metamask-link,
+.login-page-wrapper.light-background .login-metamask-link {
+  color: #f5841e !important;
+}
+

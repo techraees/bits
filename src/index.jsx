@@ -5,7 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import { onError } from "@apollo/client/link/error";
-import { ToastMessage } from "./components";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, from, Observable } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { REFRESH_TOKEN_MUTATION } from "./gql/mutations";
@@ -17,11 +16,16 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, {
   headers
 }) => {
-  const token = getCookieStorage("access_token");
+  const cookieToken = getCookieStorage("access_token");
+  // Prefer per-operation Authorization (e.g. password-reset JWT) over cookie.
+  const existingAuth = headers?.authorization || headers?.Authorization;
+  const authorization =
+    existingAuth || (cookieToken ? `Bearer ${cookieToken}` : undefined);
+
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ""
+      ...(authorization ? { authorization } : {})
     }
   };
 });
@@ -78,22 +82,12 @@ const refreshLink = onError(({
   });
 });
 const errorLink = onError(({
-  graphQLErrors,
-  networkError
+  graphQLErrors
 }) => {
+  // Auth expiry is handled by refreshLink. Do NOT toast here —
+  // screens already show their own ToastMessage, which caused duplicate toasts.
   const hasAuthError = graphQLErrors?.some(err => err.error_code === "ACCESS_TOKEN_EXPIRED" || err.extensions?.error_code === "ACCESS_TOKEN_EXPIRED" || err.message === "Access token expired");
   if (hasAuthError) return;
-  let message;
-  if (graphQLErrors?.length) {
-    message = graphQLErrors[0].message;
-  } else if (networkError?.response?.errors?.length) {
-    message = networkError.response.errors[0].message;
-  } else if (networkError?.message) {
-    message = networkError.message;
-  }
-  if (message) {
-    ToastMessage(message, "", "error");
-  }
 });
 const client = new ApolloClient({
   link: from([errorLink, refreshLink, authLink.concat(httpLink)]),

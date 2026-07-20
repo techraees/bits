@@ -404,7 +404,7 @@ p {
   color: #000000 !important;
 }
 
-.form-control {
+.list-nft-page .form-control {
   background-color: transparent !important;
   padding: 10px 20px !important;
   border: 2px solid #c4c4c4 !important;
@@ -414,15 +414,15 @@ p {
   color: #ffffff !important;
 }
 
-.form-control:focus {
+.list-nft-page .form-control:focus {
   box-shadow: none !important;
 }
 
-.form-control::placeholder {
+.list-nft-page .form-control::placeholder {
   color: #cccccc !important;
 }
 
-.ant-light-input .form-control {
+.list-nft-page .ant-light-input .form-control {
   border: 2px solid #bf3535 !important;
   opacity: 1 !important;
   color: #000000 !important;

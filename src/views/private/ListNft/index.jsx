@@ -247,7 +247,7 @@ const ListNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
-  return <div className={`${backgroundTheme}`} style={{
+  return <div className={`list-nft-page ${backgroundTheme}`} style={{
     minHeight: "100vh",
     overflowX: "hidden"
   }}>

@@ -1,0 +1,27 @@
+/* Mask as password without type="password" (blocks Chrome saved-password UI) */
+.reset-pw-masked-input input {
+  -webkit-text-security: disc !important;
+  text-security: disc !important;
+}
+
+.reset-pw-masked-input.reset-pw-visible input {
+  -webkit-text-security: none !important;
+  text-security: none !important;
+}
+
+.reset-pw-visibility-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #b0b0b0;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  font-size: 18px;
+}
+
+.reset-pw-visibility-btn:hover {
+  color: #ffffff;
+}

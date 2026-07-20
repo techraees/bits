@@ -9,6 +9,7 @@ import { emailValidate, passwordValidate } from "../../../components/validations
 import { UPDATE_EMAIL, UPDATE_PASSWORD_MUTATION } from "../../../gql/mutations";
 import { logoutWallet } from "../../../store/actions";
 import { getCookieStorage, removeCookieStorage } from "../../../utills/cookieStorage";
+import getGraphQLErrorMessage from "../../../utills/getGraphQLErrorMessage";
 import { removeStorage } from "../../../utills/localStorage";
 import "./css/index.css";
 const AccountSettings = () => {
@@ -111,7 +112,7 @@ const AccountSettings = () => {
       navigate("/login");
     }
     if (error) {
-      ToastMessage(error.message, "", "error");
+      ToastMessage("Error", getGraphQLErrorMessage(error), "error");
     }
   }, [error, data]);
   useEffect(() => {
@@ -135,7 +136,7 @@ const AccountSettings = () => {
       navigate("/login");
     }
     if (emailError) {
-      ToastMessage("error", emailError.message, "error");
+      ToastMessage("Error", getGraphQLErrorMessage(emailError), "error");
     }
   }, [emailError, emailData]);
   return <div className={`${backgroundTheme} pb-4`} style={{

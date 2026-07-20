@@ -1,0 +1,137 @@
+.verify-otp-input-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.verify-otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.verify-otp-separator {
+  display: none;
+}
+
+/* Dark theme: visible hollow circles on black page */
+.login-page-wrapper .formContainer input.verify-otp-circle,
+.formContainer input.verify-otp-circle,
+.verify-otp-circle {
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #4a4a4a !important;
+  border-top: 1.5px solid #4a4a4a !important;
+  border-right: 1.5px solid #4a4a4a !important;
+  border-bottom: 1.5px solid #4a4a4a !important;
+  border-left: 1.5px solid #4a4a4a !important;
+  background-color: #141414 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  caret-color: #d54343 !important;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.login-page-wrapper .formContainer input.verify-otp-circle:focus,
+.formContainer input.verify-otp-circle:focus,
+.verify-otp-circle:focus {
+  border-color: #d54343 !important;
+  border-top-color: #d54343 !important;
+  border-right-color: #d54343 !important;
+  border-bottom-color: #d54343 !important;
+  border-left-color: #d54343 !important;
+  background-color: #1a1a1a !important;
+  box-shadow: 0 0 0 1px #d54343 !important;
+}
+
+/* Stop browser autofill painting solid black circles */
+.login-page-wrapper .formContainer input.verify-otp-circle:-webkit-autofill,
+.login-page-wrapper .formContainer input.verify-otp-circle:-webkit-autofill:hover,
+.login-page-wrapper .formContainer input.verify-otp-circle:-webkit-autofill:focus,
+.formContainer input.verify-otp-circle:-webkit-autofill,
+.verify-otp-circle:-webkit-autofill,
+.verify-otp-circle:-webkit-autofill:hover,
+.verify-otp-circle:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #d54343 !important;
+  transition: background-color 99999s ease-in-out 0s !important;
+  box-shadow: 0 0 0 56px #141414 inset !important;
+  border: 1.5px solid #4a4a4a !important;
+}
+
+.verify-otp-circle::placeholder {
+  color: transparent !important;
+}
+
+.verify-otp-circle::selection {
+  background: rgba(213, 67, 67, 0.35);
+  color: #ffffff;
+}
+
+/* Light theme OTP circles */
+.light-background .login-page-wrapper .formContainer input.verify-otp-circle,
+.login-page-wrapper.light-background .formContainer input.verify-otp-circle,
+.light-background .verify-otp-circle,
+.login-page-wrapper.light-background .verify-otp-circle {
+  background-color: #ffffff !important;
+  border-color: #cfcfcf !important;
+  border-top-color: #cfcfcf !important;
+  border-right-color: #cfcfcf !important;
+  border-bottom-color: #cfcfcf !important;
+  border-left-color: #cfcfcf !important;
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  caret-color: #a62828 !important;
+}
+
+.light-background .login-page-wrapper .formContainer input.verify-otp-circle:focus,
+.login-page-wrapper.light-background .formContainer input.verify-otp-circle:focus,
+.light-background .verify-otp-circle:focus,
+.login-page-wrapper.light-background .verify-otp-circle:focus {
+  border-color: #a62828 !important;
+  border-top-color: #a62828 !important;
+  border-right-color: #a62828 !important;
+  border-bottom-color: #a62828 !important;
+  border-left-color: #a62828 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 1px #a62828 !important;
+}
+
+.light-background .verify-otp-circle:-webkit-autofill,
+.login-page-wrapper.light-background .verify-otp-circle:-webkit-autofill {
+  -webkit-text-fill-color: #111111 !important;
+  box-shadow: 0 0 0 56px #ffffff inset !important;
+  border: 1.5px solid #cfcfcf !important;
+}
+
+@media only screen and (max-width: 480px) {
+  .verify-otp-container {
+    gap: 8px;
+  }
+
+  .login-page-wrapper .formContainer input.verify-otp-circle,
+  .formContainer input.verify-otp-circle,
+  .verify-otp-circle {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    font-size: 18px !important;
+  }
+}

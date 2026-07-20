@@ -4,11 +4,10 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../../../assets";
 import { ButtonComponent, CustomCheckbox, ToastMessage } from "../../../components";
 import ConnectModal from "../../../components/connectModal";
-import ForgotPassModal from "../../../components/ForgotPassModal";
 import Loading from "../../../components/loaders/loading";
 import { signInSchema } from "../../../components/validations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
@@ -17,7 +16,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Input } from "antd";
 import { FiMail, FiLock } from "react-icons/fi";
 import "./css/index.css";
-const env = process.env;
 function Login() {
   const recaptchaRef = useRef(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -30,11 +28,8 @@ function Login() {
     web3,
     account
   } = useSelector(state => state.web3.walletData);
+  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
   const [connectModal, setConnectModal] = useState(false);
-  const [forgotPassModal, setForgotPassModal] = useState(false);
-  const [step, setStep] = useState(1);
-  const [id, setId] = useState(null);
-  const [token, setToken] = useState(null);
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
   let navigate = useNavigate();
   const {
@@ -95,7 +90,7 @@ function Login() {
       navigate("/");
     }
     if (loginError) {
-      ToastMessage("Sign in Error", loginError?.message, "error");
+      ToastMessage(loginError?.message || "Sign in failed", "", "error");
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
     }
@@ -116,50 +111,6 @@ function Login() {
       setConnectModal(false);
     }
   }, [isConnected]);
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  useEffect(() => {
-    const fetchData = async () => {
-      if (searchParams.get("id") && searchParams.get("token")) {
-        const id = searchParams.get("id");
-        const token = searchParams.get("token");
-        setId(id);
-        setToken(token);
-        const res = await sendToken(id, token);
-        if (res.success) {
-          setStep(3);
-          setForgotPassModal(true);
-        } else {
-          ToastMessage("Error", res.message, "error");
-        }
-      }
-    };
-    fetchData();
-  }, [searchParams.get("token")]);
-  const handleOpenForgotPass = () => {
-    setForgotPassModal(true);
-  };
-  const handleCloseForgotPass = () => {
-    setForgotPassModal(false);
-  };
-  const sendToken = async (id, token) => {
-    const body = {
-      data: {
-        id: id,
-        token: token
-      }
-    };
-    const headers = {
-      "Content-Type": "application/json"
-    };
-    const response = await fetch(`${env.REACT_APP_BACKEND_BASE_URL}/verify-token`, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body)
-    });
-    const data = await response.json();
-    return data;
-  };
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     const savedPassword = localStorage.getItem("rememberPassword");
@@ -176,11 +127,9 @@ function Login() {
       setRememberCheckbox(true);
     }
   }, []);
-  return <div className="login-page-wrapper">
+  return <div className={`login-page-wrapper ${backgroundTheme}`}>
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
       {playerLoading || loading && <Loading content="Loading" />}
-
-      {forgotPassModal && <ForgotPassModal visible={forgotPassModal} onClose={handleCloseForgotPass} setStep={setStep} step={step} id={id} token={token} handleCloseForgotPass={handleCloseForgotPass} />}
 
       <div className="container loginContainer">
         <div className="d-flex justify-content-center mb-4">
@@ -218,10 +167,7 @@ function Login() {
                     ref,
                     ...field
                   }
-                }) => <Input {...field} ref={ref} placeholder="Email" prefix={<FiMail className="login-input-icon" style={{
-                  color: "#ffffff",
-                  stroke: "#ffffff"
-                }} />} className={`login-input-field ${errors.email ? "login-input-field-error" : ""}`} autoComplete="username" />} />
+                }) => <Input {...field} ref={ref} placeholder="Email" prefix={<FiMail className="login-input-icon" />} className={`login-input-field ${errors.email ? "login-input-field-error" : ""}`} autoComplete="username" />} />
                   {errors.email && <span className="login-error-text">
                       {errors.email.message}
                     </span>}
@@ -234,10 +180,7 @@ function Login() {
                     ref,
                     ...field
                   }
-                }) => <Input.Password {...field} ref={ref} placeholder="Password" prefix={<FiLock className="login-input-icon" style={{
-                  color: "#ffffff",
-                  stroke: "#ffffff"
-                }} />} className={`login-input-field ${errors.password ? "login-input-field-error" : ""}`} autoComplete="current-password" onKeyDown={event => {
+                }) => <Input.Password {...field} ref={ref} placeholder="Password" prefix={<FiLock className="login-input-icon" />} className={`login-input-field ${errors.password ? "login-input-field-error" : ""}`} autoComplete="current-password" onKeyDown={event => {
                   if (event.key === "Enter") {
                     handleSubmit(onSubmit)();
                   }
@@ -273,9 +216,9 @@ function Login() {
               </div>
 
               <div className="mt-3 text-center">
-                <span className="footer-link cursor" onClick={handleOpenForgotPass}>
+                <Link to="/forgot-password" className="footer-link">
                   Forgot Password?
-                </span>
+                </Link>
               </div>
             </form>
           </div>

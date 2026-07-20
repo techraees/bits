@@ -1,0 +1,75 @@
+.forgot-password-page {
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  padding: 16px 20px !important;
+  box-sizing: border-box !important;
+  align-items: center !important;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+.forgot-password-page .loginContainer {
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.forgot-password-page .logoSize {
+  height: 140px !important;
+  width: 140px !important;
+}
+
+.forgot-password-page .d-flex.justify-content-center.mb-4 {
+  margin-bottom: 0.75rem !important;
+}
+
+html.forgot-password-no-scroll,
+body.forgot-password-no-scroll,
+#root.forgot-password-no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overscroll-behavior: none !important;
+}
+
+body.forgot-password-no-scroll {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  touch-action: none;
+}
+
+#root.forgot-password-no-scroll,
+#root.forgot-password-no-scroll > div {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .forgot-password-page {
+    padding: 12px 16px !important;
+  }
+
+  .forgot-password-page .logoSize {
+    height: 110px !important;
+    width: 110px !important;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .forgot-password-page .logoSize {
+    height: 90px !important;
+    width: 90px !important;
+  }
+
+  .forgot-password-page h2 {
+    font-size: 22px !important;
+    margin-bottom: 0.75rem !important;
+  }
+}

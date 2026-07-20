@@ -38,7 +38,7 @@ const PASSWORD_MALICIOUS_CHARS_REGEX = /[<>{}\[\];"']/;
 const PASSWORD_FULL_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.,?~\/-]).{8,}$/;
 const PASSWORD_FORMAT_ERROR_MESSAGE = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character";
 const getPasswordRequirementStatus = (password = "") => ({
-  minLength: password.length >= 8,
+  minLength: password.length >= 8 && password.length <= 20,
   uppercase: /[A-Z]/.test(password),
   lowercase: /[a-z]/.test(password),
   hasNumber: /\d/.test(password),

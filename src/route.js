@@ -12,6 +12,8 @@ import Marketplace from "./views/public/Marketplace";
 import Contact from "./views/public/Contact";
 import ResetPasswordSuccess from "./views/public/ResetPasswordSuccess";
 import ResetPassword from "./views/public/ResetPassword";
+import ForgotPassword from "./views/public/ForgotPassword";
+import VerifyOtp from "./views/public/VerifyOtp";
 import Collections from "./views/private/Collections";
 import SellsNft from "./views/private/Collections/sell";
 import TransactionHistory from "./views/private/TransactionHistory";
@@ -204,6 +206,22 @@ const routes = [{
   visible: true,
   key: 2
 }, {
+  name: "Forgot Password",
+  layout: "public",
+  path: "/forgot-password",
+  icon: "",
+  component: <ForgotPassword />,
+  visible: true,
+  key: 2
+}, {
+  name: "Verify OTP",
+  layout: "public",
+  path: "/verify-otp",
+  icon: "",
+  component: <VerifyOtp />,
+  visible: true,
+  key: 2
+}, {
   name: "Nft Detail",
   layout: "public",
   path: "/nft-detail/:id",
@@ -222,7 +240,7 @@ const routes = [{
 }, {
   name: "Reset Password",
   layout: "public",
-  path: "reset-password",
+  path: "/reset-password",
   icon: "",
   component: <Outlet />,
   visible: true,

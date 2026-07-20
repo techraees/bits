@@ -1,253 +1,733 @@
-.loginContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.signup-page-wrapper {
+  align-items: flex-start;
+  padding-top: 40px;
+  padding-bottom: 60px;
 }
 
-.logoSize {
-  height: 250px;
-  width: 250px;
-}
-
-.formContainer {
-  background-color: white;
-  width: 100%;
-  border-radius: 20px;
-  padding: 40px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.formContainer input {
-  border: none !important;
-  border-bottom: 2px solid #dcdcdc !important;
-  padding-bottom: 15px !important;
-  padding-top: 15px !important;
-  text-align: center;
-  color: #b0b0b0 !important;
+/* Override legacy Login white-card input rules for signup fields */
+.signup-page-wrapper .formContainer input {
+  text-align: left !important;
+  color: #ffffff !important;
   font-weight: 400 !important;
-  width: 100%;
 }
 
-.formContainer input::placeholder {
-  color: #b0b0b0 !important;
+.signup-page-wrapper .formContainer .login-input-field input {
+  border-bottom: none !important;
 }
 
-@media only screen and (max-width: 1000px) {
-  .formMobView {
-    flex-wrap: wrap;
-  }
-
-  .formContainer {
-    margin: 0px !important;
-    margin-bottom: 20px !important;
-  }
+.signup-page-wrapper .loginContainer {
+  max-width: 700px;
 }
 
-
-.ant-select-single.ant-select-show-arrow .ant-select-selection-item,
-.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
-  color: #000000;
-}
-
-.light-grey {
-  display: block;
+.signup-required {
+  color: #a62828;
+  margin-right: 2px;
 }
 
 .signup-password-section {
   width: 100%;
-  margin-bottom: 4px;
 }
 
 .signup-password-section .ant-input-password {
   width: 100%;
 }
 
-.signup-field-error {
-  display: block;
-  font-size: 12px;
-  color: #d54343;
-  margin-top: 10px;
+.signup-disclaimer {
+  margin-top: 20px;
   margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #888888;
   text-align: left;
-  line-height: 1.4;
 }
 
-
-.bits-phone-container {
-  width: 100%;
-  margin-top: 4px;
-  margin-bottom: 8px;
-}
-
-.bits-phone-container .signup-phone-input {
-  width: 100%;
-  border-bottom: 2px solid #dcdcdc;
-  transition: border-color 0.3s ease;
-}
-
-.bits-phone-container:focus-within .signup-phone-input {
-  border-bottom-color: #a62828;
-}
-
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-}
-
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 100%;
-  padding: 0 6px 0 10px;
-  background: transparent !important;
-  border-radius: 0;
-  outline: none;
-}
-
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:hover,
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:focus {
-  background: transparent !important;
-}
-
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .arrow {
-  left: 22px;
-  border-top: 4px solid #b0b0b0;
-}
-
-.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .arrow.up {
-  border-bottom: 4px solid #b0b0b0;
-  border-top: none;
-}
-
-.bits-phone-container .signup-phone-input__field {
-  width: 100% !important;
-  height: 50px !important;
-  padding: 15px 48px 15px 58px !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  text-align: center;
-  font-size: 15px;
-  font-weight: 400;
-  color: #b0b0b0 !important;
-}
-
-.bits-phone-container:focus-within .signup-phone-input__field {
-  color: #a62828 !important;
+.signup-disclaimer-label {
+  color: #a62828;
   font-weight: 600;
 }
 
-.bits-phone-container .signup-phone-input__field::placeholder {
-  color: #b0b0b0 !important;
-  opacity: 1;
+.signup-terms-text {
+  color: #888888;
+  font-size: 14px;
+  text-decoration: none;
+  line-height: 1.4;
 }
 
-.bits-phone-container:focus-within .signup-phone-input__field::placeholder {
-  color: #a62828 !important;
+.signup-terms-text:hover {
+  color: #888888;
+  text-decoration: none;
 }
 
-.bits-phone-container .signup-phone-input__dropdown .search {
+.bits-phone-container {
+  width: 100%;
+}
+
+/* Two separate fields: country dial (left) + phone number (right) */
+.bits-phone-container .signup-phone-input {
+  width: 100%;
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: flex-end;
+  align-items: stretch;
+  gap: 12px;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: 0;
+  height: 50px !important;
   padding: 0 !important;
+  margin: 0 !important;
+  background: #0c0c0c !important;
+  background-color: #0c0c0c !important;
+  border: 1px solid #1f1f1f !important;
+  border-radius: 8px !important;
+  overflow: visible !important;
+  transition: border-color 0.2s ease-in-out;
 }
 
-.bits-phone-container .signup-phone-input__dropdown .search-icon {
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open,
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:hover,
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:focus {
+  border-color: #a62828 !important;
+  background: #0c0c0c !important;
+  background-color: #0c0c0c !important;
+}
+
+/* Closed country button: flag + dial + chevron */
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px;
+  position: relative !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  height: 50px !important;
+  padding: 0 10px 0 12px !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:hover,
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag:focus,
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag.open {
+  background: transparent !important;
+}
+
+/* Flag: keep 16x11 sprite cell, scale mildly, clip so only one flag shows */
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .flag {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 8px 0 0 !important;
+  margin-top: 0 !important;
+  width: 16px !important;
+  height: 11px !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  flex: 0 0 16px !important;
+  order: 1;
+  display: inline-block !important;
+  overflow: hidden !important;
+  background-repeat: no-repeat !important;
+  transform: scale(1.35) !important;
+  transform-origin: left center !important;
+}
+
+/* Hide library arrow (nested inside .flag and clips) — use our ::after chevron */
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag .arrow {
   display: none !important;
 }
 
-.bits-phone-container .signup-phone-input__search {
-  width: 100%;
-  margin: 0 auto;
-  padding: 8px 9px;
-  font-size: 11px;
-  border: 1px solid #e0e0e0;
+/* Dial code between flag and chevron */
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::before {
+  content: var(--dial-code, "+1");
+  order: 2;
+  color: #cfcfcf;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* Solid down chevron */
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::after {
+  content: "";
+  order: 3;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0;
+  flex: 0 0 auto;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #888888;
+  border-bottom: none;
+}
+
+.bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open .selected-flag::after {
+  border-top: none;
+  border-bottom: 5px solid #888888;
+}
+
+.bits-phone-container .signup-phone-input .special-label {
+  display: none !important;
+}
+
+.bits-phone-container .signup-phone-input__field,
+.bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.signup-page-wrapper .formContainer .bits-phone-container .signup-phone-input__field,
+.signup-page-wrapper .formContainer .bits-phone-container .react-tel-input input.form-control {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 50px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  border: 1px solid #1f1f1f !important;
+  border-top: 1px solid #1f1f1f !important;
+  border-right: 1px solid #1f1f1f !important;
+  border-bottom: 1px solid #1f1f1f !important;
+  border-left: 1px solid #1f1f1f !important;
+  border-radius: 8px !important;
+  background: #0c0c0c !important;
+  background-color: #0c0c0c !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  text-align: left !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  transition: border-color 0.2s ease-in-out;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+.bits-phone-container .signup-phone-input__field:focus,
+.bits-phone-container .signup-phone-input__field:hover,
+.bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field:focus,
+.bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field:hover,
+.signup-page-wrapper .formContainer .bits-phone-container .signup-phone-input__field:focus,
+.signup-page-wrapper .formContainer .bits-phone-container .signup-phone-input__field:hover {
+  border-color: #a62828 !important;
+  background: #0c0c0c !important;
+  background-color: #0c0c0c !important;
+  opacity: 1 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bits-phone-container .signup-phone-input__field::placeholder,
+.bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field::placeholder {
+  color: #555555 !important;
+  -webkit-text-fill-color: #555555 !important;
+  opacity: 1 !important;
+}
+
+/* Dark searchable country dropdown */
+.bits-phone-container .signup-phone-input__dropdown,
+.bits-phone-container .signup-phone-input .country-list {
+  background: #0c0c0c !important;
+  border: 1px solid #1f1f1f !important;
+  color: #ffffff !important;
+  left: 0 !important;
+  width: 320px !important;
+  max-width: calc(100vw - 48px);
+  margin: 6px 0 0 0 !important;
+  padding: 0 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+  border-radius: 8px !important;
+  z-index: 20 !important;
+  max-height: 260px !important;
+  overflow-y: auto !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country,
+.bits-phone-container .signup-phone-input .country-list .country {
+  color: #ffffff !important;
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country .flag,
+.bits-phone-container .signup-phone-input .country-list .country .flag {
+  position: static !important;
+  top: auto !important;
+  margin: 0 10px 0 0 !important;
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 11px !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  overflow: hidden !important;
+  background-repeat: no-repeat !important;
+  transform: scale(1.25) !important;
+  transform-origin: left center !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country .dial-code,
+.bits-phone-container .signup-phone-input .country-list .country .dial-code {
+  color: #888888 !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country:hover,
+.bits-phone-container .signup-phone-input__dropdown .country.highlight,
+.bits-phone-container .signup-phone-input .country-list .country:hover,
+.bits-phone-container .signup-phone-input .country-list .country.highlight {
+  background: #1a1a1a !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .search,
+.bits-phone-container .signup-phone-input .country-list .search {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2;
+  padding: 10px !important;
+  background: #0c0c0c !important;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .search-icon,
+.bits-phone-container .signup-phone-input .country-list .search-emoji {
+  display: none !important;
+}
+
+.bits-phone-container .signup-phone-input__search,
+.bits-phone-container .signup-phone-input .country-list .search-box {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  border: 1px solid #1f1f1f !important;
+  border-radius: 6px !important;
+  background: #050505 !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-sizing: border-box;
+}
+
+.bits-phone-container .signup-phone-input__search::placeholder,
+.bits-phone-container .signup-phone-input .country-list .search-box::placeholder {
+  color: #777777 !important;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list,
+.bits-phone-container .signup-phone-input .country-list {
+  scrollbar-width: thin;
+  scrollbar-color: #a62828 #1a1a1a;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list::-webkit-scrollbar,
+.bits-phone-container .signup-phone-input .country-list::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list::-webkit-scrollbar-track,
+.bits-phone-container .signup-phone-input .country-list::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.bits-phone-container .signup-phone-input__dropdown .country-list::-webkit-scrollbar-thumb,
+.bits-phone-container .signup-phone-input .country-list::-webkit-scrollbar-thumb {
+  background: #a62828;
   border-radius: 4px;
-  background: #f9f9f9;
-  color: #333;
 }
-
-.bits-phone-container .signup-phone-input__dropdown .country-list::-webkit-scrollbar {
-  display: none;
-}
-
-.bits-phone-container .signup-phone-input__dropdown .country-list {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
 
 .signup-dob-section {
-  margin-top: 20px;
+  margin-top: 24px;
   margin-bottom: 8px;
+  width: 100%;
 }
 
 .signup-dob-label {
   display: block;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: #2b2b2b;
+  margin-bottom: 8px;
 }
 
-.signup-dob-select {
-  width: 100%;
+.signup-dob-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+}
+
+.signup-dob-row .signup-dob-select.ant-select {
+  width: auto !important;
+  flex: 0 0 auto;
+  border: none !important;
+  margin: 0 !important;
+  margin-right: 0 !important;
+  border-radius: 0 !important;
+}
+
+.signup-dob-select--mm,
+.signup-dob-select--dd {
+  width: 88px !important;
+  min-width: 88px;
+}
+
+.signup-dob-select--yyyy {
+  width: 104px !important;
+  min-width: 104px;
 }
 
 .signup-dob-select .ant-select-selector {
-  height: 48px !important;
-  padding: 8px 11px !important;
-  border: none !important;
-  border-bottom: 2px solid #dcdcdc !important;
-  border-radius: 0 !important;
+  height: 40px !important;
+  padding: 0 28px 0 12px !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
   box-shadow: none !important;
-  background: transparent !important;
+  outline: none !important;
+  background: #0c0c0c !important;
   display: flex;
   align-items: center;
-  justify-content: center;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.signup-dob-select:hover .ant-select-selector,
+.signup-dob-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: #2a2a2a !important;
+  box-shadow: none !important;
 }
 
 .signup-dob-select .ant-select-selection-item,
 .signup-dob-select .ant-select-selection-placeholder {
-  text-align: center;
-  width: 100%;
-  color: #b0b0b0 !important;
+  text-align: left;
+  color: #555555 !important;
   font-weight: 400;
-  line-height: 30px !important;
+  line-height: 38px !important;
+  padding-inline-end: 0 !important;
 }
 
 .signup-dob-select .ant-select-selection-item {
-  color: #2b2b2b !important;
+  color: #ffffff !important;
   font-weight: 500;
 }
 
 .signup-dob-select .ant-select-arrow {
-  color: #b0b0b0;
-  right: 8px;
+  color: #888888;
+  right: 10px;
 }
 
 .signup-dob-select.ant-select-focused .ant-select-selector,
 .signup-dob-select.ant-select-open .ant-select-selector {
-  border-bottom-color: #a62828 !important;
+  border-color: #a62828 !important;
   box-shadow: none !important;
-}
-
-.signup-dob-select.ant-select-focused .ant-select-selection-item,
-.signup-dob-select.ant-select-open .ant-select-selection-item,
-.signup-dob-select.ant-select-focused .ant-select-selection-placeholder,
-.signup-dob-select.ant-select-open .ant-select-selection-placeholder {
-  color: #a62828 !important;
-  font-weight: 600;
+  outline: none !important;
 }
 
 .signup-dob-select.ant-select-focused .ant-select-arrow,
 .signup-dob-select.ant-select-open .ant-select-arrow {
   color: #a62828;
 }
+
+/* DOB dropdown portals to body — style via dropdownClassName */
+.signup-dob-dropdown.ant-select-dropdown {
+  background: #0c0c0c !important;
+  border: 1px solid #1f1f1f !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+.signup-dob-dropdown .ant-select-item {
+  color: #ffffff !important;
+}
+
+.signup-dob-dropdown .ant-select-item-option-active,
+.signup-dob-dropdown .ant-select-item-option-selected {
+  background: #1a1a1a !important;
+}
+
+.signup-dob-dropdown .rc-virtual-list-scrollbar-thumb {
+  background: #444444 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .signup-page-wrapper {
+    padding-top: 24px;
+    padding-bottom: 40px;
+  }
+
+  .bits-phone-container .signup-phone-input {
+    gap: 10px;
+  }
+
+  .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn,
+  .bits-phone-container .signup-phone-input__field {
+    height: 48px !important;
+  }
+
+  .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag {
+    min-width: 0 !important;
+    width: max-content !important;
+    height: 48px !important;
+    padding: 0 8px 0 10px !important;
+    gap: 5px;
+  }
+
+  .signup-dob-select .ant-select-selector {
+    height: 40px !important;
+  }
+
+  .signup-dob-select .ant-select-selection-item,
+  .signup-dob-select .ant-select-selection-placeholder {
+    line-height: 38px !important;
+  }
+
+  .signup-dob-select--mm,
+  .signup-dob-select--dd {
+    width: 80px !important;
+    min-width: 80px;
+  }
+
+  .signup-dob-select--yyyy {
+    width: 96px !important;
+    min-width: 96px;
+  }
+}
+
+/* ========== Light theme (layout ancestor OR class on auth wrapper) ========== */
+.light-background .signup-page-wrapper .formContainer input,
+.light-background .signup-page-wrapper .formContainer .login-input-field input,
+.light-background .signup-page-wrapper .formContainer .login-input-field .ant-input,
+.signup-page-wrapper.light-background .formContainer input,
+.signup-page-wrapper.light-background .formContainer .login-input-field input,
+.signup-page-wrapper.light-background .formContainer .login-input-field .ant-input {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.light-background .signup-page-wrapper .signup-required,
+.signup-page-wrapper.light-background .signup-required {
+  color: #a62828;
+}
+
+.light-background .signup-page-wrapper .signup-disclaimer,
+.signup-page-wrapper.light-background .signup-disclaimer {
+  color: #555555;
+}
+
+.light-background .signup-page-wrapper .signup-disclaimer-label,
+.signup-page-wrapper.light-background .signup-disclaimer-label {
+  color: #a62828;
+}
+
+.light-background .signup-page-wrapper .signup-terms-text,
+.signup-page-wrapper.light-background .signup-terms-text {
+  color: #555555;
+}
+
+.light-background .signup-page-wrapper .password-requirements__heading,
+.signup-page-wrapper.light-background .password-requirements__heading {
+  color: #666666;
+}
+
+.light-background .signup-page-wrapper .password-requirements__item,
+.signup-page-wrapper.light-background .password-requirements__item {
+  color: #888888;
+}
+
+.light-background .signup-page-wrapper .password-requirements__item--met,
+.signup-page-wrapper.light-background .password-requirements__item--met {
+  color: #1aae17;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.light-background .signup-page-wrapper .formContainer .bits-phone-container .signup-phone-input__field,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.signup-page-wrapper.light-background .formContainer .bits-phone-container .signup-phone-input__field {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-color: #dddddd !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  opacity: 1 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:hover,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:focus,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__field:focus,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__field:hover,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:hover,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn:focus,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__field:focus,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__field:hover {
+  border-color: #a62828 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::before,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::before {
+  color: #333333;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::after,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn .selected-flag::after {
+  border-top-color: #666666;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open .selected-flag::after,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .signup-phone-input__flag-btn.open .selected-flag::after {
+  border-bottom-color: #666666;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__field::placeholder,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__field::placeholder {
+  color: #888888 !important;
+  -webkit-text-fill-color: #888888 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list {
+  background: #ffffff !important;
+  border-color: #dddddd !important;
+  color: #000000 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown .country,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .country,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown .country,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .country {
+  color: #000000 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown .country .dial-code,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .country .dial-code,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown .country .dial-code,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .country .dial-code {
+  color: #666666 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown .country:hover,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown .country.highlight,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .country:hover,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .country.highlight,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown .country:hover,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown .country.highlight,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .country:hover,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .country.highlight {
+  background: #f0f0f0 !important;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__dropdown .search,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .search,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__dropdown .search,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .search {
+  background: #ffffff !important;
+  border-bottom-color: #eeeeee;
+}
+
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input__search,
+.light-background .signup-page-wrapper .bits-phone-container .signup-phone-input .country-list .search-box,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input__search,
+.signup-page-wrapper.light-background .bits-phone-container .signup-phone-input .country-list .search-box {
+  background: #f8f8f8 !important;
+  border-color: #dddddd !important;
+  color: #000000 !important;
+}
+
+.light-background .signup-page-wrapper .signup-dob-select .ant-select-selector,
+.signup-page-wrapper.light-background .signup-dob-select .ant-select-selector {
+  background: #ffffff !important;
+  border-color: #dddddd !important;
+}
+
+.light-background .signup-page-wrapper .signup-dob-select .ant-select-selection-item,
+.signup-page-wrapper.light-background .signup-dob-select .ant-select-selection-item {
+  color: #000000 !important;
+}
+
+.light-background .signup-page-wrapper .signup-dob-select .ant-select-selection-placeholder,
+.signup-page-wrapper.light-background .signup-dob-select .ant-select-selection-placeholder {
+  color: #888888 !important;
+}
+
+.light-background .signup-page-wrapper .signup-dob-select .ant-select-arrow,
+.signup-page-wrapper.light-background .signup-dob-select .ant-select-arrow {
+  color: #666666;
+}
+
+.signup-dob-dropdown.light-background.ant-select-dropdown {
+  background: #ffffff !important;
+  border-color: #dddddd !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.signup-dob-dropdown.light-background .ant-select-item {
+  color: #000000 !important;
+}
+
+.signup-dob-dropdown.light-background .ant-select-item-option-active,
+.signup-dob-dropdown.light-background .ant-select-item-option-selected {
+  background: #f0f0f0 !important;
+}
+
+.signup-dob-dropdown.light-background .rc-virtual-list-scrollbar-thumb {
+  background: #cccccc !important;
+}
+
+/* Error borders when validation messages show */
+.signup-page-wrapper .bits-phone-container--error .signup-phone-input .signup-phone-input__flag-btn,
+.signup-page-wrapper .bits-phone-container--error .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.signup-page-wrapper .formContainer .bits-phone-container--error .signup-phone-input__field,
+.light-background .signup-page-wrapper .bits-phone-container--error .signup-phone-input .signup-phone-input__flag-btn,
+.light-background .signup-page-wrapper .bits-phone-container--error .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.light-background .signup-page-wrapper .formContainer .bits-phone-container--error .signup-phone-input__field,
+.signup-page-wrapper.light-background .bits-phone-container--error .signup-phone-input .signup-phone-input__flag-btn,
+.signup-page-wrapper.light-background .bits-phone-container--error .signup-phone-input.react-tel-input .form-control.signup-phone-input__field,
+.signup-page-wrapper.light-background .formContainer .bits-phone-container--error .signup-phone-input__field {
+  border-color: #a62828 !important;
+}
+
+/* Kill global ant-btn focus/active color flash on signup actions only */
+.signup-page-wrapper .ant-btn.btnDesign,
+.signup-page-wrapper .ant-btn.btnDesign:hover,
+.signup-page-wrapper .ant-btn.btnDesign:focus,
+.signup-page-wrapper .ant-btn.btnDesign:active,
+.signup-page-wrapper .ant-btn.btnDesign:focus-visible {
+  background-image: linear-gradient(#f45c5c, #7e1c1c) !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.signup-page-wrapper .ant-btn.btnDesign.btn-visually-disabled,
+.signup-page-wrapper .ant-btn.btnDesign.btn-visually-disabled:hover,
+.signup-page-wrapper .ant-btn.btnDesign.btn-visually-disabled:focus,
+.signup-page-wrapper .ant-btn.btnDesign.btn-visually-disabled:active,
+.signup-page-wrapper .ant-btn.btnDesign.btn-visually-disabled:focus-visible {
+  background-image: none !important;
+  background-color: gray !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+

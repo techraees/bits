@@ -1,42 +1,57 @@
 .password-requirements {
-  list-style: none;
   width: 100%;
-  margin: 12px 0 15px;
+  margin: 8px 0 4px;
   padding: 0;
   text-align: left;
 }
 
-.password-requirements__item {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+.password-requirements__hint {
+  margin: 0 0 0 !important;
+  padding: 0 0 8px;
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.4;
+  font-weight: 400;
+  color: #888888;
+}
+
+.password-requirements__heading {
+  margin: 0 0 0 !important;
+  padding: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #888888;
+}
+
+.password-requirements__list {
+  list-style: disc;
+  list-style-position: outside;
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+
+.password-requirements__item {
+  font-size: 13px;
+  line-height: 1.45;
   color: #b0b0b0;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  transition: color 0.15s ease-in-out;
+}
+
+.password-requirements__item::marker {
+  color: #b0b0b0;
+  font-size: 10px;
 }
 
 .password-requirements__item:last-child {
   margin-bottom: 0;
 }
 
-.password-requirements__item span {
-  flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.password-requirements__icon {
-  flex-shrink: 0;
-  margin-top: 3px;
-  color: #b0b0b0;
-}
-
 .password-requirements__item--met {
   color: #1aae17;
 }
 
-.password-requirements__item--met .password-requirements__icon {
+.password-requirements__item--met::marker {
   color: #1aae17;
 }

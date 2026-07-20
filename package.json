@@ -33,6 +33,7 @@
     "react-hook-form": "^7.41.5",
     "react-icons": "^4.7.1",
     "react-modal": "^3.16.3",
+    "react-otp-input": "^3.1.1",
     "react-phone-input-2": "^2.15.1",
     "react-phone-number-input": "^3.4.16",
     "react-player": "^2.12.0",

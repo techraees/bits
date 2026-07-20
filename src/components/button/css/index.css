@@ -18,6 +18,12 @@
   background: gray !important;
 }
 
+.btnDesign.btn-visually-disabled {
+  background: gray !important;
+  cursor: pointer !important;
+  opacity: 1;
+}
+
 .simpleBtnDesign:focus {
   border: none !important;
 }
