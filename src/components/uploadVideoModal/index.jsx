@@ -4,7 +4,12 @@ import { upload, upload_file_icon, loader, check2, cross } from "../../assets";
 import { ButtonComponent } from "../index";
 import { Modal, Row, Col, Progress, Input, Select, Tooltip } from "antd";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { MdMovie, MdStorage, MdHighQuality, MdAccessTime } from "react-icons/md";
+import {
+  MdMovie,
+  MdStorage,
+  MdHighQuality,
+  MdAccessTime,
+} from "react-icons/md";
 import "./css/index.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -81,10 +86,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
   const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const textColor3 = useSelector((state) => state.app.theme.textColor3);
   const isDark = textColor === "white";
-  const selectDropdownClass = `upload-video-select-dropdown ${isDark
-    ? "upload-video-select-dropdown--dark"
-    : "upload-video-select-dropdown--light"
-    }`;
+  const selectDropdownClass = `upload-video-select-dropdown ${
+    isDark
+      ? "upload-video-select-dropdown--dark"
+      : "upload-video-select-dropdown--light"
+  }`;
 
   const [createSignedUrl] = useMutation(CREATE_SIGNED_URL_FOR_NFTS);
 
@@ -609,8 +615,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
           </p>
           <div
             ref={styleSelectWrapRef}
-            className={`upload-video-style-select-wrap${selectAttention ? " upload-video-style-select-wrap--attention" : ""
-              }`}
+            className={`upload-video-style-select-wrap${
+              selectAttention
+                ? " upload-video-style-select-wrap--attention"
+                : ""
+            }`}
           >
             <Select
               className="text-center mt-3 upload-video-style-select upload-video-field"
@@ -655,7 +664,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
                     <div className="uploadIconView d-flex align-items-center justify-content-center">
                       <img src={upload} alt="Upload" />
                     </div>
-                    <p className={`${textColor2} upload-video-drop-content__text`}>
+                    <p
+                      className={`${textColor2} upload-video-drop-content__text`}
+                    >
                       Drag and drop here <br /> or
                     </p>
                     <div
@@ -689,7 +700,11 @@ const UploadVideoModal = ({ visible, onClose }) => {
                   <div className="upload-video-drop-content__right">
                     {imageUploadLoader && !selectedFileName && (
                       <div className="upload-video-drop-content__loader">
-                        <img src={loader} alt="loader" style={{ width: "80px" }} />
+                        <img
+                          src={loader}
+                          alt="loader"
+                          style={{ width: "80px" }}
+                        />
                       </div>
                     )}
 
@@ -755,7 +770,10 @@ const UploadVideoModal = ({ visible, onClose }) => {
                             (step) => (
                               <span
                                 key={step}
-                                className={getStepItemClass(step, activeUploadPhase)}
+                                className={getStepItemClass(
+                                  step,
+                                  activeUploadPhase,
+                                )}
                               >
                                 {step === "uploading"
                                   ? "Uploading"
@@ -771,7 +789,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
                     {!showUploadActivity && (
                       <div className="upload-video-requirements">
-                        <p className={`upload-video-requirements__title mb-3 ${textColor2}`}>
+                        <p
+                          className={`upload-video-requirements__title mb-3 ${textColor2}`}
+                        >
                           Upload Video <span className="red">*</span>
                         </p>
                         <ul className="upload-video-requirements__list">
@@ -815,7 +835,9 @@ const UploadVideoModal = ({ visible, onClose }) => {
 
                   <ErrorMessage
                     className="upload-video-drop-content__error"
-                    message={touched.video && errors.video ? errors.video : null}
+                    message={
+                      touched.video && errors.video ? errors.video : null
+                    }
                   />
                 </div>
               </form>

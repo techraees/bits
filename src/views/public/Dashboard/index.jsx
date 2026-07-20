@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./css/index.css";
 import { Button, Row, Col } from "antd";
-import {
-  left_arrow_red,
-} from "../../../assets";
+import { left_arrow_red } from "../../../assets";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";

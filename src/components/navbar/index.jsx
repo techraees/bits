@@ -25,7 +25,10 @@ import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
-import { getCookieStorage, removeCookieStorage } from "../../utills/cookieStorage";
+import {
+  getCookieStorage,
+  removeCookieStorage,
+} from "../../utills/cookieStorage";
 import {
   getWalletChainId,
   subscribeWalletChain,
@@ -33,7 +36,10 @@ import {
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { useWalletGateFlow } from "../../hooks/useWalletGateFlow";
 import { logoutWallet } from "../../store/actions";
-import { profileToUserData, emptyUserData } from "../../utills/hydrateUserProfile";
+import {
+  profileToUserData,
+  emptyUserData,
+} from "../../utills/hydrateUserProfile";
 
 const environment = process.env;
 
