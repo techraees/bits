@@ -2,10 +2,14 @@ import React from "react";
 import { logo } from "../../assets";
 import "./css/index.css";
 import { trimWallet } from "../../utills/trimWalletAddr";
-
-const BidModal = ({ nftOwner, name, offerAmount, amount, chain }) => {
-  return (
-    <div className="main-wrapper">
+const BidModal = ({
+  nftOwner,
+  name,
+  offerAmount,
+  amount,
+  chain
+}) => {
+  return <div className="main-wrapper">
       <div className="top-title">Place your Bid</div>
       <div className="info">
         <div className="d-flex gap-3 align-items-center pb-3">
@@ -27,7 +31,9 @@ const BidModal = ({ nftOwner, name, offerAmount, amount, chain }) => {
         </div>
       </div>
 
-      <div style={{ border: ".5px solid lightgray" }}></div>
+      <div style={{
+      border: ".5px solid lightgray"
+    }}></div>
 
       <div className="mt-4">
         <h5>Go to your wallet</h5>
@@ -35,8 +41,6 @@ const BidModal = ({ nftOwner, name, offerAmount, amount, chain }) => {
           You'all be asked to review and confirm this offer from your wallet.
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default BidModal;

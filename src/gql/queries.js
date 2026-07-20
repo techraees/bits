@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 const GET_ALL_NFTS = gql`
   query getAllNfts($walletAddress: String!) {
     getAllNfts(walletAddress: $walletAddress) {
@@ -31,7 +30,6 @@ const GET_ALL_NFTS = gql`
     }
   }
 `;
-
 const LOGIN_USER = gql`
   query LoginUser(
     $email: String!
@@ -48,7 +46,6 @@ const LOGIN_USER = gql`
     }
   }
 `;
-
 const GET_PROFILE = gql`
   query GetProfile {
     GetProfile {
@@ -63,7 +60,6 @@ const GET_PROFILE = gql`
     }
   }
 `;
-
 const GET_GENERAL_USER_INFO = gql`
   query GetGeneralUserInfo($_id: String!) {
     GetGeneralUserInfo(_id: $_id) {
@@ -73,7 +69,6 @@ const GET_GENERAL_USER_INFO = gql`
     }
   }
 `;
-
 const GET_PLAYER = gql`
   query Query($id: String!) {
     GetPlayer(id: $id) {
@@ -86,7 +81,6 @@ const GET_PLAYER = gql`
     }
   }
 `;
-
 const UPDATE_USER_PROFILE = gql`
   mutation UpdateProfile(
     $updateProfileId: String!
@@ -115,7 +109,6 @@ const UPDATE_USER_PROFILE = gql`
     }
   }
 `;
-
 const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
   query GetAllNftsWithoutAddress {
     getAllNftsWithoutAddress {
@@ -139,7 +132,6 @@ const GET_ALL_NFTS_WITHOUT_ADDRESS = gql`
     }
   }
 `;
-
 const GET_PROFILE_DETAILS_QUERY = gql`
   query GetProfileDetails {
     GetProfileDetails {
@@ -159,7 +151,6 @@ const GET_PROFILE_DETAILS_QUERY = gql`
     }
   }
 `;
-
 const GET_NFT_DETAIL_QUERY = gql`
   query GetNftDetails($id: ID!, $user_id: String) {
     getNftDetails(id: $id, user_id: $user_id) {
@@ -192,7 +183,6 @@ const GET_NFT_DETAIL_QUERY = gql`
     }
   }
 `;
-
 const DETAILS_OF_A_NFT = gql`
   query DetailsOfANft($id: ID!) {
     DetailsOfANft(id: $id) {
@@ -217,7 +207,6 @@ const DETAILS_OF_A_NFT = gql`
     }
   }
 `;
-
 const GET_TOP_VIEW_NFTS = gql`
   query {
     getTopViewNfts {
@@ -250,7 +239,6 @@ const GET_TOP_VIEW_NFTS = gql`
     }
   }
 `;
-
 const GET_TOP_NFTS = gql`
   query GetTopNfts {
     GetTopNfts {
@@ -263,8 +251,6 @@ const GET_TOP_NFTS = gql`
     }
   }
 `;
-
-// Used to fetch my nfts that I owned
 const Get_MY_NFTS_THAT_I_OWNED = gql`
   query GetMyNftsThatIOwned(
     $ownership_type: String
@@ -329,8 +315,6 @@ const Get_MY_NFTS_THAT_I_OWNED = gql`
     }
   }
 `;
-
-// Used to fetch all nfts in market plance that support filters
 const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
   query GetAllNftsInMarketPlaceAndSupportFilter(
     $filterObj: JSON
@@ -388,50 +372,36 @@ const GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER = gql`
     }
   }
 `;
-
-// Used to get datails of single nft from nft market place
 const GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE = gql`
   query GetDetailsOfSingleNftFromMarketPlace($_id: String!) {
     getDetailsOfSingleNftFromMarketPlace(_id: $_id)
   }
 `;
-
-// Used to get all my transactions
 const GET_ALL_MY_TRANSACTION = gql`
   query GetAllMyTransaction($filterObj: JSON) {
     getAllMyTransaction(filterObj: $filterObj)
   }
 `;
-
-//  Used to fetch transaction details of specific transaction
 const GET_TRANSACTION_DETAILS_OF_SPECIFIC = gql`
   query GetTransactionDetailsOfSpecific($_id: String!) {
     getTransactionDetailsOfSpecific(_id: $_id)
   }
 `;
-
-//  Used to fetch nfts that I sold
 const GET_NFTS_THAT_I_SOLD = gql`
   query GetNftsThatISold {
     getNftsThatISold
   }
 `;
-
-//  Used to fetch nfts that I bought
 const GET_NFTS_THAT_I_BOUGHT = gql`
   query GetNftsThatIBought($token: String!) {
     getNftsThatIBought(token: $token)
   }
 `;
-
-//  Used to fetch the ownership history of single nfts
 const GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS = gql`
   query GetOwnershipHistoryOfSingleNfts($_id: String!) {
     getOwnershipHistoryOfSingleNfts(_id: $_id)
   }
 `;
-
-// Used to get owners who listing the same nft with different price
 const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
   query GetOwnersWhoListedTheSameNftWithPrices(
     $_id: String!
@@ -472,46 +442,14 @@ const GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE = gql`
     }
   }
 `;
-
-// Used to get all bids of auction nft market place
 const GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE = gql`
   query GetAllBidsOfAuctionNftMarketPlace($_id: String!) {
     getAllBidsOfAuctionNftMarketPlace(_id: $_id)
   }
 `;
-
-// Used to get all top nfts
 const GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE = gql`
   query GetAllTopNftsForOneChainForWebsite($chainId: String!) {
     getAllTopNftsForOneChainForWebsite(chainId: $chainId)
   }
 `;
-
-export {
-  GET_ALL_NFTS,
-  LOGIN_USER,
-  GET_PLAYER,
-  UPDATE_USER_PROFILE,
-  GET_PROFILE,
-  GET_GENERAL_USER_INFO,
-  GET_ALL_NFTS_WITHOUT_ADDRESS,
-  GET_PROFILE_DETAILS_QUERY,
-  GET_NFT_DETAIL_QUERY,
-  GET_TOP_VIEW_NFTS,
-  DETAILS_OF_A_NFT,
-  GET_TOP_NFTS,
-  // ========================= Optimization Queries ======================
-  Get_MY_NFTS_THAT_I_OWNED,
-  GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER,
-  GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE,
-  GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE,
-  GET_ALL_MY_TRANSACTION,
-  GET_TRANSACTION_DETAILS_OF_SPECIFIC,
-  GET_NFTS_THAT_I_SOLD,
-  GET_NFTS_THAT_I_BOUGHT,
-  GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS,
-  GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE,
-  GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
-
-  // ========================= Optimization Queries ======================
-};
+export { GET_ALL_NFTS, LOGIN_USER, GET_PLAYER, UPDATE_USER_PROFILE, GET_PROFILE, GET_GENERAL_USER_INFO, GET_ALL_NFTS_WITHOUT_ADDRESS, GET_PROFILE_DETAILS_QUERY, GET_NFT_DETAIL_QUERY, GET_TOP_VIEW_NFTS, DETAILS_OF_A_NFT, GET_TOP_NFTS, Get_MY_NFTS_THAT_I_OWNED, GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER, GET_DETAILS_OF_SINGLE_NFT_FROM_MARKET_PLACE, GET_OWNERS_WHO_LISTED_THE_SAME_NFT_WITH_PRICE, GET_ALL_MY_TRANSACTION, GET_TRANSACTION_DETAILS_OF_SPECIFIC, GET_NFTS_THAT_I_SOLD, GET_NFTS_THAT_I_BOUGHT, GET_OWNERSHIP_HISTORY_OF_SINGLE_NFTS, GET_ALL_BIDS_OF_AUCTION_NFTS_MARKET_PLACE, GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE };

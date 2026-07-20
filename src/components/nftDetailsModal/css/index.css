@@ -10,7 +10,7 @@
 .cancelBtn {
   border-radius: 20px !important;
   height: 40px !important;
-  /* color: white; */
+  
 }
 
 .label-input span .ant-input:placeholder-shown {

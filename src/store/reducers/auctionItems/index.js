@@ -6,5 +6,4 @@ const auctionItemReducer = (auctionItemIns = {}, action) => {
       return auctionItemIns;
   }
 };
-
 export default auctionItemReducer;

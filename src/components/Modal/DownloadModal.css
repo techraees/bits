@@ -43,7 +43,7 @@
 }
 
 .custom-backdrop {
-  background-color: rgba(0, 0, 0, 0.6); /* Change the color as needed */
+  background-color: rgba(0, 0, 0, 0.6); 
 }
 
 @keyframes fadeIn {

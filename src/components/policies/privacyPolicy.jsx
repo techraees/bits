@@ -1,8 +1,10 @@
 import React from "react";
 import "./css/index.css";
 const PrivacyPolicyComp = () => {
-  return (
-    <div className="text-info" style={{ maxHeight: "300px", overflow: "auto" }}>
+  return <div className="text-info" style={{
+    maxHeight: "300px",
+    overflow: "auto"
+  }}>
       <h1>PRIVACY POLICY</h1>
       <div className="mt-3">
         <h1>Introduction</h1>
@@ -50,7 +52,9 @@ const PrivacyPolicyComp = () => {
           <br />
         </p>
         <h5>
-          <strong style={{ fontWeight: 800 }}>
+          <strong style={{
+          fontWeight: 800
+        }}>
             The information you provide:{" "}
           </strong>
           <br />
@@ -111,7 +115,9 @@ const PrivacyPolicyComp = () => {
         <br />
 
         <h5>
-          <strong style={{ fontWeight: "900" }}>
+          <strong style={{
+          fontWeight: "900"
+        }}>
             The information we collect automatically:{" "}
           </strong>
           <br />
@@ -227,7 +233,9 @@ const PrivacyPolicyComp = () => {
 
         <ul>
           <li>
-            <strong style={{ fontWeight: 800 }}>Service provision:</strong> We
+            <strong style={{
+            fontWeight: 800
+          }}>Service provision:</strong> We
             collect certain information, such as your registration details, to
             provide you with our services. This may include creating an account
             for you, enabling you to upload your media and mint NFTs, allowing
@@ -235,7 +243,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Communication and support:
             </strong>{" "}
             We collect contact information, such as your email address and phone
@@ -246,14 +256,18 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>Payment processing:</strong> For
+            <strong style={{
+            fontWeight: 800
+          }}>Payment processing:</strong> For
             us to process your downloads of your FBX files, you must provide
             your card or PayPal information. Likewise, to trade NFTs on our
             marketplace, you must connect your wallet address.
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>User verification:</strong> We
+            <strong style={{
+            fontWeight: 800
+          }}>User verification:</strong> We
             collect certain information to enable us to verify your ownership of
             any media submitted, prevent fraud or copyright infringement issues,
             or identify you as a human. We also collect certain properties about
@@ -261,7 +275,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Fraud prevention and legal compliance:
             </strong>{" "}
             We may collect information, such as your location and date of birth,
@@ -327,7 +343,9 @@ const PrivacyPolicyComp = () => {
 
         <ul>
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Sharing with service providers for service provision:
             </strong>
             We hire the services of certain third-party service providers to
@@ -344,7 +362,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Sharing with entities in a business transfer event:
             </strong>
             In the event that we restructure or enter a business transfer
@@ -355,7 +375,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Information available to users you transact with:
             </strong>
             If you transact with a user, or you collaborate with a user to sell
@@ -364,7 +386,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Information from your media available to other users:
             </strong>
             If you list your NFTs on the marketplace, your name, photo, and any
@@ -373,7 +397,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Sharing with law enforcement upon request:
             </strong>
             We may share personal information if we are required to do so by
@@ -383,7 +409,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Wallet addresses available publicly:
             </strong>
             Since your wallet address is publicly visible on the blockchain, it
@@ -470,7 +498,9 @@ const PrivacyPolicyComp = () => {
 
         <ul>
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to opt out of newsletters:
             </strong>{" "}
             If you opt in to receive updates about news, events, and marketing
@@ -480,7 +510,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to edit or rectify any inaccurate information:
             </strong>{" "}
             If you believe that any information you provide to us is inaccurate,
@@ -491,7 +523,9 @@ const PrivacyPolicyComp = () => {
           <br />
 
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to request the deletion of your information:
             </strong>{" "}
             You have the right to demand that we delete your personal
@@ -500,7 +534,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to withdraw consent:
             </strong>{" "}
             You have the right to withdraw your consent if we process your
@@ -510,13 +546,17 @@ const PrivacyPolicyComp = () => {
           </li>
         </ul>
 
-        <p style={{ fontWeight: 800 }}>
+        <p style={{
+        fontWeight: 800
+      }}>
           Users under the GDPR law have the following additional rights:
         </p>
         <br />
         <ul>
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to data portability:
             </strong>{" "}
             You may request that we transfer the information we hold about you
@@ -525,7 +565,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to restrict processing:
             </strong>{" "}
             Where you want that we restrict the processing of your data for
@@ -536,7 +578,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>
+            <strong style={{
+            fontWeight: 800
+          }}>
               Right to object to processing:
             </strong>{" "}
             You may object to the processing of specific information about you
@@ -545,7 +589,9 @@ const PrivacyPolicyComp = () => {
           </li>
           <br />
           <li>
-            <strong style={{ fontWeight: 800 }}>Right to reporting:</strong> You
+            <strong style={{
+            fontWeight: 800
+          }}>Right to reporting:</strong> You
             may report us to any data protection authority in your jurisdiction
             if you think we are unlawfully processing your information.
           </li>
@@ -556,7 +602,9 @@ const PrivacyPolicyComp = () => {
           </li>
         </ul>
 
-        <p style={{ fontWeight: 800 }}>
+        <p style={{
+        fontWeight: 800
+      }}>
           Users in California have the following additional rights:
         </p>
         <br />
@@ -595,7 +643,9 @@ const PrivacyPolicyComp = () => {
           </li>
         </ul>
 
-        <p style={{ fontWeight: 800 }}>
+        <p style={{
+        fontWeight: 800
+      }}>
           Users in Virginia, Utah, Connecticut, Colorado, and Nevada have the
           right below:{" "}
         </p>
@@ -611,7 +661,9 @@ const PrivacyPolicyComp = () => {
         </p>
 
         <br />
-        <p style={{ fontWeight: 800 }}>
+        <p style={{
+        fontWeight: 800
+      }}>
           Users in Brazil have the following additional rights:
         </p>
         <br />
@@ -684,8 +736,6 @@ const PrivacyPolicyComp = () => {
           your consent to the changes made.{" "}
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default PrivacyPolicyComp;

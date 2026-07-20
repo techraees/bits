@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppKitAccount } from "@reown/appkit/react";
@@ -7,22 +6,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation } from "react-router-dom";
 import { logo, metamaskwithmascot, account } from "../../../assets";
-import {
-  ButtonComponent,
-  CustomCheckbox,
-  InputComponent,
-  ToastMessage,
-} from "../../../components";
+import { ButtonComponent, CustomCheckbox, InputComponent, ToastMessage } from "../../../components";
 import ForgotPassModal from "../../../components/ForgotPassModal";
 import PasswordRequirements from "../../../components/PasswordRequirements";
 import Loading from "../../../components/loaders/loading";
 import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
-import {
-  signInSchema,
-  signUpSchema,
-  isPasswordValid,
-  PASSWORD_FORMAT_ERROR_MESSAGE,
-} from "../../../components/validations";
+import { signInSchema, signUpSchema, isPasswordValid, PASSWORD_FORMAT_ERROR_MESSAGE } from "../../../components/validations";
 import { CREATE_USER } from "../../../gql/mutations";
 import { GET_PLAYER, LOGIN_USER } from "../../../gql/queries";
 import { setCookieStorage } from "../../../utills/cookieStorage";
@@ -30,99 +19,75 @@ import "./css/index.css";
 import PhoneInputRPI2 from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isValidPhoneNumber } from "react-phone-number-input";
-
 const env = process.env;
-
 function Login() {
-  const { address, isConnected } = useAppKitAccount();
-  const { openAppKitConnect } = useWalletGateFlow();
+  const {
+    address,
+    isConnected
+  } = useAppKitAccount();
+  const {
+    openAppKitConnect
+  } = useWalletGateFlow();
   const [forgotPassModal, setForgotPassModal] = useState(false);
   const [step, setStep] = useState(1);
   const [id, setId] = useState(null);
   const [token, setToken] = useState(null);
-
-  // sign in checkbox
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
-
-  // sign up checkbox
   const [signUpAgreeCheckbox, setSignUpAgreeCheckbox] = useState(false);
   const [monthsOptions, setMonthsOptions] = useState([]);
   const [daysOptions, setDaysOptions] = useState([]);
   const [yearsOptions, setYearsOptions] = useState([]);
   const [phoneCountry, setPhoneCountry] = useState("us");
-
-  const { reset: signInResetValue } = useForm({
+  const {
+    reset: signInResetValue
+  } = useForm({
     resolver: yupResolver(signInSchema),
     mode: "onSubmit",
-    reValidateMode: "onChange",
+    reValidateMode: "onChange"
   });
-
-  const [{ loading, error: loginError, data: loginData }] = useLazyQuery(
-    LOGIN_USER,
-    {
-      fetchPolicy: "network-only",
-    },
-  );
-
+  const [{
+    loading,
+    error: loginError,
+    data: loginData
+  }] = useLazyQuery(LOGIN_USER, {
+    fetchPolicy: "network-only"
+  });
   const [day, setDay] = useState();
   const [month, setMonth] = useState();
   const [year, setYear] = useState();
-
-  const handleDay = (e) => {
+  const handleDay = e => {
     setDay(e);
   };
-
-  const handleMonth = (e) => {
+  const handleMonth = e => {
     setMonth(e);
   };
-
-  const handleYear = (e) => {
+  const handleYear = e => {
     setYear(e);
   };
-
   useEffect(() => {
     if (loginData) {
-      // need to check if LoginUser has linkingInfo
       signInResetValue();
-
-      const { LoginUser } = loginData;
-      const { access_token, refresh_token } = LoginUser;
-
+      const {
+        LoginUser
+      } = loginData;
+      const {
+        access_token,
+        refresh_token
+      } = LoginUser;
       setCookieStorage("access_token", access_token);
       setCookieStorage("refresh_token", refresh_token);
-
-      // dispatch({
-      //   type: "NFT_ADDRESS",
-      //   userData: {
-      //     address: user_address,
-      //     full_name: full_name,
-      //     country: country,
-      //     bio: bio,
-      //     profileImg: profileImg,
-      //     id,
-      //     token,
-      //     isLogged: true,
-      //   },
-      // });
-      // navigate("/");
       window.location.href = "/";
     }
-    // Apollo's global errorLink (src/index.jsx) already surfaces the real
-    // GraphQL error message in its own toast - showing one here too just
-    // duplicates it with Apollo's generic wrapper text instead.
   }, [loginData, loginError, signInResetValue]);
-
-  // login
-
-  // signUp
-
   const {
     handleSubmit: signUpSubmit,
     setValue: signUpSetValue,
     trigger,
-    formState: { errors: signUpFormError },
+    formState: {
+      errors: signUpFormError
+    },
     watch,
-    reset: signUpResetValue,
+    reset: signUpResetValue
   } = useForm({
     resolver: yupResolver(signUpSchema),
     mode: "onChange",
@@ -133,80 +98,62 @@ function Login() {
       email: "",
       password: "",
       phone_number: "",
-      dob: "",
-    },
+      dob: ""
+    }
   });
-
   useEffect(() => {
     const options = [];
     for (let i = 1; i <= 12; i++) {
       options.push({
         value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString(),
+        label: i < 10 ? `0${i}` : i.toString()
       });
     }
     setMonthsOptions(options);
-
     const daysOptions = [];
     for (let i = 1; i <= 31; i++) {
       daysOptions.push({
         value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString(),
+        label: i < 10 ? `0${i}` : i.toString()
       });
     }
     setDaysOptions(daysOptions);
-
     const optionsYears = [];
     for (let i = 1960; i <= 2024; i++) {
       optionsYears.push({
         value: i.toString(),
-        label: i.toString(),
+        label: i.toString()
       });
     }
     setYearsOptions(optionsYears);
   }, []);
-
-  const [
-    createUser,
-    { loading: signUpLoading, error: singUpError, data: signUpData },
-  ] = useMutation(CREATE_USER);
-
+  const [createUser, {
+    loading: signUpLoading,
+    error: singUpError,
+    data: signUpData
+  }] = useMutation(CREATE_USER);
   useEffect(() => {
     if (day && month && year) {
       const combined = `${month}/${day}/${year}`;
       const dateFormat = new Date(combined);
-      signUpSetValue("dob", dateFormat.toString(), { shouldValidate: true });
+      signUpSetValue("dob", dateFormat.toString(), {
+        shouldValidate: true
+      });
     }
   }, [day, month, year, signUpSetValue]);
-
-  // signUp useEffect to check if any error
-
   useEffect(() => {
     if (signUpData) {
-      const { CreateUser } = signUpData;
-
-      const { access_token, refresh_token, _id } = CreateUser;
-
+      const {
+        CreateUser
+      } = signUpData;
+      const {
+        access_token,
+        refresh_token,
+        _id
+      } = CreateUser;
       setCookieStorage("access_token", access_token);
       setCookieStorage("refresh_token", refresh_token);
-
-      // setStorage("token", token);
-      // dispatch({
-      //   type: "NFT_ADDRESS",
-      //   userData: {
-      //     address: address,
-      //     user_name: user_name,
-      //     country: country,
-      //     bio: bio,
-      //     profileImg: profileImg,
-      //     id: _id,
-      //     token,
-      //     isLogged: true,
-      //   },
-      // });
-      // navigate(`/collections/${_id}`);
       window.location.href = `/collections/${_id}`;
-
       signUpResetValue();
       signUpSetValue("full_name", "");
       signUpSetValue("email", "");
@@ -214,21 +161,9 @@ function Login() {
       signUpSetValue("dob", "");
       ToastMessage("success", "Account Created Successfully", "success");
     }
-    // Apollo's global errorLink (src/index.jsx) already shows a toast with
-    // the real GraphQL error message (e.g. "This Wallet Address Already
-    // exists") - showing another one here duplicated it with Apollo's
-    // generic wrapper text ("Response not successful: Received status code
-    // 400") instead of anything useful.
   }, [signUpData, singUpError, signUpResetValue, signUpSetValue]);
-
   async function signUpHandle(data) {
-    // console.log(data, "ASDASDASDASDADS");
-    if (
-      isPasswordValid(data.password) &&
-      validateEmail(data.email) &&
-      validateUsername(data.user_name) &&
-      validatePhoneNumber(data.phone_number)
-    ) {
+    if (isPasswordValid(data.password) && validateEmail(data.email) && validateUsername(data.user_name) && validatePhoneNumber(data.phone_number)) {
       const variables = {
         userName: data.user_name,
         email: data.email,
@@ -236,44 +171,39 @@ function Login() {
         password: data.password,
         phoneNumber: data.phone_number,
         userAddress: address,
-        dob: data.dob,
+        dob: data.dob
       };
       createUser({
-        variables: variables,
+        variables: variables
       });
     } else {
       ToastMessage("Error", "Incorrect input format", "error");
     }
   }
-
-  const handleChangeSignUp = (e) => {
-    signUpSetValue(e.target.name, e.target.value, { shouldValidate: true });
+  const handleChangeSignUp = e => {
+    signUpSetValue(e.target.name, e.target.value, {
+      shouldValidate: true
+    });
   };
-
-  // get Player
-  const [{ loading: playerLoading }] = useLazyQuery(GET_PLAYER, {
-    fetchPolicy: "network-only",
+  const [{
+    loading: playerLoading
+  }] = useLazyQuery(GET_PLAYER, {
+    fetchPolicy: "network-only"
   });
-
   const forceValidateAndConnect = async () => {
     const isValid = await trigger();
-
     if (!isValid) {
       return;
     }
-
     await openAppKitConnect();
   };
-
   const openMetaMaskLink = () => {
     window.open("https://metamask.io/", "_blank");
   };
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const resetToken = searchParams.get("token");
   const resetId = searchParams.get("id");
-
   useEffect(() => {
     const fetchData = async () => {
       if (resetId && resetToken) {
@@ -290,42 +220,32 @@ function Login() {
     };
     fetchData();
   }, [resetToken, resetId]);
-
   const handleCloseForgotPass = () => {
     setForgotPassModal(false);
   };
-
   const sendToken = async (id, token) => {
     const body = {
       data: {
         id: id,
-        token: token,
-      },
+        token: token
+      }
     };
-
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     };
-
-    const response = await fetch(
-      `${env.REACT_APP_BACKEND_BASE_URL}/verify-token`,
-      {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-      },
-    );
-
+    const response = await fetch(`${env.REACT_APP_BACKEND_BASE_URL}/verify-token`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body)
+    });
     const data = await response.json();
     return data;
   };
-
-  const validateEmail = (email) => {
+  const validateEmail = email => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-
-  const validateUsername = (username) => {
+  const validateUsername = username => {
     var regex = /^[a-zA-Z0-9_]+$/;
     if (regex.test(username)) {
       return true;
@@ -333,32 +253,21 @@ function Login() {
       return false;
     }
   };
-
-  const validatePhoneNumber = (phoneNumber) => {
+  const validatePhoneNumber = phoneNumber => {
     return phoneNumber ? isValidPhoneNumber(phoneNumber) : false;
   };
+  return <div style={{
+    background: "black"
+  }}>
+      {playerLoading || signUpLoading || loading && <Loading content="Loading" />}
 
-  return (
-    <div style={{ background: "black" }}>
-      {playerLoading ||
-        signUpLoading ||
-        (loading && <Loading content="Loading" />)}
-
-      {forgotPassModal && (
-        <ForgotPassModal
-          visible={forgotPassModal}
-          onClose={handleCloseForgotPass}
-          setStep={setStep}
-          step={step}
-          id={id}
-          token={token}
-          handleCloseForgotPass={handleCloseForgotPass}
-        />
-      )}
+      {forgotPassModal && <ForgotPassModal visible={forgotPassModal} onClose={handleCloseForgotPass} setStep={setStep} step={step} id={id} token={token} handleCloseForgotPass={handleCloseForgotPass} />}
 
       <div className="container loginContainer py-4">
         <img src={logo} className="logoSize mb-5" alt="logo" />
-        <div className="d-flex formMobView" style={{ width: "100%" }}>
+        <div className="d-flex formMobView" style={{
+        width: "100%"
+      }}>
           <div className="formContainer">
             <form>
               <div className="d-flex justify-content-center mb-5">
@@ -366,145 +275,90 @@ function Login() {
                 <span className="ms-4 semi-bold fs-5">Create Account</span>
               </div>
               <div className="mb-3">
-                <InputComponent
-                  placeholder={"Full Name"}
-                  name="full_name"
-                  value={watch("full_name")}
-                  onChange={handleChangeSignUp}
-                  autocomplete="off"
-                />
-                {signUpFormError.full_name && (
-                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                <InputComponent placeholder={"Full Name"} name="full_name" value={watch("full_name")} onChange={handleChangeSignUp} autocomplete="off" />
+                {signUpFormError.full_name && <span className="text-danger" style={{
+                fontSize: "12px"
+              }}>
                     {signUpFormError.full_name.message}
-                  </span>
-                )}
-                <InputComponent
-                  placeholder={"User Name"}
-                  name="user_name"
-                  value={watch("user_name")}
-                  onChange={handleChangeSignUp}
-                  autocomplete="off"
-                />
-                {signUpFormError.user_name && (
-                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                  </span>}
+                <InputComponent placeholder={"User Name"} name="user_name" value={watch("user_name")} onChange={handleChangeSignUp} autocomplete="off" />
+                {signUpFormError.user_name && <span className="text-danger" style={{
+                fontSize: "12px"
+              }}>
                     {signUpFormError.user_name.message}
-                  </span>
-                )}
-                <InputComponent
-                  placeholder={"E-mail"}
-                  name="email"
-                  value={watch("email")}
-                  onChange={handleChangeSignUp}
-                  autocomplete="off"
-                />
-                {signUpFormError.email && (
-                  <span className="text-danger" style={{ fontSize: "12px" }}>
+                  </span>}
+                <InputComponent placeholder={"E-mail"} name="email" value={watch("email")} onChange={handleChangeSignUp} autocomplete="off" />
+                {signUpFormError.email && <span className="text-danger" style={{
+                fontSize: "12px"
+              }}>
                     {signUpFormError.email.message}
-                  </span>
-                )}
+                  </span>}
                 <div className="signup-password-section">
-                  <InputComponent
-                    password
-                    placeholder={"Password"}
-                    name="password"
-                    value={watch("password")}
-                    onChange={handleChangeSignUp}
-                    autocomplete="off"
-                  />
-                  {signUpFormError.password &&
-                    signUpFormError.password.message !==
-                      PASSWORD_FORMAT_ERROR_MESSAGE && (
-                      <span className="signup-field-error">
+                  <InputComponent password placeholder={"Password"} name="password" value={watch("password")} onChange={handleChangeSignUp} autocomplete="off" />
+                  {signUpFormError.password && signUpFormError.password.message !== PASSWORD_FORMAT_ERROR_MESSAGE && <span className="signup-field-error">
                         {signUpFormError.password.message}
-                      </span>
-                    )}
+                      </span>}
                   <PasswordRequirements password={watch("password") || ""} />
                 </div>
                 <div className="bits-phone-container">
-                  <PhoneInputRPI2
-                    country={phoneCountry}
-                    enableSearch={true}
-                    disableSearchIcon={true}
-                    searchPlaceholder="Search country..."
-                    value={watch("phone_number")}
-                    onChange={(val, data) => {
-                      if (phoneCountry !== data.countryCode) {
-                        setPhoneCountry(data.countryCode);
-                        signUpSetValue("phone_number", "+" + data.dialCode, {
-                          shouldValidate: true,
-                        });
-                      } else {
-                        const finalVal = val.startsWith("+") ? val : "+" + val;
-                        signUpSetValue("phone_number", finalVal, {
-                          shouldValidate: true,
-                        });
-                      }
-                    }}
-                    containerClass="signup-phone-input"
-                    inputClass="signup-phone-input__field"
-                    buttonClass="signup-phone-input__flag-btn"
-                    dropdownClass="signup-phone-input__dropdown"
-                    searchClass="signup-phone-input__search"
-                  />
+                  <PhoneInputRPI2 country={phoneCountry} enableSearch={true} disableSearchIcon={true} searchPlaceholder="Search country..." value={watch("phone_number")} onChange={(val, data) => {
+                  if (phoneCountry !== data.countryCode) {
+                    setPhoneCountry(data.countryCode);
+                    signUpSetValue("phone_number", "+" + data.dialCode, {
+                      shouldValidate: true
+                    });
+                  } else {
+                    const finalVal = val.startsWith("+") ? val : "+" + val;
+                    signUpSetValue("phone_number", finalVal, {
+                      shouldValidate: true
+                    });
+                  }
+                }} containerClass="signup-phone-input" inputClass="signup-phone-input__field" buttonClass="signup-phone-input__flag-btn" dropdownClass="signup-phone-input__dropdown" searchClass="signup-phone-input__search" />
                 </div>
-                {signUpFormError.phone_number && (
-                  <span className="signup-field-error">
+                {signUpFormError.phone_number && <span className="signup-field-error">
                     {signUpFormError.phone_number.message}
-                  </span>
-                )}
+                  </span>}
 
                 <div className="signup-dob-section">
                   <label className="signup-dob-label">Date of Birth</label>
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Select
-                        placeholder="MM"
-                        style={{ width: "100%" }}
-                        name="month"
-                        className="signup-dob-select"
-                        onChange={handleMonth}
-                        options={monthsOptions}
-                      />
+                      <Select placeholder="MM" style={{
+                      width: "100%"
+                    }} name="month" className="signup-dob-select" onChange={handleMonth} options={monthsOptions} />
                     </Col>
 
                     <Col span={8}>
-                      <Select
-                        placeholder="DD"
-                        style={{ width: "100%" }}
-                        name="day"
-                        className="signup-dob-select"
-                        onChange={handleDay}
-                        options={daysOptions}
-                      />
+                      <Select placeholder="DD" style={{
+                      width: "100%"
+                    }} name="day" className="signup-dob-select" onChange={handleDay} options={daysOptions} />
                     </Col>
 
                     <Col span={8}>
-                      <Select
-                        placeholder="YYYY"
-                        style={{ width: "100%" }}
-                        name="year"
-                        className="signup-dob-select"
-                        onChange={handleYear}
-                        options={yearsOptions}
-                      />
+                      <Select placeholder="YYYY" style={{
+                      width: "100%"
+                    }} name="year" className="signup-dob-select" onChange={handleYear} options={yearsOptions} />
                     </Col>
                   </Row>
                 </div>
 
-                <p style={{ fontSize: "12px" }}>
+                <p style={{
+                fontSize: "12px"
+              }}>
                   Disclaimer: Users must be 18 or older to sign up. Our platform
                   involves buying and selling NFTs with crypto. By proceeding,
                   you confirm you meet the age requirement.
                 </p>
 
-                <Divider style={{ border: "1.5px solid #dcdcdc" }} />
+                <Divider style={{
+                border: "1.5px solid #dcdcdc"
+              }} />
               </div>
 
-              <div className="my-2 d-flex" style={{ alignItems: "center" }}>
-                <CustomCheckbox
-                  active={signUpAgreeCheckbox}
-                  setActive={setSignUpAgreeCheckbox}
-                />
+              <div className="my-2 d-flex" style={{
+              alignItems: "center"
+            }}>
+                <CustomCheckbox active={signUpAgreeCheckbox} setActive={setSignUpAgreeCheckbox} />
                 <Link to="/privacy-security">
                   <span className="ms-3 light-grey">
                     I agree to BITS’s{" "}
@@ -513,29 +367,16 @@ function Login() {
                   </span>
                 </Link>
               </div>
-              <div className="my-2 d-flex" style={{ alignItems: "center" }}>
-                <CustomCheckbox
-                  active={rememberCheckbox}
-                  setActive={setRememberCheckbox}
-                />
+              <div className="my-2 d-flex" style={{
+              alignItems: "center"
+            }}>
+                <CustomCheckbox active={rememberCheckbox} setActive={setRememberCheckbox} />
                 <span className="ms-3 light-grey">Remember me</span>
               </div>
               <div className="my-5">
-                {!isConnected ? (
-                  <ButtonComponent
-                    onClick={() => {
-                      forceValidateAndConnect();
-                    }}
-                    text={"CONNECT WALLET"}
-                  />
-                ) : (
-                  <ButtonComponent
-                    onClick={signUpSubmit(signUpHandle)}
-                    text={"CREATE ACCOUNT"}
-                    disabled={!signUpAgreeCheckbox || signUpLoading}
-                    loading={signUpLoading}
-                  />
-                )}
+                {!isConnected ? <ButtonComponent onClick={() => {
+                forceValidateAndConnect();
+              }} text={"CONNECT WALLET"} /> : <ButtonComponent onClick={signUpSubmit(signUpHandle)} text={"CREATE ACCOUNT"} disabled={!signUpAgreeCheckbox || signUpLoading} loading={signUpLoading} />}
               </div>
               <div className="my-4 d-flex justify-content-center">
                 <span>
@@ -548,32 +389,24 @@ function Login() {
               <div className="my-2 d-flex justify-content-center">
                 <span>
                   Must have a{" "}
-                  <span
-                    style={{
-                      color: "#F5841E",
-                      cursor: "pointer",
-                    }}
-                    onClick={openMetaMaskLink}
-                  >
+                  <span style={{
+                  color: "#F5841E",
+                  cursor: "pointer"
+                }} onClick={openMetaMaskLink}>
                     MetaMask
                   </span>{" "}
                   wallet to use the platform
                 </span>
               </div>
               <div className="d-flex justify-content-center">
-                <img
-                  src={metamaskwithmascot}
-                  style={{ cursor: "pointer" }}
-                  onClick={openMetaMaskLink}
-                  alt=""
-                />
+                <img src={metamaskwithmascot} style={{
+                cursor: "pointer"
+              }} onClick={openMetaMaskLink} alt="" />
               </div>
             </form>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
-
 export default Login;

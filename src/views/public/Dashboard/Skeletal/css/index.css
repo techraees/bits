@@ -162,20 +162,17 @@
 }
 
 
-/* =========================
-   LIGHT THEME OVERRIDES ONLY
-   (dark CSS ko mat change karo)
-   ========================= */
 
-/* wrapper-based ya same-element-based dono support */
+
+
 .skeleton-light .skeletal_parent_child,
 .skeleton-light.skeletal_parent_child {
     border: 1px solid rgba(0, 0, 0, 0.08);
     background: #ffffff;
-    /* card background */
+    
 }
 
-/* video area + all placeholders ko halka grey fill do */
+
 .skeleton-light .skeletal_parent_child_video_element,
 .skeleton-light .skeletal_parent_child_bottom_flex__circle,
 .skeleton-light .skeletal_parent_child_bottom_flex__button,
@@ -187,11 +184,11 @@
 .skeleton-light .skeletal_parent_child_bottom__flex_button_with_text,
 .skeleton-light .skeletal_parent_child_bottom__flex_button_with_text_text {
     background-color: #f3f4f6;
-    /* soft grey block */
+    
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* shimmer highlight ko light bg pe visible banane ke liye thoda dark-ish glow */
+
 .skeleton-light .shimmer::before {
     background: linear-gradient(90deg,
             rgba(0, 0, 0, 0) 0%,
@@ -199,8 +196,8 @@
             rgba(0, 0, 0, 0) 100%) !important;
 }
 
-/* (optional) parent grid ka light backdrop subtle rakhna ho to */
+
 .skeleton-light .skeletal_parent {
     background: transparent;
-    /* ya #fff; as per need */
+    
 }

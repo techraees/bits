@@ -7,44 +7,33 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import {
-  GET_ALL_NFTS_WITHOUT_ADDRESS,
-  GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE,
-} from "../../../gql/queries";
+import { GET_ALL_NFTS_WITHOUT_ADDRESS, GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE } from "../../../gql/queries";
 import { WeiToETH } from "../../../utills/convertWeiAndBnb";
-import {
-  CardCompnent,
-  Loader,
-  UploadVideoModal,
-  OnboardingModal,
-} from "../../../components";
+import { CardCompnent, Loader, UploadVideoModal, OnboardingModal } from "../../../components";
 import { getStorage } from "../../../utills/localStorage";
 import { ONBOARDING_SEEN_KEY } from "../../../components/onboardingModal";
 import CardSkeletal from "./Skeletal/CardSkeletal";
-
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
   const [onboardingVisible, setOnboardingVisible] = useState(false);
   const [topNfts, setTopNfts] = useState([]);
   let navigate = useNavigate();
-
-  const { userData } = useSelector((state) => state.address.userData);
-
-  const { fixedItemData } = useSelector(
-    (state) => state.fixedItemDatas.fixedItemData,
-  );
-  const { contractData } = useSelector((state) => state.chain.contractData);
-  const { auctionItemData } = useSelector(
-    (state) => state.auctionItemDatas.auctionItemData,
-  );
-
-  const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
-  );
-  const textColor = useSelector((state) => state.app.theme.textColor);
+  const {
+    userData
+  } = useSelector(state => state.address.userData);
+  const {
+    fixedItemData
+  } = useSelector(state => state.fixedItemDatas.fixedItemData);
+  const {
+    contractData
+  } = useSelector(state => state.chain.contractData);
+  const {
+    auctionItemData
+  } = useSelector(state => state.auctionItemDatas.auctionItemData);
+  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const textColor = useSelector(state => state.app.theme.textColor);
   const isLogged = userData?.isLogged;
   const userProfile = userData?.full_name;
-
   const handleCreateNFT = () => {
     if (isLogged) {
       setUploadVideoModal(true);
@@ -52,55 +41,41 @@ const Dashboard = () => {
       navigate("/login");
     }
   };
-
-  // console.log(contractData.chain, "SDFSDFSDFSFS");
-  // getOwnersOfTokenId(0, 80001, contractData.mintContract.address);
-
-  const { loading, data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
+  const {
+    loading,
+    data
+  } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
   const timenow = Math.floor(Date.now() / 1000);
-
   const {
     data: getAllTopNftsForOneChainForWebsite,
     loading: getAllTopNftsForOneChainForWebsiteLoading,
-    isFetching: getAllTopNftsForOneChainForWebsiteFetching,
+    isFetching: getAllTopNftsForOneChainForWebsiteFetching
   } = useQuery(GET_ALL_TOP_NFTS_FRO_ONE_CHAIN_FOR_WEBSITE, {
     variables: {
-      chainId: contractData.chain.toString(),
-    },
+      chainId: contractData.chain.toString()
+    }
   });
-
   useEffect(() => {
     if (getAllTopNftsForOneChainForWebsite) {
-      setTopNfts(
-        getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite,
-      );
+      setTopNfts(getAllTopNftsForOneChainForWebsite?.getAllTopNftsForOneChainForWebsite);
     }
   }, [getAllTopNftsForOneChainForWebsite]);
-
-  // Shows a one-time creator/buyer flow walkthrough on the first visit,
-  // tracked in localStorage so returning users never see it again.
   useEffect(() => {
     if (!getStorage(ONBOARDING_SEEN_KEY)) {
       setOnboardingVisible(true);
     }
   }, []);
-
-  return (
-    <div className={backgroundTheme}>
-      {/* {loading && <Loader />} */}
-      <OnboardingModal
-        visible={onboardingVisible}
-        onClose={() => setOnboardingVisible(false)}
-      />
-      <UploadVideoModal
-        visible={uploadVideoModal}
-        onClose={() => setUploadVideoModal(false)}
-      />
+  return <div className={backgroundTheme}>
+      {}
+      <OnboardingModal visible={onboardingVisible} onClose={() => setOnboardingVisible(false)} />
+      <UploadVideoModal visible={uploadVideoModal} onClose={() => setUploadVideoModal(false)} />
       <div className="container">
-        <Row
-          className="my-5 d-flex align-items-center"
-          gutter={{ xs: 8, sm: 16, md: 20, lg: 32 }}
-        >
+        <Row className="my-5 d-flex align-items-center" gutter={{
+        xs: 8,
+        sm: 16,
+        md: 20,
+        lg: 32
+      }}>
           <Col lg={12} md={12} sm={24} xs={24} className="my-2">
             <div>
               <h1 className={textColor}>
@@ -116,19 +91,13 @@ const Dashboard = () => {
               </span>
               <div className="mt-3 ">
                 <Link to="/marketplace?tab=fixed_price">
-                  <Button
-                    className="red dashboardBtns px-5"
-                    style={{
-                      backgroundColor: "transparent",
-                    }}
-                  >
+                  <Button className="red dashboardBtns px-5" style={{
+                  backgroundColor: "transparent"
+                }}>
                     Explore
                   </Button>
                 </Link>
-                <Button
-                  className="red-background white dashboardBtns px-5 ms-2"
-                  onClick={() => handleCreateNFT()}
-                >
+                <Button className="red-background white dashboardBtns px-5 ms-2" onClick={() => handleCreateNFT()}>
                   Create NFT
                 </Button>
               </div>
@@ -136,13 +105,10 @@ const Dashboard = () => {
           </Col>
           <Col lg={12} md={12} sm={24} xs={24} className="my-2">
             <div className="video-wrap">
-              <ReactPlayer
-                className="react-player"
-                width="100%"
-                height="300px"
-                url="https://www.youtube.com/watch?v=sXQH-R_0gtQ"
-                style={{ position: "relative", zIndex: 1 }}
-              />
+              <ReactPlayer className="react-player" width="100%" height="300px" url="https://www.youtube.com/watch?v=sXQH-R_0gtQ" style={{
+              position: "relative",
+              zIndex: 1
+            }} />
             </div>
           </Col>
         </Row>
@@ -150,122 +116,30 @@ const Dashboard = () => {
           <h3 className="red m-0">
             Top <span className={textColor}>NFTs</span>
           </h3>
-          <div
-            style={{ border: "1px solid #D54343", width: "80%" }}
-            className="breakline"
-          ></div>
+          <div style={{
+          border: "1px solid #D54343",
+          width: "80%"
+        }} className="breakline"></div>
           <img src={left_arrow_red} alt="lef-arrow" />
         </div>
         <div>
           <div className="row p-4 p-md-0">
-            {/* {auctionItemData?.map((item) => {
-            return data?.getTopViewNfts?.map((e, i) => {
-              if (
-                !e.is_blocked &&
-                Number(item.tokenId) == e.token_id &&
-                contractData.chain == e.chainId &&
-                Number(item.auctionEndTime) > timenow &&
-                item.isSold == false
-              ) {
-                return (
-                  <CardCompnent
-                  key={i}
-                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
-                  status={e.status}
-                  name={e.name}
-                  videoLink={e.video}
-                  userProfile={userProfile ? true : false}
-                  id={e._id}
-                  userId={e?.user_id?.id}
-                  />
-                );
-              }
-            });
-          })} */}
+            {}
 
-            {getAllTopNftsForOneChainForWebsiteLoading ? (
-              <>
+            {getAllTopNftsForOneChainForWebsiteLoading ? <>
                 <CardSkeletal />
-              </>
-            ) : Array.isArray(topNfts) && topNfts.length > 0 ? (
-              topNfts?.map((e, i) => (
-                <CardCompnent
-                  key={i}
-                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
-                  status={e?.nft_id?.status}
-                  name={e?.nft_id?.name}
-                  videoLink={e?.nft_id?.video}
-                  userProfile={userProfile ? true : false}
-                  id={e?.nft_id?._id}
-                  userId={e?.nft_id?.user_id}
-                  fixtokenId={e.fixtokenId}
-                  fixOwner={e?.nft_id?.wallet_address}
-                  artistName={e?.nft_id?.artist_name1}
-                  fixRoyalty={e?.nft_id?.royalty}
-                  fixCopies={e?.nft_id?.supply}
-                  numberofcopies={e.supply}
-                  initialPrice={e.initialPrice}
-                  auctionid={e.auctionid}
-                  currentBidAmount={e.currentBidAmount}
-                  nftOwner={e?.nft_id?.wallet_address}
-                  // isAuction={e?.nft_id?.isFixedItem ? false : true}
-                  likeCount={e?.nft_id?.likeCount}
-                  watchCount={e?.nft_id?.watchCount}
-                  isPaid={e?.nft_id?.isPaid}
-                  duration={e?.nft_id?.video_duration}
-                  isTopNfts={true}
-                  userObj={e?.nft_id?.user_id}
-                />
-              ))
-            ) : (
-              <div style={{ color: "#fff", margin: "1rem 0rem 3rem 0rem" }}>
+              </> : Array.isArray(topNfts) && topNfts.length > 0 ? topNfts?.map((e, i) => <CardCompnent key={i} image={e?.user_id?.profileImg ? e.user_id.profileImg : ""} status={e?.nft_id?.status} name={e?.nft_id?.name} videoLink={e?.nft_id?.video} userProfile={userProfile ? true : false} id={e?.nft_id?._id} userId={e?.nft_id?.user_id} fixtokenId={e.fixtokenId} fixOwner={e?.nft_id?.wallet_address} artistName={e?.nft_id?.artist_name1} fixRoyalty={e?.nft_id?.royalty} fixCopies={e?.nft_id?.supply} numberofcopies={e.supply} initialPrice={e.initialPrice} auctionid={e.auctionid} currentBidAmount={e.currentBidAmount} nftOwner={e?.nft_id?.wallet_address} likeCount={e?.nft_id?.likeCount} watchCount={e?.nft_id?.watchCount} isPaid={e?.nft_id?.isPaid} duration={e?.nft_id?.video_duration} isTopNfts={true} userObj={e?.nft_id?.user_id} />) : <div style={{
+            color: "#fff",
+            margin: "1rem 0rem 3rem 0rem"
+          }}>
                 There is no data found
-              </div>
-            )}
+              </div>}
 
-            {/* {fixedItemData?.map((item) => {
-            return data?.getTopViewNfts?.map((e, i) => {
-              if (
-                !e.is_blocked &&
-                item.tokenid == e.token_id &&
-                contractData.chain == e.chainId &&
-                
-                item.isSold == false
-              ) {
-                return (
-                  <CardCompnent
-                  key={i}
-                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
-                  status={e.status}
-                  name={e.name}
-                  videoLink={e.video}
-                  userProfile={userProfile ? true : false}
-                  id={e._id}
-                  userId={e?.user_id?.id}
-                  />
-                );
-              }
-            });
-          })} */}
-            {/* {data?.getTopViewNfts?.map((e, i) => {
-              return (
-                <CardCompnent
-                  key={i}
-                  image={e?.user_id?.profileImg ? e.user_id.profileImg : ""}
-                  status={e.status}
-                  name={e.name}
-                  videoLink={e.video}
-                  userProfile={userProfile ? true : false}
-                  id={e._id}
-                  userId={e?.user_id?.id}
-                />
-              );
-            })} */}
+            {}
+            {}
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Dashboard;

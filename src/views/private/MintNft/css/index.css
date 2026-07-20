@@ -16,7 +16,7 @@
   overflow-x: hidden;
 }
 
-/* Tablet only — sidebar offset (desktop uses standard bootstrap container) */
+
 @media (min-width: 601px) and (max-width: 991.98px) {
   .mint-nft-page.container {
     margin-left: var(--sidebar-width, 80px) !important;
@@ -160,7 +160,7 @@
   box-shadow: none !important;
 }
 
-/* Tablet */
+
 @media only screen and (min-width: 601px) and (max-width: 991px) {
   .borderBottom {
     border-bottom: 1px solid #b23232;
@@ -183,7 +183,7 @@
   }
 }
 
-/* Mobile — sidebar hidden, full width */
+
 @media only screen and (max-width: 600px) {
   .mint-nft-page.container {
     margin-left: auto !important;

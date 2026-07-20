@@ -1,15 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  map_img,
-  user_icon,
-  mail_icon,
-  phone_icon,
-  send_msg_icon,
-  mail_fill_icon,
-  phone_fill_icon,
-  location_fill_icon,
-  logo,
-} from "../../../assets";
+import { map_img, user_icon, mail_icon, phone_icon, send_msg_icon, mail_fill_icon, phone_fill_icon, location_fill_icon, logo } from "../../../assets";
 import { ButtonComponent, ToastMessage } from "../../../components";
 import "./css/index.css";
 import { Col, Input, Row, Modal } from "antd";
@@ -19,79 +9,57 @@ import { useMutation } from "@apollo/client";
 import { SEND_EMAIL_MUTATION } from "../../../gql/mutations";
 import { useFormik } from "formik";
 import { contactValidate } from "../../../components/validations";
-
 import ReCAPTCHA from "react-google-recaptcha";
-
 const environment = process.env;
-
 const Contact = () => {
   const recaptchaRef = useRef(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
-
-  const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
-  );
-  const textColor2 = useSelector((state) => state.app.theme.textColor2);
+  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const textColor2 = useSelector(state => state.app.theme.textColor2);
   const [isModalOpen, setIsModalOpen] = useState(true);
-
-  // const showModal = () => {
-  // 	setIsModalOpen(true);
-  // };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  // const [addContact, { loading, error, data }] = useMutation(ADD_CONTACT);
-
-  const [sendEmail, { data: emailData, error: emailError }] =
-    useMutation(SEND_EMAIL_MUTATION);
+  const [sendEmail, {
+    data: emailData,
+    error: emailError
+  }] = useMutation(SEND_EMAIL_MUTATION);
   const {
     handleSubmit,
-    // handleChange,
     handleBlur,
     values,
-    // touched,
     errors,
     resetForm,
-    setFieldValue,
+    setFieldValue
   } = useFormik({
     initialValues: {
       fullName: "",
       email: "",
       phoneNumber: "",
-      message: "",
+      message: ""
     },
     validate: contactValidate,
-
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         if (!recaptchaToken) {
-          ToastMessage("⚠️ reCAPTCHA not loaded yet", "", "error");
+          ToastMessage(" reCAPTCHA not loaded yet", "", "error");
           return;
         }
-
         await sendEmail({
           variables: {
             to: values?.email,
             from: environment.REACT_APP_EMAIL_OWNER,
             subject: `Contact Email From ${values?.fullName}`,
-            text: `${values?.message} and here is my ${
-              values?.phoneNumber && `phone number ${values?.phoneNumber} /`
-            } email ${values?.email}`,
-            recaptchaToken: recaptchaToken,
-          },
+            text: `${values?.message} and here is my ${values?.phoneNumber && `phone number ${values?.phoneNumber} /`} email ${values?.email}`,
+            recaptchaToken: recaptchaToken
+          }
         });
-      } catch (e) {
-        console.error(e);
-      }
-    },
+      } catch (e) {}
+    }
   });
-
   useEffect(() => {
     if (emailData) {
       ToastMessage("Platform will contact you!", "", "success");
@@ -103,173 +71,141 @@ const Contact = () => {
       setRecaptchaToken(null);
     }
   }, [emailError, emailData]);
-
-  return (
-    <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
-      <div style={{ minHeight: "100vh" }}>
-        <img src={map_img} style={{ width: "100%", height: "auto" }} />
-        <Modal
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-          className="contentModal"
-          closable={false}
-          maskClosable={true}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              cursor: "pointer",
-            }}
-          >
+  return <div className={`${backgroundTheme}`} style={{
+    minHeight: "100vh"
+  }}>
+      <div style={{
+      minHeight: "100vh"
+    }}>
+        <img src={map_img} style={{
+        width: "100%",
+        height: "auto"
+      }} />
+        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} className="contentModal" closable={false} maskClosable={true}>
+          <div style={{
+          display: "flex",
+          justifyContent: "end",
+          cursor: "pointer"
+        }}>
             <ImCross onClick={handleCancel} color="#ffffff" />
           </div>
 
           <div className="d-flex justify-content-center">
-            <img src={logo} style={{ width: 100 }} />
+            <img src={logo} style={{
+            width: 100
+          }} />
           </div>
           <div>
-            <Input
-              placeholder={"Full Name"}
-              className="contactInputsStyle regular"
-              value={values.fullName}
-              onChange={(e) => {
-                setFieldValue("fullName", e.target.value);
-              }}
-              onBlur={handleBlur}
-            />
-            <div style={{ position: "absolute" }}>
+            <Input placeholder={"Full Name"} className="contactInputsStyle regular" value={values.fullName} onChange={e => {
+            setFieldValue("fullName", e.target.value);
+          }} onBlur={handleBlur} />
+            <div style={{
+            position: "absolute"
+          }}>
               <img className="inputIcon" src={user_icon} />
             </div>
           </div>
-          {errors.fullName && errors.fullName && (
-            <div className="error text-center text-white">
+          {errors.fullName && errors.fullName && <div className="error text-center text-white">
               {errors.fullName}
-            </div>
-          )}
+            </div>}
           <div>
-            <Input
-              placeholder={"Email"}
-              className="contactInputsStyle regular"
-              value={values.email}
-              onChange={(e) => {
-                setFieldValue("email", e.target.value);
-              }}
-              onBlur={handleBlur}
-            />
-            <div style={{ position: "absolute" }}>
+            <Input placeholder={"Email"} className="contactInputsStyle regular" value={values.email} onChange={e => {
+            setFieldValue("email", e.target.value);
+          }} onBlur={handleBlur} />
+            <div style={{
+            position: "absolute"
+          }}>
               <img src={mail_icon} className="inputIcon" />
             </div>
           </div>
-          {errors.email && errors.email && (
-            <div className="error text-center text-white">{errors.email}</div>
-          )}
+          {errors.email && errors.email && <div className="error text-center text-white">{errors.email}</div>}
           <div>
-            <Input
-              placeholder={"Phone"}
-              className="contactInputsStyle regular"
-              type="number"
-              value={values.phoneNumber}
-              onChange={(e) => {
-                setFieldValue("phoneNumber", e.target.value);
-              }}
-              onBlur={handleBlur}
-            />
-            <div style={{ position: "absolute" }}>
+            <Input placeholder={"Phone"} className="contactInputsStyle regular" type="number" value={values.phoneNumber} onChange={e => {
+            setFieldValue("phoneNumber", e.target.value);
+          }} onBlur={handleBlur} />
+            <div style={{
+            position: "absolute"
+          }}>
               <img src={phone_icon} className="inputIcon" />
             </div>
           </div>
-          {errors.phoneNumber && errors.phoneNumber && (
-            <div className="error text-center text-white">
+          {errors.phoneNumber && errors.phoneNumber && <div className="error text-center text-white">
               {errors.phoneNumber}
-            </div>
-          )}
+            </div>}
           <div>
             <div className="py-3 px-2">
-              <img src={send_msg_icon} style={{ width: 25 }} />
-              <span style={{ color: "#b0b0b0" }} className="ms-2">
+              <img src={send_msg_icon} style={{
+              width: 25
+            }} />
+              <span style={{
+              color: "#b0b0b0"
+            }} className="ms-2">
                 Message
               </span>
             </div>
-            <Input.TextArea
-              rows={4}
-              className="msgTextArea"
-              value={values.message}
-              onChange={(e) => {
-                setFieldValue("message", e.target.value);
-              }}
-              onBlur={handleBlur}
-            />
+            <Input.TextArea rows={4} className="msgTextArea" value={values.message} onChange={e => {
+            setFieldValue("message", e.target.value);
+          }} onBlur={handleBlur} />
           </div>
 
-          {errors.message && errors.message && (
-            <div className="error text-center text-white">{errors.message}</div>
-          )}
+          {errors.message && errors.message && <div className="error text-center text-white">{errors.message}</div>}
           <div className="mt-4">
-            <ButtonComponent
-              height={40}
-              onClick={handleSubmit}
-              text={"Submit"}
-            />
+            <ButtonComponent height={40} onClick={handleSubmit} text={"Submit"} />
           </div>
           <div className="mt-3">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY}
-              onChange={(t) => setRecaptchaToken(t)}
-              onExpired={() => setRecaptchaToken(null)}
-              // Optional:
-              // theme="dark"
-              // size="compact"
-            />
+            <ReCAPTCHA ref={recaptchaRef} sitekey={process.env.REACT_APP_RECAPTCH_SITE_KEY} onChange={t => setRecaptchaToken(t)} onExpired={() => setRecaptchaToken(null)} />
           </div>
-          <Row gutter={{ xs: 8, sm: 16, md: 20, lg: 32 }} className="mt-5 mb-2">
+          <Row gutter={{
+          xs: 8,
+          sm: 16,
+          md: 20,
+          lg: 32
+        }} className="mt-5 mb-2">
             <Col span={8}>
               <div className="d-flex align-items-center justify-content-center">
                 <div className="contactIconsView d-flex align-items-center justify-content-center">
-                  <img src={mail_fill_icon} style={{ width: 20 }} />
+                  <img src={mail_fill_icon} style={{
+                  width: 20
+                }} />
                 </div>
               </div>
-              <p
-                className={`${textColor2} text-center m-0`}
-                style={{ fontSize: 12 }}
-              >
+              <p className={`${textColor2} text-center m-0`} style={{
+              fontSize: 12
+            }}>
                 Info@beautyinthestreets.com
               </p>
             </Col>
             <Col span={8}>
               <div className="d-flex align-items-center justify-content-center">
                 <div className="contactIconsView d-flex align-items-center justify-content-center">
-                  <img src={phone_fill_icon} style={{ width: 20 }} />
+                  <img src={phone_fill_icon} style={{
+                  width: 20
+                }} />
                 </div>
               </div>
-              <p
-                className={`${textColor2} text-center m-0`}
-                style={{ fontSize: 12 }}
-              >
+              <p className={`${textColor2} text-center m-0`} style={{
+              fontSize: 12
+            }}>
                 Info@beautyinthestreets.com
               </p>
             </Col>
             <Col span={8}>
               <div className="d-flex align-items-center justify-content-center">
                 <div className="contactIconsView d-flex align-items-center justify-content-center">
-                  <img src={location_fill_icon} style={{ width: 20 }} />
+                  <img src={location_fill_icon} style={{
+                  width: 20
+                }} />
                 </div>
               </div>
-              <p
-                className={`${textColor2} text-center m-0`}
-                style={{ fontSize: 12 }}
-              >
+              <p className={`${textColor2} text-center m-0`} style={{
+              fontSize: 12
+            }}>
                 300 W Clarendon Ave. Suite 240 Phoenix, AZ, 85013
               </p>
             </Col>
           </Row>
         </Modal>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Contact;

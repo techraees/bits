@@ -6,5 +6,4 @@ const fixedItemReducer = (fixedItemIns = {}, action) => {
       return fixedItemIns;
   }
 };
-
 export default fixedItemReducer;

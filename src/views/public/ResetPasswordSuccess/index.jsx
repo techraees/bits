@@ -2,10 +2,8 @@ import React from "react";
 import { logo } from "../../../assets";
 import { Container } from "react-bootstrap";
 import { Col, Row } from "antd";
-
 const ResetPasswordSuccess = () => {
-  return (
-    <div className="container loginContainer py-4">
+  return <div className="container loginContainer py-4">
       <img src={logo} className="logoSize mb-5" alt="logo" />
 
       <Container>
@@ -17,8 +15,6 @@ const ResetPasswordSuccess = () => {
           </Col>
         </Row>
       </Container>
-    </div>
-  );
+    </div>;
 };
-
 export default ResetPasswordSuccess;

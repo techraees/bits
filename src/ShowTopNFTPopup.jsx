@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { TopNftsPopup } from "./components";
-
 const ShowTopNFTPopup = ({
   onRequestClose,
   isOpen,
@@ -13,29 +12,13 @@ const ShowTopNFTPopup = ({
   pageAuction,
   setPageAuction,
   auctionTotalPages,
-  totalPages,
+  totalPages
 }) => {
-  return (
-    <div>
+  return <div>
       {" "}
-      <TopNftsPopup
-        isOpen={isOpen}
-        onRequestClose={() => {
-          onRequestClose();
-        }}
-        fixedData={fixedData}
-        auctionData={auctionData}
-        name={name}
-        marketplacecard={marketplacecard}
-        page={page}
-        setPage={setPage}
-        pageAuction={pageAuction}
-        setPageAuction={setPageAuction}
-        totalPages={totalPages}
-        auctionTotalPages={auctionTotalPages}
-      />
-    </div>
-  );
+      <TopNftsPopup isOpen={isOpen} onRequestClose={() => {
+      onRequestClose();
+    }} fixedData={fixedData} auctionData={auctionData} name={name} marketplacecard={marketplacecard} page={page} setPage={setPage} pageAuction={pageAuction} setPageAuction={setPageAuction} totalPages={totalPages} auctionTotalPages={auctionTotalPages} />
+    </div>;
 };
-
 export default ShowTopNFTPopup;

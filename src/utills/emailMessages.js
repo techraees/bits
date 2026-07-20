@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 export const mintMessage = (username, nftName) => {
   return {
     subject: "Congratulations on Minting Your NFT on BITSNFT.com",
@@ -24,10 +23,9 @@ Thank you for choosing BITSNFT.com as your platform for minting and sharing NFTs
 
 Sincerely,
 The BITSNFT Team
-        `,
+        `
   };
 };
-
 export const boughtMessage = (username, nftName, sellersUsername, nftPrice) => {
   return {
     subject: "Congratulations on Your NFT Purchase on BITSNFT.com",
@@ -53,6 +51,6 @@ Thank you for being a part of the BITSNFT.com community and supporting the world
 
 Sincerely,
 The BITSNFT Team
-    `,
+    `
   };
 };

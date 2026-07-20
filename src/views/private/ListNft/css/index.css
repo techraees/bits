@@ -1,4 +1,4 @@
-/*dark theme */
+
 
 .name2 {
   font-family: "Nunito Sans";
@@ -108,12 +108,12 @@ p {
 }
 
 .ant-radio-button-wrapper-checked:not([class*=" ant-radio-button-wrapper-disabled"]).ant-radio-button-wrapper:first-child {
-  /* border: none !important; */
+  
 }
 
 .radio-light .ant-radio-button-wrapper-checked:not([class*=" ant-radio-button-wrapper-disabled"]).ant-radio-button-wrapper:first-child {
-  /* border: none !important; */
-  /* color: #ffffff !important; */
+  
+  
 }
 
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
@@ -128,9 +128,7 @@ p {
   box-shadow: none !important;
 }
 
-/* span {
-  text-align: center;
-} */
+
 
 .radio-group span {
   text-align: center;
@@ -195,12 +193,7 @@ p {
   color: #cccccc;
 }
 
-/* .priceinput-field
-  .ant-select-single.ant-select-show-arrow
-  .ant-select-selection-item,
-.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
-  padding-right: 32px !important;
-} */
+
 
 .auction-length h5 {
   font-family: "Nunito Sans";
@@ -226,7 +219,7 @@ p {
   background-color: transparent !important;
   border: 2px solid #bf3535 !important;
   border-radius: 12px !important;
-  /* opacity: 0.3 !important; */
+  
   padding: 10px 20px;
 }
 
@@ -329,7 +322,7 @@ p {
   margin-top: 1rem;
 }
 
-/* light theme start */
+
 
 .ant-light-input .ant-select {
   border: none !important;
@@ -377,7 +370,7 @@ p {
 }
 
 .ant-light-select .ant-select {
-  /* opacity: 0.22 !important; */
+  
   border: 2px solid #bf3535 !important;
   border-radius: 12px !important;
   padding: 10px;
@@ -435,12 +428,12 @@ p {
   color: #000000 !important;
 }
 
-/* For selected item text */
+
 .custom-select-white .ant-select-selection-item {
   color: white !important;
 }
 
-/* Optional: For the arrow icon */
+
 .custom-select-white .ant-select-arrow {
   color: white !important;
 }

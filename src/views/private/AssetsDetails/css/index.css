@@ -19,7 +19,7 @@
 .name-field input {
   border: none;
   background-color: transparent;
-  /* margin-bottom: 1rem; */
+  
   font-family: "Nunito Sans";
   font-style: normal;
   font-weight: 400;
@@ -32,7 +32,7 @@
 .light-field input {
   border: none;
   background-color: transparent;
-  /* margin-bottom: 1rem; */
+  
   font-family: "Nunito Sans";
   font-style: normal;
   font-weight: 400;
@@ -155,7 +155,7 @@
   border: 1px solid #c54141;
 }
 
-/*light theme */
+
 
 .assettype-light h5 {
   font-family: "Nunito Sans";

@@ -10,7 +10,7 @@
 .cancelBtn {
 	border-radius: 20px !important;
 	height: 40px !important;
-	/* color: white; */
+	
 }
 
 .label-input span .ant-input:placeholder-shown {
@@ -35,7 +35,7 @@
 	}
 }
 
-/* Premium Artist Popover Styling */
+
 .artist-popover .ant-popover-inner {
 	border-radius: 12px;
 	padding: 0;
@@ -44,7 +44,7 @@
 	border: 1px solid rgba(178, 50, 50, 0.2);
 }
 
-/* Dark Theme Overrides - High Specificity */
+
 .bg-black-popover.ant-popover .ant-popover-inner {
 	background-color: #1a1a1a !important;
 	border: 1px solid rgba(178, 50, 50, 0.4) !important;
@@ -56,7 +56,7 @@
 	background-color: #1a1a1a !important;
 }
 
-/* Light Theme Overrides - High Specificity */
+
 .bg-white-popover.ant-popover .ant-popover-inner {
 	background-color: #ffffff !important;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;

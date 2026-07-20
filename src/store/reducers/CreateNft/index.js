@@ -8,20 +8,18 @@ const INITIAL_STATE = {
     download: {},
     isEmote: false,
     video_duration: 0,
-    category: "",
-  },
+    category: ""
+  }
 };
-
 const CreateNFtReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "CREATE_NFT":
       return {
         ...state,
-        createNft: action,
+        createNft: action
       };
     default:
       return state;
   }
 };
-
 export default CreateNFtReducer;

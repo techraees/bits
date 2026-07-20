@@ -2,14 +2,12 @@ import React from "react";
 import "./css/index.css";
 import { useSelector } from "react-redux";
 import { discord, telegram, twitter } from "../../../assets";
-
 const AboutUs = () => {
-  const backgroundTheme = useSelector(
-    (state) => state.app.theme.backgroundTheme,
-  );
-  const textColor2 = useSelector((state) => state.app.theme.textColor2);
-  return (
-    <div className={`${backgroundTheme}`} style={{ minHeight: "100vh" }}>
+  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const textColor2 = useSelector(state => state.app.theme.textColor2);
+  return <div className={`${backgroundTheme}`} style={{
+    minHeight: "100vh"
+  }}>
       <div className="container about-us-container">
         <p className={`m-0 ${textColor2} about-us`}>
           This concept challenges the stigmas attached to "the streets," by
@@ -28,20 +26,16 @@ const AboutUs = () => {
           towards a new and creative future.
         </p>
       </div>
-      <div
-        className="container about-us-container"
-        style={{ background: " #B13232;" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: "5rem",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "auto",
-          }}
-          className="socialIcons socialIcons_mobile"
-        >
+      <div className="container about-us-container" style={{
+      background: " #B13232;"
+    }}>
+        <div style={{
+        display: "flex",
+        gap: "5rem",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "auto"
+      }} className="socialIcons socialIcons_mobile">
           <a href="#">
             <img src={discord} height={70} />
           </a>
@@ -53,8 +47,6 @@ const AboutUs = () => {
           </a>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default AboutUs;

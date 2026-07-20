@@ -1,8 +1,10 @@
 import React from "react";
 import "./css/index.css";
 const CopyRightComp = () => {
-  return (
-    <div className="text-info" style={{ maxHeight: "300px", overflow: "auto" }}>
+  return <div className="text-info" style={{
+    maxHeight: "300px",
+    overflow: "auto"
+  }}>
       <div>
         <h1>Copyright Policy</h1>
         <p>
@@ -130,8 +132,6 @@ const CopyRightComp = () => {
           content on BITS NFT.{" "}
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default CopyRightComp;

@@ -10,7 +10,6 @@ import fixedItemReducer from "./fixedItems";
 import fixedItemDataReducer from "./fixedItemsData";
 import auctionItemReducer from "./auctionItems";
 import auctionItemDataReducer from "./auctionItemsData";
-
 export default combineReducers({
   contract: contractReducer,
   auth: AuthReducer,
@@ -22,5 +21,5 @@ export default combineReducers({
   fixedItems: fixedItemReducer,
   fixedItemDatas: fixedItemDataReducer,
   auctionItems: auctionItemReducer,
-  auctionItemDatas: auctionItemDataReducer,
+  auctionItemDatas: auctionItemDataReducer
 });

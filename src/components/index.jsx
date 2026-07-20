@@ -19,27 +19,4 @@ import ToastMessage from "./toastMessage";
 import TopNftsPopup from "./topNftsPopup/";
 import OnboardingModal from "./onboardingModal";
 import Footer from "./footer";
-
-export {
-  InputComponent,
-  ButtonComponent,
-  NavbarComponent,
-  MenuComponent,
-  CardCompnent,
-  Transactions,
-  LabelInput,
-  DatePickerComponent,
-  AccordianComponent,
-  CustomCheckbox,
-  UploadVideoModal,
-  Loader,
-  ToastMessage,
-  StepperModal,
-  SuccessModal,
-  LogoutModal,
-  NftDetailsModal,
-  OfferModal,
-  TopNftsPopup,
-  OnboardingModal,
-  Footer,
-};
+export { InputComponent, ButtonComponent, NavbarComponent, MenuComponent, CardCompnent, Transactions, LabelInput, DatePickerComponent, AccordianComponent, CustomCheckbox, UploadVideoModal, Loader, ToastMessage, StepperModal, SuccessModal, LogoutModal, NftDetailsModal, OfferModal, TopNftsPopup, OnboardingModal, Footer };

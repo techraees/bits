@@ -6,5 +6,4 @@ const contractReducer = (contractIns = {}, action) => {
       return contractIns;
   }
 };
-
 export default contractReducer;

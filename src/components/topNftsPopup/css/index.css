@@ -108,7 +108,7 @@
 }
 
 
-/* Mobile screens */
+
 @media (max-width: 768px) {
   .popup_header {
     padding: 1rem 1.5rem;
@@ -177,7 +177,7 @@
   }
 }
 
-/* Tablet screens */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .popup_header {
     padding: 1rem 1rem;
@@ -262,11 +262,11 @@
   justify-content: center;
   overflow: hidden;
   -webkit-user-select: none;
-  /* Safari */
+  
   -ms-user-select: none;
-  /* IE 10 and IE 11 */
+  
   user-select: none;
-  /* Standard syntax */
+  
   color: #b6b6b6;
 }
 
@@ -339,20 +339,20 @@
   font-family: "Nunito Sans", sans-serif;
   font-weight: 600;
   font-size: 1.125rem;
-  /* 18px */
+  
   margin-right: 20px;
   background-color: #bbbbbb;
   color: white;
   box-sizing: border-box;
 }
 
-/* Mobile screens */
+
 @media (max-width: 768px) {
   .popup_header_second_box {
     width: 28px;
     height: 28px;
     font-size: 0.9rem;
-    /* around 14.4px */
+    
     margin-right: 12px;
   }
 
@@ -361,13 +361,13 @@
   }
 }
 
-/* Tablet screens */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .popup_header_second_box {
     width: 32px;
     height: 30px;
     font-size: 1rem;
-    /* 16px */
+    
     margin-right: 16px;
   }
 
@@ -435,7 +435,7 @@
   }
 }
 
-/* Tablet screens */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .popup_parent_div {
     width: 65%;
@@ -535,11 +535,11 @@
 
 .prevent_select {
   -webkit-user-select: none;
-  /* Safari */
+  
   -ms-user-select: none;
-  /* IE 10 and IE 11 */
+  
   user-select: none;
-  /* Standard syntax */
+  
 }
 
 .no_data_found_text_auction {
@@ -552,7 +552,7 @@
   margin: 0;
 }
 
-/* Firefox */
+
 .quantity_change_input {
   -moz-appearance: textfield;
 }

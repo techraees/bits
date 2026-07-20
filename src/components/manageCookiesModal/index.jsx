@@ -2,36 +2,25 @@ import { Button, Col, Modal, Row } from "antd";
 import React, { useState } from "react";
 import PrivacyModal from "../privacyModal";
 import ConcentPreferences from "./ConcentPreferences";
-// import './index.css';
-
-const ManageCookiesModal = ({ manageCookies, setManageCookies }) => {
+const ManageCookiesModal = ({
+  manageCookies,
+  setManageCookies
+}) => {
   const [privacyModal, setPrivacyModal] = useState(false);
-
   const handleCancel = () => {
     setManageCookies(false);
   };
-
   const openPrivacyModal = () => {
     setPrivacyModal(true);
   };
-
-  return (
-    <>
-      <Modal
-        open={manageCookies}
-        onCancel={handleCancel}
-        footer={false}
-        centered
-        width={"70%"}
-        bodyStyle={{
-          backgroundColor: "#f3f3f3",
-          color: "black",
-          borderRadius: "20px",
-          height: 850,
-          overflowY: "scroll",
-        }}
-        className="privacy-policy-modal"
-      >
+  return <>
+      <Modal open={manageCookies} onCancel={handleCancel} footer={false} centered width={"70%"} bodyStyle={{
+      backgroundColor: "#f3f3f3",
+      color: "black",
+      borderRadius: "20px",
+      height: 850,
+      overflowY: "scroll"
+    }} className="privacy-policy-modal">
         <Row className="px-3">
           <Col span={24} className="text-center">
             <h4 className="fw-bold">Cookie Preferences</h4>
@@ -56,15 +45,12 @@ const ManageCookiesModal = ({ manageCookies, setManageCookies }) => {
               account, to redirect you when you log out, etc.). For more
               information about the First and Third Party Cookies used please
               follow this link:{" "}
-              <span
-                style={{
-                  color: "#B83131",
-                  fontWeight: "600",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-                onClick={openPrivacyModal}
-              >
+              <span style={{
+              color: "#B83131",
+              fontWeight: "600",
+              textDecoration: "underline",
+              cursor: "pointer"
+            }} onClick={openPrivacyModal}>
                 Privacy Policy
               </span>
             </p>
@@ -78,14 +64,7 @@ const ManageCookiesModal = ({ manageCookies, setManageCookies }) => {
         </Row>
       </Modal>
 
-      {privacyModal && (
-        <PrivacyModal
-          privacyModal={privacyModal}
-          setPrivacyModal={setPrivacyModal}
-        />
-      )}
-    </>
-  );
+      {privacyModal && <PrivacyModal privacyModal={privacyModal} setPrivacyModal={setPrivacyModal} />}
+    </>;
 };
-
 export default ManageCookiesModal;

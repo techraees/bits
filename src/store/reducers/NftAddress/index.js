@@ -7,25 +7,23 @@ const INITIAL_STATE = {
     profileImg: "",
     id: "",
     token: "",
-    isLogged: null,
-  },
+    isLogged: null
+  }
 };
-
 const NFtAddressReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "NFT_ADDRESS":
       return {
         ...state,
-        userData: action,
+        userData: action
       };
     case "USER_AUTH_RESET":
       return {
         ...state,
-        userData: action,
+        userData: action
       };
     default:
       return state;
   }
 };
-
 export default NFtAddressReducer;

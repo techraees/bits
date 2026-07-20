@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 const CREATE_NFT = gql`
   mutation CreateNft(
     $name: String!
@@ -62,7 +61,6 @@ const CREATE_NFT = gql`
     }
   }
 `;
-
 const CREATE_SIGNED_URL_FOR_NFTS = gql`
   mutation CreateSignedUrlForNfts($key: String!) {
     CreateSignedUrlForNfts(key: $key) {
@@ -70,7 +68,6 @@ const CREATE_SIGNED_URL_FOR_NFTS = gql`
     }
   }
 `;
-
 const CREATE_USER = gql`
   mutation Mutation(
     $userName: String!
@@ -96,7 +93,6 @@ const CREATE_USER = gql`
     }
   }
 `;
-
 const MINT_ASSET = gql`
   mutation MintAsset(
     $assetId: String!
@@ -125,7 +121,6 @@ const UPLOAD_FILE_MUTATION = gql`
     }
   }
 `;
-
 const UPDATE_PASSWORD_MUTATION = gql`
   mutation UpdatePassword($password: String!, $newPassword: String!) {
     Update_password(password: $password, new_password: $newPassword) {
@@ -134,7 +129,6 @@ const UPDATE_PASSWORD_MUTATION = gql`
     }
   }
 `;
-
 const RESET_PASSWORD_MUTATION = gql`
   mutation UpdatePassword($newPassword: String!) {
     Reset_password(new_password: $newPassword) {
@@ -143,7 +137,6 @@ const RESET_PASSWORD_MUTATION = gql`
     }
   }
 `;
-
 const UPDATE_EMAIL = gql`
   mutation UpdateEmail($password: String!, $newEmail: String!) {
     UpdateEmail(password: $password, newEmail: $newEmail) {
@@ -152,7 +145,6 @@ const UPDATE_EMAIL = gql`
     }
   }
 `;
-
 const ADD_CONTACT = gql`
   mutation AddContact(
     $fullName: String!
@@ -173,7 +165,6 @@ const ADD_CONTACT = gql`
     }
   }
 `;
-
 const MINT_ASSET_MUTATION = gql`
   mutation MintAsset($walletAddress: String!) {
     MintAsset(walletAddress: $walletAddress) {
@@ -181,7 +172,6 @@ const MINT_ASSET_MUTATION = gql`
     }
   }
 `;
-
 const SEND_EMAIL_MUTATION = gql`
   mutation SendEmail(
     $to: String!
@@ -202,7 +192,6 @@ const SEND_EMAIL_MUTATION = gql`
     }
   }
 `;
-
 const RECORD_VISIT_MUTATION = gql`
   mutation RecordVisit($ip_adress: String!) {
     RecordVisit(ip_adress: $ip_adress) {
@@ -212,7 +201,6 @@ const RECORD_VISIT_MUTATION = gql`
     }
   }
 `;
-
 const UPDATE_NFT_LIKE = gql`
   mutation UpdateNftLike($id: String!) {
     UpdateNftLike(id: $id) {
@@ -220,7 +208,6 @@ const UPDATE_NFT_LIKE = gql`
     }
   }
 `;
-
 const UPDATE_NFT_WATCH = gql`
   mutation UpdateNftWatch($id: String!) {
     UpdateNftWatch(id: $id) {
@@ -228,7 +215,6 @@ const UPDATE_NFT_WATCH = gql`
     }
   }
 `;
-
 const UPDATE_NFT_PAYMENT = gql`
   mutation UpdateNftWatch($id: String!) {
     UpdateNftWatch(id: $id) {
@@ -236,9 +222,6 @@ const UPDATE_NFT_PAYMENT = gql`
     }
   }
 `;
-
-// ============================ Optimization Mutations =====================
-// Add Nft to Nft Market Place
 const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
   mutation AddNftToNftMarketPlace(
     $tokenId: String!
@@ -271,8 +254,6 @@ const ADD_NFT_TO_NFT_MARKET_PLACE = gql`
     }
   }
 `;
-
-// Remove Nft From Nft Market Place
 const REMOVE_NFT_NFT_MARKET_PLACE = gql`
   mutation RemoveNftFromNftMarketPlace($nftDbMarketPlaceId: String!) {
     removeNftFromNftMarketPlace(nftDbMarketPlaceId: $nftDbMarketPlaceId) {
@@ -281,8 +262,6 @@ const REMOVE_NFT_NFT_MARKET_PLACE = gql`
     }
   }
 `;
-
-// Used to add the time by 5 mints
 const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
   mutation UpdateNftMarketPlaceBiddingTimeByMintsForEachRequest(
     $nftDbMarketPlaceId: String!
@@ -295,9 +274,6 @@ const UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST = gql`
     }
   }
 `;
-
-// Used to create New Transaction
-
 const CREATE_NEW_TRANSACTION = gql`
   mutation CreateNewTransaction(
     $transaction_type: String!
@@ -332,8 +308,6 @@ const CREATE_NEW_TRANSACTION = gql`
     }
   }
 `;
-
-// Used to create New ownership of nft
 const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
   mutation CreateNewOwnershipOfNft(
     $total_price: Decimal!
@@ -358,8 +332,6 @@ const CREATE_NEW_OWNERSHIP_OF_NFT = gql`
     }
   }
 `;
-
-// Used to create New ownership of nft
 const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
   mutation CreateBidAgainstAuctionNftMarketPlace(
     $_id: String!
@@ -368,8 +340,6 @@ const CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE = gql`
     createBidAgainstAuctionNftMarketPlace(_id: $_id, price: $price)
   }
 `;
-
-// Upload Metadata to IPFS Mutation
 const UPLOAD_META_TO_IPFS = gql`
   mutation UploadMetaToIPFS($data: JSON!) {
     uploadMetaToIPFS(data: $data) {
@@ -377,8 +347,6 @@ const UPLOAD_META_TO_IPFS = gql`
     }
   }
 `;
-
-// Get DeepMotion Session Mutation
 const GET_DEEPMOTION_SESSION = gql`
   mutation GetDeepMotionSession {
     getDeepMotionSession {
@@ -387,8 +355,6 @@ const GET_DEEPMOTION_SESSION = gql`
     }
   }
 `;
-
-// Check DeepMotion Credit Balance
 const CHECK_DEEPMOTION_CREDIT = gql`
   mutation CheckDeepMotionCredit {
     checkDeepMotionCredit {
@@ -396,8 +362,6 @@ const CHECK_DEEPMOTION_CREDIT = gql`
     }
   }
 `;
-
-// Check DeepMotion Processing Status
 const CHECK_DEEPMOTION_STATUS = gql`
   mutation CheckDeepMotionStatus($rid: String!) {
     checkDeepMotionStatus(rid: $rid) {
@@ -412,8 +376,6 @@ const CHECK_DEEPMOTION_STATUS = gql`
     }
   }
 `;
-
-// Get DeepMotion Download Links
 const GET_DEEPMOTION_DOWNLOAD_LINKS = gql`
   mutation GetDeepMotionDownloadLinks($rid: String!) {
     getDeepMotionDownloadLinks(rid: $rid) {
@@ -424,8 +386,6 @@ const GET_DEEPMOTION_DOWNLOAD_LINKS = gql`
     }
   }
 `;
-
-// Get Refresh Token Mutation
 const REFRESH_TOKEN_MUTATION = gql`
   mutation CreateNewAccessTokenFromRefreshToken($refresh_token: String!) {
     createNewAccessTokenFromRefreshToken(refresh_token: $refresh_token) {
@@ -433,49 +393,4 @@ const REFRESH_TOKEN_MUTATION = gql`
     }
   }
 `;
-
-export {
-  CREATE_NFT,
-  CREATE_USER,
-  UPLOAD_FILE_MUTATION,
-  UPDATE_PASSWORD_MUTATION,
-  RESET_PASSWORD_MUTATION,
-  UPDATE_EMAIL,
-  ADD_CONTACT,
-  MINT_ASSET_MUTATION,
-  MINT_ASSET,
-  SEND_EMAIL_MUTATION,
-  RECORD_VISIT_MUTATION,
-  UPDATE_NFT_LIKE,
-  UPDATE_NFT_WATCH,
-  UPDATE_NFT_PAYMENT,
-  CREATE_SIGNED_URL_FOR_NFTS,
-
-  // ========================= Optimization Mutations ======================
-  // Nft Market Place
-  ADD_NFT_TO_NFT_MARKET_PLACE,
-  REMOVE_NFT_NFT_MARKET_PLACE,
-  UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST,
-
-  // Transaction
-  CREATE_NEW_TRANSACTION,
-
-  // Create New Nft Ownershsip
-  CREATE_NEW_OWNERSHIP_OF_NFT,
-
-  // Create Bid
-  CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE,
-  // ========================= Optimization Mutations ======================
-
-  // IPFS Upload
-  UPLOAD_META_TO_IPFS,
-
-  // Refresh Token
-  REFRESH_TOKEN_MUTATION,
-
-  // DeepMotion
-  GET_DEEPMOTION_SESSION,
-  CHECK_DEEPMOTION_CREDIT,
-  CHECK_DEEPMOTION_STATUS,
-  GET_DEEPMOTION_DOWNLOAD_LINKS,
-};
+export { CREATE_NFT, CREATE_USER, UPLOAD_FILE_MUTATION, UPDATE_PASSWORD_MUTATION, RESET_PASSWORD_MUTATION, UPDATE_EMAIL, ADD_CONTACT, MINT_ASSET_MUTATION, MINT_ASSET, SEND_EMAIL_MUTATION, RECORD_VISIT_MUTATION, UPDATE_NFT_LIKE, UPDATE_NFT_WATCH, UPDATE_NFT_PAYMENT, CREATE_SIGNED_URL_FOR_NFTS, ADD_NFT_TO_NFT_MARKET_PLACE, REMOVE_NFT_NFT_MARKET_PLACE, UPDATE_NFT_MARKET_PLACE_BIDDING_TIME_BY_MINTS_FOR_EACH_REQUEST, CREATE_NEW_TRANSACTION, CREATE_NEW_OWNERSHIP_OF_NFT, CREATE_BID_AGAINST_AUCTION_NFT_MARKET_PLACE, UPLOAD_META_TO_IPFS, REFRESH_TOKEN_MUTATION, GET_DEEPMOTION_SESSION, CHECK_DEEPMOTION_CREDIT, CHECK_DEEPMOTION_STATUS, GET_DEEPMOTION_DOWNLOAD_LINKS };

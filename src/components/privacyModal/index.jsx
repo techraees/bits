@@ -1,41 +1,33 @@
 import { Col, Modal, Row } from "antd";
 import "./index.css";
-
-const PrivacyModal = ({ privacyModal, setPrivacyModal }) => {
+const PrivacyModal = ({
+  privacyModal,
+  setPrivacyModal
+}) => {
   const handleCancel = () => {
     setPrivacyModal(false);
   };
-  return (
-    <Modal
-      open={privacyModal}
-      onCancel={handleCancel}
-      footer={false}
-      centered
-      width={"70%"}
-      bodyStyle={{
-        backgroundColor: "#f3f3f3",
-        color: "black",
-        borderRadius: "20px",
-      }}
-      className="privacy-policy-modal"
-    >
+  return <Modal open={privacyModal} onCancel={handleCancel} footer={false} centered width={"70%"} bodyStyle={{
+    backgroundColor: "#f3f3f3",
+    color: "black",
+    borderRadius: "20px"
+  }} className="privacy-policy-modal">
       <Row className="px-3">
         <Col span={24} className="text-center">
           <h4 className="fw-bold">BITS Privacy Policy</h4>
-          <p style={{ color: "#191919" }}>
+          <p style={{
+          color: "#191919"
+        }}>
             This Privacy Policy is effective as of December 19, 2023.
           </p>
         </Col>
       </Row>
 
-      <div
-        className="text-info text-black my-3"
-        style={{
-          maxHeight: "300px",
-          overflow: "auto",
-          color: "#000000",
-        }}
-      >
+      <div className="text-info text-black my-3" style={{
+      maxHeight: "300px",
+      overflow: "auto",
+      color: "#000000"
+    }}>
         <h1>PRIVACY POLICY</h1>
         <div className="mt-3">
           <h1>Introduction</h1>
@@ -682,8 +674,6 @@ const PrivacyModal = ({ privacyModal, setPrivacyModal }) => {
           </p>
         </div>
       </div>
-    </Modal>
-  );
+    </Modal>;
 };
-
 export default PrivacyModal;

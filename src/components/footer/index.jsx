@@ -1,37 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./css/index.css";
-import {
-  logo,
-  metamaskFooter,
-  helplinecustomer,
-  telegramsocialicon,
-  xsocialicon,
-  metamasksocialicon,
-} from "../../assets";
-
+import { logo, metamaskFooter, helplinecustomer, telegramsocialicon, xsocialicon, metamasksocialicon } from "../../assets";
 const Footer = () => {
-  const textColor = useSelector((state) => state.app.theme.textColor);
+  const location = useLocation();
+  const textColor = useSelector(state => state.app.theme.textColor);
   const isLightClass = textColor === "black" ? "light-mode" : "";
-
-  return (
-    <footer className={`footer-container ${isLightClass}`}>
+  const path = location.pathname.toLowerCase().trim();
+  const isAuthRoute = path === "/login" || path === "/login/" || path.endsWith("/login") || path.endsWith("/login/") || path === "/signup" || path === "/signup/" || path.endsWith("/signup") || path.endsWith("/signup/") || path === "/reset-password" || path === "/reset-password/" || path.endsWith("/reset-password") || path.endsWith("/reset-password/") || path === "/reset-password/success" || path === "/reset-password/success/" || path.endsWith("/reset-password/success") || path.endsWith("/reset-password/success/");
+  if (isAuthRoute) {
+    return null;
+  }
+  return <footer className={`footer-container ${isLightClass}`}>
       <div className="footer-support-align">
         <div className="container">
           <div className="support-btn-fixed">
-            <img
-              src={helplinecustomer}
-              alt="support"
-              className="support-icon"
-            />
+            <img src={helplinecustomer} alt="support" className="support-icon" />
           </div>
         </div>
       </div>
 
       <div className="container">
         <div className="footer-content">
-          {/* Brand Section */}
+          {}
           <div className="footer-brand">
             <img src={logo} alt="BITS logo" className="footer-logo-img" />
             <p className="footer-description">
@@ -40,7 +32,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Links Sections */}
+          {}
           <div className="footer-column">
             <h4>Home</h4>
             <ul>
@@ -79,59 +71,41 @@ const Footer = () => {
 
           <div className="footer-socials">
             <a href="https://discord.com" target="_blank" rel="noreferrer">
-              <img
-                src={metamasksocialicon}
-                alt="discord"
-                className="social-icon"
-              />
+              <img src={metamasksocialicon} alt="discord" className="social-icon" />
             </a>
             <a href="https://telegram.org" target="_blank" rel="noreferrer">
-              <img
-                src={telegramsocialicon}
-                alt="telegram"
-                className="social-icon"
-              />
+              <img src={telegramsocialicon} alt="telegram" className="social-icon" />
             </a>
             <a href="https://twitter.com" target="_blank" rel="noreferrer">
               <img src={xsocialicon} alt="twitter" className="social-icon" />
             </a>
           </div>
 
-          {/* Right Section: Socials & Search */}
+          {}
           <div className="footer-right-section">
             <div className="footer-search">
               <div className="search-box">
-                <input
-                  type="text"
-                  placeholder="Write here ..."
-                  className="search-input"
-                />
+                <input type="text" placeholder="Write here ..." className="search-input" />
                 <button className="search-btn">Search</button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Red Bar */}
+        {}
         <div className="footer-bottom-parent">
           <div className="footer-bottom">
             <div className="red-bar">
               <p className="copyright-text">
-                BITS NFT Inc. © {new Date().getFullYear()} All Rights reserved
+                BITS NFT Inc.  {new Date().getFullYear()} All Rights reserved
               </p>
             </div>
             <a href="#metamask" className="metamask-link">
-              <img
-                src={metamaskFooter}
-                alt="MetaMask"
-                className="metamask-icon"
-              />
+              <img src={metamaskFooter} alt="MetaMask" className="metamask-icon" />
             </a>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

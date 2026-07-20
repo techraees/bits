@@ -3,26 +3,24 @@ const INITIAL_STATE = {
     contractData: {
       marketContract: {},
       mintContract: {},
-      chain: 137,
-    },
-  },
+      chain: 137
+    }
+  }
 };
-
 const chainReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "ETH_CHAIN":
       return {
         ...state,
-        contractData: action,
+        contractData: action
       };
     case "MATIC_CHAIN":
       return {
         ...state,
-        contractData: action,
+        contractData: action
       };
     default:
       return state;
   }
 };
-
 export default chainReducer;

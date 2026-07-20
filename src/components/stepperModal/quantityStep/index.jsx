@@ -5,9 +5,10 @@ import "./css/index.css";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { trimWallet } from "../../../utills/trimWalletAddr";
 import { ETHTOUSD, MATICTOUSD } from "../../../utills/currencyConverter";
-
 function QuantityStep({
-  setCurrent = { setCurrent },
+  setCurrent = {
+    setCurrent
+  },
   owner,
   name,
   setQuantity,
@@ -15,21 +16,20 @@ function QuantityStep({
   totalPrice,
   setTotalPrice,
   showAmt,
-  setShowAmt,
+  setShowAmt
 }) {
-  const { contractData } = useSelector((state) => state.chain.contractData);
+  const {
+    contractData
+  } = useSelector(state => state.chain.contractData);
   const [ethBal, setEthBal] = useState(0);
   const [maticBal, setMaticBal] = useState(0);
-
-  ETHTOUSD(1).then((result) => {
+  ETHTOUSD(1).then(result => {
     setEthBal(result);
   });
-
-  MATICTOUSD(1).then((result) => {
+  MATICTOUSD(1).then(result => {
     setMaticBal(result);
   });
-
-  const handleChange = (e) => {
+  const handleChange = e => {
     const val = e.target.value;
     setQuantity(val);
     if (contractData.chain == 1) {
@@ -42,9 +42,7 @@ function QuantityStep({
       setShowAmt(total * maticBal);
     }
   };
-
-  return (
-    <div className="quantityStep">
+  return <div className="quantityStep">
       <div className="quantityStepMainWrapper">
         <div className="quantitycontentDiv">
           <div className="quantityleftDiv">
@@ -67,12 +65,7 @@ function QuantityStep({
         <div className="quantityBottomDiv">
           <div className="quanitityBottomLeftDiv">
             <h6 className="selectQuantity">Select Quantity</h6>
-            <input
-              type="number"
-              className="numberField"
-              placeholder="0"
-              onChange={handleChange}
-            />
+            <input type="number" className="numberField" placeholder="0" onChange={handleChange} />
           </div>
           <div className="quanitityBottomRightDiv">
             <button className="goBtn" onClick={() => setCurrent(2)}>
@@ -105,8 +98,6 @@ function QuantityStep({
           </h4>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
-
 export default QuantityStep;

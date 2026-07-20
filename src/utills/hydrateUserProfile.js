@@ -7,10 +7,9 @@ export function profileToUserData(GetProfile) {
     profileImg: GetProfile.profileImg,
     id: GetProfile.id,
     token: GetProfile.token,
-    isLogged: true,
+    isLogged: true
   };
 }
-
 export const emptyUserData = {
   address: "",
   full_name: "",
@@ -19,5 +18,5 @@ export const emptyUserData = {
   profileImg: "",
   id: "",
   token: "",
-  isLogged: false,
+  isLogged: false
 };

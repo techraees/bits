@@ -33,7 +33,7 @@
 .leftDiv {
   display: flex;
   justify-content: flex-start;
-  /* align-items: center; */
+  
   gap: 10px;
   flex: 2;
 }

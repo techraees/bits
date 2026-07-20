@@ -44,7 +44,6 @@
   }
 }
 
-
 .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   color: #000000;
@@ -52,4 +51,222 @@
 
 .light-grey {
   display: block;
+}
+
+.login-page-wrapper {
+  background-color: #000000;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.login-page-wrapper .loginContainer {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-page-wrapper .formContainer {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.metamask-banner {
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 12px 20px;
+  text-align: center;
+  background-color: #050505;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.metamask-banner span {
+  color: #aaaaaa;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.login-metamask-link {
+  color: #f5841e !important;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline !important;
+}
+
+.login-metamask-link:hover {
+  color: #f5841e !important;
+}
+
+.login-input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-input-label {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.login-input-field {
+  background-color: #0c0c0c !important;
+  border: 1px solid #1f1f1f !important;
+  border-radius: 8px !important;
+  height: 50px !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.login-input-field:hover,
+.login-input-field-focused,
+.login-input-field:focus-within {
+  border-color: #a62828 !important;
+  box-shadow: none !important;
+}
+
+.login-page-wrapper .login-input-field input {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  font-size: 15px !important;
+  padding-left: 10px !important;
+  text-align: left !important;
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.login-input-field input::placeholder {
+  color: #555555 !important;
+}
+
+.login-input-field .ant-input-suffix {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.login-input-field .ant-input-suffix svg {
+  color: #a62828 !important;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.login-input-field .ant-input-suffix svg:hover {
+  opacity: 0.8;
+}
+
+.login-input-icon {
+  color: #ffffff !important;
+  fill: none !important;
+  stroke: #ffffff !important;
+  font-size: 18px;
+}
+
+.login-input-field .ant-input-prefix svg,
+.login-input-field .ant-input-prefix svg path,
+.login-input-field .ant-input-prefix .login-input-icon {
+  color: #ffffff !important;
+  fill: none !important;
+  stroke: #ffffff !important;
+}
+
+.login-input-field-error {
+  border-color: #a62828 !important;
+}
+
+.login-error-text {
+  color: #a62828 !important;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 6px;
+  text-align: left;
+}
+
+.remember-me-text {
+  color: #888888;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.footer-text {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.footer-link {
+  color: #a62828;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-link:hover {
+  color: #d54343;
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: 768px) {
+  .login-page-wrapper {
+    padding: 24px 16px;
+    align-items: flex-start;
+  }
+
+  .login-page-wrapper .loginContainer {
+    max-width: 100%;
+  }
+
+  .login-input-field {
+    height: 48px !important;
+  }
+
+  .metamask-banner {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .logoSize {
+    height: 180px;
+    width: 180px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .login-page-wrapper {
+    padding: 16px 12px;
+  }
+
+  .login-input-label {
+    font-size: 13px;
+  }
+
+  .login-input-field input {
+    font-size: 14px !important;
+  }
+
+  .logoSize {
+    height: 140px;
+    width: 140px;
+  }
 }

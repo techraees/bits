@@ -8,20 +8,18 @@ const INITIAL_STATE = {
     bgColor: "dark-grey-bg",
     bgColor2: "",
     bgColor3: "black-background3",
-    border: "dark-border",
-  },
+    border: "dark-border"
+  }
 };
-
 const AppReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "THEME":
       return {
         ...state,
-        theme: action.theme,
+        theme: action.theme
       };
     default:
       return state;
   }
 };
-
 export default AppReducer;
