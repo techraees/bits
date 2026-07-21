@@ -422,8 +422,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 24px;
-  padding: 52px 32px;
+  gap: 16px;
+  padding: 32px 28px;
   border: 2px dashed #c44040;
   border-radius: 20px;
   background-color: #0f0f0f;
@@ -445,8 +445,8 @@
 }
 
 .upload-video-dropzone__icon {
-  width: 88px;
-  height: 88px;
+  width: 72px;
+  height: 72px;
   display: block;
   margin: 0;
   color: #ffffff;
@@ -461,7 +461,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
   max-width: 420px;
 }
