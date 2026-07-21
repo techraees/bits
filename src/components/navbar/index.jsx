@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import {
   home,
   logo,
-  menu_icon,
   search,
   polygon,
   redPolygon,
 } from "../../assets/index";
+import HeaderNotificationBell from "./HeaderNotificationBell";
+import HeaderMenuIcon from "./icons/HeaderMenuIcon";
 import SwitchBtn from "../switchBtn";
 import "./css/index.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +39,7 @@ import {
   profileToUserData,
   emptyUserData,
 } from "../../utills/hydrateUserProfile";
+import { openConnectWalletModal } from "../connectModal/openConnectWalletModal";
 
 const environment = process.env;
 
@@ -266,14 +268,25 @@ const NavbarComponent = ({ dashboardNav }) => {
     setMobileNavOpen(false);
   };
 
-  const toggleMenuDropdown = () => {
+  const handleMenuButtonClick = () => {
     if (width < 992) {
       setMobileNavOpen((prev) => !prev);
       setMenuOpen(false);
       setOpenGroup(null);
-      return;
     }
-    setMenuOpen((prev) => !prev);
+  };
+
+  const handleMenuMouseEnter = () => {
+    if (width >= 992) {
+      setMenuOpen(true);
+    }
+  };
+
+  const handleMenuMouseLeave = () => {
+    if (width >= 992) {
+      setMenuOpen(false);
+      setOpenGroup(null);
+    }
   };
 
   useEffect(() => {
@@ -380,6 +393,111 @@ const NavbarComponent = ({ dashboardNav }) => {
     return location.pathname.startsWith(path);
   };
 
+  const renderHeaderMenu = () => (
+    <div
+      className="bits-header__menu-wrap"
+      ref={menuRef}
+      onMouseEnter={handleMenuMouseEnter}
+      onMouseLeave={handleMenuMouseLeave}
+    >
+      <button
+        type="button"
+        className={`bits-header__menu-btn ${menuOpen ? "is-open" : ""}`}
+        onClick={handleMenuButtonClick}
+        aria-label="Open menu"
+        aria-expanded={menuOpen}
+        aria-haspopup="menu"
+      >
+        <HeaderMenuIcon />
+      </button>
+
+      {menuOpen && (
+        <div
+          className={`bits-header__dropdown ${isLight ? "is-light" : "is-dark"}`}
+          role="menu"
+        >
+          {menuGroups.map((item) => {
+            if (item.children) {
+              const expanded = openGroup === item.key;
+              return (
+                <div key={item.key} className="bits-header__dropdown-group">
+                  <button
+                    type="button"
+                    className={`bits-header__dropdown-item bits-header__dropdown-parent ${
+                      expanded ? "is-expanded" : ""
+                    }`}
+                    onClick={() =>
+                      setOpenGroup((prev) =>
+                        prev === item.key ? null : item.key,
+                      )
+                    }
+                  >
+                    {item.icon && (
+                      <img
+                        src={item.icon}
+                        alt=""
+                        className="bits-header__dropdown-icon"
+                      />
+                    )}
+                    <span>{item.name}</span>
+                    <span className="bits-header__dropdown-caret">
+                      {expanded ? "▴" : "▾"}
+                    </span>
+                  </button>
+                  {expanded && (
+                    <div className="bits-header__dropdown-children">
+                      {item.children.map((child) => (
+                        <button
+                          key={child.key}
+                          type="button"
+                          className={`bits-header__dropdown-item ${
+                            child.isDisabled ? "is-disabled" : ""
+                          }`}
+                          disabled={child.isDisabled}
+                          onClick={() => handleMenuNavigate(child)}
+                        >
+                          {child.icon && (
+                            <img
+                              src={child.icon}
+                              alt=""
+                              className="bits-header__dropdown-icon"
+                            />
+                          )}
+                          <span>{child.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <button
+                key={item.key}
+                type="button"
+                className={`bits-header__dropdown-item ${
+                  isActiveLink(item.path) ? "is-active" : ""
+                } ${item.isDisabled ? "is-disabled" : ""}`}
+                disabled={item.isDisabled}
+                onClick={() => handleMenuNavigate(item)}
+              >
+                {item.icon && (
+                  <img
+                    src={item.icon}
+                    alt=""
+                    className="bits-header__dropdown-icon"
+                  />
+                )}
+                <span>{item.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+
   if (nonNavbarRoutes?.includes(location?.pathname)) return null;
 
   const headerClass = [
@@ -447,56 +565,62 @@ const NavbarComponent = ({ dashboardNav }) => {
             </nav>
           </div>
 
-          <div className="bits-header__actions">
-            <button
-              type="button"
-              className="bits-header__icon-btn"
-              onClick={handleSearch}
-              aria-label="Search marketplace"
-            >
-              <img src={search} alt="" />
-            </button>
+          <div
+            className={`bits-header__actions ${full_name ? "bits-header__actions--logged-in" : ""}`}
+          >
+            {!full_name && (
+              <>
+                <button
+                  type="button"
+                  className="bits-header__icon-btn"
+                  onClick={handleSearch}
+                  aria-label="Search marketplace"
+                >
+                  <img src={search} alt="" />
+                </button>
 
-            <div
-              className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}
-            >
-              <div className="bits-header__chains-label">
-                <span>Chains</span>
-                {isChainMismatched && (
-                  <Tooltip
-                    title={`Your wallet is on a different network. Click ${
-                      contractData?.chain === 1 ? "ETH" : "Polygon"
-                    } to switch it.`}
-                  >
-                    <span className="chain-mismatch-dot" />
-                  </Tooltip>
-                )}
-              </div>
-              <div className="bits-header__chains-icons">
-                <FaEthereum
-                  cursor="pointer"
-                  onClick={() => handleChainSelect(1)}
-                  className={`chainIcon ${iconClicked ? "red" : ""}`}
-                  title="Ethereum"
-                />
-                <img
-                  className={`ethIcon ${showRedImage ? "" : "hidden"}`}
-                  src={polygon}
-                  alt="Polygon"
-                  onClick={() => handleChainSelect(137)}
-                  width={15}
-                  height={15}
-                />
-                <img
-                  className={`ethIcon red ${showRedImage ? "hidden" : ""}`}
-                  src={redPolygon}
-                  alt="Polygon"
-                  onClick={() => handleChainSelect(137)}
-                  width={15}
-                  height={15}
-                />
-              </div>
-            </div>
+                <div
+                  className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}
+                >
+                  <div className="bits-header__chains-label">
+                    <span>Chains</span>
+                    {isChainMismatched && (
+                      <Tooltip
+                        title={`Your wallet is on a different network. Click ${
+                          contractData?.chain === 1 ? "ETH" : "Polygon"
+                        } to switch it.`}
+                      >
+                        <span className="chain-mismatch-dot" />
+                      </Tooltip>
+                    )}
+                  </div>
+                  <div className="bits-header__chains-icons">
+                    <FaEthereum
+                      cursor="pointer"
+                      onClick={() => handleChainSelect(1)}
+                      className={`chainIcon ${iconClicked ? "red" : ""}`}
+                      title="Ethereum"
+                    />
+                    <img
+                      className={`ethIcon ${showRedImage ? "" : "hidden"}`}
+                      src={polygon}
+                      alt="Polygon"
+                      onClick={() => handleChainSelect(137)}
+                      width={15}
+                      height={15}
+                    />
+                    <img
+                      className={`ethIcon red ${showRedImage ? "hidden" : ""}`}
+                      src={redPolygon}
+                      alt="Polygon"
+                      onClick={() => handleChainSelect(137)}
+                      width={15}
+                      height={15}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
 
             {!full_name ? (
               <>
@@ -517,9 +641,24 @@ const NavbarComponent = ({ dashboardNav }) => {
                 >
                   Sign up/Login
                 </button>
+                {renderHeaderMenu()}
               </>
             ) : (
               <>
+                {!isConnected && (
+                  <button
+                    type="button"
+                    className="bits-header__wallet-btn"
+                    onClick={openConnectWalletModal}
+                  >
+                    Connect Wallet
+                  </button>
+                )}
+                <HeaderNotificationBell isLight={isLight} />
+                <div className="bits-header__theme">
+                  <SwitchBtn toggleBtn={textColor === "white"} />
+                </div>
+                {renderHeaderMenu()}
                 <button
                   type="button"
                   className="bits-header__profile"
@@ -541,112 +680,8 @@ const NavbarComponent = ({ dashboardNav }) => {
                     alt="profile"
                   />
                 </button>
-                <div className="bits-header__theme">
-                  <SwitchBtn toggleBtn={textColor === "white"} />
-                </div>
               </>
             )}
-
-            <div className="bits-header__menu-wrap" ref={menuRef}>
-              <button
-                type="button"
-                className={`bits-header__menu-btn ${menuOpen ? "is-open" : ""}`}
-                onClick={toggleMenuDropdown}
-                aria-label="Open menu"
-                aria-expanded={menuOpen}
-                aria-haspopup="menu"
-              >
-                <img src={menu_icon} alt="" />
-              </button>
-
-              {menuOpen && (
-                <div
-                  className={`bits-header__dropdown ${isLight ? "is-light" : "is-dark"}`}
-                  role="menu"
-                >
-                  {menuGroups.map((item) => {
-                    if (item.children) {
-                      const expanded = openGroup === item.key;
-                      return (
-                        <div
-                          key={item.key}
-                          className="bits-header__dropdown-group"
-                        >
-                          <button
-                            type="button"
-                            className={`bits-header__dropdown-item bits-header__dropdown-parent ${
-                              expanded ? "is-expanded" : ""
-                            }`}
-                            onClick={() =>
-                              setOpenGroup((prev) =>
-                                prev === item.key ? null : item.key,
-                              )
-                            }
-                          >
-                            {item.icon && (
-                              <img
-                                src={item.icon}
-                                alt=""
-                                className="bits-header__dropdown-icon"
-                              />
-                            )}
-                            <span>{item.name}</span>
-                            <span className="bits-header__dropdown-caret">
-                              {expanded ? "▴" : "▾"}
-                            </span>
-                          </button>
-                          {expanded && (
-                            <div className="bits-header__dropdown-children">
-                              {item.children.map((child) => (
-                                <button
-                                  key={child.key}
-                                  type="button"
-                                  className={`bits-header__dropdown-item ${
-                                    child.isDisabled ? "is-disabled" : ""
-                                  }`}
-                                  disabled={child.isDisabled}
-                                  onClick={() => handleMenuNavigate(child)}
-                                >
-                                  {child.icon && (
-                                    <img
-                                      src={child.icon}
-                                      alt=""
-                                      className="bits-header__dropdown-icon"
-                                    />
-                                  )}
-                                  <span>{child.name}</span>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <button
-                        key={item.key}
-                        type="button"
-                        className={`bits-header__dropdown-item ${
-                          isActiveLink(item.path) ? "is-active" : ""
-                        } ${item.isDisabled ? "is-disabled" : ""}`}
-                        disabled={item.isDisabled}
-                        onClick={() => handleMenuNavigate(item)}
-                      >
-                        {item.icon && (
-                          <img
-                            src={item.icon}
-                            alt=""
-                            className="bits-header__dropdown-icon"
-                          />
-                        )}
-                        <span>{item.name}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
           </div>
         </div>
 
@@ -805,11 +840,21 @@ const NavbarComponent = ({ dashboardNav }) => {
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="bits-header__profile"
-                  onClick={showModal}
-                >
+                <>
+                  {!isConnected && (
+                    <button
+                      type="button"
+                      className="bits-header__wallet-btn"
+                      onClick={openConnectWalletModal}
+                    >
+                      Connect Wallet
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="bits-header__profile"
+                    onClick={showModal}
+                  >
                   <span className="nav-fullname-truncate">{full_name}</span>
                   <img
                     src={
@@ -822,6 +867,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                     alt="profile"
                   />
                 </button>
+                </>
               )}
             </div>
           </div>

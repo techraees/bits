@@ -9,11 +9,13 @@ import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../../data/enums";
 import { GET_ALL_NFTS_IN_MARKET_PLACE_AND_SUPPORT_FILTER } from "../../../gql/queries";
 import "./css/index.css";
 import CardSkeletal from "./Skeletal/CardSkeletal";
+import MarketplaceFilters from "./MarketplaceFilters";
 import MarketplacePagination from "./MarketplacePagination";
 const environment = process.env;
 const PAGE_SIZE_BY_TYPE = {
   [ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE]: 12,
   [ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION]: 4,
+  [ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT]: 12,
 };
 const MARKETPLACE_TAB_ITEMS = [
   {
@@ -24,19 +26,40 @@ const MARKETPLACE_TAB_ITEMS = [
     key: ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION,
     label: "Auction",
   },
+  {
+    key: ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT,
+    label: "Free NFT",
+  },
 ];
 const resolveInitialTab = (requestedTab) => {
   if (requestedTab === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION) {
     return ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION;
   }
+  if (requestedTab === ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT) {
+    return ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT;
+  }
   return ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE;
 };
-const buildFilterObj = (listingType, page) => ({
-  listingType,
-  page,
-  limit: PAGE_SIZE_BY_TYPE[listingType],
-  available: true,
-});
+const getApiListingType = (listingType) => {
+  if (listingType === ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT) {
+    return ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE;
+  }
+  return listingType;
+};
+const buildFilterObj = (listingType, page) => {
+  const filter = {
+    listingType: getApiListingType(listingType),
+    page,
+    limit: PAGE_SIZE_BY_TYPE[listingType],
+    available: true,
+  };
+
+  if (listingType === ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT) {
+    filter.price = [0, 0];
+  }
+
+  return filter;
+};
 const Marketplace = () => {
   const imgPaths = environment.REACT_APP_BACKEND_BASE_URL + "/";
   const textColor = useSelector((state) => state.app.theme.textColor);
@@ -66,6 +89,7 @@ const Marketplace = () => {
     fetchPolicy: "cache-and-network",
   });
   const isAuctionTab = activeTab === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION;
+  const isFreeNftTab = activeTab === ALLOWED_MARKET_PLACE_NFT_TYPE.FREE_NFT;
   const pageSize = PAGE_SIZE_BY_TYPE[activeTab];
   const totalItems =
     getAllNftsInMarketPlaceAndSupportFilter
@@ -132,6 +156,13 @@ const Marketplace = () => {
               </button>
             ))}
           </div>
+
+          <MarketplaceFilters
+            filterObj={filterObj}
+            setFilterObj={setFilterObj}
+            isLight={isLight}
+            isFreeNftTab={isFreeNftTab}
+          />
 
           <MarketplacePagination
             currentPage={currentPage}

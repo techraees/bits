@@ -681,9 +681,9 @@ const CardCompnent = ({
         </Space>
 
         {marketplacecard ? (
-          <>
-            <div className="price-wrapper d-flex justify-content-between">
-              <h5>Price</h5>
+          <div className="auction-marketplace-card">
+            <div className="price-wrapper d-flex justify-content-between align-items-center">
+              <h5>Price :</h5>
               <p>
                 <span>$</span>{" "}
                 {contractData.chain === 1
@@ -692,115 +692,63 @@ const CardCompnent = ({
               </p>
             </div>
             {!userProfile ? (
-              <>
-                <Tooltip title="To Purchase NFT's Please Login">
-                  <span>
-                    <ButtonComponent
-                      height={40}
-                      text={"Sign in"}
-                      onClick={() => {
-                        navigate("/login");
-                      }}
-                    />
-                  </span>
-                </Tooltip>
-              </>
+              <Tooltip title="To Purchase NFT's Please Login">
+                <span>
+                  <ButtonComponent
+                    height={40}
+                    text={"Sign in"}
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  />
+                </span>
+              </Tooltip>
             ) : (
               <button className="buybtn" onClick={handleBuyBidClick}>
                 Bid Now
               </button>
             )}
-            <button
-              className="buybtn nft_details_button"
-              onClick={() => {
-                navigate(`/nft-detail/${id}`);
-              }}
-            >
-              Nft Detail
-            </button>
-            {}
-            <Link
-              to={`/nft-detail/${id}`}
-              className={`fw-semibold ${!isLight ? "nft_details_button" : "nft_details_button_dark"}`}
-              style={{}}
-            >
-              Nft Detail
-            </Link>
-            <div>
-              <img
-                src={profile}
-                style={{
-                  width: 15,
-                }}
-                alt="profile"
-              />
-              <abbr
-                title={name}
-                className="light-grey2 mt-2 fs-5 d-inline-block text-truncate"
-                style={{
-                  maxWidth: "170px",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  fontSize: "1rem",
+            <div className="auction-card__meta-row">
+              <div className="auction-card__artist-row">
+                <img
+                  src={image}
+                  alt="artist"
+                  onError={(e) => {
+                    e.target.src = profileimg;
+                  }}
+                />
+                <abbr
+                  title={userObj?.full_name || userObj?.user_name || artistName}
+                  className="auction-card__artist-name text-truncate"
+                >
+                  {userObj?.full_name || userObj?.user_name || artistName}
+                </abbr>
+              </div>
+              <button
+                type="button"
+                className={`auction-card__detail-link ${isLight ? "auction-card__detail-link--light" : ""}`}
+                onClick={() => {
+                  navigate(`/nft-detail/${id}`);
                 }}
               >
-                {name}
-              </abbr>
+                Nft Detail
+              </button>
             </div>
-            <div>
-              <img
-                src={cross}
-                style={{
-                  width: 15,
-                }}
-                alt="cross"
-              />
-              <span
-                className="light-grey2 ms-2"
-                style={{
-                  fontSize: "1rem",
-                }}
-              >
+            <div className="auction-card__feature-row">
+              <img src={cross} alt="cross" />
+              <span className="auction-card__copyright-strike light-grey2">
                 No copyright Transfer
               </span>
             </div>
-            <div className="my-1">
-              <img
-                src={check}
-                style={{
-                  width: 15,
-                }}
-                alt="check"
-              />
-              <span
-                className="light-grey2 ms-2"
-                style={{
-                  fontSize: "1rem",
-                }}
-              >
-                First Gen Emote
-              </span>
+            <div className="auction-card__feature-row">
+              <img src={check} alt="check" />
+              <span className="light-grey2">First Gen Emote</span>
             </div>
-            <div className="my-1">
-              <img
-                src={marketcardimg}
-                style={{
-                  width: 15,
-                }}
-                alt="marketing-card"
-              />
-              <span
-                className="light-grey2 ms-2"
-                style={{
-                  fontSize: "1rem",
-                }}
-              >
+            <div className="auction-card__feature-row">
+              <img src={marketcardimg} alt="supply" />
+              <span className="light-grey2">
                 Supply :{" "}
-                <span
-                  style={{
-                    color: "#AD2B2B",
-                  }}
-                >
+                <span className="auction-card__supply-value">
                   {numberofcopies}
                 </span>
               </span>
@@ -808,8 +756,9 @@ const CardCompnent = ({
             <Timercomp
               auctionStartTime={auctionStartTime}
               auctionEndTime={auctionEndTime}
+              className="auction-card__timer"
             />
-          </>
+          </div>
         ) : (
           <>
             {topName ? (

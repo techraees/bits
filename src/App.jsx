@@ -32,11 +32,18 @@ const metadata = {
   url: "https://www.bitsnft.com",
   icons: ["https://www.bitsnft.com"],
 };
+
+/** Above navbar (100000000), onboarding/connect modals (100000310). */
+const REOWN_MODAL_Z_INDEX = 100000500;
+
 createAppKit({
   adapters: [new Ethers5Adapter()],
   metadata: metadata,
   networks: [mainnet, polygon],
   projectId,
+  themeVariables: {
+    "--w3m-z-index": REOWN_MODAL_Z_INDEX,
+  },
   ...(customRpcUrls
     ? {
         customRpcUrls,

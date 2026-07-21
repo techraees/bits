@@ -161,13 +161,29 @@ const Footer = () => {
       <div className="footer-wave">
         <svg
           className="footer-wave-svg"
-          viewBox="0 0 1440 60"
+          viewBox="0 0 1424 122"
           preserveAspectRatio="none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
         >
+          <defs>
+            <linearGradient
+              id="footer-wave-gradient"
+              x1="-16"
+              y1="61"
+              x2="1424"
+              y2="61"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="#972020" />
+              <stop offset="0.5" stopColor="#D54242" />
+            </linearGradient>
+          </defs>
           <path
-            d="M0,38 C180,58 360,10 540,22 C720,34 900,56 1080,40 C1260,24 1380,8 1440,18 L1440,60 L0,60 Z"
-            fill="currentColor"
+            d="M-16 0L85.0012 17.3202C144.508 27.5248 205.372 26.8674 264.644 15.3798L269.707 14.3986C318.955 4.85388 369.359 2.77478 419.226 8.23113L472.38 14.0471C509.345 18.0917 546.645 18.0001 583.59 13.774L631.776 8.26183C679.674 2.78274 728.112 4.25964 775.586 12.6467L798.038 16.6131C856.219 26.8915 915.761 26.7769 973.901 16.2748L998.702 11.795C1042.04 3.96599 1086.23 1.89796 1130.11 5.6446L1201.08 11.7038C1229.31 14.1137 1257.69 14.1203 1285.92 11.7237L1424 0V122H-16V0Z"
+            fill="url(#footer-wave-gradient)"
+            fillOpacity="0.8"
           />
         </svg>
         <div className="footer-wave-bar">

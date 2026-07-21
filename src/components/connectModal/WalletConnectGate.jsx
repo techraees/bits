@@ -7,6 +7,7 @@ import { GET_PROFILE } from "../../gql/queries";
 import { profileToUserData } from "../../utills/hydrateUserProfile";
 import { getCookieStorage } from "../../utills/cookieStorage";
 import ConnectModal from "./index";
+import { OPEN_CONNECT_WALLET_MODAL_EVENT } from "./openConnectWalletModal";
 
 const AUTH_PATHS = [
   "/login",
@@ -77,6 +78,17 @@ const WalletConnectGate = () => {
       });
     }
   }, [profileData, dispatch]);
+
+  useEffect(() => {
+    const openFromHeader = () => {
+      setDismissed(false);
+      setVisible(true);
+    };
+
+    window.addEventListener(OPEN_CONNECT_WALLET_MODAL_EVENT, openFromHeader);
+    return () =>
+      window.removeEventListener(OPEN_CONNECT_WALLET_MODAL_EVENT, openFromHeader);
+  }, []);
 
   useEffect(() => {
     if (!needsWallet) {

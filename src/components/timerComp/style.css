@@ -1,5 +1,25 @@
+.auction-timer {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 1rem;
+  width: 100%;
+  font-size: clamp(8px, 2.1vw, 10px);
+  color: #b2b2b2;
+}
+
 .time-wrapper {
+  flex: 1 1 0;
+  min-width: 0;
   border: 1px solid #df4747;
-  border-radius: 15px;
-  padding: 5px;
+  border-radius: 20px;
+  padding: 5px 2px;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.2;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

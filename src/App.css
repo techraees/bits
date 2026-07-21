@@ -6,8 +6,9 @@
   z-index: 299;
 }
 
-w3m-modal {
-  z-index: 99999 !important;
+w3m-modal,
+appkit-modal {
+  z-index: 100000500 !important;
   position: fixed !important;
   inset: 0 !important;
 }

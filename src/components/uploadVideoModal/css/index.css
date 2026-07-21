@@ -6,12 +6,136 @@
 
 .upload-video-modal.black-background .ant-modal-content,
 .upload-video-modal.black-background .ant-modal-body {
-  background-color: #222222 !important;
+  background-color: #0f0f0f !important;
 }
 
 .upload-video-modal.light-background .ant-modal-content,
 .upload-video-modal.light-background .ant-modal-body {
   background-color: #ffffff !important;
+}
+
+.upload-video-modal .ant-modal-content {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.upload-video-modal .ant-modal-body {
+  padding: 0 !important;
+}
+
+.upload-video-modal__body {
+  padding: 24px;
+}
+
+.upload-video-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 96px;
+  padding: 20px 24px;
+  padding-right: 52px;
+  border-radius: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.upload-video-modal .ant-modal-close {
+  top: 48px;
+  right: 24px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-video-modal .ant-modal-close-x {
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-video-modal.black-background .ant-modal-close {
+  color: #9ca3af;
+}
+
+.upload-video-modal.black-background .ant-modal-close:hover {
+  color: #ffffff;
+}
+
+.upload-video-modal.black-background .upload-video-header {
+  background-color: #0f0f0f;
+}
+
+.upload-video-modal.light-background .upload-video-header {
+  background-color: #f3f3f3;
+}
+
+.upload-video-header__icon-wrap {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-video-modal.black-background .upload-video-header__icon-wrap {
+  border: 1px solid rgba(196, 64, 64, 0.45);
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-header__icon-wrap {
+  border: 1px solid rgba(196, 64, 64, 0.55);
+  color: #c44040;
+}
+
+.upload-video-header__icon-svg {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.upload-video-header__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.upload-video-header__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.upload-video-modal.black-background .upload-video-header__title {
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-header__title {
+  color: #2b2b2b;
+}
+
+.upload-video-header__subtitle {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.upload-video-modal.black-background .upload-video-header__subtitle {
+  color: #9ca3af;
+}
+
+.upload-video-modal.light-background .upload-video-header__subtitle {
+  color: #666666;
 }
 
 .upload-video-confirm-modal.ant-modal {
@@ -125,7 +249,7 @@
 }
 
 .upload-video-select-dropdown--dark.ant-select-dropdown {
-  background-color: #343434 !important;
+  background-color: #1a1a1a !important;
   border: none !important;
 }
 
@@ -280,6 +404,376 @@
   flex-direction: column;
   align-items: stretch;
   border: 2px dashed #b23232;
+}
+
+.upload-video-upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.upload-video-upload-section__error {
+  margin: 0;
+}
+
+.upload-video-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+  padding: 52px 32px;
+  border: 2px dashed #c44040;
+  border-radius: 20px;
+  background-color: #0f0f0f;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone {
+  background-color: #ffffff;
+  border-color: #c44040;
+}
+
+.upload-video-dropzone--active {
+  border-color: #e04a4a;
+  background-color: rgba(196, 64, 64, 0.06);
+}
+
+.upload-video-dropzone--disabled {
+  opacity: 0.85;
+}
+
+.upload-video-dropzone__icon {
+  width: 88px;
+  height: 88px;
+  display: block;
+  margin: 0;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__icon {
+  color: #2b2b2b;
+}
+
+.upload-video-dropzone__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.upload-video-dropzone__title {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__title {
+  color: #2b2b2b;
+}
+
+.upload-video-dropzone__hint {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #9ca3af;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__hint {
+  color: #666666;
+}
+
+.upload-video-dropzone__browse {
+  margin: 0;
+  width: 42px;
+  height: 54px;
+  margin-bottom: 16px;
+}
+
+.upload-video-document-icon__shape {
+  fill: #232323;
+  stroke: #cbd0dc;
+  stroke-width: 4;
+}
+
+.upload-video-modal.light-background .upload-video-document-icon__shape {
+  fill: #f0f0f0;
+  stroke: #cbd0dc;
+}
+
+.upload-video-dropzone__title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__title {
+  color: #2b2b2b;
+}
+
+.upload-video-dropzone__hint {
+  margin: 0 0 40px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #9ca3af;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__hint {
+  color: #666666;
+}
+
+.upload-video-dropzone__browse {
+  min-width: 148px;
+  height: 40px;
+  padding: 0 28px;
+  border-radius: 10px;
+  border: none;
+  background-color: #bc3e3e;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.upload-video-modal.light-background .upload-video-dropzone__browse {
+  background-color: #bc3e3e;
+  color: #ffffff;
+}
+
+.upload-video-dropzone__browse:hover:not(:disabled) {
+  background-color: #cf4545;
+}
+
+.upload-video-dropzone__browse--disabled,
+.upload-video-dropzone__browse:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-video-file-card {
+  border-radius: 16px;
+  background-color: #1a1a1a;
+  overflow: hidden;
+}
+
+.upload-video-modal.light-background .upload-video-file-card {
+  background-color: #f3f3f3;
+}
+
+.upload-video-file-card__main {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+}
+
+.upload-video-file-card__doc {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+
+.upload-video-file-card__doc .upload-video-document-icon {
+  width: 42px;
+  height: 54px;
+  margin-bottom: 0;
+  display: block;
+}
+
+.upload-video-file-card__doc .upload-video-document-icon__shape {
+  fill: #232323;
+  stroke: #cbd0dc;
+  stroke-width: 4;
+}
+
+.upload-video-modal.light-background
+  .upload-video-file-card__doc
+  .upload-video-document-icon__shape {
+  fill: #f0f0f0;
+  stroke: #cbd0dc;
+}
+
+.upload-video-file-card__info {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.upload-video-file-card__name {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-video-file-card__name-base {
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-file-card__name-base {
+  color: #2b2b2b;
+}
+
+.upload-video-file-card__ext {
+  color: #cf3913;
+  font-weight: 600;
+}
+
+.upload-video-file-card__status {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.upload-video-file-card__status-size,
+.upload-video-file-card__status-label {
+  color: #9ca3af;
+}
+
+.upload-video-modal.light-background .upload-video-file-card__status-size,
+.upload-video-modal.light-background .upload-video-file-card__status-label {
+  color: #666666;
+}
+
+.upload-video-file-card__status-sep {
+  color: #9ca3af;
+  line-height: 1;
+}
+
+.upload-video-modal.light-background .upload-video-file-card__status-sep {
+  color: #666666;
+}
+
+.upload-video-file-card__success-icon {
+  flex-shrink: 0;
+  display: block;
+}
+
+.upload-video-file-card__spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(156, 163, 175, 0.35);
+  border-top-color: #9ca3af;
+  border-radius: 50%;
+  animation: upload-video-file-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes upload-video-file-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.upload-video-file-card__action {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  margin-left: 12px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-file-card__action {
+  color: #666666;
+}
+
+.upload-video-file-card__action:hover {
+  opacity: 0.85;
+}
+
+.upload-video-file-card__progress {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.upload-video-modal.light-background .upload-video-file-card__progress {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.upload-video-file-card__progress-bar {
+  height: 100%;
+  background-color: #3ebf8f;
+  border-radius: 0 2px 2px 0;
+  transition: width 0.25s ease;
+}
+
+.upload-video-emote-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(196, 64, 64, 0.2);
+  background-color: rgba(196, 64, 64, 0.05);
+}
+
+.upload-video-emote-note__badge {
+  background-color: #c44040;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.upload-video-emote-note__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.upload-video-modal.light-background .upload-video-emote-note__title {
+  color: #2b2b2b;
+}
+
+.upload-video-emote-note__text {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #9ca3af;
+}
+
+.upload-video-modal.light-background .upload-video-emote-note__text {
+  color: #666666;
+}
+
+.upload-video-emote-note__highlight {
+  color: #c44040;
+  font-weight: 700;
 }
 
 .upload-video-drop-content {
@@ -620,17 +1114,17 @@
 }
 
 .upload-video-modal.black-background .greyBgInput {
-  background-color: #343434 !important;
+  background-color: #1a1a1a !important;
   border: none !important;
   color: #ffffff !important;
 }
 
 .upload-video-modal.black-background .greyBgInput::placeholder {
-  color: #535353 !important;
+  color: #666666 !important;
 }
 
 .upload-video-modal.light-background .greyBgInput {
-  background-color: #e7e7e7 !important;
+  background-color: #f0f0f0 !important;
   border: none !important;
   color: #2b2b2b !important;
 }
@@ -656,6 +1150,14 @@
   padding-bottom: 0;
   border-radius: 6px !important;
   overflow: hidden;
+}
+
+.upload-video-modal.black-background .upload-video-field.ant-input:not([disabled]):not(.ant-input-disabled) {
+  background-color: #1a1a1a !important;
+}
+
+.upload-video-modal.light-background .upload-video-field.ant-input:not([disabled]):not(.ant-input-disabled) {
+  background-color: #f0f0f0 !important;
 }
 
 .upload-video-modal.black-background .upload-video-field.ant-input[disabled],
@@ -684,7 +1186,7 @@
 .upload-video-modal.black-background .upload-video-category-select.upload-video-field .ant-select-selector {
   height: 44px !important;
   min-height: 44px !important;
-  background-color: #343434 !important;
+  background-color: #1a1a1a !important;
   border: 1px solid transparent !important;
   border-radius: 6px !important;
   overflow: hidden;
@@ -693,17 +1195,31 @@
   box-shadow: none !important;
 }
 
+.upload-video-modal.black-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selector,
+.upload-video-modal.black-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selector {
+  background-color: #2a2a2a !important;
+  color: #8a8a8a !important;
+  cursor: not-allowed !important;
+}
+
 .upload-video-modal.light-background .upload-video-style-select.upload-video-field .ant-select-selector,
 .upload-video-modal.light-background .upload-video-category-select.upload-video-field .ant-select-selector {
   height: 44px !important;
   min-height: 44px !important;
-  background-color: #e7e7e7 !important;
+  background-color: #f0f0f0 !important;
   border: 1px solid transparent !important;
   border-radius: 6px !important;
   overflow: hidden;
   display: flex;
   align-items: center;
   box-shadow: none !important;
+}
+
+.upload-video-modal.light-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selector,
+.upload-video-modal.light-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selector {
+  background-color: #d9d9d9 !important;
+  color: #888888 !important;
+  cursor: not-allowed !important;
 }
 
 .upload-video-modal .upload-video-style-select.upload-video-field:not(.ant-select-disabled):hover .ant-select-selector,
@@ -727,12 +1243,12 @@
 
 .upload-video-modal.black-background .upload-video-style-select.upload-video-field.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector,
 .upload-video-modal.black-background .upload-video-category-select.upload-video-field.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector {
-  background-color: #343434 !important;
+  background-color: #1a1a1a !important;
 }
 
 .upload-video-modal.light-background .upload-video-style-select.upload-video-field.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector,
 .upload-video-modal.light-background .upload-video-category-select.upload-video-field.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector {
-  background-color: #e7e7e7 !important;
+  background-color: #f0f0f0 !important;
 }
 
 .upload-video-modal .upload-video-style-select.upload-video-field.ant-select-status-error.ant-select-focused .ant-select-selector,
@@ -741,6 +1257,20 @@
 .upload-video-modal .upload-video-category-select.upload-video-field.ant-select-status-error.ant-select-open .ant-select-selector {
   border-color: #d54343 !important;
   box-shadow: none !important;
+}
+
+.upload-video-modal.black-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selection-item,
+.upload-video-modal.black-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selection-placeholder,
+.upload-video-modal.black-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selection-item,
+.upload-video-modal.black-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selection-placeholder {
+  color: #8a8a8a !important;
+}
+
+.upload-video-modal.light-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selection-item,
+.upload-video-modal.light-background .upload-video-style-select.upload-video-field.ant-select-disabled .ant-select-selection-placeholder,
+.upload-video-modal.light-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selection-item,
+.upload-video-modal.light-background .upload-video-category-select.upload-video-field.ant-select-disabled .ant-select-selection-placeholder {
+  color: #888888 !important;
 }
 
 .upload-video-modal .upload-video-style-select.upload-video-field .ant-select-selection-item,
@@ -757,7 +1287,7 @@
   padding: 10px 11px;
   border-radius: 6px !important;
   border: 1px solid transparent !important;
-  background-color: #343434 !important;
+  background-color: #1a1a1a !important;
   color: #ffffff !important;
   resize: vertical;
   box-shadow: none !important;
@@ -770,7 +1300,7 @@
   padding: 10px 11px;
   border-radius: 6px !important;
   border: 1px solid transparent !important;
-  background-color: #e7e7e7 !important;
+  background-color: #f0f0f0 !important;
   color: #2b2b2b !important;
   resize: vertical;
   box-shadow: none !important;
@@ -784,7 +1314,7 @@
 }
 
 .upload-video-modal.black-background .upload-video-textarea.ant-input::placeholder {
-  color: #535353 !important;
+  color: #666666 !important;
 }
 
 .upload-video-modal.light-background .upload-video-textarea.ant-input::placeholder {

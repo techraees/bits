@@ -18,6 +18,7 @@ export const sendFileToStorj = async (
   isEmote,
   createSignedUrl,
   onProgress,
+  signal,
 ) => {
   let finalFile;
   if (isEmote) {
@@ -52,7 +53,9 @@ export const sendFileToStorj = async (
     headers: {
       "Content-Type": finalFile.type || "application/octet-stream",
     },
+    signal,
     onUploadProgress: (event) => {
+      if (signal?.aborted) return;
       if (!event.total) return;
       const uploadRange = STORJ_PROGRESS.uploadEnd - STORJ_PROGRESS.uploadStart;
       const percent =
