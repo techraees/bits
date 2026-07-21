@@ -6,31 +6,51 @@ const DownloadModal = ({
   setShow,
   duration,
   handelStripe,
-  handlePaypal
+  handlePaypal,
 }) => {
   const [price, setPrice] = useState(0);
   const handleClose = () => {
     setShow(false);
   };
   const calculatePrice = () => {
-    setPrice(duration * 10 / 100);
+    setPrice((duration * 10) / 100);
   };
   useEffect(() => {
     if (duration) {
       calculatePrice();
     }
   }, []);
-  return <>
-      {show && <div className="modal fade show custom-backdrop" tabIndex="-1" role="dialog" style={{
-      display: "block"
-    }} id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  return (
+    <>
+      {show && (
+        <div
+          className="modal fade show custom-backdrop"
+          tabIndex="-1"
+          role="dialog"
+          style={{
+            display: "block",
+          }}
+          id="staticBackdrop"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content" style={{
-          borderRadius: "30px"
-        }}>
+            <div
+              className="modal-content"
+              style={{
+                borderRadius: "30px",
+              }}
+            >
               <div className="modal-header flex-column">
                 <div className="w-100 text-end">
-                  <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    aria-label="Close"
+                    onClick={handleClose}
+                  ></button>
                 </div>
                 <div className="w-100 text-center">
                   <h5 className="modal-title fw-bold">Download File</h5>
@@ -54,23 +74,41 @@ const DownloadModal = ({
                   <p className="items">N/A</p>
                 </div>
               </div>
-              <div className="modal-footer flex-column gap-2" style={{
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderTop: 0
-          }}>
-                <button type="button" className="btn w-100 text-white checkoutBtn" onClick={handelStripe}>
+              <div
+                className="modal-footer flex-column gap-2"
+                style={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  borderTop: 0,
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn w-100 text-white checkoutBtn"
+                  onClick={handelStripe}
+                >
                   Start Checkout
                 </button>
-                <button type="button" className="btn w-100 paypalBtn" onClick={handlePaypal}>
-                  <img style={{
-                width: "118px"
-              }} className="img-fluid" src={Logo} alt="paypal" />
+                <button
+                  type="button"
+                  className="btn w-100 paypalBtn"
+                  onClick={handlePaypal}
+                >
+                  <img
+                    style={{
+                      width: "118px",
+                    }}
+                    className="img-fluid"
+                    src={Logo}
+                    alt="paypal"
+                  />
                 </button>
               </div>
             </div>
           </div>
-        </div>}
-    </>;
+        </div>
+      )}
+    </>
+  );
 };
 export default DownloadModal;

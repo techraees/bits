@@ -14,14 +14,14 @@ import { logo } from "../../../assets";
 import {
   ButtonComponent,
   CustomCheckbox,
-  ToastMessage
+  ToastMessage,
 } from "../../../components";
 import PasswordRequirements from "../../../components/PasswordRequirements";
 import Loading from "../../../components/loaders/loading";
 import {
   isPasswordValid,
   PASSWORD_FORMAT_ERROR_MESSAGE,
-  signUpSchema
+  signUpSchema,
 } from "../../../components/validations";
 import { CREATE_USER } from "../../../gql/mutations";
 import { GET_PLAYER } from "../../../gql/queries";
@@ -33,7 +33,9 @@ import "./css/index.css";
 function SignUp() {
   const { address, isConnected } = useAppKitAccount();
   const { openAppKitConnect } = useWalletGateFlow();
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
   const [signUpAgreeCheckbox, setSignUpAgreeCheckbox] = useState(false);
   const [monthsOptions, setMonthsOptions] = useState([]);
@@ -52,7 +54,7 @@ function SignUp() {
     trigger,
     formState: { errors: signUpFormError, isValid: isSignUpFormValid },
     watch,
-    reset: signUpResetValue
+    reset: signUpResetValue,
   } = useForm({
     resolver: yupResolver(signUpSchema),
     mode: "onChange",
@@ -63,8 +65,8 @@ function SignUp() {
       email: "",
       password: "",
       phone_number: "",
-      dob: ""
-    }
+      dob: "",
+    },
   });
 
   useEffect(() => {
@@ -72,7 +74,7 @@ function SignUp() {
     for (let i = 1; i <= 12; i++) {
       options.push({
         value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString()
+        label: i < 10 ? `0${i}` : i.toString(),
       });
     }
     setMonthsOptions(options);
@@ -81,7 +83,7 @@ function SignUp() {
     for (let i = 1; i <= 31; i++) {
       nextDays.push({
         value: i.toString(),
-        label: i < 10 ? `0${i}` : i.toString()
+        label: i < 10 ? `0${i}` : i.toString(),
       });
     }
     setDaysOptions(nextDays);
@@ -90,7 +92,7 @@ function SignUp() {
     for (let i = 1960; i <= 2024; i++) {
       optionsYears.push({
         value: i.toString(),
-        label: i.toString()
+        label: i.toString(),
       });
     }
     setYearsOptions(optionsYears);
@@ -104,7 +106,7 @@ function SignUp() {
       const combined = `${month}/${day}/${year}`;
       const dateFormat = new Date(combined);
       signUpSetValue("dob", dateFormat.toString(), {
-        shouldValidate: true
+        shouldValidate: true,
       });
     }
   }, [day, month, year, signUpSetValue]);
@@ -136,8 +138,8 @@ function SignUp() {
           password: data.password,
           phoneNumber: data.phone_number,
           userAddress: address,
-          dob: data.dob
-        }
+          dob: data.dob,
+        },
       });
     } else {
       await trigger();
@@ -145,7 +147,7 @@ function SignUp() {
   }
 
   const [{ loading: playerLoading }] = useLazyQuery(GET_PLAYER, {
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
   });
 
   const forceValidateAndConnect = async (e) => {
@@ -180,7 +182,9 @@ function SignUp() {
     isSignUpFormValid && signUpAgreeCheckbox && !signUpLoading;
 
   return (
-    <div className={`login-page-wrapper signup-page-wrapper ${backgroundTheme}`}>
+    <div
+      className={`login-page-wrapper signup-page-wrapper ${backgroundTheme}`}
+    >
       {(playerLoading || signUpLoading) && <Loading content="Loading" />}
 
       <div className="container loginContainer">
@@ -226,11 +230,7 @@ function SignUp() {
                         {...field}
                         ref={ref}
                         placeholder="Full Name"
-                        prefix={
-                          <FiUser
-                            className="login-input-icon"
-                          />
-                        }
+                        prefix={<FiUser className="login-input-icon" />}
                         className={`login-input-field ${
                           signUpFormError.full_name
                             ? "login-input-field-error"
@@ -259,11 +259,7 @@ function SignUp() {
                         {...field}
                         ref={ref}
                         placeholder="Username"
-                        prefix={
-                          <FiUser
-                            className="login-input-icon"
-                          />
-                        }
+                        prefix={<FiUser className="login-input-icon" />}
                         className={`login-input-field ${
                           signUpFormError.user_name
                             ? "login-input-field-error"
@@ -292,11 +288,7 @@ function SignUp() {
                         {...field}
                         ref={ref}
                         placeholder="Email"
-                        prefix={
-                          <FiMail
-                            className="login-input-icon"
-                          />
-                        }
+                        prefix={<FiMail className="login-input-icon" />}
                         className={`login-input-field ${
                           signUpFormError.email ? "login-input-field-error" : ""
                         }`}
@@ -323,11 +315,7 @@ function SignUp() {
                         {...field}
                         ref={ref}
                         placeholder="Password"
-                        prefix={
-                          <FiLock
-                            className="login-input-icon"
-                          />
-                        }
+                        prefix={<FiLock className="login-input-icon" />}
                         className={`login-input-field ${
                           signUpFormError.password
                             ? "login-input-field-error"
@@ -391,7 +379,7 @@ function SignUp() {
                           : `+${dial}`;
 
                         signUpSetValue("phone_number", fullNumber, {
-                          shouldValidate: true
+                          shouldValidate: true,
                         });
                       }}
                       containerClass="signup-phone-input"

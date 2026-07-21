@@ -10,7 +10,7 @@ import { ALLOWED_MARKET_PLACE_NFT_TYPE } from "../../data/enums";
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 10
+    zIndex: 10,
   },
   content: {
     top: "0px",
@@ -27,8 +27,8 @@ const customStyles = {
     borderBottomRightRadius: "15px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 };
 const ListingModal = ({
   isOpen,
@@ -42,9 +42,11 @@ const ListingModal = ({
   pageAuction,
   setPageAuction,
   auctionTotalPages,
-  totalPages
+  totalPages,
 }) => {
-  const [isSwitchValue, setIsSwitchValue] = useState(ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE);
+  const [isSwitchValue, setIsSwitchValue] = useState(
+    ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE,
+  );
   const [isFixedPriceStep, setIsFixedPriceStep] = useState(1);
   const [isAuctionStep, setIsAuctionStep] = useState(1);
   const [itemData, setItemData] = useState({});
@@ -63,28 +65,74 @@ const ListingModal = ({
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
-  return <Modal isOpen={isOpen} onRequestClose={() => {
-    onRequestClose();
-    setIsAuctionStep(1);
-    setIsFixedPriceStep(1);
-  }} style={customStyles}>
-      <motion.div initial={{
-      opacity: 0,
-      scale: 0.9
-    }} animate={{
-      opacity: 1,
-      scale: 1
-    }} exit={{
-      opacity: 0,
-      scale: 0.9
-    }} className="popup_parent_div shadow-xl text-gray-800 scrollbar_hide_custom" style={{
-      zIndex: 1
-    }}>
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={() => {
+        onRequestClose();
+        setIsAuctionStep(1);
+        setIsFixedPriceStep(1);
+      }}
+      style={customStyles}
+    >
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.9,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.9,
+        }}
+        className="popup_parent_div shadow-xl text-gray-800 scrollbar_hide_custom"
+        style={{
+          zIndex: 1,
+        }}
+      >
         {}
-        <TopNftListingQuantityPurchaseHeader isSwitchValue={isSwitchValue} setIsSwitchValue={setIsSwitchValue} onRequestClose={onRequestClose} isFixedPriceStep={isFixedPriceStep} isAuctionStep={isAuctionStep} marketplacecard={marketplacecard} />
-        {isFixedPriceStep === 1 && <TopNftListingAuctionBodySection fixedData={fixedData} auctionData={auctionData} name={name} itemData={itemData} setItemData={setItemData} isSwitchValue={isSwitchValue} setIsSwitchValue={setIsSwitchValue} onRequestClose={onRequestClose} setIsFixedPriceStep={setIsFixedPriceStep} setIsAuctionStep={setIsAuctionStep} page={page} setPage={setPage} pageAuction={pageAuction} setPageAuction={setPageAuction} totalPages={totalPages} auctionTotalPages={auctionTotalPages} />}
-        {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && <TopNftAddQuantiyPurchaseInputBodySection setIsFixedPriceStep={setIsFixedPriceStep} fixedData={fixedData} itemData={itemData} onRequestClose={onRequestClose} setIsAuctionStep={setIsAuctionStep} />}
+        <TopNftListingQuantityPurchaseHeader
+          isSwitchValue={isSwitchValue}
+          setIsSwitchValue={setIsSwitchValue}
+          onRequestClose={onRequestClose}
+          isFixedPriceStep={isFixedPriceStep}
+          isAuctionStep={isAuctionStep}
+          marketplacecard={marketplacecard}
+        />
+        {isFixedPriceStep === 1 && (
+          <TopNftListingAuctionBodySection
+            fixedData={fixedData}
+            auctionData={auctionData}
+            name={name}
+            itemData={itemData}
+            setItemData={setItemData}
+            isSwitchValue={isSwitchValue}
+            setIsSwitchValue={setIsSwitchValue}
+            onRequestClose={onRequestClose}
+            setIsFixedPriceStep={setIsFixedPriceStep}
+            setIsAuctionStep={setIsAuctionStep}
+            page={page}
+            setPage={setPage}
+            pageAuction={pageAuction}
+            setPageAuction={setPageAuction}
+            totalPages={totalPages}
+            auctionTotalPages={auctionTotalPages}
+          />
+        )}
+        {(isFixedPriceStep === 2 || isFixedPriceStep === 3) && (
+          <TopNftAddQuantiyPurchaseInputBodySection
+            setIsFixedPriceStep={setIsFixedPriceStep}
+            fixedData={fixedData}
+            itemData={itemData}
+            onRequestClose={onRequestClose}
+            setIsAuctionStep={setIsAuctionStep}
+          />
+        )}
       </motion.div>
-    </Modal>;
+    </Modal>
+  );
 };
 export default ListingModal;

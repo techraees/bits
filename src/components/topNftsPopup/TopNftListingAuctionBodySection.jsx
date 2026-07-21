@@ -21,7 +21,7 @@ const TopNftListingAuctionBodySection = ({
   pageAuction,
   setPageAuction,
   auctionTotalPages,
-  totalPages
+  totalPages,
 }) => {
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [ethBal, setEthBal] = useState(0);
@@ -29,13 +29,14 @@ const TopNftListingAuctionBodySection = ({
   const handleCancel = () => {
     setIsOfferModalOpen(false);
   };
-  ETHTOUSD(1).then(result => {
+  ETHTOUSD(1).then((result) => {
     setEthBal(result);
   });
-  MATICTOUSD(1).then(result => {
+  MATICTOUSD(1).then((result) => {
     setMaticBal(result);
   });
-  return <>
+  return (
+    <>
       <div className=" d-flex flex-column justify-content-center align-items-center">
         <div className="down_side_popup lg:p-4 p-3 bg-white">
           <p className="lg:mb-4 mb-2 text_detail_note">
@@ -45,36 +46,53 @@ const TopNftListingAuctionBodySection = ({
 
           <div className="w-full d-flex justify-content-center  ">
             <div className="lg:mb-4 mb-2 switch_button_data switch_button_data__dark_color">
-              <button onClick={() => {
-              setIsSwitchValue(ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE);
-            }} className={`btn-outline-secondary btn-sm switch_button_data  ${isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? "switch_button_data_red_button theme_gradient_red" : "switch_button_data__dark_color switch_button_data_gray_button"}`}>
+              <button
+                onClick={() => {
+                  setIsSwitchValue(ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE);
+                }}
+                className={`btn-outline-secondary btn-sm switch_button_data  ${isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? "switch_button_data_red_button theme_gradient_red" : "switch_button_data__dark_color switch_button_data_gray_button"}`}
+              >
                 Fixed Price NFTs
               </button>
-              <button onClick={() => {
-              setIsSwitchValue(ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION);
-            }} className={`btn-sm btn-outline-secondary switch_button_data ${isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION ? "switch_button_data_red_button theme_gradient_red" : "switch_button_data__dark_color switch_button_data_gray_button"}`}>
+              <button
+                onClick={() => {
+                  setIsSwitchValue(ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION);
+                }}
+                className={`btn-sm btn-outline-secondary switch_button_data ${isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION ? "switch_button_data_red_button theme_gradient_red" : "switch_button_data__dark_color switch_button_data_gray_button"}`}
+              >
                 Auctioned NFTs
               </button>
             </div>
           </div>
 
           <div className="">
-            {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? fixedData?.length > 0 ? fixedData.map((nft, index) => <div key={index} onClick={() => {
-            setItemData({
-              name: name,
-              price: nft?.price,
-              currentBidAmount: nft?.currentBidAmount,
-              nftOwner: nft?.owner,
-              auctionId: nft?.fixedid,
-              itemDbId: nft?.dbid,
-              nftId: nft?.nftId,
-              chainId: nft?.chainId,
-              tokenId: nft?.tokenId
-            });
-            setIsFixedPriceStep(2);
-          }} className="shadow-move d-flex nft_listing justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3">
+            {isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.FIXED_PRICE ? (
+              fixedData?.length > 0 ? (
+                fixedData.map((nft, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setItemData({
+                        name: name,
+                        price: nft?.price,
+                        currentBidAmount: nft?.currentBidAmount,
+                        nftOwner: nft?.owner,
+                        auctionId: nft?.fixedid,
+                        itemDbId: nft?.dbid,
+                        nftId: nft?.nftId,
+                        chainId: nft?.chainId,
+                        tokenId: nft?.tokenId,
+                      });
+                      setIsFixedPriceStep(2);
+                    }}
+                    className="shadow-move d-flex nft_listing justify-content-between align-items-center bg-white lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                  >
                     <div className="d-flex align-items-center">
-                      <img src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="NFT" className="rounded-circle img-top_nft lg:me-3 me-2" />
+                      <img
+                        src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="NFT"
+                        className="rounded-circle img-top_nft lg:me-3 me-2"
+                      />
                       <div>
                         <div className="d-flex align-items-center ">
                           <h5 className="mb-1 nft_title text-danger">{name}</h5>
@@ -94,24 +112,39 @@ const TopNftListingAuctionBodySection = ({
                         {nft?.chainId == 137 ? "MATIC" : "ETH"}
                       </span>
                     </span>
-                  </div>) : <span>There is no fixed item data available</span> : auctionData?.length > 0 ? auctionData.map((nft, index) => <div key={index} onClick={() => {
-            setItemData({
-              name: name,
-              price: nft?.price,
-              currentBidAmount: nft?.currentBidAmount,
-              nftOwner: nft?.owner,
-              auctionId: nft?.fixedid,
-              itemDbId: nft?.dbid,
-              nftId: nft?.nftId,
-              chainId: nft?.chainId,
-              tokenId: nft?.tokenId,
-              offers: nft?.auctionbids
-            });
-            setIsAuctionStep(2);
-            setIsOfferModalOpen(true);
-          }} className="shadow-move nft_listing d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3">
+                  </div>
+                ))
+              ) : (
+                <span>There is no fixed item data available</span>
+              )
+            ) : auctionData?.length > 0 ? (
+              auctionData.map((nft, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setItemData({
+                      name: name,
+                      price: nft?.price,
+                      currentBidAmount: nft?.currentBidAmount,
+                      nftOwner: nft?.owner,
+                      auctionId: nft?.fixedid,
+                      itemDbId: nft?.dbid,
+                      nftId: nft?.nftId,
+                      chainId: nft?.chainId,
+                      tokenId: nft?.tokenId,
+                      offers: nft?.auctionbids,
+                    });
+                    setIsAuctionStep(2);
+                    setIsOfferModalOpen(true);
+                  }}
+                  className="shadow-move nft_listing d-flex justify-content-between align-items-center lg:py-2 py-1 lg:px-3 px-2 lg:mb-3 mb-2 rounded-3"
+                >
                   <div className="d-flex align-items-center">
-                    <img src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="NFT" className="rounded-circle img-top_nft lg:me-3 me-2" />
+                    <img
+                      src="https://images.unsplash.com/photo-1617136041743-451cb49648b0?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="NFT"
+                      className="rounded-circle img-top_nft lg:me-3 me-2"
+                    />
                     <div>
                       <div className="d-flex align-items-center ">
                         <h5 className="mb-1 nft_title text-danger">{name}</h5>
@@ -121,40 +154,98 @@ const TopNftListingAuctionBodySection = ({
                       </div>
 
                       <p className="mb-0 nft_available_box">
-                        {'"Bid on this batch" ' + Number(nft?.copies).toLocaleString("en-US") + " NFTs Available"}
+                        {'"Bid on this batch" ' +
+                          Number(nft?.copies).toLocaleString("en-US") +
+                          " NFTs Available"}
                       </p>
                     </div>
                   </div>
                   <span className="text-black price_tag">
-                    {nft?.currentBidAmount > 0 ? nft?.currentBidAmount : nft?.price}{" "}
+                    {nft?.currentBidAmount > 0
+                      ? nft?.currentBidAmount
+                      : nft?.price}{" "}
                     <span className="price_tag_currency">
                       {nft?.chainId == 137 ? "MATIC" : "ETH"}
                     </span>
                   </span>
-                </div>) : <span className="no_data_found_text_auction">
+                </div>
+              ))
+            ) : (
+              <span className="no_data_found_text_auction">
                 There is no auction data available
-              </span>}
+              </span>
+            )}
             {}
           </div>
 
           <div className="w-full d-flex justify-content-center pagination_div_parent">
-            <TopNftPopupPagination currentPage={isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION ? pageAuction : page} onPageChange={isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION ? setPageAuction : setPage} totalPages={isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION ? auctionTotalPages === 0 ? 1 : auctionTotalPages : totalPages} />
+            <TopNftPopupPagination
+              currentPage={
+                isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION
+                  ? pageAuction
+                  : page
+              }
+              onPageChange={
+                isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION
+                  ? setPageAuction
+                  : setPage
+              }
+              totalPages={
+                isSwitchValue === ALLOWED_MARKET_PLACE_NFT_TYPE.AUCTION
+                  ? auctionTotalPages === 0
+                    ? 1
+                    : auctionTotalPages
+                  : totalPages
+              }
+            />
           </div>
 
           <div className="text-center mt-4 close_button">
-            <button onClick={() => {
-            onRequestClose();
-            setIsAuctionStep(1);
-            setIsFixedPriceStep(1);
-          }} className="theme_gradient_red btn-lg close_button">
+            <button
+              onClick={() => {
+                onRequestClose();
+                setIsAuctionStep(1);
+                setIsFixedPriceStep(1);
+              }}
+              className="theme_gradient_red btn-lg close_button"
+            >
               Close
             </button>
           </div>
         </div>
       </div>
-      <Modal open={isOfferModalOpen} onCancel={handleCancel} footer={false} centered width={829}>
-        <OfferModal handleCancel={handleCancel} name={itemData.name} price={itemData.chainId == 1 ? (itemData?.price * ethBal).toFixed(4) : (itemData?.price * maticBal).toFixed(4)} initialPrice={itemData?.price} currentBidAmount={itemData.chainId == 1 ? (itemData?.currentBidAmount * ethBal).toFixed(4) : (itemData?.currentBidAmount * maticBal).toFixed(4)} nftOwner={itemData.nftOwner} auctionid={itemData.auctionId} itemDbId={itemData.itemDbId} nftId={itemData.nftId} tokenId={itemData.tokenId} offers={itemData.offers} modalType="test" customMessage="This is a test of the OfferModal with dummy data." />
+      <Modal
+        open={isOfferModalOpen}
+        onCancel={handleCancel}
+        footer={false}
+        centered
+        width={829}
+      >
+        <OfferModal
+          handleCancel={handleCancel}
+          name={itemData.name}
+          price={
+            itemData.chainId == 1
+              ? (itemData?.price * ethBal).toFixed(4)
+              : (itemData?.price * maticBal).toFixed(4)
+          }
+          initialPrice={itemData?.price}
+          currentBidAmount={
+            itemData.chainId == 1
+              ? (itemData?.currentBidAmount * ethBal).toFixed(4)
+              : (itemData?.currentBidAmount * maticBal).toFixed(4)
+          }
+          nftOwner={itemData.nftOwner}
+          auctionid={itemData.auctionId}
+          itemDbId={itemData.itemDbId}
+          nftId={itemData.nftId}
+          tokenId={itemData.tokenId}
+          offers={itemData.offers}
+          modalType="test"
+          customMessage="This is a test of the OfferModal with dummy data."
+        />
       </Modal>
-    </>;
+    </>
+  );
 };
 export default TopNftListingAuctionBodySection;

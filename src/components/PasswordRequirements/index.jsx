@@ -4,20 +4,20 @@ import "./css/index.css";
 const REQUIREMENTS = [
   {
     key: "minLength",
-    label: "Between 8 and 20 characters"
+    label: "Between 8 and 20 characters",
   },
   {
     key: "uppercase",
-    label: "1 Uppercase letter"
+    label: "1 Uppercase letter",
   },
   {
     key: "hasNumber",
-    label: "1 or more numbers"
+    label: "1 or more numbers",
   },
   {
     key: "hasSpecial",
-    label: "1 or more special characters"
-  }
+    label: "1 or more special characters",
+  },
 ];
 
 const PasswordRequirements = ({ password = "" }) => {

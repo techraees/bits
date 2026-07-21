@@ -29,19 +29,29 @@ const ZendeskComp = () => {
     }
   }, [open, isLoaded]);
   const handleToggle = useCallback(() => {
-    setOpen(prev => !prev);
+    setOpen((prev) => !prev);
   }, []);
   if (!ZENDESK_KEY) {
     return null;
   }
-  return <>
+  return (
+    <>
       <Zendesk defer zendeskKey={ZENDESK_KEY} onLoaded={handleLoaded} />
 
-      {typeof document !== "undefined" && ReactDOM.createPortal(<div className="img-wrapper" onClick={handleToggle} style={{
-      zIndex: 9999999
-    }}>
+      {typeof document !== "undefined" &&
+        ReactDOM.createPortal(
+          <div
+            className="img-wrapper"
+            onClick={handleToggle}
+            style={{
+              zIndex: 9999999,
+            }}
+          >
             <img src={help} alt="help_icon" />
-          </div>, document.body)}
-    </>;
+          </div>,
+          document.body,
+        )}
+    </>
+  );
 };
 export default ZendeskComp;

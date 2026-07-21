@@ -12,11 +12,9 @@ function ListingStep({
   setFixedId,
   setDatabaseId,
   setNFTId,
-  setTokenId
+  setTokenId,
 }) {
-  const {
-    contractData
-  } = useSelector(state => state.chain.contractData);
+  const { contractData } = useSelector((state) => state.chain.contractData);
   const handleSelection = (owner, price, fixedid, dbid, tokenId, nftId) => {
     setOwner(owner);
     setPrice(price);
@@ -26,7 +24,8 @@ function ListingStep({
     setNFTId(nftId);
     setTokenId(tokenId);
   };
-  return <div className="listingStepContainer">
+  return (
+    <div className="listingStepContainer">
       <h4 className="noteText">
         Note: &nbsp;
         <span className="spanText">
@@ -34,7 +33,22 @@ function ListingStep({
           proceed with
         </span>
       </h4>
-      {owners.map((item, i) => item.copies > 0 ? <div className={item ? "bottomContentDiv" : "contentDiv"} key={i} onClick={() => handleSelection(item.owner, item.price, item.fixedid, item.dbid, item.tokenId, item.nftId)}>
+      {owners.map((item, i) =>
+        item.copies > 0 ? (
+          <div
+            className={item ? "bottomContentDiv" : "contentDiv"}
+            key={i}
+            onClick={() =>
+              handleSelection(
+                item.owner,
+                item.price,
+                item.fixedid,
+                item.dbid,
+                item.tokenId,
+                item.nftId,
+              )
+            }
+          >
             <div className="leftDiv">
               <img className="divImg" src={test} />
               <div>
@@ -52,7 +66,12 @@ function ListingStep({
                 </span>
               </h4>
             </div>
-          </div> : "")}
-    </div>;
+          </div>
+        ) : (
+          ""
+        ),
+      )}
+    </div>
+  );
 }
 export default ListingStep;

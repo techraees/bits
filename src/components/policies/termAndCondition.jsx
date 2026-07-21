@@ -1,11 +1,15 @@
 import React from "react";
 import "./css/index.css";
 const TermAndConditionComp = () => {
-  return <div>
-      <div className="text-info" style={{
-      maxHeight: "300px",
-      overflow: "auto"
-    }}>
+  return (
+    <div>
+      <div
+        className="text-info"
+        style={{
+          maxHeight: "300px",
+          overflow: "auto",
+        }}
+      >
         <div>
           <ul>
             <li>
@@ -25,9 +29,11 @@ const TermAndConditionComp = () => {
         </div>
 
         <div>
-          <ul style={{
-          listStyleType: "disc"
-        }}>
+          <ul
+            style={{
+              listStyleType: "disc",
+            }}
+          >
             <li>
               <h1>Definitions and interpretations</h1>
             </li>
@@ -40,52 +46,84 @@ const TermAndConditionComp = () => {
             <ul>
               <li>
                 The words{" "}
-                <strong style={{
-                fontWeight: 800
-              }}>“we,” “us,”</strong> and{" "}
-                <strong style={{
-                fontWeight: 800
-              }}>“our,”</strong> as used
-                throughout these Conditions, refer to BITS NFT, Inc., a company
-                incorporated in and operating from 651 N Broad St. Suite 201
-                Middletown, Delaware 19709.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  “we,” “us,”
+                </strong>{" "}
+                and{" "}
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  “our,”
+                </strong>{" "}
+                as used throughout these Conditions, refer to BITS NFT, Inc., a
+                company incorporated in and operating from 651 N Broad St. Suite
+                201 Middletown, Delaware 19709.
               </li>
               <br />
               <li>
                 The words{" "}
-                <strong style={{
-                fontWeight: 800
-              }}>“you,” “your,”</strong> and{" "}
-                <strong style={{
-                fontWeight: 800
-              }}>“user”</strong> refer to
-                anyone accessing and using BITS NFT, including if you are
-                visiting and/or using BITS NFT.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  “you,” “your,”
+                </strong>{" "}
+                and{" "}
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  “user”
+                </strong>{" "}
+                refer to anyone accessing and using BITS NFT, including if you
+                are visiting and/or using BITS NFT.
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>BITS NFT</strong> refers
-                collectively to the services we provide through the website.
-                This may include your creation, minting, trading, displaying,
-                transferring, and ownership of NFTs through the website.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  BITS NFT
+                </strong>{" "}
+                refers collectively to the services we provide through the
+                website. This may include your creation, minting, trading,
+                displaying, transferring, and ownership of NFTs through the
+                website.
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>NFT</strong> is an acronym
-                for Non-Fungible Tokens, a unique piece of art whose ownership
-                can be tracked on the blockchain.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  NFT
+                </strong>{" "}
+                is an acronym for Non-Fungible Tokens, a unique piece of art
+                whose ownership can be tracked on the blockchain.
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>NFT Art</strong> refers to
-                the media attached to an NFT. This may include any design,
-                photos, texts, sounds, and videos that appear on the NFT.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  NFT Art
+                </strong>{" "}
+                refers to the media attached to an NFT. This may include any
+                design, photos, texts, sounds, and videos that appear on the
+                NFT.
               </li>
             </ul>
           </ul>
@@ -153,9 +191,13 @@ const TermAndConditionComp = () => {
 
             <ul>
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Account creation:</strong>{" "}
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Account creation:
+                </strong>{" "}
                 You can access the website to view content without creating an
                 account. However, to use BITS NFT, you must create a user
                 account, which will require you to submit certain identifying
@@ -174,9 +216,13 @@ const TermAndConditionComp = () => {
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Applicable users:</strong>{" "}
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Applicable users:
+                </strong>{" "}
                 To comply with applicable laws and make BITS NFT safe for all
                 users, we limit our target to individuals who are at least 18
                 years of age and can form a binding agreement. By using BITS
@@ -184,9 +230,11 @@ const TermAndConditionComp = () => {
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Applicable locations:
                 </strong>{" "}
                 We target BITS NFT at locations where its use is legal. We do
@@ -199,10 +247,14 @@ const TermAndConditionComp = () => {
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Privacy policy:</strong> We
-                care about your privacy. That is why we engage in privacy
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Privacy policy:
+                </strong>{" "}
+                We care about your privacy. That is why we engage in privacy
                 practices that conform to applicable laws. Please, read our{" "}
                 <a href="">Privacy Policy</a> to learn about our information
                 collection and how we protect it from unauthorized access or
@@ -212,9 +264,11 @@ const TermAndConditionComp = () => {
 
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Additional services:
                 </strong>{" "}
                 We may also offer additional services that are not related to
@@ -228,9 +282,11 @@ const TermAndConditionComp = () => {
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Third-party services:
                 </strong>{" "}
                 The website may contain links, adverts, and content that lead to
@@ -404,9 +460,11 @@ const TermAndConditionComp = () => {
               <h1>Fees and payments </h1>
             </li>
 
-            <ol style={{
-            listStyleType: "lower-alpha"
-          }}>
+            <ol
+              style={{
+                listStyleType: "lower-alpha",
+              }}
+            >
               <li>
                 Split Fee
                 <br />
@@ -784,9 +842,11 @@ const TermAndConditionComp = () => {
             <br />
             <ul>
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Applicable law and jurisdiction:
                 </strong>{" "}
                 These Conditions and all aspects of BITS NFT shall be governed
@@ -804,9 +864,11 @@ const TermAndConditionComp = () => {
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Binding arbitration:
                 </strong>{" "}
                 If we are unable to settle a dispute informally for at least 30
@@ -836,9 +898,11 @@ const TermAndConditionComp = () => {
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
                   Arbitration restrictions:
                 </strong>{" "}
                 You hereby agree that arbitration shall be limited to the
@@ -851,16 +915,20 @@ const TermAndConditionComp = () => {
               </li>
               <br />
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Exceptions:</strong> You
-                hereby agree that the following disputes shall not be subject to
-                informal resolution or binding arbitration: (i) any dispute
-                seeking to enforce or protect (or concerning the validity of)
-                any party’s intellectual property rights; (ii) any dispute
-                relating to or arising from allegations of theft, piracy,
-                invasion of privacy, or unauthorized use; and (ii) any claim
-                from injunctive relief.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Exceptions:
+                </strong>{" "}
+                You hereby agree that the following disputes shall not be
+                subject to informal resolution or binding arbitration: (i) any
+                dispute seeking to enforce or protect (or concerning the
+                validity of) any party’s intellectual property rights; (ii) any
+                dispute relating to or arising from allegations of theft,
+                piracy, invasion of privacy, or unauthorized use; and (ii) any
+                claim from injunctive relief.
               </li>
             </ul>
           </ul>
@@ -921,9 +989,13 @@ const TermAndConditionComp = () => {
 
             <ul>
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Entire agreement:</strong>{" "}
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Entire agreement:
+                </strong>{" "}
                 These Conditions constitute the entire agreement between you and
                 us with respect to BITS NFT, and they supersede any prior
                 agreements between you and us – whether written or oral.
@@ -931,21 +1003,29 @@ const TermAndConditionComp = () => {
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>No waiver:</strong> Our
-                failure or delay to enforce a right under these Conditions shall
-                not waive our right to enforce that right on similar violations
-                or at a later time. No waiver is valid unless it’s put in
-                writing.
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  No waiver:
+                </strong>{" "}
+                Our failure or delay to enforce a right under these Conditions
+                shall not waive our right to enforce that right on similar
+                violations or at a later time. No waiver is valid unless it’s
+                put in writing.
               </li>
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Severability:</strong> If
-                any provision of these Conditions is found to be invalid or
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Severability:
+                </strong>{" "}
+                If any provision of these Conditions is found to be invalid or
                 unenforceable, such a provision shall be deemed severable from
                 these Conditions, and the remaining provisions shall remain
                 valid and enforceable.
@@ -953,21 +1033,29 @@ const TermAndConditionComp = () => {
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Assignment:</strong> You may
-                not assign, license, or transfer your rights under these
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Assignment:
+                </strong>{" "}
+                You may not assign, license, or transfer your rights under these
                 Conditions to a third party without written approval from us. We
                 may assign our duties and obligations under these Conditions.
               </li>
               <br />
 
               <li>
-                <strong style={{
-                fontWeight: 800
-              }}>Force majeure:</strong> If
-                we are unable to provide any portion of BITS NFT, or there is a
-                delay as a result of any event outside our reasonable control
+                <strong
+                  style={{
+                    fontWeight: 800,
+                  }}
+                >
+                  Force majeure:
+                </strong>{" "}
+                If we are unable to provide any portion of BITS NFT, or there is
+                a delay as a result of any event outside our reasonable control
                 (including without limitation, riots, internet breakdown,
                 government intervention, and acts of God), we shall not be held
                 liable for any liabilities or damages the delay or failure may
@@ -1001,6 +1089,7 @@ const TermAndConditionComp = () => {
           </ul>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default TermAndConditionComp;

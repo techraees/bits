@@ -6,10 +6,12 @@ const CHAIN_CONFIG = {
     nativeCurrency: {
       name: "Ether",
       symbol: "ETH",
-      decimals: 18
+      decimals: 18,
     },
-    rpcUrls: [`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`],
-    blockExplorerUrls: ["https://etherscan.io"]
+    rpcUrls: [
+      `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`,
+    ],
+    blockExplorerUrls: ["https://etherscan.io"],
   },
   137: {
     chainId: "0x89",
@@ -17,13 +19,16 @@ const CHAIN_CONFIG = {
     nativeCurrency: {
       name: "MATIC",
       symbol: "MATIC",
-      decimals: 18
+      decimals: 18,
     },
-    rpcUrls: [`https://polygon-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`],
-    blockExplorerUrls: ["https://polygonscan.com"]
-  }
+    rpcUrls: [
+      `https://polygon-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}`,
+    ],
+    blockExplorerUrls: ["https://polygonscan.com"],
+  },
 };
-const getErrorCode = error => error?.code ?? error?.data?.originalError?.code ?? error?.error?.code;
+const getErrorCode = (error) =>
+  error?.code ?? error?.data?.originalError?.code ?? error?.error?.code;
 export class WalletSwitchRejectedError extends Error {
   constructor(message = "User rejected the network switch.") {
     super(message);
@@ -43,15 +48,17 @@ export async function switchWalletChain(walletProvider, targetChainId) {
   try {
     await provider.request({
       method: "wallet_switchEthereumChain",
-      params: [{
-        chainId: chainConfig.chainId
-      }]
+      params: [
+        {
+          chainId: chainConfig.chainId,
+        },
+      ],
     });
   } catch (error) {
     if (getErrorCode(error) === 4902) {
       await provider.request({
         method: "wallet_addEthereumChain",
-        params: [chainConfig]
+        params: [chainConfig],
       });
       return;
     }

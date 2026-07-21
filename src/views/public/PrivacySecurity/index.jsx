@@ -3,28 +3,45 @@ import "./css/index.css";
 import { useSelector } from "react-redux";
 import { AccordianComponent } from "../../../components";
 const PrivacySecurity = () => {
-  let faqsData = [{
-    key: "1",
-    title: "Terms & Agreements",
-    description: ""
-  }, {
-    key: "2",
-    title: "Digital Millennium Copyright Act",
-    description: ""
-  }, {
-    key: "4",
-    title: "Privacy Policy",
-    description: ""
-  }];
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
-  return <div className={`${backgroundTheme} pb-4`} style={{
-    minHeight: "100vh"
-  }}>
+  let faqsData = [
+    {
+      key: "1",
+      title: "Terms & Agreements",
+      description: "",
+    },
+    {
+      key: "2",
+      title: "Digital Millennium Copyright Act",
+      description: "",
+    },
+    {
+      key: "4",
+      title: "Privacy Policy",
+      description: "",
+    },
+  ];
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
+  return (
+    <div
+      className={`${backgroundTheme} pb-4`}
+      style={{
+        minHeight: "100vh",
+      }}
+    >
       <div className="container">
         <div className="my-5">
-          <AccordianComponent btnKey={"3"} data={faqsData} termKey={"1"} copyrightKey={"2"} privacyKey={"4"} />
+          <AccordianComponent
+            btnKey={"3"}
+            data={faqsData}
+            termKey={"1"}
+            copyrightKey={"2"}
+            privacyKey={"4"}
+          />
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default PrivacySecurity;

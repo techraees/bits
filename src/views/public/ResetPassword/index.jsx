@@ -13,7 +13,7 @@ import { RESET_PASSWORD_MUTATION } from "../../../gql/mutations";
 import {
   clearPasswordResetStorage,
   clearResetToken,
-  getResetToken
+  getResetToken,
 } from "../../../utills/forgotPasswordOtpStorage";
 import getGraphQLErrorMessage from "../../../utills/getGraphQLErrorMessage";
 import "../Login/css/index.css";
@@ -31,12 +31,14 @@ const noAutofillProps = {
   "data-1p-ignore": "true",
   "data-bwignore": "true",
   "data-form-type": "other",
-  "data-username": "false"
+  "data-username": "false",
 };
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
   const fieldSuffix = useId().replace(/:/g, "");
 
   const [password, setPassword] = useState("");
@@ -52,7 +54,11 @@ const ResetPassword = () => {
 
   const denyAccess = (message) => {
     clearResetToken();
-    ToastMessage("Error", message || "Session expired. Please verify OTP again.", "error");
+    ToastMessage(
+      "Error",
+      message || "Session expired. Please verify OTP again.",
+      "error",
+    );
     navigate("/forgot-password", { replace: true });
   };
 
@@ -72,8 +78,8 @@ const ResetPassword = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ data: { token: storedToken } })
-          }
+            body: JSON.stringify({ data: { token: storedToken } }),
+          },
         );
         const data = await response.json();
         if (cancelled) return;
@@ -83,11 +89,15 @@ const ResetPassword = () => {
           setTokenValid(true);
           setVerifying(false);
         } else {
-          denyAccess(data.message || "Reset token expired. Please verify OTP again.");
+          denyAccess(
+            data.message || "Reset token expired. Please verify OTP again.",
+          );
         }
       } catch (error) {
         if (cancelled) return;
-        denyAccess(error.message || "Reset token expired. Please verify OTP again.");
+        denyAccess(
+          error.message || "Reset token expired. Please verify OTP again.",
+        );
       }
     };
 
@@ -118,9 +128,9 @@ const ResetPassword = () => {
         variables: { newPassword: password },
         context: {
           headers: {
-            authorization: `Bearer ${getResetToken() || token}`
-          }
-        }
+            authorization: `Bearer ${getResetToken() || token}`,
+          },
+        },
       });
 
       if (data?.Reset_password?.updated) {
@@ -135,7 +145,8 @@ const ResetPassword = () => {
       const isSamePassword =
         /same as old password/i.test(msg) ||
         error?.graphQLErrors?.[0]?.error_code === "PASSWORDS_SAME" ||
-        error?.networkError?.result?.errors?.[0]?.error_code === "PASSWORDS_SAME";
+        error?.networkError?.result?.errors?.[0]?.error_code ===
+          "PASSWORDS_SAME";
       if (/invalid|expired|token|unauthorized/i.test(msg) && !isSamePassword) {
         denyAccess(msg);
       } else {
@@ -196,13 +207,20 @@ const ResetPassword = () => {
               >
                 Reset your password
               </h2>
-              <p className="text-center text-white mb-4" style={{ opacity: 0.8 }}>
-                Your new password must be different from previous used passwords.
+              <p
+                className="text-center text-white mb-4"
+                style={{ opacity: 0.8 }}
+              >
+                Your new password must be different from previous used
+                passwords.
               </p>
 
               <div className="mb-4">
                 <div className="login-input-group">
-                  <label className="login-input-label" htmlFor={`np-${fieldSuffix}`}>
+                  <label
+                    className="login-input-label"
+                    htmlFor={`np-${fieldSuffix}`}
+                  >
                     New Password
                   </label>
                   <Input
@@ -230,7 +248,10 @@ const ResetPassword = () => {
                 <PasswordRequirements password={password || ""} />
 
                 <div className="login-input-group mt-4">
-                  <label className="login-input-label" htmlFor={`cp-${fieldSuffix}`}>
+                  <label
+                    className="login-input-label"
+                    htmlFor={`cp-${fieldSuffix}`}
+                  >
                     Confirm Password
                   </label>
                   <Input
@@ -263,7 +284,9 @@ const ResetPassword = () => {
                     {...noAutofillProps}
                   />
                   {confirmPassword && password !== confirmPassword && (
-                    <span className="login-error-text">Passwords do not match</span>
+                    <span className="login-error-text">
+                      Passwords do not match
+                    </span>
                   )}
                 </div>
               </div>

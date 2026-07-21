@@ -7,34 +7,36 @@ import polygonMintingContractAbi from "../../abis/polygonMintingContractAbi.json
 import { numToHex } from "../../utills/numberToHex";
 import { WeiToETH } from "../../utills/convertWeiAndBnb";
 import { ToastMessage } from "../../components";
-export const loadBlockchainAction = (chain, address, connectedAccount, provider) => async dispatch => {
-  try {
-    if (address?.toLowerCase() === connectedAccount?.toLowerCase() || address === undefined) {
-      const signer = await provider.getSigner();
-      const {
-        chainId
-      } = await provider.getNetwork();
-      if (chain === chainId) {
-        const web3 = provider;
-        const data = {
-          connectedAccount,
-          web3,
-          chainId,
-          signer
-        };
-        dispatch({
-          type: ActionTypes.WEB3CONNECT,
-          payload: data
-        });
+export const loadBlockchainAction =
+  (chain, address, connectedAccount, provider) => async (dispatch) => {
+    try {
+      if (
+        address?.toLowerCase() === connectedAccount?.toLowerCase() ||
+        address === undefined
+      ) {
+        const signer = await provider.getSigner();
+        const { chainId } = await provider.getNetwork();
+        if (chain === chainId) {
+          const web3 = provider;
+          const data = {
+            connectedAccount,
+            web3,
+            chainId,
+            signer,
+          };
+          dispatch({
+            type: ActionTypes.WEB3CONNECT,
+            payload: data,
+          });
+        } else {
+          ToastMessage("Error", "Please connect correct chain", "error");
+        }
       } else {
-        ToastMessage("Error", "Please connect correct chain", "error");
+        ToastMessage("Error", "Please connect correct wallet", "error");
       }
-    } else {
-      ToastMessage("Error", "Please connect correct wallet", "error");
-    }
-  } catch (err) {}
-};
-export const logoutWallet = () => async dispatch => {
+    } catch (err) {}
+  };
+export const logoutWallet = () => async (dispatch) => {
   try {
     let account = null;
     account = null;
@@ -43,62 +45,88 @@ export const logoutWallet = () => async dispatch => {
     const data = {
       web3,
       account,
-      chainId
+      chainId,
     };
     dispatch({
       type: ActionTypes.WEB3DISCONNECT,
-      payload: data
+      payload: data,
     });
   } catch (err) {}
 };
-export const updateAccount = account => async dispatch => {
+export const updateAccount = (account) => async (dispatch) => {
   try {
     const data = {
-      account
+      account,
     };
     dispatch({
       type: ActionTypes.WEB3CONNECT,
-      payload: data
+      payload: data,
     });
   } catch (err) {
     throw err;
   }
 };
-export const loadContractIns = () => async dispatch => {
+export const loadContractIns = () => async (dispatch) => {
   const apiKey = process.env.REACT_APP_INFURA_API_KEY;
   const ethInfuraIns = `https://mainnet.infura.io/v3/${apiKey}`;
   const polygonInfuraIns = `https://polygon-mainnet.infura.io/v3/${apiKey}`;
   try {
-    const ethProvider = new ethers.providers.StaticJsonRpcProvider(ethInfuraIns, 1);
+    const ethProvider = new ethers.providers.StaticJsonRpcProvider(
+      ethInfuraIns,
+      1,
+    );
     const ethMarketPlaceContract = "0x3E12F9b507F51DccDc448B38d67eBfE2194b6e72";
     const ethMintingConract = "0x00Ee6dA7De5635cA6c2742682168621351e6b5B1";
-    const ethMarketContractIns = new ethers.Contract(ethMarketPlaceContract, ethMarketContractAbi, ethProvider);
-    const ethMintingContractIns = new ethers.Contract(ethMintingConract, ethMintingContractAbi, ethProvider);
-    const polygonProvider = new ethers.providers.StaticJsonRpcProvider(polygonInfuraIns, 137);
-    const polygonMarketPlaceContract = "0x381c730F1646f00e4Ae9Dfe9589b1E0BDE107a1e";
+    const ethMarketContractIns = new ethers.Contract(
+      ethMarketPlaceContract,
+      ethMarketContractAbi,
+      ethProvider,
+    );
+    const ethMintingContractIns = new ethers.Contract(
+      ethMintingConract,
+      ethMintingContractAbi,
+      ethProvider,
+    );
+    const polygonProvider = new ethers.providers.StaticJsonRpcProvider(
+      polygonInfuraIns,
+      137,
+    );
+    const polygonMarketPlaceContract =
+      "0x381c730F1646f00e4Ae9Dfe9589b1E0BDE107a1e";
     const polygonMintingConract = "0x00Ee6dA7De5635cA6c2742682168621351e6b5B1";
-    const polygonMarketContractIns = new ethers.Contract(polygonMarketPlaceContract, polygonMarketContractAbi, polygonProvider);
-    const polygonMintingContractIns = new ethers.Contract(polygonMintingConract, polygonMintingContractAbi, polygonProvider);
+    const polygonMarketContractIns = new ethers.Contract(
+      polygonMarketPlaceContract,
+      polygonMarketContractAbi,
+      polygonProvider,
+    );
+    const polygonMintingContractIns = new ethers.Contract(
+      polygonMintingConract,
+      polygonMintingContractAbi,
+      polygonProvider,
+    );
     dispatch({
       type: ActionTypes.LOAD_CONTRACT,
       payload: {
         ethMarketContractIns,
         ethMintingContractIns,
         polygonMarketContractIns,
-        polygonMintingContractIns
-      }
+        polygonMintingContractIns,
+      },
     });
     dispatch({
       type: "MATIC_CHAIN",
       contractData: {
         marketContract: polygonMarketContractIns,
         mintContract: polygonMintingContractIns,
-        chain: 137
-      }
+        chain: 137,
+      },
     });
   } catch (err) {}
 };
-const getEmoteItems = async (ethMarketContractIns, polygonMarketContractIns) => {
+const getEmoteItems = async (
+  ethMarketContractIns,
+  polygonMarketContractIns,
+) => {
   const maticcombined = {};
   const ethcombined = {};
   const maticArray = Number(await polygonMarketContractIns.getAllFixedPrices());
@@ -113,19 +141,21 @@ const getEmoteItems = async (ethMarketContractIns, polygonMarketContractIns) => 
           copies: Number(obj.copiesForSale),
           newOwner: obj.newowner,
           price: WeiToETH(obj.price),
-          fixedid: Number(obj.fixedid)
+          fixedid: Number(obj.fixedid),
         });
       } else {
         maticcombined[id] = {
           tokenid: id,
           isSold: obj.isSold,
-          owners: [{
-            owner: obj.owner,
-            copies: Number(obj.copiesForSale),
-            newOwner: obj.newowner,
-            price: WeiToETH(obj.price),
-            fixedid: Number(obj.fixedid)
-          }]
+          owners: [
+            {
+              owner: obj.owner,
+              copies: Number(obj.copiesForSale),
+              newOwner: obj.newowner,
+              price: WeiToETH(obj.price),
+              fixedid: Number(obj.fixedid),
+            },
+          ],
         };
       }
     }
@@ -141,26 +171,28 @@ const getEmoteItems = async (ethMarketContractIns, polygonMarketContractIns) => 
         copies: Number(ethobj.copiesForSale),
         newOwner: ethobj.newowner,
         price: WeiToETH(ethobj.price),
-        fixedid: Number(ethobj.fixedid)
+        fixedid: Number(ethobj.fixedid),
       });
     } else {
       ethcombined[ethid] = {
         tokenid: ethid,
         isSold: ethobj.isSold,
-        owners: [{
-          owner: ethobj.owner,
-          copies: Number(ethobj.copiesForSale),
-          newOwner: ethobj.newowner,
-          price: WeiToETH(ethobj.price),
-          fixedid: Number(ethobj.fixedid)
-        }]
+        owners: [
+          {
+            owner: ethobj.owner,
+            copies: Number(ethobj.copiesForSale),
+            newOwner: ethobj.newowner,
+            price: WeiToETH(ethobj.price),
+            fixedid: Number(ethobj.fixedid),
+          },
+        ],
       };
     }
   }
   const ethList = Object.values(ethcombined);
   return {
     maticList,
-    ethList
+    ethList,
   };
 };
 const getAuctions = async (ethMarketContractIns, polygonMarketContractIns) => {
@@ -178,6 +210,6 @@ const getAuctions = async (ethMarketContractIns, polygonMarketContractIns) => {
   }
   return {
     maticAuctionsList,
-    ethAuctionsList
+    ethAuctionsList,
   };
 };

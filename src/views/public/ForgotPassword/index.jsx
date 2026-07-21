@@ -9,7 +9,7 @@ import Loading from "../../../components/loaders/loading";
 import {
   getCooldownRemainingMs,
   setOtpCooldown,
-  clearPasswordResetStorage
+  clearPasswordResetStorage,
 } from "../../../utills/forgotPasswordOtpStorage";
 import "../Login/css/index.css";
 import "./css/index.css";
@@ -19,7 +19,9 @@ const NO_SCROLL_CLASS = "forgot-password-no-scroll";
 
 function ForgotPassword() {
   const navigate = useNavigate();
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -71,7 +73,7 @@ function ForgotPassword() {
       ToastMessage(
         "Error",
         `Please wait ${seconds}s before requesting another OTP`,
-        "error"
+        "error",
       );
       // Push so Back from OTP still returns to forgot-password
       navigate(`/verify-otp?email=${encodeURIComponent(email.trim())}`);
@@ -85,8 +87,8 @@ function ForgotPassword() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: { email: email.trim() } })
-        }
+          body: JSON.stringify({ data: { email: email.trim() } }),
+        },
       );
       const data = await response.json();
       if (data.success) {
@@ -109,7 +111,9 @@ function ForgotPassword() {
   };
 
   return (
-    <div className={`login-page-wrapper forgot-password-page ${backgroundTheme}`}>
+    <div
+      className={`login-page-wrapper forgot-password-page ${backgroundTheme}`}
+    >
       {loading && <Loading content="Loading" />}
 
       <div className="container loginContainer">
@@ -139,11 +143,21 @@ function ForgotPassword() {
                   top: "auto",
                   width: 1,
                   height: 1,
-                  overflow: "hidden"
+                  overflow: "hidden",
                 }}
               >
-                <input type="text" name="fake_username" autoComplete="username" tabIndex={-1} />
-                <input type="password" name="fake_password" autoComplete="current-password" tabIndex={-1} />
+                <input
+                  type="text"
+                  name="fake_username"
+                  autoComplete="username"
+                  tabIndex={-1}
+                />
+                <input
+                  type="password"
+                  name="fake_password"
+                  autoComplete="current-password"
+                  tabIndex={-1}
+                />
               </div>
 
               <h2
@@ -152,8 +166,12 @@ function ForgotPassword() {
               >
                 Forgot your password?
               </h2>
-              <p className="text-center text-white mb-4" style={{ opacity: 0.8 }}>
-                Enter your email and we&apos;ll send you a one-time verification code.
+              <p
+                className="text-center text-white mb-4"
+                style={{ opacity: 0.8 }}
+              >
+                Enter your email and we&apos;ll send you a one-time verification
+                code.
               </p>
 
               <div className="mb-4">

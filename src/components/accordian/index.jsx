@@ -13,45 +13,75 @@ const AccordianComponent = ({
   btnKey,
   termKey,
   copyrightKey,
-  privacyKey
+  privacyKey,
 }) => {
-  const textColor = useSelector(state => state.app.theme.textColor);
-  const bgColor3 = useSelector(state => state.app.theme.bgColor3);
-  const border = useSelector(state => state.app.theme.border);
-  const {
-    Panel
-  } = Collapse;
-  return <div className={`mt-4 ${bgColor3}`}>
-      <Collapse accordion expandIconPosition={"right"} className={border} ghost={true} expandIcon={({
-      isActive
-    }) => isActive ? <img src={up_arrow2} style={{
-      width: 20
-    }} /> : <img src={down_arrow3} style={{
-      width: 20
-    }} />}>
-        {data && data.map(e => {
-        return <Panel className={`${border} p-2`} header={e.title} key={e.key}>
-                {list ? <ul>
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const bgColor3 = useSelector((state) => state.app.theme.bgColor3);
+  const border = useSelector((state) => state.app.theme.border);
+  const { Panel } = Collapse;
+  return (
+    <div className={`mt-4 ${bgColor3}`}>
+      <Collapse
+        accordion
+        expandIconPosition={"right"}
+        className={border}
+        ghost={true}
+        expandIcon={({ isActive }) =>
+          isActive ? (
+            <img
+              src={up_arrow2}
+              style={{
+                width: 20,
+              }}
+            />
+          ) : (
+            <img
+              src={down_arrow3}
+              style={{
+                width: 20,
+              }}
+            />
+          )
+        }
+      >
+        {data &&
+          data.map((e) => {
+            return (
+              <Panel className={`${border} p-2`} header={e.title} key={e.key}>
+                {list ? (
+                  <ul>
                     <li className={`py-3 ${"textColor_Black"}`}>
                       {e.description}
                     </li>
-                  </ul> : <>
+                  </ul>
+                ) : (
+                  <>
                     <span className={"textColor_Black"}>{e.description}</span>
-                    {e.key === btnKey && <div className="d-flex mt-4 justify-content-center">
-                        <div style={{
-                minWidth: "20%"
-              }}>
-                          <ButtonComponent height={40} text={"Change Password"} />
+                    {e.key === btnKey && (
+                      <div className="d-flex mt-4 justify-content-center">
+                        <div
+                          style={{
+                            minWidth: "20%",
+                          }}
+                        >
+                          <ButtonComponent
+                            height={40}
+                            text={"Change Password"}
+                          />
                         </div>
-                      </div>}
+                      </div>
+                    )}
 
                     {e.key === termKey && <TermAndConditionComp />}
                     {e.key === copyrightKey && <CopyRightComp />}
                     {e.key === privacyKey && <PrivacyPolicyComp />}
-                  </>}
-              </Panel>;
-      })}
+                  </>
+                )}
+              </Panel>
+            );
+          })}
       </Collapse>
-    </div>;
+    </div>
+  );
 };
 export default AccordianComponent;

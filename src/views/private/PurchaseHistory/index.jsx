@@ -5,33 +5,32 @@ import { DownOutlined } from "@ant-design/icons";
 import "./css/index.css";
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_NFTS_WITHOUT_ADDRESS, GET_ALL_MY_TRANSACTION } from "../../../gql/queries";
+import {
+  GET_ALL_NFTS_WITHOUT_ADDRESS,
+  GET_ALL_MY_TRANSACTION,
+} from "../../../gql/queries";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 const PurchaseHistory = () => {
   let token = getCookieStorage("access_token");
-  const {
-    data
-  } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
-  const {
-    contractData
-  } = useSelector(state => state.chain.contractData);
-  const {
-    userData
-  } = useSelector(state => state.address.userData);
+  const { data } = useQuery(GET_ALL_NFTS_WITHOUT_ADDRESS);
+  const { contractData } = useSelector((state) => state.chain.contractData);
+  const { userData } = useSelector((state) => state.address.userData);
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [dropdownValue, setDropdownValue] = useState("Last Week");
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
-  const textColor = useSelector(state => state.app.theme.textColor);
-  const textColor2 = useSelector(state => state.app.theme.textColor2);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const textColor2 = useSelector((state) => state.app.theme.textColor2);
   const {
     data: getAllMyTransaction,
     isLoading: getAllMyTransactionLoading,
-    isFetching: getAllMyTransactionFetching
+    isFetching: getAllMyTransactionFetching,
   } = useQuery(GET_ALL_MY_TRANSACTION, {
     variables: {
       token: token,
-      filterObj: `{"transaction_type":"buying_nft","chain_id":${contractData?.chain}}`
-    }
+      filterObj: `{"transaction_type":"buying_nft","chain_id":${contractData?.chain}}`,
+    },
   });
   useEffect(() => {
     if (getAllMyTransaction) {
@@ -39,23 +38,39 @@ const PurchaseHistory = () => {
       setTransactionHistory(transactions);
     }
   }, [getAllMyTransaction]);
-  const menu = <Menu onClick={e => setDropdownValue(e.key)} items={[{
-    label: "Last Week",
-    key: "Last Week"
-  }, {
-    label: "Last Month",
-    key: "Last Month"
-  }, {
-    label: "Last Year",
-    key: "Last Year"
-  }]} />;
-  return <div className={`${backgroundTheme}`} style={{
-    minHeight: "100vh"
-  }}>
+  const menu = (
+    <Menu
+      onClick={(e) => setDropdownValue(e.key)}
+      items={[
+        {
+          label: "Last Week",
+          key: "Last Week",
+        },
+        {
+          label: "Last Month",
+          key: "Last Month",
+        },
+        {
+          label: "Last Year",
+          key: "Last Year",
+        },
+      ]}
+    />
+  );
+  return (
+    <div
+      className={`${backgroundTheme}`}
+      style={{
+        minHeight: "100vh",
+      }}
+    >
       <div className="container">
-        <div className="d-flex justify-content-between py-5 transactionFirstView" style={{
-        alignItems: "center"
-      }}>
+        <div
+          className="d-flex justify-content-between py-5 transactionFirstView"
+          style={{
+            alignItems: "center",
+          }}
+        >
           <div className="d-flex">
             {}
             <div className="ms-3">
@@ -72,11 +87,14 @@ const PurchaseHistory = () => {
             </Button>
           </Dropdown>
         </div>
-        <div style={{
-        border: "1px solid #D54343"
-      }}></div>
+        <div
+          style={{
+            border: "1px solid #D54343",
+          }}
+        ></div>
         <Transactions checkIcon data={transactionHistory} />
       </div>
-    </div>;
+    </div>
+  );
 };
 export default PurchaseHistory;

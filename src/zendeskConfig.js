@@ -1,30 +1,30 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
-const canUseDOM = () => typeof window !== "undefined" && !!window.document && !!window.document.createElement;
+const canUseDOM = () =>
+  typeof window !== "undefined" &&
+  !!window.document &&
+  !!window.document.createElement;
 export const ZendeskAPI = (...args) => {
   if (canUseDOM() && window.zE) {
     try {
       window.zE(...args);
     } catch (e) {}
-  } else {}
+  } else {
+  }
 };
 class Zendesk extends Component {
   insertScript(zendeskKey, defer) {
     const script = document.createElement("script");
     script.id = "ze-snippet";
     script.src = `https://static.zdassets.com/ekr/snippet.js?key=${zendeskKey}`;
-    if (defer) script.defer = true;else script.async = true;
+    if (defer) script.defer = true;
+    else script.async = true;
     script.addEventListener("load", this.props.onLoaded);
     document.body.appendChild(script);
   }
   componentDidMount() {
     if (canUseDOM() && !window.zE) {
-      const {
-        defer,
-        zendeskKey,
-        onLoaded,
-        ...other
-      } = this.props;
+      const { defer, zendeskKey, onLoaded, ...other } = this.props;
       window.zESettings = other;
       this.insertScript(zendeskKey, defer);
     }
@@ -44,6 +44,6 @@ class Zendesk extends Component {
 Zendesk.propTypes = {
   zendeskKey: PropTypes.string.isRequired,
   defer: PropTypes.bool,
-  onLoaded: PropTypes.func
+  onLoaded: PropTypes.func,
 };
 export default Zendesk;

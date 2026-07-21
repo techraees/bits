@@ -1,8 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 const CardSkeletalCard = () => {
-  const isLight = useSelector(s => s.app?.theme?.textColor === "black");
-  return <div className={`skeletal_parent_child ${isLight ? "skeleton-light" : ""}`}>
+  const isLight = useSelector((s) => s.app?.theme?.textColor === "black");
+  return (
+    <div className={`skeletal_parent_child ${isLight ? "skeleton-light" : ""}`}>
       {}
       <div className="skeletal_parent_child_video_element shimmer"></div>
 
@@ -34,6 +35,7 @@ const CardSkeletalCard = () => {
           <div className="skeletal_parent_child_bottom__flex_button_with_text_text shimmer"></div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default CardSkeletalCard;

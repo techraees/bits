@@ -7,7 +7,7 @@ const DEFAULT_THEME = {
   bgColor: "dark-grey-bg",
   bgColor2: "",
   bgColor3: "black-background3",
-  border: "dark-border"
+  border: "dark-border",
 };
 
 const loadSavedTheme = () => {
@@ -23,7 +23,7 @@ const loadSavedTheme = () => {
 };
 
 const INITIAL_STATE = {
-  theme: loadSavedTheme() || DEFAULT_THEME
+  theme: loadSavedTheme() || DEFAULT_THEME,
 };
 
 const AppReducer = (state = INITIAL_STATE, action) => {
@@ -31,7 +31,7 @@ const AppReducer = (state = INITIAL_STATE, action) => {
     case "THEME":
       return {
         ...state,
-        theme: action.theme
+        theme: action.theme,
       };
     default:
       return state;

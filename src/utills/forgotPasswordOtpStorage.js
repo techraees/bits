@@ -3,7 +3,9 @@ const RESET_TOKEN_KEY = "password_reset_token";
 const COOLDOWN_MS = 60 * 1000;
 
 function normalizeEmail(email) {
-  return String(email || "").trim().toLowerCase();
+  return String(email || "")
+    .trim()
+    .toLowerCase();
 }
 
 function readCooldown() {
@@ -28,7 +30,7 @@ function setOtpCooldown(email) {
   const payload = {
     email: normalizeEmail(email),
     sentAt,
-    cooldownUntil: sentAt + COOLDOWN_MS
+    cooldownUntil: sentAt + COOLDOWN_MS,
   };
   localStorage.setItem(COOLDOWN_KEY, JSON.stringify(payload));
   return payload;
@@ -66,5 +68,5 @@ export {
   setResetToken,
   getResetToken,
   clearResetToken,
-  clearPasswordResetStorage
+  clearPasswordResetStorage,
 };

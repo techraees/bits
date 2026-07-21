@@ -1,6 +1,7 @@
 import React from "react";
 const TopNftListingAuctionHeader = () => {
-  return <>
+  return (
+    <>
       <div className="d-flex justify-content-between align-items-center w-full bg-white popup_header Nunito_font_family">
         <div className="d-flex align-items-center">
           <span className=" theme_gradient_red text-white popup_header_first_box">
@@ -14,6 +15,7 @@ const TopNftListingAuctionHeader = () => {
           <div>Auction</div>
         </div>
       </div>
-    </>;
+    </>
+  );
 };
 export default TopNftListingAuctionHeader;

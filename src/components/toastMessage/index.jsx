@@ -6,7 +6,7 @@ const ToastMessage = (title, message, type) => {
     key,
     message: title,
     description: message,
-    duration: 5.2
+    duration: 5.2,
   });
 };
 export default ToastMessage;

@@ -53,7 +53,11 @@ const Footer = () => {
       <div className="footer-support-align">
         <div className="container">
           <div className="support-btn-fixed">
-            <img src={helplinecustomer} alt="support" className="support-icon" />
+            <img
+              src={helplinecustomer}
+              alt="support"
+              className="support-icon"
+            />
           </div>
         </div>
       </div>
@@ -64,16 +68,32 @@ const Footer = () => {
             <div className="footer-brand-top">
               <img src={logo} alt="BITS logo" className="footer-logo-img" />
               <p className="footer-description">
-                At BITS we will take your most iconic performances and immortalize
-                them on the blockchain.
+                At BITS we will take your most iconic performances and
+                immortalize them on the blockchain.
               </p>
             </div>
             <div className="footer-socials">
-              <a href="#" aria-label="Instagram" onClick={(e) => e.preventDefault()}>
-                <img src={instagramsocialicon} alt="Instagram" className="social-icon" />
+              <a
+                href="#"
+                aria-label="Instagram"
+                onClick={(e) => e.preventDefault()}
+              >
+                <img
+                  src={instagramsocialicon}
+                  alt="Instagram"
+                  className="social-icon"
+                />
               </a>
-              <a href="#" aria-label="TikTok" onClick={(e) => e.preventDefault()}>
-                <img src={tiktoksocialicon} alt="TikTok" className="social-icon" />
+              <a
+                href="#"
+                aria-label="TikTok"
+                onClick={(e) => e.preventDefault()}
+              >
+                <img
+                  src={tiktoksocialicon}
+                  alt="TikTok"
+                  className="social-icon"
+                />
               </a>
               <a
                 href="https://twitter.com"
@@ -156,7 +176,11 @@ const Footer = () => {
               BITS NFT Inc. © {year} All Rights reserved
             </p>
             <a href="#metamask" className="metamask-link">
-              <img src={metamaskFooter} alt="MetaMask" className="metamask-icon" />
+              <img
+                src={metamaskFooter}
+                alt="MetaMask"
+                className="metamask-icon"
+              />
             </a>
           </div>
         </div>

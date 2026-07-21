@@ -19,25 +19,31 @@ import { Form } from "react-bootstrap";
 import { timeToTimeStamp } from "../../../utills/timeToTimestamp";
 import { loadContractIns } from "../../../store/actions";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
-import { useAppKitProvider, useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
+import {
+  useAppKitProvider,
+  useAppKitAccount,
+  useAppKitNetwork,
+} from "@reown/appkit/react";
 import { gql, useMutation } from "@apollo/client";
-import { ADD_NFT_TO_NFT_MARKET_PLACE, CREATE_NEW_TRANSACTION } from "../../../gql/mutations";
+import {
+  ADD_NFT_TO_NFT_MARKET_PLACE,
+  CREATE_NEW_TRANSACTION,
+} from "../../../gql/mutations";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 import { useWalletGateFlow } from "../../../hooks/useWalletGateFlow";
 const ListNft = () => {
-  const {
-    chainId
-  } = useAppKitNetwork();
-  const [addNftToMarketPlace, {
-    data,
-    loading,
-    error
-  }] = useMutation(ADD_NFT_TO_NFT_MARKET_PLACE);
-  const [createNewTransation, {
-    data: transactionData,
-    loading: transactionLoading,
-    error: transactionError
-  }] = useMutation(CREATE_NEW_TRANSACTION);
+  const { chainId } = useAppKitNetwork();
+  const [addNftToMarketPlace, { data, loading, error }] = useMutation(
+    ADD_NFT_TO_NFT_MARKET_PLACE,
+  );
+  const [
+    createNewTransation,
+    {
+      data: transactionData,
+      loading: transactionLoading,
+      error: transactionError,
+    },
+  ] = useMutation(CREATE_NEW_TRANSACTION);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("fixed Price");
   const [fixedPrice, setFixedPrice] = useState(0);
@@ -50,54 +56,32 @@ const ListNft = () => {
   const [showVal, setShowVal] = useState(0);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
-  const {
-    state
-  } = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    isConnected,
-    address
-  } = useAppKitAccount();
-  const {
-    walletProvider
-  } = useAppKitProvider("eip155");
-  const {
-    isTargetChainMismatched
-  } = useWalletGateFlow();
-  const {
-    userData
-  } = useSelector(state => state.address.userData);
-  const {
-    web3,
-    account,
-    signer
-  } = useSelector(state => state.web3.walletData);
-  const {
-    contractData
-  } = useSelector(state => state.chain.contractData);
+  const { isConnected, address } = useAppKitAccount();
+  const { walletProvider } = useAppKitProvider("eip155");
+  const { isTargetChainMismatched } = useWalletGateFlow();
+  const { userData } = useSelector((state) => state.address.userData);
+  const { web3, account, signer } = useSelector(
+    (state) => state.web3.walletData,
+  );
+  const { contractData } = useSelector((state) => state.chain.contractData);
   const [tokens, setTokens] = useState(0);
-  const {
-    name,
-    royalty,
-    artistName,
-    tokenId,
-    videoLink,
-    nftId
-  } = state;
+  const { name, royalty, artistName, tokenId, videoLink, nftId } = state;
   let token = getCookieStorage("access_token");
   const handleEndTimeStamp = (value, dateString) => {
     const time = timeToTimeStamp(dateString);
     setEndTimeStamp(time);
   };
-  const handleRadioChange = e => {
+  const handleRadioChange = (e) => {
     setSelectedOption(e.target.value);
     setPotentialEarning(0);
     setFixedPrice(0);
     setAuctionStartPrice(0);
     setShowVal(0);
   };
-  const handlePriceChange = e => {
+  const handlePriceChange = (e) => {
     const value = e.target.value;
     const finalVal = value;
     setShowVal(value);
@@ -109,7 +93,7 @@ const ListNft = () => {
       setPotentialEarning(calculateEarning(value, 2.5, royalty));
     }
   };
-  const handleCopyChange = e => {
+  const handleCopyChange = (e) => {
     const value = e.target.value;
     if (selectedOption === "fixed Price") {
       setFixedPriceCopies(value);
@@ -117,12 +101,17 @@ const ListNft = () => {
       setAuctionCopies(value);
     }
   };
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
-  const textColor = useSelector(state => state.app.theme.textColor);
-  const handleChange = value => {};
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const handleChange = (value) => {};
   useEffect(() => {
     async function getTokens() {
-      const data = await contractData.mintContract.balanceOf(userData?.address, tokenId);
+      const data = await contractData.mintContract.balanceOf(
+        userData?.address,
+        tokenId,
+      );
       setTokens(Number(data));
     }
     getTokens();
@@ -138,13 +127,8 @@ const ListNft = () => {
       try {
         const provider = new ethers.providers.Web3Provider(walletProvider);
         const signer = provider.getSigner();
-        const {
-          chainId
-        } = await provider.getNetwork();
-        const {
-          marketContract,
-          mintContract
-        } = contractData;
+        const { chainId } = await provider.getNetwork();
+        const { marketContract, mintContract } = contractData;
         const market = marketContract.connect(signer);
         const mint = mintContract.connect(signer);
         const isApproved = await mint.isApprovedForAll(address, market.address);
@@ -156,14 +140,30 @@ const ListNft = () => {
         const price = ETHToWei(isAuction ? auctionStartPrice : fixedPrice);
         const copies = isAuction ? auctionCopies : fixedPriceCopies;
         const eventName = isAuction ? "AuctionStart" : "OfferSale";
-        const startTimeStamp = isAuction ? Math.floor(Date.now() / 1000) + 150 : 0;
+        const startTimeStamp = isAuction
+          ? Math.floor(Date.now() / 1000) + 150
+          : 0;
         const endTimeStampParam = isAuction ? endTimeStamp : 0;
         setLoadingStatus(true);
         setLoadingMessage("Listing...");
-        const tx = isAuction ? await market.listItemForAuction(price, startTimeStamp, endTimeStampParam, tokenId, copies, mintContract.address) : await market.listItemForFixedPrice(tokenId, copies, price, mintContract.address);
+        const tx = isAuction
+          ? await market.listItemForAuction(
+              price,
+              startTimeStamp,
+              endTimeStampParam,
+              tokenId,
+              copies,
+              mintContract.address,
+            )
+          : await market.listItemForFixedPrice(
+              tokenId,
+              copies,
+              price,
+              mintContract.address,
+            );
         const res = await tx.wait();
         const transactionHash = res.transactionHash;
-        const event = res.events.find(e => e.event === eventName);
+        const event = res.events.find((e) => e.event === eventName);
         if (event) {
           newItemId = Number(event.args[0]);
         } else {
@@ -182,26 +182,28 @@ const ListNft = () => {
               nftAddress: mintContract.address,
               listingID: newItemId.toString(),
               listingType,
-              currency: chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
+              currency:
+                chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
               [isAuction ? "auctionid" : "fixedid"]: newItemId.toString(),
               biddingStartTime: start || 0,
-              biddingEndTime: end || 0
-            }
+              biddingEndTime: end || 0,
+            },
           });
           await createNewTransation({
             variables: {
               first_person_wallet_address: address.toString(),
               nft_id: nftId.toString(),
               amount: Number(isAuction ? auctionStartPrice : fixedPrice),
-              currency: chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
+              currency:
+                chainId === process.env.REACT_APP_ETH_CHAINID ? "ETH" : "MATIC",
               copies_transferred: Number(copies),
               transaction_type: "listing_nft",
               token_id: tokenId.toString(),
               chain_id: chainId.toString(),
               blockchain_listingID: newItemId.toString(),
               listingID: response?.data?.addNftToNftMarketPlace?._id,
-              hash_field: transactionHash
-            }
+              hash_field: transactionHash,
+            },
           });
         }
         setLoadingStatus(false);
@@ -220,7 +222,11 @@ const ListNft = () => {
         ToastMessage("Error", parsedError.context || "Unknown error", "error");
       }
     } else {
-      ToastMessage("Error", `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`, "error");
+      ToastMessage(
+        "Error",
+        `Profile Wallet Address(${userData?.address}) mismatch with metamask wallet address(${address})`,
+        "error",
+      );
     }
   };
   const calculateEarning = (amount, fee, royalty) => {
@@ -229,15 +235,20 @@ const ListNft = () => {
     const earning = amount - totalFeeAmount;
     return earning;
   };
-  const selectAfter = <Select value={contractData.chain === 1 ? "ETH" : "MATIC"}>
+  const selectAfter = (
+    <Select value={contractData.chain === 1 ? "ETH" : "MATIC"}>
       {}
       {}
-    </Select>;
+    </Select>
+  );
   const closeConnectModel = () => {
     setConnectModal(false);
   };
   const connectWalletHandle = (forceOpen = false) => {
-    const chainMismatch = isConnected && chainId != null && Number(chainId) !== Number(contractData?.chain);
+    const chainMismatch =
+      isConnected &&
+      chainId != null &&
+      Number(chainId) !== Number(contractData?.chain);
     if (forceOpen || !isConnected || chainMismatch) {
       setConnectModal(true);
     }
@@ -247,29 +258,46 @@ const ListNft = () => {
       setConnectModal(false);
     }
   }, [isConnected]);
-  return <div className={`list-nft-page ${backgroundTheme}`} style={{
-    minHeight: "100vh",
-    overflowX: "hidden"
-  }}>
+  return (
+    <div
+      className={`list-nft-page ${backgroundTheme}`}
+      style={{
+        minHeight: "100vh",
+        overflowX: "hidden",
+      }}
+    >
       {loadingStatus && <Loader content={loadingMessage} />}
       <ConnectModal visible={connectModal} onClose={closeConnectModel} />
       {}
       <div className="container py-3">
-        <Row style={{
-        width: "100%"
-      }} className={"d-flex  my-4 p-5"}>
+        <Row
+          style={{
+            width: "100%",
+          }}
+          className={"d-flex  my-4 p-5"}
+        >
           <Col lg={24} sm={24} xs={24}>
-            <Row gutter={{
-            xs: 8,
-            sm: 16,
-            md: 30,
-            lg: 50
-          }}>
+            <Row
+              gutter={{
+                xs: 8,
+                sm: 16,
+                md: 30,
+                lg: 50,
+              }}
+            >
               <Col lg={6} sm={24} md={12} xs={24}>
-                <div className="cardContainer" style={{
-                width: "100%"
-              }}>
-                  <ReactPlayer controls={true} width="260px" height="250px" url={videoLink} />
+                <div
+                  className="cardContainer"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <ReactPlayer
+                    controls={true}
+                    width="260px"
+                    height="250px"
+                    url={videoLink}
+                  />
                   <div className="d-flex justify-content-between mt-1 px-2">
                     <p className="name">{name}</p>
                     {}
@@ -288,7 +316,12 @@ const ListNft = () => {
                   </span>
                 </div>
                 <div className="radio-group">
-                  <Radio.Group defaultValue="fixed Price" buttonStyle="solid" className={textColor === "black" && "radio-light"} onChange={handleRadioChange}>
+                  <Radio.Group
+                    defaultValue="fixed Price"
+                    buttonStyle="solid"
+                    className={textColor === "black" && "radio-light"}
+                    onChange={handleRadioChange}
+                  >
                     <Radio.Button value="fixed Price">
                       <span>
                         <IoLogoUsd />
@@ -309,17 +342,30 @@ const ListNft = () => {
             </Row>
           </Col>
         </Row>
-        {selectedOption === "fixed Price" && <>
+        {selectedOption === "fixed Price" && (
+          <>
             <div className="PriceWrapper  d-flex justify-content-between">
               <h5 className={`${textColor}`}>
                 Price <AiOutlineInfoCircle />
               </h5>
             </div>
-            <div style={{
-          width: "100%",
-          marginTop: "1rem"
-        }} className={textColor === "black" ? "ant-light-input" : "priceinput-field"}>
-              <Input className={textColor === "black" && "ant-light"} onChange={handlePriceChange} addonAfter={selectAfter} placeholder="Amount" type="number" onWheel={e => e.target.blur()} />
+            <div
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+              }}
+              className={
+                textColor === "black" ? "ant-light-input" : "priceinput-field"
+              }
+            >
+              <Input
+                className={textColor === "black" && "ant-light"}
+                onChange={handlePriceChange}
+                addonAfter={selectAfter}
+                placeholder="Amount"
+                type="number"
+                onWheel={(e) => e.target.blur()}
+              />
             </div>
 
             <div className="PriceWrapper  d-flex justify-content-between">
@@ -327,45 +373,74 @@ const ListNft = () => {
                 Number Copies To Sell (Available: {tokens})
               </h5>
             </div>
-            <div style={{
-          width: "100%",
-          marginTop: "1rem"
-        }} className={textColor === "black" ? "ant-light-input" : "priceinput-field"}>
-              <Form.Control type="number" id="number" aria-describedby="number" placeholder="0000" min="0" onChange={handleCopyChange} onWheel={e => e.target.blur()} />
+            <div
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+              }}
+              className={
+                textColor === "black" ? "ant-light-input" : "priceinput-field"
+              }
+            >
+              <Form.Control
+                type="number"
+                id="number"
+                aria-describedby="number"
+                placeholder="0000"
+                min="0"
+                onChange={handleCopyChange}
+                onWheel={(e) => e.target.blur()}
+              />
             </div>
 
-            <div className="option-wrapper d-flex justify-content-between" onClick={() => setIsOpen(!isOpen)}>
+            <div
+              className="option-wrapper d-flex justify-content-between"
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <h5>More Options</h5>
               <span>
-                <RiArrowDropDownLine className={`${textColor}`} style={{
-              color: "white",
-              fontSize: "2.5rem",
-              marginTop: "1.5rem",
-              cursor: "pointer"
-            }} />
+                <RiArrowDropDownLine
+                  className={`${textColor}`}
+                  style={{
+                    color: "white",
+                    fontSize: "2.5rem",
+                    marginTop: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                />
               </span>
             </div>
-            {isOpen && <h5 style={{
-          color: "white"
-        }}>
+            {isOpen && (
+              <h5
+                style={{
+                  color: "white",
+                }}
+              >
                 <div className="d-flex justify-content-center align-items-center">
-                  <button disabled style={{
-              cursor: "not-allowed",
-              background: "none",
-              border: "none"
-            }}>
+                  <button
+                    disabled
+                    style={{
+                      cursor: "not-allowed",
+                      background: "none",
+                      border: "none",
+                    }}
+                  >
                     <span className={`${textColor}`}>Coming soon</span>
                   </button>
                 </div>
-              </h5>}
+              </h5>
+            )}
             <div className="summary-wrapper d-flex justify-content-between mt-3">
               <h5 className={`${textColor}`}>Summary</h5>
               <span>
-                <AiOutlineInfoCircle className={`${textColor}`} style={{
-              color: "white",
-              fontSize: "1.5rem",
-              cursor: "pointer"
-            }} />
+                <AiOutlineInfoCircle
+                  className={`${textColor}`}
+                  style={{
+                    color: "white",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                />
               </span>
             </div>
             <div className="list-wrapper d-flex justify-content-between ">
@@ -382,11 +457,13 @@ const ListNft = () => {
               <h5>Creator Fee</h5>
               <p>{royalty / 100}%</p>
             </div>
-            <div style={{
-          borderBottom: "1px solid #F7F8F8",
-          opacity: "0.4",
-          marginTop: "2rem"
-        }}></div>
+            <div
+              style={{
+                borderBottom: "1px solid #F7F8F8",
+                opacity: "0.4",
+                marginTop: "2rem",
+              }}
+            ></div>
             <div className="footer-text d-flex justify-content-between mt-5">
               <h5>Total Potential Earning</h5>
               <p className={`${textColor}`}>
@@ -394,66 +471,118 @@ const ListNft = () => {
                 {potentialEarning} {contractData.chain === 1 ? "ETH" : "MATIC"}
               </p>
             </div>
-            <div className="btn-wrapper red-gradient" style={loadingStatus ? {
-          opacity: 0.6,
-          cursor: "not-allowed",
-          pointerEvents: "none"
-        } : {}}>
-              <button onClick={handleListing} disabled={loadingStatus} style={loadingStatus ? {
-            cursor: "not-allowed"
-          } : {}}>
-                {loadingStatus ? <div className="d-flex align-items-center justify-content-center gap-2">
+            <div
+              className="btn-wrapper red-gradient"
+              style={
+                loadingStatus
+                  ? {
+                      opacity: 0.6,
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            >
+              <button
+                onClick={handleListing}
+                disabled={loadingStatus}
+                style={
+                  loadingStatus
+                    ? {
+                        cursor: "not-allowed",
+                      }
+                    : {}
+                }
+              >
+                {loadingStatus ? (
+                  <div className="d-flex align-items-center justify-content-center gap-2">
                     <ClipLoader size={20} color="#fff" />
                     <span>LISTING...</span>
-                  </div> : "COMPLETE LISTING"}
+                  </div>
+                ) : (
+                  "COMPLETE LISTING"
+                )}
               </button>
             </div>
-          </>}
-        {selectedOption === "auction price" && <>
+          </>
+        )}
+        {selectedOption === "auction price" && (
+          <>
             <div className="PriceWrapper  d-flex justify-content-between">
               <h5 className={`${textColor}`}>
                 Choose a method <AiOutlineInfoCircle />
               </h5>
             </div>
-            <div className={textColor === "black" ? "ant-light-select" : "select"}>
-              <Select defaultValue="Type of auction" style={{
-            width: "100%",
-            color: "white"
-          }} dropdownStyle={{
-            backgroundColor: "#000",
-            color: "white"
-          }} className="custom-select-white" onChange={handleChange} options={[{
-            value: "jack",
-            label: "Sell To Highest Bidder"
-          }]} />
+            <div
+              className={textColor === "black" ? "ant-light-select" : "select"}
+            >
+              <Select
+                defaultValue="Type of auction"
+                style={{
+                  width: "100%",
+                  color: "white",
+                }}
+                dropdownStyle={{
+                  backgroundColor: "#000",
+                  color: "white",
+                }}
+                className="custom-select-white"
+                onChange={handleChange}
+                options={[
+                  {
+                    value: "jack",
+                    label: "Sell To Highest Bidder",
+                  },
+                ]}
+              />
             </div>
             <div className="PriceWrapper  d-flex justify-content-between">
               <h5 className={`${textColor}`}>
                 Starting Price <AiOutlineInfoCircle />
               </h5>
             </div>
-            <div style={{
-          width: "100%",
-          marginTop: "1rem"
-        }} className={textColor === "black" ? "ant-light-input" : "priceinput-field"}>
-              <Input addonAfter={selectAfter} placeholder="Amount" type="number" onChange={handlePriceChange} onWheel={e => e.target.blur()} />
+            <div
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+              }}
+              className={
+                textColor === "black" ? "ant-light-input" : "priceinput-field"
+              }
+            >
+              <Input
+                addonAfter={selectAfter}
+                placeholder="Amount"
+                type="number"
+                onChange={handlePriceChange}
+                onWheel={(e) => e.target.blur()}
+              />
             </div>
 
-            <Row gutter={{
-          xs: 8,
-          sm: 16,
-          md: 30,
-          lg: 50
-        }}>
+            <Row
+              gutter={{
+                xs: 8,
+                sm: 16,
+                md: 30,
+                lg: 50,
+              }}
+            >
               {}
               <Col lg={12} md={12} xs={24}>
                 <div className="PriceWrapper  d-flex justify-content-between">
                   <h5 className={`${textColor}`}>Auction End Time</h5>
                 </div>
-                <div style={{
-              width: "100%",
-              marginTop: "1rem"
-            }} className={textColor === "black" ? "ant-light-input" : "priceinput-field"}>
+                <div
+                  style={{
+                    width: "100%",
+                    marginTop: "1rem",
+                  }}
+                  className={
+                    textColor === "black"
+                      ? "ant-light-input"
+                      : "priceinput-field"
+                  }
+                >
                   <DatePicker showTime onChange={handleEndTimeStamp} />
                 </div>
               </Col>
@@ -464,46 +593,75 @@ const ListNft = () => {
                 Number Copies To Sell (Available: {tokens})
               </h5>
             </div>
-            <div style={{
-          width: "100%",
-          marginTop: "1rem"
-        }} className={textColor === "black" ? "ant-light-input" : "priceinput-field"}>
-              <Form.Control type="number" id="number" aria-describedby="number" placeholder="0000" min="0" onChange={handleCopyChange} onWheel={e => e.target.blur()} />
+            <div
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+              }}
+              className={
+                textColor === "black" ? "ant-light-input" : "priceinput-field"
+              }
+            >
+              <Form.Control
+                type="number"
+                id="number"
+                aria-describedby="number"
+                placeholder="0000"
+                min="0"
+                onChange={handleCopyChange}
+                onWheel={(e) => e.target.blur()}
+              />
             </div>
 
-            <div className="option-wrapper d-flex justify-content-between" onClick={() => setIsOpen(!isOpen)}>
+            <div
+              className="option-wrapper d-flex justify-content-between"
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <h5>More Options</h5>
               <span>
-                <RiArrowDropDownLine className={`${textColor}`} style={{
-              color: "white",
-              fontSize: "2.5rem",
-              marginTop: "1.5rem",
-              cursor: "pointer"
-            }} />
+                <RiArrowDropDownLine
+                  className={`${textColor}`}
+                  style={{
+                    color: "white",
+                    fontSize: "2.5rem",
+                    marginTop: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                />
               </span>
             </div>
-            {isOpen && <h5 style={{
-          color: "white"
-        }}>
+            {isOpen && (
+              <h5
+                style={{
+                  color: "white",
+                }}
+              >
                 <div className="d-flex justify-content-center align-items-center">
-                  <button disabled style={{
-              cursor: "not-allowed",
-              background: "none",
-              border: "none"
-            }}>
+                  <button
+                    disabled
+                    style={{
+                      cursor: "not-allowed",
+                      background: "none",
+                      border: "none",
+                    }}
+                  >
                     <span className={`${textColor}`}>Coming soon</span>
                   </button>
                 </div>
-              </h5>}
+              </h5>
+            )}
 
             <div className="summary-wrapper d-flex justify-content-between mt-3">
               <h5 className={`${textColor}`}>Summary</h5>
               <span>
-                <AiOutlineInfoCircle className={`${textColor}`} style={{
-              color: "white",
-              fontSize: "1.5rem",
-              cursor: "pointer"
-            }} />
+                <AiOutlineInfoCircle
+                  className={`${textColor}`}
+                  style={{
+                    color: "white",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                />
               </span>
             </div>
             <div className="list-wrapper d-flex justify-content-between ">
@@ -520,11 +678,13 @@ const ListNft = () => {
               <h5>Creator Fee</h5>
               <p>{royalty / 100}%</p>
             </div>
-            <div style={{
-          borderBottom: "1px solid #F7F8F8",
-          opacity: "0.4",
-          marginTop: "2rem"
-        }}></div>
+            <div
+              style={{
+                borderBottom: "1px solid #F7F8F8",
+                opacity: "0.4",
+                marginTop: "2rem",
+              }}
+            ></div>
             <div className="footer-text d-flex justify-content-between mt-5">
               <h5>Total Potential Earning</h5>
               <p className={`${textColor}`}>
@@ -532,22 +692,43 @@ const ListNft = () => {
                 {potentialEarning} {contractData.chain === 1 ? "ETH" : "MATIC"}
               </p>
             </div>
-            <div className="btn-wrapper red-gradient" style={loadingStatus ? {
-          opacity: 0.6,
-          cursor: "not-allowed",
-          pointerEvents: "none"
-        } : {}}>
-              <button onClick={handleListing} disabled={loadingStatus} style={loadingStatus ? {
-            cursor: "not-allowed"
-          } : {}}>
-                {loadingStatus ? <div className="d-flex align-items-center justify-content-center gap-2">
+            <div
+              className="btn-wrapper red-gradient"
+              style={
+                loadingStatus
+                  ? {
+                      opacity: 0.6,
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                    }
+                  : {}
+              }
+            >
+              <button
+                onClick={handleListing}
+                disabled={loadingStatus}
+                style={
+                  loadingStatus
+                    ? {
+                        cursor: "not-allowed",
+                      }
+                    : {}
+                }
+              >
+                {loadingStatus ? (
+                  <div className="d-flex align-items-center justify-content-center gap-2">
                     <ClipLoader size={20} color="#fff" />
                     <span>LISTING...</span>
-                  </div> : "COMPLETE LISTING"}
+                  </div>
+                ) : (
+                  "COMPLETE LISTING"
+                )}
               </button>
             </div>
-          </>}
+          </>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
 export default ListNft;

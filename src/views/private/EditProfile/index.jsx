@@ -1,7 +1,16 @@
 import { Input } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { account2, account_dark, book, down_arrow2, down_arrow4, left_arrow, location2, location_dark2 } from "../../../assets";
+import {
+  account2,
+  account_dark,
+  book,
+  down_arrow2,
+  down_arrow4,
+  left_arrow,
+  location2,
+  location_dark2,
+} from "../../../assets";
 import { ButtonComponent, Loader, ToastMessage } from "../../../components";
 import "./css/index.css";
 import { useMutation } from "@apollo/client";
@@ -14,37 +23,29 @@ import { UPDATE_USER_PROFILE } from "../../../gql/queries";
 import { getCookieStorage } from "../../../utills/cookieStorage";
 const environment = process.env;
 const EditProfile = () => {
-  const {
-    userData
-  } = useSelector(state => state.address.userData);
+  const { userData } = useSelector((state) => state.address.userData);
   let token = getCookieStorage("access_token");
-  const [updateUserProfile, {
-    loading,
-    error,
-    data
-  }] = useMutation(UPDATE_USER_PROFILE);
+  const [updateUserProfile, { loading, error, data }] =
+    useMutation(UPDATE_USER_PROFILE);
   const [userId, setUserId] = useState(null);
-  const {
-    handleSubmit,
-    values,
-    touched,
-    errors,
-    setFieldValue
-  } = useFormik({
+  const { handleSubmit, values, touched, errors, setFieldValue } = useFormik({
     initialValues: {
       full_name: "",
       bio: null,
       country: null,
       profileImg: "",
-      userAddress: ""
+      userAddress: "",
     },
     validate: editProfileValidate,
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       const formData = new FormData();
       formData.append("file", file);
       try {
         if (file) {
-          const response = await axios.post(`${environment.REACT_APP_BACKEND_BASE_URL}/upload`, formData);
+          const response = await axios.post(
+            `${environment.REACT_APP_BACKEND_BASE_URL}/upload`,
+            formData,
+          );
           if (response) {
             updateUserProfile({
               variables: {
@@ -53,13 +54,13 @@ const EditProfile = () => {
                 userAddress: values.userAddress,
                 country: values.country,
                 bio: values.bio,
-                profileImg: response.data
+                profileImg: response.data,
               },
               context: {
                 headers: {
-                  Authorization: `Bearer ${token} `
-                }
-              }
+                  Authorization: `Bearer ${token} `,
+                },
+              },
             });
           }
         } else {
@@ -69,17 +70,17 @@ const EditProfile = () => {
               full_name: values.full_name,
               userAddress: values.userAddress,
               country: values.country,
-              bio: values.bio
+              bio: values.bio,
             },
             context: {
               headers: {
-                Authorization: `Bearer ${token} `
-              }
-            }
+                Authorization: `Bearer ${token} `,
+              },
+            },
           });
         }
       } catch (error) {}
-    }
+    },
   });
   useEffect(() => {
     if (data) {
@@ -91,16 +92,25 @@ const EditProfile = () => {
     }
   }, [data, error]);
   const [city, setCity] = useState("");
-  let cities = ["Boston, MA (USA)", "New York City, NYC (USA)", "Washington DC, Washington (USA)", "Boston, MA", "New York City, NYC", "Washington DC, Washington"];
-  let filterization = cities.filter(e => {
+  let cities = [
+    "Boston, MA (USA)",
+    "New York City, NYC (USA)",
+    "Washington DC, Washington (USA)",
+    "Boston, MA",
+    "New York City, NYC",
+    "Washington DC, Washington",
+  ];
+  let filterization = cities.filter((e) => {
     if (city) {
       if (e.includes(city)) return e;
     }
   });
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
-  const textColor = useSelector(state => state.app.theme.textColor);
-  const textColor2 = useSelector(state => state.app.theme.textColor2);
-  const bgColor3 = useSelector(state => state.app.theme.bgColor3);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const textColor2 = useSelector((state) => state.app.theme.textColor2);
+  const bgColor3 = useSelector((state) => state.app.theme.bgColor3);
   useEffect(() => {
     if (userData) {
       const address = userData?.address;
@@ -120,9 +130,7 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (data) {
-      const {
-        UpdateProfile
-      } = data;
+      const { UpdateProfile } = data;
       const address = UpdateProfile?.user_address;
       const full_name = UpdateProfile?.full_name;
       const bio = UpdateProfile?.bio;
@@ -137,14 +145,14 @@ const EditProfile = () => {
           bio: bio,
           profileImg: profileImg,
           id: userId,
-          isLogged: true
-        }
+          isLogged: true,
+        },
       });
     }
   }, [data]);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [file, setFile] = useState(null);
-  const profileHandle = e => {
+  const profileHandle = (e) => {
     const file = e.target.files[0];
     if (file.type.startsWith("image/")) {
       setFile(file);
@@ -153,153 +161,269 @@ const EditProfile = () => {
       ToastMessage("Please upload an image file", "", "warning");
     }
   };
-  const imgPath = environment.REACT_APP_BACKEND_BASE_URL + "/" + values.profileImg;
-  return <div className={`${backgroundTheme} pb-4`}>
+  const imgPath =
+    environment.REACT_APP_BACKEND_BASE_URL + "/" + values.profileImg;
+  return (
+    <div className={`${backgroundTheme} pb-4`}>
       {loading && <Loader content="loading" />}
 
       <form>
         <div className="container">
-          <div className="d-flex mb-4" style={{
-          flexDirection: "column",
-          alignItems: "center"
-        }}>
-            {previewUrl ? <img src={previewUrl} width={200} className="mt-4 mb-3" style={{
-            borderRadius: "50%"
-          }} /> : values.profileImg ? <img src={imgPath} width={200} className="mt-4 mb-3" style={{
-            borderRadius: "50%"
-          }} /> : <img src={profileimg} width={200} className="mt-4 mb-3" />}
+          <div
+            className="d-flex mb-4"
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                width={200}
+                className="mt-4 mb-3"
+                style={{
+                  borderRadius: "50%",
+                }}
+              />
+            ) : values.profileImg ? (
+              <img
+                src={imgPath}
+                width={200}
+                className="mt-4 mb-3"
+                style={{
+                  borderRadius: "50%",
+                }}
+              />
+            ) : (
+              <img src={profileimg} width={200} className="mt-4 mb-3" />
+            )}
 
-            <h5 className="red cursor" style={{
-            textDecoration: "underline",
-            cursor: "pointer"
-          }}>
-              <label htmlFor="uploadFile" style={{
-              cursor: "pointer",
-              textDecoration: "underline"
-            }}>
+            <h5
+              className="red cursor"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+            >
+              <label
+                htmlFor="uploadFile"
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+              >
                 Change Profile Photo
               </label>
-              <input onChange={profileHandle} type="file" style={{
-              display: "none"
-            }} name="uploadFile" id="uploadFile" accept="image/jpeg,image/png" />
+              <input
+                onChange={profileHandle}
+                type="file"
+                style={{
+                  display: "none",
+                }}
+                name="uploadFile"
+                id="uploadFile"
+                accept="image/jpeg,image/png"
+              />
             </h5>
           </div>
-          <div style={{
-          border: "1px solid #272727"
-        }}></div>
-          <div className="d-flex justify-content-between mt-4 mb-4" style={{
-          alignItems: "center"
-        }}>
+          <div
+            style={{
+              border: "1px solid #272727",
+            }}
+          ></div>
+          <div
+            className="d-flex justify-content-between mt-4 mb-4"
+            style={{
+              alignItems: "center",
+            }}
+          >
             <h5 className={`m-0 ${textColor} semi-regular`}>
               Account Information
             </h5>
             <h5 className="red-gradient-color  ">Edit</h5>
           </div>
           <div className="my-3">
-            <p className={`${textColor2} ms-3`} style={{
-            marginBottom: -5
-          }}>
+            <p
+              className={`${textColor2} ms-3`}
+              style={{
+                marginBottom: -5,
+              }}
+            >
               Name
             </p>
-            <div className={bgColor3} style={{
-            borderRadius: 10
-          }}>
+            <div
+              className={bgColor3}
+              style={{
+                borderRadius: 10,
+              }}
+            >
               <div className="mt-3">
-                <img src={textColor === "white" ? account2 : account_dark} className="ms-4 mt-3" style={{
-                width: 15,
-                position: "absolute",
-                zIndex: 1
-              }} />
+                <img
+                  src={textColor === "white" ? account2 : account_dark}
+                  className="ms-4 mt-3"
+                  style={{
+                    width: 15,
+                    position: "absolute",
+                    zIndex: 1,
+                  }}
+                />
               </div>
-              <Input name="full_name" value={values.full_name} onChange={e => {
-              setFieldValue("full_name", e.target.value);
-            }} className="editProfileInput" />
+              <Input
+                name="full_name"
+                value={values.full_name}
+                onChange={(e) => {
+                  setFieldValue("full_name", e.target.value);
+                }}
+                className="editProfileInput"
+              />
             </div>
-            {touched.full_name && errors.full_name && <p className="text-white">{errors.full_name}</p>}
+            {touched.full_name && errors.full_name && (
+              <p className="text-white">{errors.full_name}</p>
+            )}
           </div>
 
           <div className="my-3">
             <p className={`${textColor2} ms-3`}>Bio</p>
-            <div className={`d-flex justify-content-between ${bgColor3}`} style={{
-            borderRadius: 10,
-            alignItems: "center"
-          }}>
-              <div style={{
-              flex: 1
-            }}>
+            <div
+              className={`d-flex justify-content-between ${bgColor3}`}
+              style={{
+                borderRadius: 10,
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                }}
+              >
                 <div>
-                  <img src={book} className="ms-4 mt-3" style={{
-                  width: 15,
-                  position: "absolute",
-                  zIndex: 1
-                }} />
+                  <img
+                    src={book}
+                    className="ms-4 mt-3"
+                    style={{
+                      width: 15,
+                      position: "absolute",
+                      zIndex: 1,
+                    }}
+                  />
                 </div>
-                <Input name="bio" value={values.bio} onChange={e => {
-                setFieldValue("bio", e.target.value);
-              }} maxLength={150} className="editProfileInput" style={{
-                width: "100%"
-              }} />
+                <Input
+                  name="bio"
+                  value={values.bio}
+                  onChange={(e) => {
+                    setFieldValue("bio", e.target.value);
+                  }}
+                  maxLength={150}
+                  className="editProfileInput"
+                  style={{
+                    width: "100%",
+                  }}
+                />
               </div>
               <span className="red me-3">
-                {values?.bio && values?.bio?.length ? values?.bio?.length + "/150" : "0/150"}
+                {values?.bio && values?.bio?.length
+                  ? values?.bio?.length + "/150"
+                  : "0/150"}
               </span>
             </div>
           </div>
           <div className="my-3">
             <p className={`${textColor2} ms-3`}>Country</p>
-            <div className={`d-flex justify-content-between ${bgColor3}`} style={{
-            borderRadius: 10,
-            alignItems: "center"
-          }}>
-              <div style={{
-              flex: 1
-            }}>
+            <div
+              className={`d-flex justify-content-between ${bgColor3}`}
+              style={{
+                borderRadius: 10,
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                }}
+              >
                 <div>
-                  <img src={textColor === "white" ? location2 : location_dark2} className="ms-4 mt-3" style={{
-                  width: 15,
-                  position: "absolute",
-                  zIndex: 1
-                }} />
+                  <img
+                    src={textColor === "white" ? location2 : location_dark2}
+                    className="ms-4 mt-3"
+                    style={{
+                      width: 15,
+                      position: "absolute",
+                      zIndex: 1,
+                    }}
+                  />
                 </div>
-                <Input placeholder="country" className="editProfileInput" value={values.country} onChange={e => {
-                setFieldValue("country", e.target.value);
-              }} style={{
-                width: "100%"
-              }} />
+                <Input
+                  placeholder="country"
+                  className="editProfileInput"
+                  value={values.country}
+                  onChange={(e) => {
+                    setFieldValue("country", e.target.value);
+                  }}
+                  style={{
+                    width: "100%",
+                  }}
+                />
               </div>
-              <img src={textColor === "white" ? down_arrow2 : down_arrow4} className="me-3" style={{
-              width: 20
-            }} />
+              <img
+                src={textColor === "white" ? down_arrow2 : down_arrow4}
+                className="me-3"
+                style={{
+                  width: 20,
+                }}
+              />
             </div>
           </div>
           <div>
             {filterization.map((e, i) => {
-            return <div className="d-flex justify-content-between p-4" style={{
-              borderBottom: "1px solid #272727"
-            }} key={i}>
+              return (
+                <div
+                  className="d-flex justify-content-between p-4"
+                  style={{
+                    borderBottom: "1px solid #272727",
+                  }}
+                  key={i}
+                >
                   <span className="light-grey">{e}</span>
-                  <img src={left_arrow} className="" style={{
-                width: 10
-              }} />
-                </div>;
-          })}
+                  <img
+                    src={left_arrow}
+                    className=""
+                    style={{
+                      width: 10,
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
           <div className="d-flex justify-content-center mt-5 mb-3">
             <Link to="/collections">
-              <div style={{
-              width: 280
-            }} className="me-3">
+              <div
+                style={{
+                  width: 280,
+                }}
+                className="me-3"
+              >
                 <ButtonComponent radius={5} text={"Cancel"} />
               </div>
             </Link>
-            <div style={{
-            width: 280
-          }} className="ms-3">
-              <ButtonComponent radius={5} green text={"Save"} onClick={handleSubmit} disabled={!values.userAddress || !values.full_name} />
+            <div
+              style={{
+                width: 280,
+              }}
+              className="ms-3"
+            >
+              <ButtonComponent
+                radius={5}
+                green
+                text={"Save"}
+                onClick={handleSubmit}
+                disabled={!values.userAddress || !values.full_name}
+              />
             </div>
           </div>
         </div>
       </form>
-    </div>;
+    </div>
+  );
 };
 export default EditProfile;

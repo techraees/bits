@@ -21,5 +21,5 @@ export default combineReducers({
   fixedItems: fixedItemReducer,
   fixedItemDatas: fixedItemDataReducer,
   auctionItems: auctionItemReducer,
-  auctionItemDatas: auctionItemDataReducer
+  auctionItemDatas: auctionItemDataReducer,
 });

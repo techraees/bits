@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { home, logo, menu_icon, search, polygon, redPolygon } from "../../assets/index";
+import {
+  home,
+  logo,
+  menu_icon,
+  search,
+  polygon,
+  redPolygon,
+} from "../../assets/index";
 import SwitchBtn from "../switchBtn";
 import "./css/index.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,12 +23,21 @@ import PrivacyModal from "../privacyModal";
 import ManageCookiesModal from "../manageCookiesModal";
 import routes from "../../route";
 import { trimAfterFirstSlash } from "../../utills/reusableFunctions";
-import { getCookieStorage, removeCookieStorage } from "../../utills/cookieStorage";
-import { getWalletChainId, subscribeWalletChain } from "../../utills/walletChain";
+import {
+  getCookieStorage,
+  removeCookieStorage,
+} from "../../utills/cookieStorage";
+import {
+  getWalletChainId,
+  subscribeWalletChain,
+} from "../../utills/walletChain";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { useWalletGateFlow } from "../../hooks/useWalletGateFlow";
 import { logoutWallet } from "../../store/actions";
-import { profileToUserData, emptyUserData } from "../../utills/hydrateUserProfile";
+import {
+  profileToUserData,
+  emptyUserData,
+} from "../../utills/hydrateUserProfile";
 
 const environment = process.env;
 
@@ -29,14 +45,14 @@ const navLinks = [
   { label: "Home", path: "/", end: true },
   { label: "Marketplace", path: "/marketplace" },
   { label: "About", path: "/about-us" },
-  { label: "Contact", path: "/contact" }
+  { label: "Contact", path: "/contact" },
 ];
 
-const buildMenuGroups = isLogged => {
+const buildMenuGroups = (isLogged) => {
   const topLevel = [];
   const groups = {};
 
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (!route.isNav) return;
     if (route.layout === "private" && !isLogged) return;
 
@@ -45,7 +61,7 @@ const buildMenuGroups = isLogged => {
       name: route.name,
       path: route.path,
       icon: route.icon,
-      isDisabled: route.isDisabled
+      isDisabled: route.isDisabled,
     };
 
     if (route.belongsTo) {
@@ -54,7 +70,7 @@ const buildMenuGroups = isLogged => {
           key: `group-${route.belongsTo}`,
           name: route.belongsTo,
           icon: route.belongsToIcon,
-          children: []
+          children: [],
         };
         topLevel.push(groups[route.belongsTo]);
       }
@@ -87,15 +103,15 @@ const NavbarComponent = ({ dashboardNav }) => {
     "/verify-otp",
     "/reset-password",
     "/reset-password/success",
-    "/404"
+    "/404",
   ];
 
-  const textColor = useSelector(state => state.app.theme.textColor);
-  const headerTheme = useSelector(state => state.app.theme.headerTheme);
-  const { userData } = useSelector(state => state.address.userData);
-  const { contractData } = useSelector(state => state.chain.contractData);
-  const contracts = useSelector(state => state.contract);
-  const fixedItems = useSelector(state => state.fixedItems);
+  const textColor = useSelector((state) => state.app.theme.textColor);
+  const headerTheme = useSelector((state) => state.app.theme.headerTheme);
+  const { userData } = useSelector((state) => state.address.userData);
+  const { contractData } = useSelector((state) => state.chain.contractData);
+  const contracts = useSelector((state) => state.contract);
+  const fixedItems = useSelector((state) => state.fixedItems);
   const isLoggedIn = Boolean(userData?.isLogged);
   const { isConnected } = useAppKitAccount();
   const { chainId: walletChainId } = useAppKitNetwork();
@@ -104,7 +120,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     openAppKitConnect,
     ensureWalletOnChain,
     pendingTargetChain,
-    setPendingTargetChain
+    setPendingTargetChain,
   } = useWalletGateFlow();
 
   const effectiveWalletChainId =
@@ -114,7 +130,7 @@ const NavbarComponent = ({ dashboardNav }) => {
   const userProfile = userData?.profileImg;
 
   const [profile, { error, data }] = useLazyQuery(GET_PROFILE, {
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
   });
 
   const handleLogin = () => navigate("/login");
@@ -131,12 +147,12 @@ const NavbarComponent = ({ dashboardNav }) => {
       return;
     }
     let cancelled = false;
-    getWalletChainId().then(chainId => {
+    getWalletChainId().then((chainId) => {
       if (!cancelled && chainId != null) {
         setLiveWalletChainId(chainId);
       }
     });
-    const unsubscribe = subscribeWalletChain(chainId => {
+    const unsubscribe = subscribeWalletChain((chainId) => {
       setLiveWalletChainId(chainId);
     });
     return () => {
@@ -151,12 +167,12 @@ const NavbarComponent = ({ dashboardNav }) => {
       contractData: {
         marketContract: contracts.ethMarketContractIns,
         mintContract: contracts.ethMintingContractIns,
-        chain: 1
-      }
+        chain: 1,
+      },
     });
     dispatch({
       type: "ETH_CHAIN_FIXED",
-      fixedItemData: fixedItems.ethList
+      fixedItemData: fixedItems.ethList,
     });
   };
 
@@ -166,12 +182,12 @@ const NavbarComponent = ({ dashboardNav }) => {
       contractData: {
         marketContract: contracts.polygonMarketContractIns,
         mintContract: contracts.polygonMintingContractIns,
-        chain: 137
-      }
+        chain: 137,
+      },
     });
     dispatch({
       type: "MATIC_CHAIN_FIXED",
-      fixedItemData: fixedItems.maticList
+      fixedItemData: fixedItems.maticList,
     });
   };
 
@@ -179,7 +195,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     if (data?.GetProfile) {
       dispatch({
         type: "NFT_ADDRESS",
-        userData: profileToUserData(data.GetProfile)
+        userData: profileToUserData(data.GetProfile),
       });
     }
   }, [data, dispatch]);
@@ -216,13 +232,13 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   useEffect(() => {
     if (!menuOpen) return;
-    const handleOutsideClick = event => {
+    const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
         setOpenGroup(null);
       }
     };
-    const handleEscape = event => {
+    const handleEscape = (event) => {
       if (event.key === "Escape") {
         setMenuOpen(false);
         setOpenGroup(null);
@@ -238,7 +254,7 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   const menuGroups = useMemo(() => buildMenuGroups(isLoggedIn), [isLoggedIn]);
 
-  const handleMenuNavigate = item => {
+  const handleMenuNavigate = (item) => {
     if (item.isDisabled) return;
     if (item.key === 10) {
       navigate(`/collections/${userData?.id}`);
@@ -252,19 +268,19 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   const toggleMenuDropdown = () => {
     if (width < 992) {
-      setMobileNavOpen(prev => !prev);
+      setMobileNavOpen((prev) => !prev);
       setMenuOpen(false);
       setOpenGroup(null);
       return;
     }
-    setMenuOpen(prev => !prev);
+    setMenuOpen((prev) => !prev);
   };
 
   useEffect(() => {
     if (error?.message === "jwt expired") {
       dispatch({
         type: "USER_AUTH_RESET",
-        userData: emptyUserData
+        userData: emptyUserData,
       });
       removeCookieStorage("access_token");
       removeCookieStorage("refresh_token");
@@ -287,7 +303,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     }
   }, [contractData?.chain]);
 
-  const applyChainSelection = targetChain => {
+  const applyChainSelection = (targetChain) => {
     if (targetChain === 1) {
       handleEthChain();
     } else {
@@ -300,7 +316,7 @@ const NavbarComponent = ({ dashboardNav }) => {
       return;
     }
     let cancelled = false;
-    ensureWalletOnChain(pendingTargetChain).then(ok => {
+    ensureWalletOnChain(pendingTargetChain).then((ok) => {
       if (cancelled) return;
       if (ok) {
         applyChainSelection(pendingTargetChain);
@@ -312,7 +328,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     };
   }, [pendingTargetChain, isConnected]);
 
-  const handleChainSelect = async targetChain => {
+  const handleChainSelect = async (targetChain) => {
     if (!isLoggedIn) {
       applyChainSelection(targetChain);
       return;
@@ -340,10 +356,10 @@ const NavbarComponent = ({ dashboardNav }) => {
     effectiveWalletChainId != null &&
     effectiveWalletChainId !== Number(contractData?.chain);
 
-  const getPageName = pathName => {
+  const getPageName = (pathName) => {
     const pageName = routes?.find(
-      route =>
-        trimAfterFirstSlash(route?.path) === trimAfterFirstSlash(pathName)
+      (route) =>
+        trimAfterFirstSlash(route?.path) === trimAfterFirstSlash(pathName),
     )?.name;
     return pageName === "Home" ? "" : pageName;
   };
@@ -357,7 +373,7 @@ const NavbarComponent = ({ dashboardNav }) => {
     img.onerror = () => setValidImage(false);
   }, [userProfile]);
 
-  const isActiveLink = path => {
+  const isActiveLink = (path) => {
     if (path === "/") {
       return location.pathname === "/";
     }
@@ -368,9 +384,11 @@ const NavbarComponent = ({ dashboardNav }) => {
 
   const headerClass = [
     "bits-header",
-    dashboardNav ? headerTheme || "dashboardNavBgColor" : headerTheme || "navbarBgColor",
+    dashboardNav
+      ? headerTheme || "dashboardNavBgColor"
+      : headerTheme || "navbarBgColor",
     isLight ? "bits-header--light" : "bits-header--dark",
-    mobileNavOpen ? "bits-header--mobile-open" : ""
+    mobileNavOpen ? "bits-header--mobile-open" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -397,12 +415,16 @@ const NavbarComponent = ({ dashboardNav }) => {
 
         <div className="bits-header__inner">
           <div className="bits-header__brand">
-            <NavLink to="/" className="bits-header__logo" aria-label="BITS NFT Home">
+            <NavLink
+              to="/"
+              className="bits-header__logo"
+              aria-label="BITS NFT Home"
+            >
               <img src={logo} alt="BITS NFT" />
             </NavLink>
 
             <nav className="bits-header__nav" aria-label="Primary">
-              {navLinks.map(link => {
+              {navLinks.map((link) => {
                 const active = isActiveLink(link.path);
                 return (
                   <NavLink
@@ -412,7 +434,11 @@ const NavbarComponent = ({ dashboardNav }) => {
                     className={`bits-header__link ${active ? "is-active" : ""}`}
                   >
                     {link.path === "/" && (
-                      <img src={home} alt="" className="bits-header__home-icon" />
+                      <img
+                        src={home}
+                        alt=""
+                        className="bits-header__home-icon"
+                      />
                     )}
                     <span>{link.label}</span>
                   </NavLink>
@@ -431,7 +457,9 @@ const NavbarComponent = ({ dashboardNav }) => {
               <img src={search} alt="" />
             </button>
 
-            <div className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}>
+            <div
+              className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}
+            >
               <div className="bits-header__chains-label">
                 <span>Chains</span>
                 {isChainMismatched && (
@@ -536,22 +564,31 @@ const NavbarComponent = ({ dashboardNav }) => {
                   className={`bits-header__dropdown ${isLight ? "is-light" : "is-dark"}`}
                   role="menu"
                 >
-                  {menuGroups.map(item => {
+                  {menuGroups.map((item) => {
                     if (item.children) {
                       const expanded = openGroup === item.key;
                       return (
-                        <div key={item.key} className="bits-header__dropdown-group">
+                        <div
+                          key={item.key}
+                          className="bits-header__dropdown-group"
+                        >
                           <button
                             type="button"
                             className={`bits-header__dropdown-item bits-header__dropdown-parent ${
                               expanded ? "is-expanded" : ""
                             }`}
                             onClick={() =>
-                              setOpenGroup(prev => (prev === item.key ? null : item.key))
+                              setOpenGroup((prev) =>
+                                prev === item.key ? null : item.key,
+                              )
                             }
                           >
                             {item.icon && (
-                              <img src={item.icon} alt="" className="bits-header__dropdown-icon" />
+                              <img
+                                src={item.icon}
+                                alt=""
+                                className="bits-header__dropdown-icon"
+                              />
                             )}
                             <span>{item.name}</span>
                             <span className="bits-header__dropdown-caret">
@@ -560,7 +597,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                           </button>
                           {expanded && (
                             <div className="bits-header__dropdown-children">
-                              {item.children.map(child => (
+                              {item.children.map((child) => (
                                 <button
                                   key={child.key}
                                   type="button"
@@ -597,7 +634,11 @@ const NavbarComponent = ({ dashboardNav }) => {
                         onClick={() => handleMenuNavigate(item)}
                       >
                         {item.icon && (
-                          <img src={item.icon} alt="" className="bits-header__dropdown-icon" />
+                          <img
+                            src={item.icon}
+                            alt=""
+                            className="bits-header__dropdown-icon"
+                          />
                         )}
                         <span>{item.name}</span>
                       </button>
@@ -612,7 +653,7 @@ const NavbarComponent = ({ dashboardNav }) => {
         {mobileNavOpen && width < 992 && (
           <div className="bits-header__mobile-panel">
             <nav className="bits-header__mobile-nav" aria-label="Mobile">
-              {navLinks.map(link => {
+              {navLinks.map((link) => {
                 const active = isActiveLink(link.path);
                 return (
                   <NavLink
@@ -623,7 +664,11 @@ const NavbarComponent = ({ dashboardNav }) => {
                     onClick={() => setMobileNavOpen(false)}
                   >
                     {link.path === "/" && (
-                      <img src={home} alt="" className="bits-header__home-icon" />
+                      <img
+                        src={home}
+                        alt=""
+                        className="bits-header__home-icon"
+                      />
                     )}
                     <span>{link.label}</span>
                   </NavLink>
@@ -631,8 +676,10 @@ const NavbarComponent = ({ dashboardNav }) => {
               })}
             </nav>
 
-            <div className={`bits-header__mobile-menu ${isLight ? "is-light" : "is-dark"}`}>
-              {menuGroups.map(item => {
+            <div
+              className={`bits-header__mobile-menu ${isLight ? "is-light" : "is-dark"}`}
+            >
+              {menuGroups.map((item) => {
                 if (item.children) {
                   const expanded = openGroup === item.key;
                   return (
@@ -643,11 +690,17 @@ const NavbarComponent = ({ dashboardNav }) => {
                           expanded ? "is-expanded" : ""
                         }`}
                         onClick={() =>
-                          setOpenGroup(prev => (prev === item.key ? null : item.key))
+                          setOpenGroup((prev) =>
+                            prev === item.key ? null : item.key,
+                          )
                         }
                       >
                         {item.icon && (
-                          <img src={item.icon} alt="" className="bits-header__dropdown-icon" />
+                          <img
+                            src={item.icon}
+                            alt=""
+                            className="bits-header__dropdown-icon"
+                          />
                         )}
                         <span>{item.name}</span>
                         <span className="bits-header__dropdown-caret">
@@ -656,7 +709,7 @@ const NavbarComponent = ({ dashboardNav }) => {
                       </button>
                       {expanded && (
                         <div className="bits-header__dropdown-children">
-                          {item.children.map(child => (
+                          {item.children.map((child) => (
                             <button
                               key={child.key}
                               type="button"
@@ -691,7 +744,11 @@ const NavbarComponent = ({ dashboardNav }) => {
                     onClick={() => handleMenuNavigate(item)}
                   >
                     {item.icon && (
-                      <img src={item.icon} alt="" className="bits-header__dropdown-icon" />
+                      <img
+                        src={item.icon}
+                        alt=""
+                        className="bits-header__dropdown-icon"
+                      />
                     )}
                     <span>{item.name}</span>
                   </button>
@@ -700,7 +757,9 @@ const NavbarComponent = ({ dashboardNav }) => {
             </div>
 
             <div className="bits-header__mobile-extras">
-              <div className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}>
+              <div
+                className={`bits-header__chains ${isLight ? "is-light" : "is-dark"}`}
+              >
                 <div className="bits-header__chains-label">
                   <span>Chains</span>
                 </div>
@@ -771,7 +830,9 @@ const NavbarComponent = ({ dashboardNav }) => {
 
       {getPageName(location?.pathname) && (
         <div className={`${headerTheme} p-2`} style={{ textAlign: "center" }}>
-          <span className="light-grey fs-5">{getPageName(location?.pathname)}</span>
+          <span className="light-grey fs-5">
+            {getPageName(location?.pathname)}
+          </span>
         </div>
       )}
 
@@ -786,7 +847,7 @@ const NavbarComponent = ({ dashboardNav }) => {
             backgroundColor: "#9f2323",
             fontSize: "13px",
             padding: "10px 40px",
-            borderRadius: "40px"
+            borderRadius: "40px",
           }}
           expires={365}
         >
@@ -796,14 +857,14 @@ const NavbarComponent = ({ dashboardNav }) => {
               <p className="text-black">
                 We use cookies to operate this website, improve usability,
                 personalize your experience, and improve our marketing. Your
-                privacy is important to us, and we will never sell your data. For
-                more information see our{" "}
+                privacy is important to us, and we will never sell your data.
+                For more information see our{" "}
                 <span
                   style={{
                     color: "#B83131",
                     fontWeight: "600",
                     textDecoration: "underline",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   }}
                   onClick={openPrivacyModal}
                 >
@@ -820,7 +881,7 @@ const NavbarComponent = ({ dashboardNav }) => {
               cursor: "pointer",
               position: "absolute",
               right: "45px",
-              top: "120px"
+              top: "120px",
             }}
             onClick={handleManageCookiesModal}
           >

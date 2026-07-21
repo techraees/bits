@@ -1,4 +1,4 @@
-export const timeToTimeStamp = time => {
+export const timeToTimeStamp = (time) => {
   const str = time.toString();
   const [dateComponents, timeComponents] = str.split(" ");
   const [year, month, day] = dateComponents.split("-");
@@ -7,12 +7,18 @@ export const timeToTimeStamp = time => {
   const timestamp = date.getTime();
   return timestamp / 1000;
 };
-export const timestampToDate = timestamp => {
+export const timestampToDate = (timestamp) => {
   const dateFormat = new Date(timestamp);
-  const fulldate = dateFormat.getMonth() + 1 + "/" + dateFormat.getDate() + "/" + dateFormat.getFullYear();
+  const fulldate =
+    dateFormat.getMonth() +
+    1 +
+    "/" +
+    dateFormat.getDate() +
+    "/" +
+    dateFormat.getFullYear();
   return fulldate;
 };
-export const dbDateToReadableDate = dbdate => {
+export const dbDateToReadableDate = (dbdate) => {
   const date = new Date(dbdate);
   const readableDateTime = date.toLocaleString("en-US", {
     month: "2-digit",
@@ -20,11 +26,11 @@ export const dbDateToReadableDate = dbdate => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true
+    hour12: true,
   });
   return readableDateTime;
 };
-export const dbDateToTime = dbdate => {
+export const dbDateToTime = (dbdate) => {
   const givenTime = new Date(dbdate);
   const timestampInMilliseconds = givenTime.getTime();
   const timestampInSeconds = Math.floor(timestampInMilliseconds / 1000);

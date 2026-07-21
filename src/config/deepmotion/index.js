@@ -2,37 +2,37 @@ import axios from "axios";
 import { ToastMessage } from "../../components";
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { CHECK_DEEPMOTION_CREDIT, CHECK_DEEPMOTION_STATUS, GET_DEEPMOTION_DOWNLOAD_LINKS } from "../../gql/mutations";
+import {
+  CHECK_DEEPMOTION_CREDIT,
+  CHECK_DEEPMOTION_STATUS,
+  GET_DEEPMOTION_DOWNLOAD_LINKS,
+} from "../../gql/mutations";
 import { getCookieStorage } from "../../utills/cookieStorage";
 const env = process.env;
 const backendUrl = env.REACT_APP_BACKEND_BASE_URL;
 const createApolloClient = () => {
   const token = getCookieStorage("access_token");
   const httpLink = createHttpLink({
-    uri: `${backendUrl}/graphql`
+    uri: `${backendUrl}/graphql`,
   });
-  const authLink = setContext((_, {
-    headers
-  }) => {
+  const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${token}` : ""
-      }
+        authorization: token ? `Bearer ${token}` : "",
+      },
     };
   });
   return new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
 };
 const checkCredit = async () => {
   try {
     const client = createApolloClient();
-    const {
-      data
-    } = await client.mutate({
-      mutation: CHECK_DEEPMOTION_CREDIT
+    const { data } = await client.mutate({
+      mutation: CHECK_DEEPMOTION_CREDIT,
     });
     return data?.checkDeepMotionCredit?.credits || 0;
   } catch (error) {
@@ -47,18 +47,22 @@ const uploadVideoToBackend = async (videoFile, fileName) => {
     }
     const formData = new FormData();
     formData.append("video", videoFile, fileName);
-    const response = await axios.post(`${backendUrl}/deepmotion/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`
+    const response = await axios.post(
+      `${backendUrl}/deepmotion/upload`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
       },
-      maxBodyLength: Infinity,
-      maxContentLength: Infinity
-    });
+    );
     if (response.data.success) {
       return {
         rid: response.data.rid,
-        credits: response.data.credits
+        credits: response.data.credits,
       };
     } else {
       throw new Error(response.data.message || "Upload failed");
@@ -67,29 +71,27 @@ const uploadVideoToBackend = async (videoFile, fileName) => {
     throw error;
   }
 };
-const checkProgress = async rid => {
+const checkProgress = async (rid) => {
   try {
     const client = createApolloClient();
-    const {
-      data
-    } = await client.mutate({
+    const { data } = await client.mutate({
       mutation: CHECK_DEEPMOTION_STATUS,
       variables: {
-        rid
-      }
+        rid,
+      },
     });
     const status = data?.checkDeepMotionStatus;
     if (status?.isComplete) {
       return {
         complete: true,
         failed: false,
-        progress: 100
+        progress: 100,
       };
     } else if (status?.isFailed) {
       return {
         complete: false,
         failed: true,
-        progress: 0
+        progress: 0,
       };
     } else {
       return {
@@ -99,7 +101,7 @@ const checkProgress = async rid => {
         progress: status?.progress || 0,
         step: status?.step || 0,
         total: status?.total || 0,
-        positionInQueue: status?.positionInQueue || 0
+        positionInQueue: status?.positionInQueue || 0,
       };
     }
   } catch (error) {
@@ -118,7 +120,7 @@ const waitForCompletion = async (rid, onProgress = null) => {
           progress: 100,
           status: "SUCCESS",
           step: result.total,
-          total: result.total
+          total: result.total,
         });
       }
       return true;
@@ -131,24 +133,22 @@ const waitForCompletion = async (rid, onProgress = null) => {
         status: result.status,
         step: result.step,
         total: result.total,
-        positionInQueue: result.positionInQueue
+        positionInQueue: result.positionInQueue,
       });
     }
-    await new Promise(resolve => setTimeout(resolve, pollInterval));
+    await new Promise((resolve) => setTimeout(resolve, pollInterval));
     attempts++;
   }
   throw new Error("Processing timed out");
 };
-const getDownloadLinks = async rid => {
+const getDownloadLinks = async (rid) => {
   try {
     const client = createApolloClient();
-    const {
-      data
-    } = await client.mutate({
+    const { data } = await client.mutate({
       mutation: GET_DEEPMOTION_DOWNLOAD_LINKS,
       variables: {
-        rid
-      }
+        rid,
+      },
     });
     const links = data?.getDeepMotionDownloadLinks;
     if (links) {
@@ -156,7 +156,7 @@ const getDownloadLinks = async rid => {
         rid: links.rid,
         bvh: links.bvh,
         mp4: links.mp4,
-        fbx: links.fbx
+        fbx: links.fbx,
       };
     } else {
       throw new Error("No download links available");
@@ -165,7 +165,11 @@ const getDownloadLinks = async rid => {
     throw error;
   }
 };
-export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = null) => {
+export const handleDeepMotionUpload = async (
+  videoFile,
+  fileName,
+  onProgress = null,
+) => {
   const main = async () => {
     try {
       if (onProgress) {
@@ -173,7 +177,7 @@ export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = n
           progress: 0,
           status: "CHECKING_CREDITS",
           step: 0,
-          total: 0
+          total: 0,
         });
       }
       const credit = await checkCredit();
@@ -186,7 +190,7 @@ export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = n
           progress: 0,
           status: "UPLOADING",
           step: 0,
-          total: 0
+          total: 0,
         });
       }
       const uploadResult = await uploadVideoToBackend(videoFile, fileName);
@@ -198,7 +202,7 @@ export const handleDeepMotionUpload = async (videoFile, fileName, onProgress = n
             progress: 100,
             status: "DOWNLOADING",
             step: 0,
-            total: 0
+            total: 0,
           });
         }
         const data = await getDownloadLinks(rid);
@@ -225,6 +229,6 @@ export const getSession = async () => {
 export const getSessionFromFrontend = async () => {
   return true;
 };
-export const downloadVideo = async rid => {
+export const downloadVideo = async (rid) => {
   return await getDownloadLinks(rid);
 };

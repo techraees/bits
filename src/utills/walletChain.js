@@ -4,7 +4,7 @@ export async function getWalletChainId() {
   }
   try {
     const hex = await window.ethereum.request({
-      method: "eth_chainId"
+      method: "eth_chainId",
     });
     return parseInt(hex, 16);
   } catch {
@@ -21,13 +21,15 @@ export function isWalletActive(appKitConnected) {
   if (appKitConnected) {
     return true;
   }
-  return Boolean(typeof window !== "undefined" && window.ethereum?.selectedAddress);
+  return Boolean(
+    typeof window !== "undefined" && window.ethereum?.selectedAddress,
+  );
 }
 export function subscribeWalletChain(onChange) {
   if (typeof window === "undefined" || !window.ethereum?.on) {
     return () => {};
   }
-  const handleChainChanged = chainIdHex => {
+  const handleChainChanged = (chainIdHex) => {
     onChange(parseInt(chainIdHex, 16));
   };
   window.ethereum.on("chainChanged", handleChainChanged);

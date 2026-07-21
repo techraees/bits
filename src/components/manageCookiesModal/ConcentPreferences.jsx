@@ -1,21 +1,21 @@
 import { Button, Col, Collapse, Row, Switch } from "antd";
 import React, { useState } from "react";
 import "./index.css";
-const {
-  Panel
-} = Collapse;
+const { Panel } = Collapse;
 const ConcentPreferences = () => {
   const [expandIconPosition] = useState("end");
-  const [isTargetingCookiesChecked, setIsTargetingCookiesChecked] = useState(true);
-  const [isSocialMediaCookiesChecked, setIsSocialMediaCookiesChecked] = useState(false);
+  const [isTargetingCookiesChecked, setIsTargetingCookiesChecked] =
+    useState(true);
+  const [isSocialMediaCookiesChecked, setIsSocialMediaCookiesChecked] =
+    useState(false);
   const onChange = () => {};
-  const onToggleTargetingCookies = checked => {
+  const onToggleTargetingCookies = (checked) => {
     setIsTargetingCookiesChecked(checked);
   };
-  const onToggleSocialMediaCookies = checked => {
+  const onToggleSocialMediaCookies = (checked) => {
     setIsSocialMediaCookiesChecked(checked);
   };
-  const genExtra = type => {
+  const genExtra = (type) => {
     let isChecked, onChangeHandler;
     if (type === "targeting") {
       isChecked = isTargetingCookiesChecked;
@@ -24,15 +24,35 @@ const ConcentPreferences = () => {
       isChecked = isSocialMediaCookiesChecked;
       onChangeHandler = onToggleSocialMediaCookies;
     }
-    return <Switch checked={isChecked} onChange={onChangeHandler} className={`${isChecked ? "switchBtnStyle" : ""}`} />;
+    return (
+      <Switch
+        checked={isChecked}
+        onChange={onChangeHandler}
+        className={`${isChecked ? "switchBtnStyle" : ""}`}
+      />
+    );
   };
-  return <>
-      <Collapse defaultActiveKey={["1"]} onChange={onChange} expandIconPosition={expandIconPosition}>
-        <Panel header="Performance Cookies" key="1" extra={<div className="fw-bold" style={{
-        color: "#4161B8"
-      }}>
+  return (
+    <>
+      <Collapse
+        defaultActiveKey={["1"]}
+        onChange={onChange}
+        expandIconPosition={expandIconPosition}
+      >
+        <Panel
+          header="Performance Cookies"
+          key="1"
+          extra={
+            <div
+              className="fw-bold"
+              style={{
+                color: "#4161B8",
+              }}
+            >
               Always Active
-            </div>}>
+            </div>
+          }
+        >
           <div>
             These cookies could be established via our website by our
             advertising associates. These entities may employ them to construct
@@ -44,11 +64,20 @@ const ConcentPreferences = () => {
             advertising you encounter.
           </div>
         </Panel>
-        <Panel header="Functional Cookies" key="2" extra={<div className="fw-bold" style={{
-        color: "#4161B8"
-      }}>
+        <Panel
+          header="Functional Cookies"
+          key="2"
+          extra={
+            <div
+              className="fw-bold"
+              style={{
+                color: "#4161B8",
+              }}
+            >
               Always Active
-            </div>}>
+            </div>
+          }
+        >
           <div>
             These cookies enable the website to provide enhanced functionality
             and personalisation. They may be set by us or by third party
@@ -57,11 +86,20 @@ const ConcentPreferences = () => {
             function properly.
           </div>
         </Panel>
-        <Panel header="Strictly Necessary Cookies" key="3" extra={<div className="fw-bold" style={{
-        color: "#4161B8"
-      }}>
+        <Panel
+          header="Strictly Necessary Cookies"
+          key="3"
+          extra={
+            <div
+              className="fw-bold"
+              style={{
+                color: "#4161B8",
+              }}
+            >
               Always Active
-            </div>}>
+            </div>
+          }
+        >
           <div>
             These cookies are essential for the proper functioning of the
             website and cannot be deactivated in our systems. They are typically
@@ -111,6 +149,7 @@ const ConcentPreferences = () => {
           </Button>
         </Col>
       </Row>
-    </>;
+    </>
+  );
 };
 export default ConcentPreferences;

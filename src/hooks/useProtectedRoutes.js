@@ -14,18 +14,18 @@ export const useProtectedRoutes = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const validRoutes = routes?.map(route => trimAfterFirstSlash(route?.path));
+  const validRoutes = routes?.map((route) => trimAfterFirstSlash(route?.path));
   const token = getCookieStorage("access_token");
   const {
     data,
     loading: queryLoading,
-    error
+    error,
   } = useQuery(GET_PROFILE, {
     variables: {
-      token
+      token,
     },
     skip: !token,
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
   });
   useEffect(() => {
     if (!token) {
@@ -38,7 +38,7 @@ export const useProtectedRoutes = () => {
       setIsAuthenticated(true);
       dispatch({
         type: "NFT_ADDRESS",
-        userData: profileToUserData(data.GetProfile)
+        userData: profileToUserData(data.GetProfile),
       });
     } else {
       setIsAuthenticated(false);
@@ -54,20 +54,20 @@ export const useProtectedRoutes = () => {
       navigate("/404");
     }
   }, [validRoutes]);
-  const Protected = ({
-    redirectPath = "/",
-    children
-  }) => {
+  const Protected = ({ redirectPath = "/", children }) => {
     if (loading) return <Loader content="authenticating..." />;
     if (isAuthenticated) return children;
-    return <Navigate to={redirectPath} state={{
-      from: location
-    }} replace />;
+    return (
+      <Navigate
+        to={redirectPath}
+        state={{
+          from: location,
+        }}
+        replace
+      />
+    );
   };
-  const Public = ({
-    redirectPath = "/",
-    children
-  }) => {
+  const Public = ({ redirectPath = "/", children }) => {
     if (loading) return <Loader content="authenticating..." />;
     if (isAuthenticated) {
       const from = location.state?.from?.pathname || redirectPath;
@@ -77,6 +77,6 @@ export const useProtectedRoutes = () => {
   };
   return {
     Protected,
-    Public
+    Public,
   };
 };

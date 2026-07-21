@@ -6,21 +6,17 @@ import { useApolloClient } from "@apollo/client";
 import { logoutWallet } from "../../store/actions";
 import { removeCookieStorage } from "../../utills/cookieStorage";
 import { emptyUserData } from "../../utills/hydrateUserProfile";
-function LogoutModal({
-  handleOk
-}) {
+function LogoutModal({ handleOk }) {
   const navigate = useNavigate();
   const client = useApolloClient();
-  const {
-    userData
-  } = useSelector(state => state.address.userData);
+  const { userData } = useSelector((state) => state.address.userData);
   const dispatch = useDispatch();
   const address = userData?.address;
   const full_name = userData?.full_name;
   const logoutHandle = () => {
     dispatch({
       type: "USER_AUTH_RESET",
-      userData: emptyUserData
+      userData: emptyUserData,
     });
     removeCookieStorage("access_token");
     removeCookieStorage("refresh_token");
@@ -29,18 +25,23 @@ function LogoutModal({
     client.clearStore();
     navigate("/");
   };
-  return <div className="logoutModal">
+  return (
+    <div className="logoutModal">
       <div className="flexDiv firstDiv">
         <p className="logOutText">User Name</p>
         <p className="logOutvalue">{full_name}</p>
       </div>
       <div className="flexDiv">
         <p className="logOutText">Wallet Address</p>
-        <p className="logOutvalue" onClick={() => {
-        navigator.clipboard.writeText(address);
-      }} style={{
-        cursor: "pointer"
-      }}>
+        <p
+          className="logOutvalue"
+          onClick={() => {
+            navigator.clipboard.writeText(address);
+          }}
+          style={{
+            cursor: "pointer",
+          }}
+        >
           {address.slice(0, 4)}...{address.slice(37, address.length)}
         </p>
       </div>
@@ -50,6 +51,7 @@ function LogoutModal({
           Log Out
         </button>
       </div>
-    </div>;
+    </div>
+  );
 }
 export default LogoutModal;

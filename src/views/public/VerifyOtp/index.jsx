@@ -10,7 +10,7 @@ import {
   getResetToken,
   clearResetToken,
   setOtpCooldown,
-  setResetToken
+  setResetToken,
 } from "../../../utills/forgotPasswordOtpStorage";
 import "../Login/css/index.css";
 import "../ForgotPassword/css/index.css";
@@ -22,7 +22,9 @@ const NO_SCROLL_CLASS = "forgot-password-no-scroll";
 function VerifyOtp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const backgroundTheme = useSelector(state => state.app.theme.backgroundTheme);
+  const backgroundTheme = useSelector(
+    (state) => state.app.theme.backgroundTheme,
+  );
   const emailFromQuery = searchParams.get("email") || "";
 
   const [email] = useState(emailFromQuery);
@@ -115,9 +117,9 @@ function VerifyOtp() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            data: { email: email.trim(), otp: code }
-          })
-        }
+            data: { email: email.trim(), otp: code },
+          }),
+        },
       );
       const data = await response.json();
       if (data.success && data.token) {
@@ -150,7 +152,7 @@ function VerifyOtp() {
       ToastMessage(
         "Error",
         `Please wait ${Math.ceil(remainingMs / 1000)}s before requesting another OTP`,
-        "error"
+        "error",
       );
       return;
     }
@@ -162,8 +164,8 @@ function VerifyOtp() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: { email: email.trim() } })
-        }
+          body: JSON.stringify({ data: { email: email.trim() } }),
+        },
       );
       const data = await response.json();
       if (data.success) {
@@ -186,7 +188,9 @@ function VerifyOtp() {
   };
 
   return (
-    <div className={`login-page-wrapper forgot-password-page ${backgroundTheme}`}>
+    <div
+      className={`login-page-wrapper forgot-password-page ${backgroundTheme}`}
+    >
       {(loading || resendLoading) && <Loading content="Loading" />}
 
       <div className="container loginContainer">
@@ -214,7 +218,10 @@ function VerifyOtp() {
               >
                 Verify OTP
               </h2>
-              <p className="text-center text-white mb-4" style={{ opacity: 0.8 }}>
+              <p
+                className="text-center text-white mb-4"
+                style={{ opacity: 0.8 }}
+              >
                 Enter the 6-digit code sent to{" "}
                 <span style={{ color: "#d54343" }}>{email}</span>
               </p>
