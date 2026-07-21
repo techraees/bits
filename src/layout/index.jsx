@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BrowserRouter, useLocation } from "react-router-dom";
 import { ethers } from "ethers";
 import logo from "../assets/images/logo.png";
@@ -8,7 +8,10 @@ import { updateAccount } from "../store/actions";
 import ActionTypes from "../store/contants/ActionTypes";
 import PublicLayout from "../views/public";
 import PrivateLayout from "../views/private";
-import { NavbarComponent, Footer } from "../components";
+import { NavbarComponent, Footer, OnboardingModal } from "../components";
+import WalletConnectGate from "../components/connectModal/WalletConnectGate";
+import { getStorage } from "../utills/localStorage";
+import { ONBOARDING_SEEN_KEY } from "../components/onboardingModal";
 function ScrollToTop() {
   const { pathname } = useLocation();
   useLayoutEffect(() => {
@@ -16,12 +19,20 @@ function ScrollToTop() {
   }, [pathname]);
   return null;
 }
+
 const Layout = () => {
   const backgroundTheme = useSelector(
     (state) => state.app.theme.backgroundTheme,
   );
   const dispatch = useDispatch();
   const { web3, account } = useSelector((state) => state.web3.walletData);
+  const [onboardingVisible, setOnboardingVisible] = useState(false);
+
+  useEffect(() => {
+    if (!getStorage(ONBOARDING_SEEN_KEY)) {
+      setOnboardingVisible(true);
+    }
+  }, []);
   useEffect(() => {
     if (!web3 || !window.ethereum) return;
     const handleAccountsChanged = (accounts) => {
@@ -54,6 +65,11 @@ const Layout = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <OnboardingModal
+        visible={onboardingVisible}
+        onClose={() => setOnboardingVisible(false)}
+      />
+      <WalletConnectGate />
       <div
         style={{
           minHeight: "100vh",

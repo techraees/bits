@@ -16,14 +16,10 @@ import {
   CardCompnent,
   Loader,
   UploadVideoModal,
-  OnboardingModal,
 } from "../../../components";
-import { getStorage } from "../../../utills/localStorage";
-import { ONBOARDING_SEEN_KEY } from "../../../components/onboardingModal";
 import CardSkeletal from "./Skeletal/CardSkeletal";
 const Dashboard = () => {
   const [uploadVideoModal, setUploadVideoModal] = useState(false);
-  const [onboardingVisible, setOnboardingVisible] = useState(false);
   const [topNfts, setTopNfts] = useState([]);
   let navigate = useNavigate();
   const { userData } = useSelector((state) => state.address.userData);
@@ -65,18 +61,8 @@ const Dashboard = () => {
       );
     }
   }, [getAllTopNftsForOneChainForWebsite]);
-  useEffect(() => {
-    if (!getStorage(ONBOARDING_SEEN_KEY)) {
-      setOnboardingVisible(true);
-    }
-  }, []);
   return (
     <div className={backgroundTheme}>
-      {}
-      <OnboardingModal
-        visible={onboardingVisible}
-        onClose={() => setOnboardingVisible(false)}
-      />
       <UploadVideoModal
         visible={uploadVideoModal}
         onClose={() => setUploadVideoModal(false)}
